@@ -26,8 +26,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@iconify/svelte": "^3.1.6",
 		"autoprefixer": "^10.4.16",
 		"postcss": "^8.4.31",
+		"svelte-fontawesome": "^0.0.3",
 		"tailwindcss": "^3.3.5"
 	}
 }

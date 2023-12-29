@@ -257,6 +257,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify/svelte@npm:^3.1.6":
+  version: 3.1.6
+  resolution: "@iconify/svelte@npm:3.1.6"
+  dependencies:
+    "@iconify/types": "npm:^2.0.0"
+  peerDependencies:
+    svelte: "*"
+  checksum: c1cf9fda64e0229f835bd162ea575194a78eba114250b6c30ed7226db8119d79d7fd3acf49633dcbe39f3e9e150513fe1ca365ba9eedbf79fda8d8ae5b12c94b
+  languageName: node
+  linkType: hard
+
+"@iconify/types@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@iconify/types@npm:2.0.0"
+  checksum: 65a3be43500c7ccacf360e136d00e1717f050b7b91da644e94370256ac66f582d59212bdb30d00788aab4fc078262e91c95b805d1808d654b72f6d2072a7e4b2
+  languageName: node
+  linkType: hard
+
 "@isaacs/cliui@npm:^8.0.2":
   version: 8.0.2
   resolution: "@isaacs/cliui@npm:8.0.2"
@@ -2853,6 +2871,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"svelte-fontawesome@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "svelte-fontawesome@npm:0.0.3"
+  checksum: a92f92a93581223641225bf3babb13a47fca6c1193bdc4331ac3ede98d26d73546ab20afc9e8f3a8299832efc791491c4e646d7fb253580cd1701ed34098dc8a
+  languageName: node
+  linkType: hard
+
 "svelte-hmr@npm:^0.15.3":
   version: 0.15.3
   resolution: "svelte-hmr@npm:0.15.3"
@@ -3262,6 +3287,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zjx-svelte@workspace:."
   dependencies:
+    "@iconify/svelte": "npm:^3.1.6"
     "@sveltejs/adapter-auto": "npm:^2.0.0"
     "@sveltejs/kit": "npm:^1.20.4"
     autoprefixer: "npm:^10.4.16"
@@ -3273,6 +3299,7 @@ __metadata:
     prettier-plugin-svelte: "npm:^2.10.1"
     svelte: "npm:^4.0.5"
     svelte-check: "npm:^3.4.3"
+    svelte-fontawesome: "npm:^0.0.3"
     tailwindcss: "npm:^3.3.5"
     typescript: "npm:^5.0.0"
     vite: "npm:^4.4.2"
