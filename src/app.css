@@ -6,7 +6,8 @@ html {
 
 body {
   margin: 0;
-  width: 100%
+  width: 100%;
+  background-color: #f5f6f7;
 }
 
 a.link-effect {
@@ -38,6 +39,10 @@ a:hover.link-effect::before {
 }
 a {
   transition: color .12s ease-out
+}
+
+.border-3 {
+  border-inline-start-width: 3px;
 }
 
 @tailwind base;
