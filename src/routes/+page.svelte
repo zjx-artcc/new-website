@@ -109,12 +109,56 @@
 			</div>
 		</div>
 
-		<!-- Events Section -->
+		<main class="container mx-auto p-4">
+			<!-- ZJX Info Section -->
+			<section class="my-6">
+			  <h2 class="text-2xl font-semibold mb-4">ZJX Info</h2>
+			  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<!-- News -->
+				<div class="bg-white shadow p-4">
+				  <h3 class="font-semibold mb-2">ZJX News</h3>
+				  <!-- News items go here -->
+				</div>
+				
+				<!-- Upcoming Events -->
+				<div class="bg-white shadow p-4">
+				  <h3 class="font-semibold mb-2">Upcoming Events</h3>
+				  <!-- Events list goes here -->
+				</div>
+				
+				<!-- Expected ATC -->
+				<div class="bg-white shadow p-4">
+				  <h3 class="font-semibold mb-2">Expected ATC</h3>
+				  <!-- ATC schedule goes here -->
+				</div>
+			  </div>
+			</section>
+			
+			<!-- Stats and Controllers Section -->
+			<section class="my-6">
+			  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<!-- This Month's Stats -->
+				<div class="bg-white shadow p-4">
+				  <h3 class="font-semibold mb-2">This Month's Stats</h3>
+				  <!-- Stats go here -->
+				</div>
+				
+				<!-- Welcome New Controllers -->
+				<div class="bg-white shadow p-4">
+				  <h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
+				  <!-- New controller list goes here -->
+				</div>
+			  </div>
+			</section>
+		  </main>
+		
+		<!--  Events Section -->
 		<div class="md:col-span-2 bg-white p-4 shadow rounded mt-4 md:mt-0">
 			<!-- Event cards -->
 			<div class="grid grid-cols-1 gap-4">
 				<!-- Add event cards here -->
 			</div>
-		</div>
+		</div> 
+
 	</div>
 </body>
