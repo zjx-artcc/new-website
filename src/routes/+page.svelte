@@ -76,10 +76,7 @@
 					</tr>
         </thead>
         <tbody>
-          <tr class="pt-4">
-						<td style="width:30%;" class="pt-4">December 29, 2023</td>
-						<td style="width:70%;" class="pt-4"><a href="/news/100/">GCAP coming to ZJX in January </a></td>
-					</tr>
+          <NewsCard date="December 29, 2023" description="BLAHB LAH BLAH IG UESS THIS WORKS"/>
           
         </tbody>
       </table>
