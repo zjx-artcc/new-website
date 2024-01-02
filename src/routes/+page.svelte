@@ -4,7 +4,7 @@
 </script>
 <header class="bg-gray-700 block" id="myTopnav">
   <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-    <Navbar />
+    <Navbar/>
   </div>
   <div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 560px; ">
   </div>
