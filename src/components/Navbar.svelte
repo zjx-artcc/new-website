@@ -14,7 +14,7 @@
 	}
 </script>
 
-<div style="display: inline-block; height: 34px; line-height: 34px; vertical-align: middle;">
+<div class="pl-4" style="display: inline-block; height: 34px; line-height: 34px; vertical-align: middle;">
 	<a class="link-effect font-bold" href="/">
 		<span class="text-xl text-stone-50">Jacksonville</span>
 		<span class="text-xl text-sky-500"> ARTCC</span>
