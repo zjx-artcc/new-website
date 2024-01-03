@@ -13,6 +13,6 @@
         <div class="mb-2 text-lg font-light uppercase">{timestamp}</div>
     </div>
 <div class="icon col-auto ml-auto pt-8 align-middle">
-    <Icon icon={icon} class="" width="64" height="64"/>
+    <Icon icon={icon} class="" width="64" height="64" />
 </div>
 </div>
