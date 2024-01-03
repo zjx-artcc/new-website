@@ -109,14 +109,44 @@
 					<div class="bg-white shadow p-4">
 						<h3 class="font-semibold mb-2">Upcoming Events</h3>
 						<!-- New controller list goes here -->
-						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-							<EventCard
-								imageUrl="https://i.ibb.co/7WV2Ppw/Everglades-Circuit.png"
-								title="The Everglades Circuit Lap #2"
-								hostedBy="Hosted by: ZJX ARTCC"
-								date="Jan. 07, 2024 @ 22:00Z"
-							/>
-							<!-- Repeat the EventCard component for as many events as you have -->
+						<div class="table-responsive">
+							<table class="table table-striped table-hover table-leftpadded mb-0" width="100%" cellspacing="0">
+									 
+								<tbody><tr style="background-color: rgba(255, 255, 255);">
+									<td style="width: 50%;" align="left"><a href="/events/307/"><img width="100%" src="https://i.ibb.co/7WV2Ppw/Everglades-Circuit.png"></a></td>
+									<td style="width: 50%;"><a href="/events/307/"><div style="text-align:center; font-size: 24px;"><b>The Everglades Circuit Lap #2</b></div></a>
+									 <div style="text-align:center; font-size: 20px;">Hosted by: ZMA</div><br>
+									 <div style="text-align:center; font-size: 20px;">Jan 07, 2024 at 22:00z</div>
+									</td>
+								  </tr>  
+									<tr>
+										   <td colspan="2">&nbsp;</td>
+									   </tr>		      
+									  
+								<tr style="background-color: rgba(255, 255, 255);">
+									<td style="width: 50%;" align="left"><a href="/events/314/"><img width="100%" src="https://www.ztlartcc.org/storage/event_banners/1699861515.png"></a></td>
+									<td style="width: 50%;"><a href="/events/314/"><div style="text-align:center; font-size: 24px;"><b>Honoring the Dream FNO @ KATL </b></div></a>
+									 <div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div><br>
+									 <div style="text-align:center; font-size: 20px;">Jan 12, 2024 at 23:59z</div>
+									</td>
+								  </tr>  
+									<tr>
+										   <td colspan="2">&nbsp;</td>
+									   </tr>		      
+									  
+								<tr style="background-color: rgba(255, 255, 255);">
+									<td style="width: 50%;" align="left"><a href="/events/316/"><img width="100%" src="https://www.ztlartcc.org/storage/event_banners/1699246811.png"></a></td>
+									<td style="width: 50%;"><a href="/events/316/"><div style="text-align:center; font-size: 24px;"><b>First Flight's First School </b></div></a>
+									 <div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div><br>
+									 <div style="text-align:center; font-size: 20px;">Jan 25, 2024 at 11:59z</div>
+									</td>
+								  </tr>  
+									<tr>
+										   <td colspan="2">&nbsp;</td>
+									   </tr>		      
+								   
+		
+							</tbody></table>
 						</div>
 					</div>
 				</div>
