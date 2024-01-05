@@ -180,7 +180,24 @@
 				<!-- Upcoming Events -->
 				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
-					<!-- Events list goes here -->
+					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;">
+										
+						<tbody><tr>
+							<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
+							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+						 </tr>  
+						 
+						<tr>
+							<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
+							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+						 </tr>  
+						 
+						<tr>
+							<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
+							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
+						 </tr>  
+						 
+					</tbody></table>
 				</div>
 
 				<!-- Expected ATC -->
