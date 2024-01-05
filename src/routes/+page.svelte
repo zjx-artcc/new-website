@@ -180,7 +180,7 @@
 				<!-- Upcoming Events -->
 				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
-					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;">
+					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
 										
 						<tbody><tr>
 							<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
@@ -203,11 +203,93 @@
 				<!-- Expected ATC -->
 				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Expected ATC</h3>
-					<!-- ATC schedule goes here -->
+					<p>Note: Expected coverage does not guarantee coverage will be present </p>
+					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;">
+										
+						<tbody><tr>
+							<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
+							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+						 </tr>  
+						 
+						<tr>
+							<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
+							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+						 </tr>  
+						 
+						<tr>
+							<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
+							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
+						 </tr>  
+						 
+					</tbody></table>
 				</div>
 			</div>
 		</section>
 	</main>
 
 	<!-- Main Content -->
+
+	<div class="bg-image" style="background-image: url('/orl_aerial.jpg'); background-color: #f8f9fa; background-position: 0 50%; background-size: cover;">
+		<div class="block-content block-content-full bg-primary-dark-op text-center" style="padding-bottom: 18px; background-color: rgba(52, 58, 64, .8) !important; transition: opacity .2s ease-out; margin: 0 auto; padding: 18px 18px 1px; width: 100%; overflow-x: visible; text-align: center !important;">
+			<div class="py-[30px] js-appear-enabled animated fadeIn" data-toggle="appear">
+				<div class="row justify-content-center py-[10px]">
+					<div class="col-md-8">
+						<div class="font-w700 text-white mb-10">
+							<Icon icon="material-symbols:star" color="#fc0" />
+							<Icon icon="material-symbols:star" color="#fc0" />
+							<Icon icon="material-symbols:star" color="#fc0" />
+							<Icon icon="material-symbols:star" color="#fc0" />
+							<Icon icon="material-symbols:star" color="#fc0" />
+						</div>
+						<h3 class="font-w700 text-white mb-10">Give our controllers some words of praise.</h3>
+						<a class="btn btn-hero btn-noborder btn-rounded btn-primary mb-10 js-appear-enabled animated fadeInUp" data-toggle="appear" data-class="animated fadeInUp" href="/feedback/">
+							<i class="far fa-pencil mr-10"></i> Provide Feedback
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--Leave Praise End-->
+	<footer id="page-footer" class="bg-white opacity-0" style="opacity: 1;">
+		<div class="content content-full">
+			<!-- Footer Navigation -->
+			<div class="row items-push-2x mt-30">
+				<div class="col-6 col-md-8">
+					<h3 class="h5 font-w700"><i class="far fa-info-circle"></i> Disclaimer</h3>
+					<p>The information contained on this website is for flight simulation purposes only. It is not intended for real world navigation. This site is not affiliated with the FAA, the actual Jacksonville ARTCC, or any governing aviation body. All content contained herein is approved only for use on the VATSIM network.</p>
+					<a class="link effect font-w600" href="/privacy">Privacy Policy</a>
+				</div>
+				<div class="col-md-4">
+					<h3 class="h5 font-w700">Links</h3>
+					<div class="font-size-sm mb-30">
+						<ul class="list list-simple-mini font-size-sm">
+							<li>
+								<a class="link-effect font-w600" href="https://vatusa.net/" target="_blank">VATUSA</a>
+							</li>
+							<li>
+								<a class="link-effect font-w600" href="https://vatsim.net/" target="_blank">VATSIM</a>
+							</li>
+							
+							<li>
+								<a href="https://www.vatstar.com/" target="blank"><img src="https://i.imgur.com/4AszbGC.png" alt="VATSTAR" style="width:200px; height:50px;"></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- END Footer Navigation -->
+
+			<!-- Copyright Info -->
+			<div class="font-size-xs clearfix border-t pt-20 pb-10">
+				<div class="float-left">
+					© Copyright <span class="js-year-copy">2024</span> Jacksonville ARTCC. All rights reserved.
+				</div>
+						<div class="float-right">
+					<a href="https://github.com/ZJX-ARTCC/jacksonville-issue-tracker/issues/new/choose" target="_blank"><i class="fas fa-bug text-pulse"></i> Log a bug or Request a feature</a>
+				</div>
+			</div>
+			<!-- END Copyright Info -->
+		</div>
+	</footer>
 </body>

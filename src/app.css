@@ -51,6 +51,30 @@ a {
   }
 }
 
+.col-md-8 {
+  flex: 0 0 66.666667%;
+  max-width: 66.666667%;    
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.font-w700 {
+  font-weight: 700 !important;
+
+}
+
+.fas {
+  -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
 
 @tailwind base;
 @tailwind components;
