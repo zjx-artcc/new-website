@@ -29,9 +29,9 @@
 <body>
 	<div
 		id="cards"
-		class="inline-flex w-full pl-6 pt-6 m-auto align-middle items-center justify-center"
+		class="inline-flex w-full pl-[110px] pt-6 m-auto align-middle items-center justify-center "
 	>
-		<div class="container">
+		<div class=" container">
 			<Card
 				title="Top Controller of {currentMonthName}"
 				subtext="Jack Freeze"
@@ -110,43 +110,88 @@
 						<h3 class="font-semibold mb-2">Upcoming Events</h3>
 						<!-- New controller list goes here -->
 						<div class="table-responsive">
-							<table class="table table-striped table-hover table-leftpadded mb-0" width="100%" cellspacing="0">
-									 
-								<tbody><tr style="background-color: rgba(255, 255, 255);">
-									<td style="width: 50%;" align="left"><a href="/events/307/"><img width="100%" src="https://i.ibb.co/7WV2Ppw/Everglades-Circuit.png"></a></td>
-									<td style="width: 50%;"><a href="/events/307/"><div style="text-align:center; font-size: 24px;"><b>The Everglades Circuit Lap #2</b></div></a>
-									 <div style="text-align:center; font-size: 20px;">Hosted by: ZMA</div><br>
-									 <div style="text-align:center; font-size: 20px;">Jan 07, 2024 at 22:00z</div>
-									</td>
-								  </tr>  
+							<table
+								class="table table-striped table-hover table-leftpadded mb-0"
+								width="100%"
+								cellspacing="0"
+							>
+								<tbody
+									><tr style="background-color: rgba(255, 255, 255);">
+										<td style="width: 50%;" align="left"
+											><a href="/events/307/"
+												><img
+													width="100%"
+													src="https://i.ibb.co/7WV2Ppw/Everglades-Circuit.png"
+													alt="Everglades-Circuit"
+												/></a
+											></td
+										>
+										<td style="width: 50%;"
+											><a href="/events/307/"
+												><div style="text-align:center; font-size: 24px;">
+													<b>The Everglades Circuit Lap #2</b>
+												</div></a
+											>
+											<div style="text-align:center; font-size: 20px;">Hosted by: ZMA</div>
+											<br />
+											<div style="text-align:center; font-size: 20px;">Jan 07, 2024 at 22:00z</div>
+										</td>
+									</tr>
 									<tr>
-										   <td colspan="2">&nbsp;</td>
-									   </tr>		      
-									  
-								<tr style="background-color: rgba(255, 255, 255);">
-									<td style="width: 50%;" align="left"><a href="/events/314/"><img width="100%" src="https://www.ztlartcc.org/storage/event_banners/1699861515.png"></a></td>
-									<td style="width: 50%;"><a href="/events/314/"><div style="text-align:center; font-size: 24px;"><b>Honoring the Dream FNO @ KATL </b></div></a>
-									 <div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div><br>
-									 <div style="text-align:center; font-size: 20px;">Jan 12, 2024 at 23:59z</div>
-									</td>
-								  </tr>  
+										<td colspan="2">&nbsp;</td>
+									</tr>
+
+									<tr style="background-color: rgba(255, 255, 255);">
+										<td style="width: 50%;" align="left"
+											><a href="/events/314/"
+												><img
+													width="100%"
+													src="https://www.ztlartcc.org/storage/event_banners/1699861515.png"
+													alt="Everglades-Circuit Lap #2"
+												/></a
+											></td
+										>
+										<td style="width: 50%;"
+											><a href="/events/314/"
+												><div style="text-align:center; font-size: 24px;">
+													<b>Honoring the Dream FNO @ KATL </b>
+												</div></a
+											>
+											<div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div>
+											<br />
+											<div style="text-align:center; font-size: 20px;">Jan 12, 2024 at 23:59z</div>
+										</td>
+									</tr>
 									<tr>
-										   <td colspan="2">&nbsp;</td>
-									   </tr>		      
-									  
-								<tr style="background-color: rgba(255, 255, 255);">
-									<td style="width: 50%;" align="left"><a href="/events/316/"><img width="100%" src="https://www.ztlartcc.org/storage/event_banners/1699246811.png"></a></td>
-									<td style="width: 50%;"><a href="/events/316/"><div style="text-align:center; font-size: 24px;"><b>First Flight's First School </b></div></a>
-									 <div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div><br>
-									 <div style="text-align:center; font-size: 20px;">Jan 25, 2024 at 11:59z</div>
-									</td>
-								  </tr>  
+										<td colspan="2">&nbsp;</td>
+									</tr>
+
+									<tr style="background-color: rgba(255, 255, 255);">
+										<td style="width: 50%;" align="left"
+											><a href="/events/316/"
+												><img
+													width="100%"
+													src="https://www.ztlartcc.org/storage/event_banners/1699246811.png"
+													alt="Honoring the Dream FNO @ KATL"
+												/></a
+											></td
+										>
+										<td style="width: 50%;"
+											><a href="/events/316/"
+												><div style="text-align:center; font-size: 24px;">
+													<b>First Flight's First School </b>
+												</div></a
+											>
+											<div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div>
+											<br />
+											<div style="text-align:center; font-size: 20px;">Jan 25, 2024 at 11:59z</div>
+										</td>
+									</tr>
 									<tr>
-										   <td colspan="2">&nbsp;</td>
-									   </tr>		      
-								   
-		
-							</tbody></table>
+										<td colspan="2">&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -181,47 +226,47 @@
 				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
-										
-						<tbody><tr>
-							<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
-							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
-						 </tr>  
-						 
-						<tr>
-							<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
-							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
-						 </tr>  
-						 
-						<tr>
-							<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
-							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
-						 </tr>  
-						 
-					</tbody></table>
+						<tbody
+							><tr>
+								<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
+								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+							</tr>
+
+							<tr>
+								<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
+								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+							</tr>
+
+							<tr>
+								<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
+								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 
 				<!-- Expected ATC -->
 				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Expected ATC</h3>
-					<p>Note: Expected coverage does not guarantee coverage will be present </p>
+					<p>Note: Expected coverage does not guarantee coverage will be present</p>
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;">
-										
-						<tbody><tr>
-							<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
-							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
-						 </tr>  
-						 
-						<tr>
-							<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
-							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
-						 </tr>  
-						 
-						<tr>
-							<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
-							 <td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
-						 </tr>  
-						 
-					</tbody></table>
+						<tbody
+							><tr>
+								<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
+								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+							</tr>
+
+							<tr>
+								<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
+								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+							</tr>
+
+							<tr>
+								<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
+								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</section>
@@ -229,8 +274,14 @@
 
 	<!-- Main Content -->
 
-	<div class="bg-image" style="background-image: url('/orl_aerial.jpg'); background-color: #f8f9fa; background-position: 0 50%; background-size: cover;">
-		<div class="block-content block-content-full bg-primary-dark-op text-center" style="padding-bottom: 18px; background-color: rgba(52, 58, 64, .8) !important; transition: opacity .2s ease-out; margin: 0 auto; padding: 18px 18px 1px; width: 100%; overflow-x: visible; text-align: center !important;">
+	<div
+		class="bg-image"
+		style="background-image: url('/orl_aerial.jpg'); background-color: #f8f9fa; background-position: 0 50%; background-size: cover;"
+	>
+		<div
+			class="block-content block-content-full bg-primary-dark-op text-center"
+			style="padding-bottom: 18px; background-color: rgba(52, 58, 64, .8) !important; transition: opacity .2s ease-out; margin: 0 auto; padding: 18px 18px 1px; width: 100%; overflow-x: visible; text-align: center !important;"
+		>
 			<div class="py-[30px] js-appear-enabled animated fadeIn" data-toggle="appear">
 				<div class="row justify-content-center py-[10px]">
 					<div class="col-md-8">
@@ -242,8 +293,13 @@
 							<Icon icon="material-symbols:star" color="#fc0" />
 						</div>
 						<h3 class="font-w700 text-white mb-10">Give our controllers some words of praise.</h3>
-						<a class="btn btn-hero btn-noborder btn-rounded btn-primary mb-10 js-appear-enabled animated fadeInUp" data-toggle="appear" data-class="animated fadeInUp" href="/feedback/">
-							<i class="far fa-pencil mr-10"></i> Provide Feedback
+						<a
+							class="btn btn-hero btn-noborder btn-rounded btn-primary mb-10 js-appear-enabled animated fadeInUp"
+							data-toggle="appear"
+							data-class="animated fadeInUp"
+							href="/feedback/"
+						>
+							<i class="far fa-pencil mr-10" /> Provide Feedback
 						</a>
 					</div>
 				</div>
@@ -256,8 +312,13 @@
 			<!-- Footer Navigation -->
 			<div class="row items-push-2x mt-30">
 				<div class="col-6 col-md-8">
-					<h3 class="h5 font-w700"><i class="far fa-info-circle"></i> Disclaimer</h3>
-					<p>The information contained on this website is for flight simulation purposes only. It is not intended for real world navigation. This site is not affiliated with the FAA, the actual Jacksonville ARTCC, or any governing aviation body. All content contained herein is approved only for use on the VATSIM network.</p>
+					<h3 class="h5 font-w700"><i class="far fa-info-circle" /> Disclaimer</h3>
+					<p>
+						The information contained on this website is for flight simulation purposes only. It is
+						not intended for real world navigation. This site is not affiliated with the FAA, the
+						actual Jacksonville ARTCC, or any governing aviation body. All content contained herein
+						is approved only for use on the VATSIM network.
+					</p>
 					<a class="link effect font-w600" href="/privacy">Privacy Policy</a>
 				</div>
 				<div class="col-md-4">
@@ -265,14 +326,24 @@
 					<div class="font-size-sm mb-30">
 						<ul class="list list-simple-mini font-size-sm">
 							<li>
-								<a class="link-effect font-w600" href="https://vatusa.net/" target="_blank">VATUSA</a>
+								<a class="link-effect font-w600" href="https://vatusa.net/" target="_blank"
+									>VATUSA</a
+								>
 							</li>
 							<li>
-								<a class="link-effect font-w600" href="https://vatsim.net/" target="_blank">VATSIM</a>
+								<a class="link-effect font-w600" href="https://vatsim.net/" target="_blank"
+									>VATSIM</a
+								>
 							</li>
-							
+
 							<li>
-								<a href="https://www.vatstar.com/" target="blank"><img src="https://i.imgur.com/4AszbGC.png" alt="VATSTAR" style="width:200px; height:50px;"></a>
+								<a href="https://www.vatstar.com/" target="blank"
+									><img
+										src="https://i.imgur.com/4AszbGC.png"
+										alt="VATSTAR"
+										style="width:200px; height:50px;"
+									/></a
+								>
 							</li>
 						</ul>
 					</div>
@@ -285,8 +356,11 @@
 				<div class="float-left">
 					© Copyright <span class="js-year-copy">2024</span> Jacksonville ARTCC. All rights reserved.
 				</div>
-						<div class="float-right">
-					<a href="https://github.com/ZJX-ARTCC/jacksonville-issue-tracker/issues/new/choose" target="_blank"><i class="fas fa-bug text-pulse"></i> Log a bug or Request a feature</a>
+				<div class="float-right">
+					<a
+						href="https://github.com/ZJX-ARTCC/jacksonville-issue-tracker/issues/new/choose"
+						target="_blank"><i class="fas fa-bug text-pulse" /> Log a bug or Request a feature</a
+					>
 				</div>
 			</div>
 			<!-- END Copyright Info -->
