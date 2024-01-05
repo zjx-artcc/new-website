@@ -56,7 +56,8 @@
 			/>
 		</div>
 	</div>
-	<nav class="bg-blue-800 text-white p-4">
+	<!---->
+	<nav class="bg-slate-400 text-white p-4">
 		<div class="container mx-auto">
 			<h1 class="text-xl text-center">ZJX Info Table</h1>
 		</div>
@@ -309,9 +310,9 @@
 
 	<!--Leave Praise End-->
 	<footer id="page-footer" class="bg-white opacity-0" style="opacity: 1;">
-		<div class="content content-full">
+		<div class="content content-full ">
 			<!-- Footer Navigation -->
-			<div class="row items-push-2x mt-30">
+			<div class="row items-push-2x mt-30  items-center justify-center align-middle">
 				<div class="col-6 col-md-8">
 					<h3 class="h5 font-w700"><i class="far fa-info-circle" /> Disclaimer</h3>
 					<p>
@@ -349,9 +350,8 @@
 						</ul>
 					</div>
 				</div>
+				
 			</div>
-			<!-- END Footer Navigation -->
-
 			<!-- Copyright Info -->
 			<div class="font-size-xs clearfix border-t pt-20 pb-10">
 				<div class="float-left">
@@ -365,6 +365,9 @@
 				</div>
 			</div>
 			<!-- END Copyright Info -->
+			<!-- END Footer Navigation -->
+
+			
 		</div>
 	</footer>
 </body>
