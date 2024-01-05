@@ -29,7 +29,7 @@
 <body>
 	<div
 		id="cards"
-		class="inline-flex w-full pl-[110px] pt-6 m-auto align-middle items-center justify-center "
+		class="inline-flex w-full pl-[110px] pt-6 m-auto align-middle items-center justify-center"
 	>
 		<div class=" container">
 			<Card
@@ -283,29 +283,30 @@
 			style="padding-bottom: 18px; background-color: rgba(52, 58, 64, .8) !important; transition: opacity .2s ease-out; margin: 0 auto; padding: 18px 18px 1px; width: 100%; overflow-x: visible; text-align: center !important;"
 		>
 			<div class="py-[30px] js-appear-enabled animated fadeIn" data-toggle="appear">
-				<div class="row justify-content-center py-[10px]">
-					<div class="col-md-8">
-						<div class="font-w700 text-white mb-10">
+				<div class="justify-content-center py-[10px]">
+					<div class="iconStar">
+						<div class="font-w700 text-white pb-[10px] flex flex-row justify-center m-auto">
 							<Icon icon="material-symbols:star" color="#fc0" />
 							<Icon icon="material-symbols:star" color="#fc0" />
 							<Icon icon="material-symbols:star" color="#fc0" />
 							<Icon icon="material-symbols:star" color="#fc0" />
 							<Icon icon="material-symbols:star" color="#fc0" />
 						</div>
-						<h3 class="font-w700 text-white mb-10">Give our controllers some words of praise.</h3>
+						<h3 class="font-bold text-3xl text-white mb-[20px]">Give our controllers some words of praise.</h3>
 						<a
-							class="btn btn-hero btn-noborder btn-rounded btn-primary mb-10 js-appear-enabled animated fadeInUp"
+							class="btn btn-hero btn-noborder btn-rounded btn-primary mb-10 items-center justify-center gap-2 js-appear-enabled animated fadeInUp"
 							data-toggle="appear"
 							data-class="animated fadeInUp"
 							href="/feedback/"
 						>
-							<i class="far fa-pencil mr-10" /> Provide Feedback
+							<Icon icon="tabler:pencil" class="inline-block text-lg" /> Provide Feedback
 						</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
 	<!--Leave Praise End-->
 	<footer id="page-footer" class="bg-white opacity-0" style="opacity: 1;">
 		<div class="content content-full">
