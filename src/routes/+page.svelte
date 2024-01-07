@@ -27,11 +27,9 @@
 	</div>
 </header>
 <body>
-	<div
-		id="cards"
-		class="inline-flex w-full pl-[110px] pt-6 m-auto align-middle items-center justify-center"
-	>
-		<div class=" container">
+
+	<div class="flex flex-wrap justify-center">
+		<div class="m-4">
 			<Card
 				title="Top Controller of {currentMonthName}"
 				subtext="Jack Freeze"
@@ -39,15 +37,15 @@
 				icon="ant-design:hourglass-twotone"
 			/>
 		</div>
-		<div class="container">
+		<div class="m-4">
 			<Card
-				title="Next Event"
+				title="Everglades Circuit Lap #2"
 				subtext="The Everglades Circuit Lap #2"
 				timestamp="Jan. 07, 2024 @ 22:00Z"
 				icon="ion:calendar"
 			/>
 		</div>
-		<div class="container">
+		<div class="m-4">
 			<Card
 				title="Newest Home Controller"
 				subtext="Nick Soriano (OBS)"
