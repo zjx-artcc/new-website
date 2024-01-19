@@ -9,6 +9,9 @@
 	import NewsCard from '../components/NewsCard.svelte';
 	/** @type {import('./$types').PageData}*/
 	export let data;
+
+	//TODO: REMOVE LATER
+	console.log(data);
 	const today = new Date();
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>
@@ -33,8 +36,8 @@
 	<div class="flex flex-wrap justify-center">
 		<Card
 			title="Top Controller of {currentMonthName}"
-			subtext="{data.data[0].first_name} {data.data[0].last_name}"
-			timestamp="{data.data[0].month_three} HOURS"
+			subtext="{data.stats.first_name} {data.stats.last_name}"
+			timestamp="{data.stats.month_three} HOURS"
 			icon="ant-design:hourglass-twotone"
 		/>
 
@@ -47,8 +50,8 @@
 
 		<Card
 			title="Newest Home Controller"
-			subtext="Nick Soriano (OBS)"
-			timestamp="Joined Dec. 27, 2023"
+			subtext="{data.newController.first_name} {data.newController.last_name} ({data.newController.rating})"
+			timestamp="Joined {new Date(data.newController.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}"
 			icon="material-symbols:person"
 		/>
 	</div>
