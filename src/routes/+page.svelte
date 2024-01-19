@@ -34,26 +34,30 @@
 </header>
 <body>
 	<div class="flex flex-wrap justify-center">
-		<Card
-			title="Top Controller of {currentMonthName}"
-			subtext="{data.stats.first_name} {data.stats.last_name}"
-			timestamp="{data.stats.month_three} HOURS"
-			icon="ant-design:hourglass-twotone"
-		/>
-
-		<Card
-			title="Everglades Circuit Lap #2"
-			subtext="The Everglades Circuit Lap #2"
-			timestamp="Jan. 07, 2024 @ 22:00Z"
-			icon="ion:calendar"
-		/>
-
-		<Card
-			title="Newest Home Controller"
-			subtext="{data.newController.first_name} {data.newController.last_name} ({data.newController.rating})"
-			timestamp="Joined {new Date(data.newController.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}"
-			icon="material-symbols:person"
-		/>
+		<a href="/stats">
+			<Card
+				title="Top Controller of {currentMonthName}"
+				subtext="{data.stats[0].first_name} {data.stats[0].last_name}"
+				timestamp="{data.stats[0].month_three} HOURS"
+				icon="ant-design:hourglass-twotone"
+			/>
+		</a>
+		<a href="/events">
+			<Card
+				title="Next Event"
+				subtext="{data.events[0].name}"
+				timestamp="{new Date(data.events[0].event_start).toLocaleString(undefined, {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'numeric', timeZoneName:'short'})}"
+				icon="ion:calendar"
+			/>
+		</a>
+		<a href="/roster">
+			<Card
+				title="Newest Home Controller"
+				subtext="{data.newController.first_name} {data.newController.last_name} ({data.newController.rating})"
+				timestamp="Joined {new Date(data.newController.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}"
+				icon="material-symbols:person"
+			/>
+		</a>
 	</div>
 	<!---->
 	<nav class="bg-slate-400 text-white p-4">
@@ -118,23 +122,23 @@
 								<tbody
 									><tr style="background-color: rgba(255, 255, 255);">
 										<td style="width: 50%;" align="left"
-											><a href="/events/307/"
+											><a href="/events/{data.events[0].id}/"
 												><img
 													width="100%"
-													src="https://i.ibb.co/7WV2Ppw/Everglades-Circuit.png"
-													alt="Everglades-Circuit"
+													src="{data.events[0].banner}"
+													alt="{data.events[0].name}"
 												/></a
 											></td
 										>
 										<td style="width: 50%;"
-											><a href="/events/307/"
+											><a href="/events/{data.events[0].id}/"
 												><div style="text-align:center; font-size: 24px;">
-													<b>The Everglades Circuit Lap #2</b>
+													<b>{data.events[0].name}</b>
 												</div></a
 											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: ZMA</div>
+											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[0].host}</div>
 											<br />
-											<div style="text-align:center; font-size: 20px;">Jan 07, 2024 at 22:00z</div>
+											<div style="text-align:center; font-size: 20px;">{new Date(data.events[0].event_start).toLocaleString(undefined, {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'numeric', timeZoneName:'short'})}</div>
 										</td>
 									</tr>
 									<tr>
@@ -143,23 +147,23 @@
 
 									<tr style="background-color: rgba(255, 255, 255);">
 										<td style="width: 50%;" align="left"
-											><a href="/events/314/"
+											><a href="/events/{data.events[1].id}/"
 												><img
 													width="100%"
-													src="https://www.ztlartcc.org/storage/event_banners/1699861515.png"
-													alt="Everglades-Circuit Lap #2"
+													src="{data.events[1].banner}"
+													alt="{data.events[1].name}"
 												/></a
 											></td
 										>
 										<td style="width: 50%;"
-											><a href="/events/314/"
+											><a href="/events/{data.events[1].id}/"
 												><div style="text-align:center; font-size: 24px;">
-													<b>Honoring the Dream FNO @ KATL </b>
+													<b>{data.events[1].name}</b>
 												</div></a
 											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div>
+											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[1].host}</div>
 											<br />
-											<div style="text-align:center; font-size: 20px;">Jan 12, 2024 at 23:59z</div>
+											<div style="text-align:center; font-size: 20px;">{new Date(data.events[1].event_start).toLocaleString(undefined, {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'numeric', timeZoneName:'short'})}</div>
 										</td>
 									</tr>
 									<tr>
@@ -168,23 +172,23 @@
 
 									<tr style="background-color: rgba(255, 255, 255);">
 										<td style="width: 50%;" align="left"
-											><a href="/events/316/"
+											><a href="/events/{data.events[2].id}/"
 												><img
 													width="100%"
-													src="https://www.ztlartcc.org/storage/event_banners/1699246811.png"
-													alt="Honoring the Dream FNO @ KATL"
+													src="{data.events[2].banner}"
+													alt="{data.events[2].name}"
 												/></a
 											></td
 										>
 										<td style="width: 50%;"
-											><a href="/events/316/"
+											><a href="/events/{data.events[2].id}/"
 												><div style="text-align:center; font-size: 24px;">
-													<b>First Flight's First School </b>
+													<b>{data.events[2].name} </b>
 												</div></a
 											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div>
+											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[2].host}</div>
 											<br />
-											<div style="text-align:center; font-size: 20px;">Jan 25, 2024 at 11:59z</div>
+											<div style="text-align:center; font-size: 20px;">{new Date(data.events[2].event_start).toLocaleString(undefined, {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'numeric', timeZoneName:'short'})}</div>
 										</td>
 									</tr>
 									<tr>

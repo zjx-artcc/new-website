@@ -6,15 +6,16 @@ import { supabase } from '../lib/supabaseClient';
 export async function load({ params }) {
   let pageData = {
     stats: {},
-    newController: {}
+    newController: {},
+    events: {},
   };
   {
-    const { data, error } = await supabase.from("stats").select("*").order('month_three', { ascending: false }).limit(1);
+    const { data, error } = await supabase.from("stats").select("*").order('month_three', { ascending: false }).limit(3);
     if (error) {
       console.error(error);
       return;
     }
-    pageData.stats = data[0]
+    pageData.stats = data
   }
   {
     const { data, error } = await supabase.from("roster").select("*").order("created_at", {ascending: false}).limit(1);
@@ -44,6 +45,14 @@ export async function load({ params }) {
         break;
     }
     pageData.newController = data[0]
+  }
+  {
+    const { data, error } = await supabase.from('events').select("*").eq('hidden', false).order("event_start", { ascending: true }).limit(3);
+    if (error) {
+      console.error(error);
+      return;
+    }
+    pageData.events = data
   }
   return pageData;
 }
