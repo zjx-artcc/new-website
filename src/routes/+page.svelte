@@ -5,7 +5,6 @@
 	import Navbar from '../components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
 	import Card from '../components/Card.svelte';
-	import EventCard from '../components/EventCard.svelte';
 	import NewsCard from '../components/NewsCard.svelte';
 	/** @type {import('./$types').PageData}*/
 	export let data;
