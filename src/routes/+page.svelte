@@ -52,8 +52,8 @@
 		<a href="/roster">
 			<Card
 				title="Newest Home Controller"
-				subtext="{data.newController.first_name} {data.newController.last_name} ({data.newController.rating})"
-				timestamp="Joined {new Date(data.newController.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}"
+				subtext="{data.newController[0].first_name} {data.newController[0].last_name} ({data.newController[0].rating})"
+				timestamp="Joined {new Date(data.newController[0].created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}"
 				icon="material-symbols:person"
 			/>
 		</a>
@@ -211,15 +211,15 @@
 						<div class="flex flex-col items-center">
 							<div id="1st-controller" class="inline-flex">
 								<span class="text-yellow-500 text-left">★★★</span>
-								<div class="font-bold text-gray-800 mr-2 text-right">Jack Freeze</div>
+								<div class="font-bold text-gray-800 mr-2 text-right">{data.stats[0].first_name} {data.stats[0].last_name}</div>
 							</div>
 							<div id="2nd-controller" class="inline-flex">
 								<span class="text-gray-500">★★</span>
-								<div class="font-bold text-gray-800 mr-2">Alex Brehm</div>
+								<div class="font-bold text-gray-800 mr-2">{data.stats[1].first_name} {data.stats[1].last_name}</div>
 							</div>
 							<div id="3rd-controller" class="inline-flex">
 								<span class="text-red-500">★</span>
-								<div class="font-bold text-gray-800 mr-2">Robert Burkhead</div>
+								<div class="font-bold text-gray-800 mr-2">{data.stats[2].first_name} {data.stats[2].last_name}</div>
 							</div>
 						</div>
 					</div>
@@ -231,18 +231,18 @@
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
 						<tbody
 							><tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[0].first_name} {data.newController[0].last_name} ({data.newController[0].rating})</td>
+								<td style="font-size: 14px; width: 50%;" align="right">Joined on {new Date(data.newController[0].created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
 							</tr>
 
 							<tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[1].first_name} {data.newController[1].last_name} ({data.newController[1].rating})</td>
+								<td style="font-size: 14px; width: 50%;" align="right">Joined on {new Date(data.newController[1].created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
 							</tr>
 
 							<tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
+								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[2].first_name} {data.newController[2].last_name} ({data.newController[2].rating})</td>
+								<td style="font-size: 14px; width: 50%;" align="right">Joined on {new Date(data.newController[2].created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
 							</tr>
 						</tbody>
 					</table>
