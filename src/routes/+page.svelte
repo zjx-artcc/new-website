@@ -30,34 +30,27 @@
 	</div>
 </header>
 <body>
-	<div
-		id="cards"
-		class="inline-flex w-full pl-[110px] pt-6 m-auto align-middle items-center justify-center"
-	>
-		<div class=" container">
-			<Card
-				title="Top Controller of {currentMonthName}"
-				subtext="{data.data[0].first_name} {data.data[0].last_name}"
-				timestamp="{data.data[0].month_three} HOURS"
-				icon="ant-design:hourglass-twotone"
-			/>
-		</div>
-		<div class="container">
-			<Card
-				title="Next Event"
-				subtext="The Everglades Circuit Lap #2"
-				timestamp="Jan. 07, 2024 @ 22:00Z"
-				icon="ion:calendar"
-			/>
-		</div>
-		<div class="container">
-			<Card
-				title="Newest Home Controller"
-				subtext="Nick Soriano (OBS)"
-				timestamp="Joined Dec. 27, 2023"
-				icon="material-symbols:person"
-			/>
-		</div>
+	<div class="flex flex-wrap justify-center">
+		<Card
+			title="Top Controller of {currentMonthName}"
+			subtext="{data.data[0].first_name} {data.data[0].last_name}"
+			timestamp="{data.data[0].month_three} HOURS"
+			icon="ant-design:hourglass-twotone"
+		/>
+
+		<Card
+			title="Everglades Circuit Lap #2"
+			subtext="The Everglades Circuit Lap #2"
+			timestamp="Jan. 07, 2024 @ 22:00Z"
+			icon="ion:calendar"
+		/>
+
+		<Card
+			title="Newest Home Controller"
+			subtext="Nick Soriano (OBS)"
+			timestamp="Joined Dec. 27, 2023"
+			icon="material-symbols:person"
+		/>
 	</div>
 	<!---->
 	<nav class="bg-slate-400 text-white p-4">
@@ -296,7 +289,9 @@
 							<Icon icon="material-symbols:star" color="#fc0" />
 							<Icon icon="material-symbols:star" color="#fc0" />
 						</div>
-						<h3 class="font-bold text-3xl text-white mb-[20px]">Give our controllers some words of praise.</h3>
+						<h3 class="font-bold text-3xl text-white mb-[20px]">
+							Give our controllers some words of praise.
+						</h3>
 						<a
 							class="btn btn-hero btn-noborder btn-rounded btn-primary mb-10 items-center justify-center gap-2 js-appear-enabled animated fadeInUp"
 							data-toggle="appear"
@@ -313,9 +308,9 @@
 
 	<!--Leave Praise End-->
 	<footer id="page-footer" class="bg-white opacity-0" style="opacity: 1;">
-		<div class="content content-full ">
+		<div class="content content-full">
 			<!-- Footer Navigation -->
-			<div class="row items-push-2x mt-30  items-center justify-center align-middle">
+			<div class="row items-push-2x mt-30 items-center justify-center align-middle">
 				<div class="col-6 col-md-8">
 					<h3 class="h5 font-w700"><i class="far fa-info-circle" /> Disclaimer</h3>
 					<p>
@@ -353,7 +348,6 @@
 						</ul>
 					</div>
 				</div>
-				
 			</div>
 			<!-- Copyright Info -->
 			<div class="font-size-xs clearfix border-t pt-20 pb-10">
@@ -369,8 +363,6 @@
 			</div>
 			<!-- END Copyright Info -->
 			<!-- END Footer Navigation -->
-
-			
 		</div>
 	</footer>
 </body>
