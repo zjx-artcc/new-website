@@ -1,11 +1,14 @@
 <script>
+// @ts-nocheck
+
 	import '../app.css';
 	import Navbar from '../components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
 	import Card from '../components/Card.svelte';
 	import EventCard from '../components/EventCard.svelte';
 	import NewsCard from '../components/NewsCard.svelte';
-
+	/** @type {import('./$types').PageData}*/
+	export let data;
 	const today = new Date();
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>
@@ -34,8 +37,8 @@
 		<div class=" container">
 			<Card
 				title="Top Controller of {currentMonthName}"
-				subtext="Jack Freeze"
-				timestamp="00:56 HOURS"
+				subtext="{data.data[0].first_name} {data.data[0].last_name}"
+				timestamp="{data.data[0].month_three} HOURS"
 				icon="ant-design:hourglass-twotone"
 			/>
 		</div>

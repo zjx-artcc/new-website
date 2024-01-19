@@ -1,6 +1,5 @@
 <script>
 // @ts-nocheck
-
 	import Icon from '@iconify/svelte';
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
