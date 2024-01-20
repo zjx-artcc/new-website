@@ -5,8 +5,15 @@
 	import Card from '../components/Card.svelte';
 	import EventCard from '../components/EventCard.svelte';
 	import NewsCard from '../components/NewsCard.svelte';
+	import ATCCard from '../components/ATCCard.svelte';
 
 	const today = new Date();
+	const options = {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	};
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>
 
@@ -245,10 +252,8 @@
 					<p>Note: Expected coverage does not guarantee coverage will be present</p>
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;">
 						<tbody
-							><tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
-							</tr>
+							>
+						<ATCCard name="John Doe" position="Blank" date={today.toLocaleString("en-US", options)}/>
 
 							<tr>
 								<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
