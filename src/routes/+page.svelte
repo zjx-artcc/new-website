@@ -37,11 +37,13 @@
 			<Card title="Newest Home Controller" subtext="{data.newController[0].first_name} {data.newController[0].last_name} ({data.newController[0].rating})" timestamp="Joined {new Date(data.newController[0].created_at).toLocaleDateString(undefined,{ month: 'short', day: 'numeric', year: 'numeric' })}" icon="material-symbols:person" />
 		</a>
 	</div>
+
 	<nav class="bg-slate-400 text-white p-4">
 		<div class="container mx-auto">
 			<h1 class="text-xl text-center">ZJX Info Table</h1>
 		</div>
 	</nav>
+	
 	<main class="container mx-auto p-4">
 		<section class="my-6">
 			<h2 class="text-2xl font-semibold mb-4">ZJX Info</h2>
