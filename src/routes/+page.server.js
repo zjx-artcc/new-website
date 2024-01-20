@@ -3,6 +3,7 @@
 import { supabase } from '../lib/supabaseClient';
 
 /** @type {import('./$types').PageLoad} */
+// eslint-disable-next-line no-unused-vars
 export async function load({ params }) {
   let pageData = {
     stats: {},
@@ -23,7 +24,6 @@ export async function load({ params }) {
       console.error(error);
       return;
     }
-    console.log(data);
     for(let i = 0; i < data.length; i++) {
       switch(data[i].rating) {
         case 1:

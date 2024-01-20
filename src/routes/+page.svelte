@@ -8,8 +8,6 @@
 
 	/** @type {import('./$types').PageData}*/
 	export let data;
-	//TODO: REMOVE LATER
-	console.log(data);
 	const today = new Date();
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>
