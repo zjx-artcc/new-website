@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
 	import '../app.css';
 	import Navbar from '../components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
