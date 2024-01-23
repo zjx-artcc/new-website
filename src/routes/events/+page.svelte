@@ -1,10 +1,12 @@
 <script>
   //@ts-nocheck
+  import { Card, Button, Toggle } from 'flowbite-svelte';
   import '../../app.css';
   import Navbar from '../../components/Navbar.svelte';
   import Icon from '@iconify/svelte';
   export let data;
   console.log(data);
+
 </script>
 
 <!--<header class="bg-gray-700 block" id="myTopnav">
@@ -48,6 +50,8 @@
   </div>
 </div>
 <div id="content" class="grid-cols-2">
+
+
   {#each data.data as e, i}
     <div>
       <a href="/events/{data.data[i].id}">
@@ -63,4 +67,6 @@
       </a>
     </div>
   {/each}
+
+
 </div>
