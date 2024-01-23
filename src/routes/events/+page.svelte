@@ -49,11 +49,11 @@
     </nav>
   </div>
 </div>
-<div id="content" class="grid-cols-2">
+<div id="content" class="grid grid-cols-3 gap-4 justify-items-center align-middle">
 
 
   {#each data.data as e, i}
-    <div>
+   <!---- <div>
       <a href="/events/{data.data[i].id}">
         <div class="mb-5">
           <div>
@@ -66,6 +66,12 @@
         </div>
       </a>
     </div>
+  -->
+
+  <Card img="{data.data[i].banner}" href="/events/{data.data[i].id}" horizontal size="md" class="w-96">
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data.data[i].name}</h5>
+    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">{new Date(data.data[i].event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})} -> {new Date(data.data[i].event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
+  </Card>
   {/each}
 
 
