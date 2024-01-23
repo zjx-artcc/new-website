@@ -24,7 +24,6 @@
   <div class="py-1.5 text-center">
     <nav class="py-2 mb-0">
       <a href="/" class="text-sky-500">Home</a>
-      >
       <a href="/events" class="text-sky-500">Events</a>
     </nav>
   </div>

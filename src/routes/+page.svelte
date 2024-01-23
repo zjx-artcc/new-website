@@ -1,5 +1,5 @@
 <script>
-// @ts-nocheck
+	// @ts-nocheck
 
 	import '../app.css';
 	import Navbar from '../components/Navbar.svelte';
@@ -11,10 +11,10 @@
 
 	const today = new Date();
 	const options = {
-		weekday: "long",
-		year: "numeric",
-		month: "long",
-		day: "numeric",
+		weekday: 'long',
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
 	};
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>
@@ -119,16 +119,8 @@
 								cellspacing="0"
 							>
 								<tbody
-									><tr style="background-color: rgba(255, 255, 255);">
-										<td style="width: 50%;" align="left"
-											><a href="/events/307/"
-												><img
-													width="100%"
-													src="https://i.ibb.co/7WV2Ppw/Everglades-Circuit.png"
-													alt="Everglades-Circuit"
-												/></a
-											></td
-										>
+									>
+									<EventCard />
 										<td style="width: 50%;"
 											><a href="/events/307/"
 												><div style="text-align:center; font-size: 24px;">
@@ -139,7 +131,6 @@
 											<br />
 											<div style="text-align:center; font-size: 20px;">Jan 07, 2024 at 22:00z</div>
 										</td>
-									</tr>
 									<tr>
 										<td colspan="2">&nbsp;</td>
 									</tr>
@@ -253,9 +244,12 @@
 					<h3 class="font-semibold mb-2">Expected ATC</h3>
 					<p>Note: Expected coverage does not guarantee coverage will be present</p>
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;">
-						<tbody
-							>
-						<ATCCard name="John Doe" position="Blank" date={today.toLocaleString("en-US", options)}/>
+						<tbody>
+							<ATCCard
+								name="John Doe"
+								position="Blank"
+								date={today.toLocaleString('en-US', options)}
+							/>
 
 							<tr>
 								<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
