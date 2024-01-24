@@ -15,10 +15,10 @@ export async function load({ params }) {
     
     }
   }
-  const { data, error } = await supabase.from('events').select("*").eq('id', params.id).single();
+  /*const { data, error } = await supabase.from('events').select("*").eq('id', params.id).single();
   if (error) {
     console.error(error);
     return;
   }
-  return data[0]
+  return data[0]*/
 }
