@@ -30,5 +30,5 @@
 </Dropdown>
 <a href="/" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ri:radar-fill" class="pt-1.5" style="width: 30px; height: 25px" /> Controllers</a>
 <a href="/" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-people" class="pt-1.5" style="width: 30px; height: 25px" /> Membership</a>
-<a href="/" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ion:calendar" class="pt-1.5" style="width: 30px; height: 25px" /> Events</a>
+<a href="/events" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ion:calendar" class="pt-1.5" style="width: 30px; height: 25px" /> Events</a>
 <a href="/" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5" style="width: 30px; height: 25px" /> Login</a>
