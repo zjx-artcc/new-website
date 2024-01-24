@@ -10,6 +10,7 @@
 	import ATCCard from '../components/ATCCard.svelte';
 
 	const today = new Date();
+	export let data;
 	const options = {
 		weekday: 'long',
 		year: 'numeric',
@@ -39,22 +40,21 @@
 	<div class="flex flex-wrap justify-center">
 		<Card
 			title="Top Controller of {currentMonthName}"
-			subtext="Jack Freeze"
-			timestamp="00:56 HOURS"
+			subtext="{data.stats[0].first_name} {data.stats[0].last_name}" timestamp="{data.stats[0].month_three} HOURS"
 			icon="ant-design:hourglass-twotone"
 		/>
 
 		<Card
-			title="Everglades Circuit Lap #2"
-			subtext="The Everglades Circuit Lap #2"
-			timestamp="Jan. 07, 2024 @ 22:00Z"
+			title="Next Event"
+			subtext={data.events[0].name} 
+			timestamp={new Date(data.events[0].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
 			icon="ion:calendar"
 		/>
 
 		<Card
 			title="Newest Home Controller"
-			subtext="Nick Soriano (OBS)"
-			timestamp="Joined Dec. 27, 2023"
+			subtext="{data.newController[0].first_name} {data.newController[0].last_name} ({data.newController[0].rating})"
+			timestamp="Joined {new Date(data.newController[0].created_at).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric' })}"
 			icon="material-symbols:person"
 		/>
 	</div>
@@ -120,17 +120,28 @@
 							>
 								<tbody
 									>
-									<EventCard />
+									<tr style="background-color: rgba(255, 255, 255);">
+										<td style="width: 50%;" align="left"
+											><a href="/events/314/"
+												><img
+													loading="lazy"
+													width="100%"
+													src="{data.events[0].banner}"
+													alt="{data.events[0].name}"
+												/></a
+											></td
+										>
 										<td style="width: 50%;"
-											><a href="/events/307/"
+											><a href="/events/314/"
 												><div style="text-align:center; font-size: 24px;">
-													<b>The Everglades Circuit Lap #2</b>
+													<b>{data.events[0].name}</b>
 												</div></a
 											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: ZMA</div>
+											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[0].host}</div>
 											<br />
-											<div style="text-align:center; font-size: 20px;">Jan 07, 2024 at 22:00z</div>
+											<div style="text-align:center; font-size: 20px;">{new Date(data.events[0].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
 										</td>
+									</tr>
 									<tr>
 										<td colspan="2">&nbsp;</td>
 									</tr>
@@ -140,20 +151,21 @@
 											><a href="/events/314/"
 												><img
 													width="100%"
-													src="https://www.ztlartcc.org/storage/event_banners/1699861515.png"
-													alt="Everglades-Circuit Lap #2"
+													loading="lazy"
+													src="{data.events[1].banner}"
+													alt="{data.events[1].name}"
 												/></a
 											></td
 										>
 										<td style="width: 50%;"
 											><a href="/events/314/"
 												><div style="text-align:center; font-size: 24px;">
-													<b>Honoring the Dream FNO @ KATL </b>
+													<b>{data.events[1].name}</b>
 												</div></a
 											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div>
+											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[1].host}</div>
 											<br />
-											<div style="text-align:center; font-size: 20px;">Jan 12, 2024 at 23:59z</div>
+											<div style="text-align:center; font-size: 20px;">{new Date(data.events[1].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
 										</td>
 									</tr>
 									<tr>
@@ -164,21 +176,22 @@
 										<td style="width: 50%;" align="left"
 											><a href="/events/316/"
 												><img
+													loading="lazy"
 													width="100%"
-													src="https://www.ztlartcc.org/storage/event_banners/1699246811.png"
-													alt="Honoring the Dream FNO @ KATL"
+													src="{data.events[2].banner}"
+													alt="{data.events[2].name}"
 												/></a
 											></td
 										>
 										<td style="width: 50%;"
 											><a href="/events/316/"
 												><div style="text-align:center; font-size: 24px;">
-													<b>First Flight's First School </b>
+													<b>{data.events[2].name}</b>
 												</div></a
 											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: ZTL</div>
+											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[2].host}</div>
 											<br />
-											<div style="text-align:center; font-size: 20px;">Jan 25, 2024 at 11:59z</div>
+											<div style="text-align:center; font-size: 20px;">{new Date(data.events[2].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
 										</td>
 									</tr>
 									<tr>
@@ -202,15 +215,15 @@
 						<div class="flex flex-col items-center">
 							<div id="1st-controller" class="inline-flex">
 								<span class="text-yellow-500 text-left">★★★</span>
-								<div class="font-bold text-gray-800 mr-2 text-right">Jack Freeze</div>
+								<div class="font-bold text-gray-800 mr-2 text-right">{data.stats[0].first_name} {data.stats[0].last_name}</div>
 							</div>
 							<div id="2nd-controller" class="inline-flex">
 								<span class="text-gray-500">★★</span>
-								<div class="font-bold text-gray-800 mr-2">Alex Brehm</div>
+								<div class="font-bold text-gray-800 mr-2">{data.stats[1].first_name} {data.stats[1].last_name}</div>
 							</div>
 							<div id="3rd-controller" class="inline-flex">
 								<span class="text-red-500">★</span>
-								<div class="font-bold text-gray-800 mr-2">Robert Burkhead</div>
+								<div class="font-bold text-gray-800 mr-2">{data.stats[2].first_name} {data.stats[2].last_name}</div>
 							</div>
 						</div>
 					</div>
@@ -222,18 +235,18 @@
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
 						<tbody
 							><tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Will Zeitler (S1) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[0].first_name} {data.newController[0].last_name} ({data.newController[0].rating})</td>
+								<td style="font-size: 14px; width: 50%;" align="right">{new Date(data.newController[0].created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</td>
 							</tr>
 
 							<tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
+								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[1].first_name} {data.newController[1].last_name} ({data.newController[1].rating}) </td>
+								<td style="font-size: 14px; width: 50%;" align="right">{new Date(data.newController[1].created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</td>
 							</tr>
 
 							<tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
+								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[2].first_name} {data.newController[2].last_name} ({data.newController[2].rating}) </td>
+								<td style="font-size: 14px; width: 50%;" align="right">{new Date(data.newController[2].created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</td>
 							</tr>
 						</tbody>
 					</table>
