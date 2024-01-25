@@ -51,7 +51,9 @@
 </div>
 <div id="content" class="grid grid-cols-3 gap-4 justify-items-center align-middle">
 
-  
+<div>
+  <div class="items-center text-center justify-center container w-full flex flex-col" id="description">{data.description}</div>
+</div>
 
 
 </div>
