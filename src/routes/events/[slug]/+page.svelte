@@ -27,14 +27,14 @@
 		<Navbar />
 	</div>
 	<div
-		style="background-position: 0% 50%; background-size: cover; background-image: url('{data.banner}'); filter: blur(20px); left: 0; top: 0; height: 400px; "
+		style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; "
 	>
 		<div
 			class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]"
 		>
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
 			<h1 class="text-6xl text-white font-bold pt-3">{data.name}</h1>
-			<h3 class="text-3xl text-white pt-3">Jacksonville ARTCC</h3>
+			<h3 class="text-3xl text-white pt-3">{data.host}</h3>
 		</div>
 	</div>
 </header>
@@ -44,6 +44,7 @@
   <div class="py-1.5 text-center">
     <nav class="py-2 mb-0">
       <a href="/" class="text-sky-500">Home</a>
+      >
       <a href="/events" class="text-sky-500">Events</a>
     </nav>
   </div>
