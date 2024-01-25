@@ -1,18 +1,22 @@
 //@ts-nocheck
-import { error } from '@sveltejs/kit'
-//import { supabase } from '../../../lib/supabaseClient';
+import { error as svelteError} from '@sveltejs/kit'
+import { supabase } from '../../../lib/supabaseClient';
 
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params }) {
   console.log(params);
   if (params.slug == undefined) {
-    error(404, 'Event not found');
+    svelteError(404, 'Event not found');
   }
-  /*const { data, error } = await supabase.from('events').select("*").eq('id', params.id).single();
+  const { data, error } = await supabase.from('events').select("*").eq('id', parseInt(params.slug));
   if (error) {
     console.error(error);
-    return;
+    svelteError(500, 'Error fetching event');
   }
-  return data[0]*/
+  if (data[0] == undefined) {
+    svelteError(404, 'Event not found');
+  }
+  console.log(data[0])
+  return data[0]
 }
