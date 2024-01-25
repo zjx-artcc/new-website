@@ -609,7 +609,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.0.0":
+"@sveltejs/kit@npm:^2.4.3":
   version: 2.4.3
   resolution: "@sveltejs/kit@npm:2.4.3"
   dependencies:
@@ -992,9 +992,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001565, caniuse-lite@npm:^1.0.30001578":
-  version: 1.0.30001579
-  resolution: "caniuse-lite@npm:1.0.30001579"
-  checksum: 4003970f8d01a5fa314e39f4a21751dc750a530f3d19aed225e18e8e02892b590b8b0debfa0961eae9bc0e49b77bfb17cf30d2469540e428a8305e3cc9164fb8
+  version: 1.0.30001580
+  resolution: "caniuse-lite@npm:1.0.30001580"
+  checksum: f3a41bb5a820640a60071ed69d464f20d783d9a51cc2fd8916c7b0c187b25a8062e11986d04f531bdc1798d0bc37dfb0f90dcfa90fa3227bd49691efd4272c03
   languageName: node
   linkType: hard
 
@@ -1206,9 +1206,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.601":
-  version: 1.4.644
-  resolution: "electron-to-chromium@npm:1.4.644"
-  checksum: de79cce1523992fb05b4e74162923e0921aefe7ab1f7342848b68d06085a8b5cb390a5e33ea494078fe676f35ecbada0e4b52d8cc65e204fb836d31663b2784e
+  version: 1.4.645
+  resolution: "electron-to-chromium@npm:1.4.645"
+  checksum: a77ad457b960fae4ca109eda9e0d6263686c9868ded5c02029ad18cd69387376395ab113104b01a3355ae5efd4a4d63deb3d00af41c52b48c1408aa7719aec75
   languageName: node
   linkType: hard
 
@@ -3737,7 +3737,7 @@ __metadata:
     "@iconify/svelte": "npm:^3.1.6"
     "@supabase/supabase-js": "npm:^2.39.3"
     "@sveltejs/adapter-auto": "npm:^3.0.0"
-    "@sveltejs/kit": "npm:^2.0.0"
+    "@sveltejs/kit": "npm:^2.4.3"
     "@sveltejs/vite-plugin-svelte": "npm:^3.0.0"
     autoprefixer: "npm:^10.4.16"
     dotenv: "npm:^16.3.1"

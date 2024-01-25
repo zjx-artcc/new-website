@@ -2,11 +2,11 @@
 import { error } from '@sveltejs/kit'
 //import { supabase } from '../../../lib/supabaseClient';
 
-/** @type {import('$types').PageLoad}*/
+/** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params }) {
   console.log(params);
-  if (params.id == undefined) {
+  if (params.slug == undefined) {
     error(404, 'Event not found');
   }
   /*const { data, error } = await supabase.from('events').select("*").eq('id', params.id).single();
