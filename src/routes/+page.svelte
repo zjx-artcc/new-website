@@ -260,19 +260,22 @@
 						<tbody>
 							<ATCCard
 								name="John Doe"
-								position="Blank"
-								date={today.toLocaleString('en-US', options)}
+								position="JAX_CTR"
+								startDate={today.toLocaleString('en-US', options)}
+								endDate={today.toLocaleString('en-US', options)}
 							/>
-
-							<tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Prolly Perry (OBS) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 4, 2024</td>
-							</tr>
-
-							<tr>
-								<td style="font-size: 14px; width: 50%;" align="left">Virgil Zetterlind (OBS) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">Join ZJX on Jan. 3, 2024</td>
-							</tr>
+							<ATCCard
+							name="Samuel Valencia"
+							position="JAX_APP"
+							startDate={today.toLocaleString('en-US', options)}
+							endDate={today.toLocaleString('en-US', options)}
+						/>
+						<ATCCard
+								name="Michael Knight"
+								position="JAX_DEL"
+								startDate={today.toLocaleString('en-US', options)}
+								endDate={today.toLocaleString('en-US', options)}
+							/>	
 						</tbody>
 					</table>
 				</div>
