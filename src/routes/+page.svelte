@@ -118,85 +118,29 @@
 								width="100%"
 								cellspacing="0"
 							>
-								<tbody
-									>
+								<tbody>
+									{#each data.events as event}
 									<tr style="background-color: rgba(255, 255, 255);">
-										<td style="width: 50%;" align="left"
-											><a href="/events/314/"
-												><img
-													loading="lazy"
-													width="100%"
-													src="{data.events[0].banner}"
-													alt="{data.events[0].name}"
-												/></a
-											></td
-										>
-										<td style="width: 50%;"
-											><a href="/events/314/"
-												><div style="text-align:center; font-size: 24px;">
-													<b>{data.events[0].name}</b>
-												</div></a
-											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[0].host}</div>
+										<td style="width: 50%;" align="left">
+											<a href="/events/{event.id}/">
+												<img loading="lazy" width="100%" src="{event.banner}" alt="{event.name}" />
+											</a>
+										</td>
+										<td style="width: 50%;">
+											<a href="/events/314/">
+												<div style="text-align:center; font-size: 24px;">
+													<b>{event.name}</b>
+												</div>
+											</a>
+											<div style="text-align:center; font-size: 20px;">Hosted by: {event.host}</div>
 											<br />
-											<div style="text-align:center; font-size: 20px;">{new Date(data.events[0].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
+											<div style="text-align:center; font-size: 20px;">{new Date(event.event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
 										</td>
 									</tr>
 									<tr>
 										<td colspan="2">&nbsp;</td>
 									</tr>
-
-									<tr style="background-color: rgba(255, 255, 255);">
-										<td style="width: 50%;" align="left"
-											><a href="/events/314/"
-												><img
-													width="100%"
-													loading="lazy"
-													src="{data.events[1].banner}"
-													alt="{data.events[1].name}"
-												/></a
-											></td
-										>
-										<td style="width: 50%;"
-											><a href="/events/314/"
-												><div style="text-align:center; font-size: 24px;">
-													<b>{data.events[1].name}</b>
-												</div></a
-											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[1].host}</div>
-											<br />
-											<div style="text-align:center; font-size: 20px;">{new Date(data.events[1].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="2">&nbsp;</td>
-									</tr>
-
-									<tr style="background-color: rgba(255, 255, 255);">
-										<td style="width: 50%;" align="left"
-											><a href="/events/316/"
-												><img
-													loading="lazy"
-													width="100%"
-													src="{data.events[2].banner}"
-													alt="{data.events[2].name}"
-												/></a
-											></td
-										>
-										<td style="width: 50%;"
-											><a href="/events/316/"
-												><div style="text-align:center; font-size: 24px;">
-													<b>{data.events[2].name}</b>
-												</div></a
-											>
-											<div style="text-align:center; font-size: 20px;">Hosted by: {data.events[2].host}</div>
-											<br />
-											<div style="text-align:center; font-size: 20px;">{new Date(data.events[2].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="2">&nbsp;</td>
-									</tr>
+									{/each}
 								</tbody>
 							</table>
 						</div>
@@ -213,18 +157,15 @@
 							<div class="text-gray-600">Hours Controlled This Month</div>
 						</div>
 						<div class="flex flex-col items-center">
-							<div id="1st-controller" class="inline-flex">
-								<span class="text-yellow-500 text-left">★★★</span>
+								<div class="text-yellow-500 text-left">★★★</div>
 								<div class="font-bold text-gray-800 mr-2 text-right">{data.stats[0].first_name} {data.stats[0].last_name}</div>
-							</div>
-							<div id="2nd-controller" class="inline-flex">
+								<div class="text-gray-800 mr-2 text-right">{data.stats[0].hours}</div>
+								<br>
 								<span class="text-gray-500">★★</span>
 								<div class="font-bold text-gray-800 mr-2">{data.stats[1].first_name} {data.stats[1].last_name}</div>
-							</div>
-							<div id="3rd-controller" class="inline-flex">
+								<br>
 								<span class="text-red-500">★</span>
 								<div class="font-bold text-gray-800 mr-2">{data.stats[2].first_name} {data.stats[2].last_name}</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -233,21 +174,15 @@
 				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
-						<tbody
-							><tr>
-								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[0].first_name} {data.newController[0].last_name} ({data.newController[0].rating})</td>
-								<td style="font-size: 14px; width: 50%;" align="right">{new Date(data.newController[0].created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</td>
-							</tr>
-
-							<tr>
-								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[1].first_name} {data.newController[1].last_name} ({data.newController[1].rating}) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">{new Date(data.newController[1].created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</td>
-							</tr>
-
-							<tr>
-								<td style="font-size: 14px; width: 50%;" align="left">{data.newController[2].first_name} {data.newController[2].last_name} ({data.newController[2].rating}) </td>
-								<td style="font-size: 14px; width: 50%;" align="right">{new Date(data.newController[2].created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</td>
-							</tr>
+						<tbody>
+							{#each data.newController as controller}
+							<ATCCard
+								name="{controller.first_name} {controller.last_name} ({controller.rating})"
+								position="Joined ZJX on:"
+								startDate=""
+								endDate="{new Date(controller.created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}"
+							/>
+							{/each}
 						</tbody>
 					</table>
 				</div>
@@ -258,24 +193,14 @@
 					<p>Note: Expected coverage does not guarantee coverage will be present</p>
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;">
 						<tbody>
+							{#each data.bookings as booking}
 							<ATCCard
-								name="John Doe"
-								position="JAX_CTR"
-								startDate={today.toLocaleString('en-US', options)}
-								endDate={today.toLocaleString('en-US', options)}
+								name="{booking.first_name} {booking.last_name}"
+								position="{booking.position}"
+								startDate={new Date(booking.booking_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+								endDate={new Date(booking.booking_end).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
 							/>
-							<ATCCard
-							name="Samuel Valencia"
-							position="JAX_APP"
-							startDate={today.toLocaleString('en-US', options)}
-							endDate={today.toLocaleString('en-US', options)}
-						/>
-						<ATCCard
-								name="Michael Knight"
-								position="JAX_DEL"
-								startDate={today.toLocaleString('en-US', options)}
-								endDate={today.toLocaleString('en-US', options)}
-							/>	
+							{/each}
 						</tbody>
 					</table>
 				</div>
