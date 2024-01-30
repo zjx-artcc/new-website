@@ -19,17 +19,17 @@ export async function load({ params }) {
     }
     //TODO: Convert hhh:mm to decimal
     for(let i = 0; i < data.length; i++) {
-      if (data[i].month_one === null) {
-        data[i].month_one = 0
-      }
-      if (data[i].month_two === null) {
-        data[i].month_two = 0
-      }
-      if (data[i].month_three === null) {
-        data[i].month_three = 0
+      for (let j = 0; j < 3; j++) {
+        let num = ['','one','two','three']
+        if (data[i][`month_${num[j+1]}`] == null) {
+          data[i][`month_${num[j+1]}`] = "0:00"
+        }
+        let time = data[i][`month_${num[j+1]}`].toString().split(':');
+        time[1] = (Math.ceil((time[1]/60)*100)).toString()
+        time = parseFloat(`${time[0]}.${time[1]}`)
+        console.log(time);
       }
       data[i].hours = Math.round(data[i].month_one + data[i].month_two + data[i].month_three)
-      console.log(data[i])
     }
     pageData.stats = data
   }
