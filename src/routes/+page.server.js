@@ -10,6 +10,7 @@ export async function load({ params }) {
     newController: {},
     events: {},
     bookings: {},
+    notams: {},
   };
   {
     const { data, error } = await supabase.from("stats").select("*").order('month_three', { ascending: false }).limit(3);
@@ -72,6 +73,14 @@ export async function load({ params }) {
       return;
     }
     pageData.bookings = data
+  }
+  {
+    const { data, error } = await supabase.from('notams').select("*").order("created_at", { ascending: true }).limit(15);
+    if (error) {
+      console.error(error);
+      return;
+    }
+    pageData.notams = data;
   }
   return pageData;
 }

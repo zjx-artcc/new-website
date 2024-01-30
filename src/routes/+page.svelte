@@ -24,12 +24,8 @@
 	<div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
 		<Navbar />
 	</div>
-	<div
-		style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 560px; "
-	>
-		<div
-			class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]"
-		>
+	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 560px; ">
+		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
 			<img src="/ZJX-Light-Logo.png" height="200" width="200" alt="" srcset="" />
 			<h1 class="text-6xl text-white font-bold pt-3">Welcome to Jacksonville!</h1>
 			<h3 class="text-3xl text-white pt-3">Part of VATUSA and VATSIM</h3>
@@ -43,14 +39,12 @@
 			subtext="{data.stats[0].first_name} {data.stats[0].last_name}" timestamp="{data.stats[0].month_three} HOURS"
 			icon="ant-design:hourglass-twotone"
 		/>
-
 		<Card
 			title="Next Event"
 			subtext={data.events[0].name} 
 			timestamp={new Date(data.events[0].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
 			icon="ion:calendar"
 		/>
-
 		<Card
 			title="Newest Home Controller"
 			subtext="{data.newController[0].first_name} {data.newController[0].last_name} ({data.newController[0].rating})"
@@ -58,57 +52,32 @@
 			icon="material-symbols:person"
 		/>
 	</div>
-	<!---->
-	<nav class="bg-slate-400 text-white p-4">
-		<div class="container mx-auto">
-			<h1 class="text-xl text-center">ZJX Info Table</h1>
-		</div>
-	</nav>
-
-	<!--zjx news -> this month's stats;upcoming events->welcome our newest home controllers-->
-
 	<main class="container mx-auto p-4">
-		<!-- ZJX Info Section -->
 		<section class="my-6">
-			<h2 class="text-2xl font-semibold mb-4">ZJX Info</h2>
-			<!-- Stats and Controllers Section -->
 			<section class="my-6">
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<!-- This Month's Stats -->
 					<div class="bg-white shadow p-4">
 						<h3 class="font-semibold mb-2">ZJX News</h3>
 						<table class="table-auto w-full">
 							<thead />
 							<tbody>
 								<tr class="pt-4">
-									<td style="width:30%;" class="pt-4"
-										><Icon
-											icon="ic:outline-warning"
-											color="orange"
-											class="text-center align-middle items-center"
-										/></td
-									>
-									<td style="width:70%;" class="pt-4"
-										>NOTAM:
-										<p>GTOUT Of 2023 signups needed! Please sign up if you can control!</p></td
-									>
+									<td style="width:30%;" class="pt-4">Date:</td>
+									<td style="width:70%;" class="pt-4">NOTAM:</td>
 								</tr>
+								{#each data.notams as notam}
 								<NewsCard
-									date="December 29, 2023"
-									description="BLAHB LAH BLAH IG UESS THIS WORKS"
+									date="{new Date(notam.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}"
+									description="{notam.body}"
 								/>
+								{/each}
 							</tbody>
 						</table>
-						<span class=" mt-4 block text-center justify-center items-center"
-							>For More Information, <a
-								href="discord.gg"
-								style="width: 100%; text-decoration: none; color: blue;">Join the Discord!</a
-							></span
-						>
+						<span class=" mt-4 block text-center justify-center items-center">
+							For More Information, 
+							<a href="discord.gg" style="width: 100%; text-decoration: none; color: blue;">Join the Discord!</a>
+						</span>
 					</div>
-
-					<!-- Welcome New Controllers -->
-					<!-- Upcoming Events Section -->
 					<div class="bg-white shadow p-4">
 						<h3 class="font-semibold mb-2">Upcoming Events</h3>
 						<!-- New controller list goes here -->
