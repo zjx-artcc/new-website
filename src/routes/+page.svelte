@@ -159,13 +159,15 @@
 						<div class="flex flex-col items-center">
 								<div class="text-yellow-500 text-left">★★★</div>
 								<div class="font-bold text-gray-800 mr-2 text-right">{data.stats[0].first_name} {data.stats[0].last_name}</div>
-								<div class="text-gray-800 mr-2 text-right">{data.stats[0].hours}</div>
+								<div class="text-gray-800 mr-2 text-right">{data.stats[0].month_three} hours</div>
 								<br>
 								<span class="text-gray-500">★★</span>
 								<div class="font-bold text-gray-800 mr-2">{data.stats[1].first_name} {data.stats[1].last_name}</div>
+								<div class="text-gray-800 mr-2 text-right">{data.stats[1].month_three} hours</div>
 								<br>
 								<span class="text-red-500">★</span>
 								<div class="font-bold text-gray-800 mr-2">{data.stats[2].first_name} {data.stats[2].last_name}</div>
+								<div class="text-gray-800 mr-2 text-right">{data.stats[2].month_three} hours</div>
 						</div>
 					</div>
 				</div>
@@ -265,24 +267,10 @@
 					<div class="font-size-sm mb-30">
 						<ul class="list list-simple-mini font-size-sm">
 							<li>
-								<a class="link-effect font-w600" href="https://vatusa.net/" target="_blank"
-									>VATUSA</a
-								>
+								<a class="link-effect font-w600" href="https://vatusa.net/" target="_blank">VATUSA</a>
 							</li>
 							<li>
-								<a class="link-effect font-w600" href="https://vatsim.net/" target="_blank"
-									>VATSIM</a
-								>
-							</li>
-
-							<li>
-								<a href="https://www.vatstar.com/" target="blank"
-									><img
-										src="https://i.imgur.com/4AszbGC.png"
-										alt="VATSTAR"
-										style="width:200px; height:50px;"
-									/></a
-								>
+								<a class="link-effect font-w600" href="https://vatsim.net/" target="_blank">VATSIM</a>
 							</li>
 						</ul>
 					</div>

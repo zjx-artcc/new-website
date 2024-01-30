@@ -24,12 +24,7 @@ export async function load({ params }) {
         if (data[i][`month_${num[j+1]}`] == null) {
           data[i][`month_${num[j+1]}`] = "0:00"
         }
-        let time = data[i][`month_${num[j+1]}`].toString().split(':');
-        time[1] = (Math.ceil((time[1]/60)*100)).toString()
-        time = parseFloat(`${time[0]}.${time[1]}`)
-        console.log(time);
       }
-      data[i].hours = Math.round(data[i].month_one + data[i].month_two + data[i].month_three)
     }
     pageData.stats = data
   }
