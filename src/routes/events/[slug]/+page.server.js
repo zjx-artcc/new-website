@@ -5,7 +5,6 @@ import { supabase } from '../../../lib/supabaseClient';
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params }) {
-  console.log(params);
   if (params.slug == undefined) {
     svelteError(404, 'Event not found');
   }
@@ -17,6 +16,5 @@ export async function load({ params }) {
   if (data[0] == undefined) {
     svelteError(404, 'Event not found');
   }
-  console.log(data[0])
   return data[0]
 }
