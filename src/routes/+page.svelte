@@ -11,12 +11,6 @@
 
 	const today = new Date();
 	export let data;
-	const options = {
-		weekday: 'long',
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
-	};
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>
 
@@ -168,8 +162,8 @@
 							<ATCCard
 								name="{booking.first_name} {booking.last_name}"
 								position="{booking.position}"
-								startDate={new Date(booking.booking_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
-								endDate={new Date(booking.booking_end).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+								startDate={new Date(booking.booking_start).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+								endDate={new Date(booking.booking_end).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
 							/>
 							{/each}
 						</tbody>
@@ -251,10 +245,10 @@
 					© Copyright <span class="js-year-copy">2024</span> Jacksonville ARTCC. All rights reserved.
 				</div>
 				<div class="float-right">
-					<a
-						href="https://github.com/ZJX-ARTCC/jacksonville-issue-tracker/issues/new/choose"
-						target="_blank"><i class="fas fa-bug text-pulse" /> Log a bug or Request a feature</a
-					>
+					<a href="https://github.com/ZJX-ARTCC/jacksonville-issue-tracker/issues/new/choose" target="_blank">
+						<i class="fas fa-bug text-pulse" /> 
+						Log a bug or Request a feature
+					</a>
 				</div>
 			</div>
 			<!-- END Copyright Info -->
