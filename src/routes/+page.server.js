@@ -18,7 +18,6 @@ export async function load({ params }) {
       console.error(error);
       return;
     }
-    //TODO: Convert hhh:mm to decimal
     for(let i = 0; i < data.length; i++) {
       for (let j = 0; j < 3; j++) {
         let num = ['','one','two','three']
