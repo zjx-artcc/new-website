@@ -28,7 +28,12 @@
 		<ChevronRightSolid class="w-5 h-5 pt-3"/>
 	</DropdownItem>
 </Dropdown>
-<a href="/" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ri:radar-fill" class="pt-1.5" style="width: 30px; height: 25px" /> Controllers</a>
-<a href="/" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-people" class="pt-1.5" style="width: 30px; height: 25px" /> Membership</a>
+<a href="/controllers" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ri:radar-fill" class="pt-1.5" style="width: 30px; height: 25px" /> Controllers</a>
+<Button class="text-lg text-stone-200 inline-flex"><Icon icon="ic:baseline-people" class="w-7 h-7 pr-1.5" />Membership<ChevronDownSolid class="w-6 h-6 pt-1 pl-3"/></Button>
+<Dropdown>
+	<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
+		<a href="/membership/roster"><span>Roster</span></a>
+	</DropdownItem>
+</Dropdown>
 <a href="/events" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ion:calendar" class="pt-1.5" style="width: 30px; height: 25px" /> Events</a>
 <a href="/" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5" style="width: 30px; height: 25px" /> Login</a>

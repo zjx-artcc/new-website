@@ -43,13 +43,16 @@
       {:else}
         {#each data.positions as position}
           {#if position.controller == ''}
-            <div id="positions" class="pt-5 inline-flex ">
-              <p class="text-left">{position.position}: </p>
+            <div id="positions" class="pt-5 inline-flex">
+              <p class="text-left pr-5">{position.position}: </p>
               <p class="text-right">Not assigned</p>
             </div>
             <br>
           {:else}
-            <div id="positions" class="pt-5">{position.position}: {position.controller}</div>
+            <div id="positions" class="pt-5 inline-flex">
+              <p class="text-left pr-5">{position.position}: </p>
+              <p class="text-right">{position.controller}</p> 
+            </div>
           {/if}
         {/each}
       {/if}
