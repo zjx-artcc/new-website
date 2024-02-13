@@ -68,7 +68,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.pageData.home as controller}
+				{#each data.pageData.visiting as controller}
 				<tr>
 					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.first_name} {controller.last_name} ({controller.initials}) - {controller.home_facility}</td>
 					<td class="text-center align-top border-2 border-solid px-2 py-5"><a href="/membership/roster/{controller.cid}">{controller.cid}</a></td>
