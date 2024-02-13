@@ -21,28 +21,63 @@
 </header>
 
 <div id="content" class="bg-white align-middle text-center">
-	<style type="text/css">
-		.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-			overflow:hidden;padding:10px 5px;word-break:normal;}
-		.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-			font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-		.tg .tg-baqh{vertical-align:top}
-	</style>
-	<div class="pl-5">
-		<table>
+	<div class="pl-5 py-2">
+		<h1 class="text-3xl pb-2">Home Controllers</h1>
+		<table class="ml-auto mr-auto">
 			<thead>
 				<tr>
-					<th class="tg-baqh text-center align-top">Name</th>
-					<th class="tg-baqh text-center align-top">CID</th>
-					<th class="tg-baqh text-center align-top">Rating</th>
+					<th class="text-center border-2 border-solid align-top px-2">Name</th>
+					<th class="text-center border-2 border-solid align-top px-2">CID</th>
+					<th class="text-center border-2 border-solid align-top px-2">Rating</th>
+					<th class="text-center border-2 border-solid align-top px-2">Delivery Certs</th>
+					<th class="text-center border-2 border-solid align-top px-2">Ground Certs</th>
+					<th class="text-center border-2 border-solid align-top px-2">Tower Certs</th>
+					<th class="text-center border-2 border-solid align-top px-2">TRACON Certs</th>
+					<th class="text-center border-2 border-solid align-top px-2">Center Certs</th>
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.data as controller}
+				{#each data.pageData.home as controller}
 				<tr>
-					<td class="tg-baqh text-center align-top">{controller.first_name} {controller.last_name}</td>
-					<td class="tg-baqh text-center align-top">{controller.cid}</td>
-					<td class="tg-baqh text-center align-top">{controller.rating}</td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.first_name} {controller.last_name} ({controller.initials})</td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><a href="/membership/roster/{controller.cid}">{controller.cid}</a></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.rating}</td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.del_cert.color}">{controller.del_cert.cert}</p></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.gnd_cert.color}">{controller.gnd_cert.cert}</p></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.twr_cert.color}">{controller.twr_cert.cert}</p></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.app_cert.color}">{controller.app_cert.cert}</p></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.ctr_cert.color}">{controller.ctr_cert.cert}</p></td>
+				</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+	<div class="pl-5 py-2">
+		<h1 class="text-3xl pb-2">Visiting Controllers</h1>
+		<table class="ml-auto mr-auto">
+			<thead>
+				<tr>
+					<th class="text-center border-2 border-solid align-top px-2">Name</th>
+					<th class="text-center border-2 border-solid align-top px-2">CID</th>
+					<th class="text-center border-2 border-solid align-top px-2">Rating</th>
+					<th class="text-center border-2 border-solid align-top px-2">Delivery Certs</th>
+					<th class="text-center border-2 border-solid align-top px-2">Ground Certs</th>
+					<th class="text-center border-2 border-solid align-top px-2">Tower Certs</th>
+					<th class="text-center border-2 border-solid align-top px-2">TRACON Certs</th>
+					<th class="text-center border-2 border-solid align-top px-2">Center Certs</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each data.pageData.home as controller}
+				<tr>
+					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.first_name} {controller.last_name} ({controller.initials}) - {controller.home_facility}</td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><a href="/membership/roster/{controller.cid}">{controller.cid}</a></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.rating}</td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.del_cert.color}">{controller.del_cert.cert}</p></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.gnd_cert.color}">{controller.gnd_cert.cert}</p></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.twr_cert.color}">{controller.twr_cert.cert}</p></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.app_cert.color}">{controller.app_cert.cert}</p></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.ctr_cert.color}">{controller.ctr_cert.cert}</p></td>
 				</tr>
 				{/each}
 			</tbody>
