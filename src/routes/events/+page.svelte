@@ -29,14 +29,14 @@
   <div class="py-1.5 text-center">
     <nav class="py-2 mb-0">
       <a href="/" class="text-sky-500">Home</a>
-      <span class="text-gray-500">&#62;</span>
+      <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
       <a href="/events" class="text-sky-500">Events</a>
     </nav>
   </div>
 </div>
-<div id="content" class="grid xl:grid-cols-3 lg:grid-cols-2 gap-4 justify-items-center align-middle mt-5 sm:grid-cols-1">
+<div id="content" class="flex flex-wrap justify-center">
   {#each data.data as event}
-    <Card img="{event.banner}" href="/events/{event.id}" horizontal size="md" class="w-96 align-middle justify-center justify-items-center">
+    <Card img="{event.banner}" href="/events/{event.id}" horizontal size="md" class="w-96 align-middle justify-center justify-items-center m-10">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{event.name}</h5>
       <p class="mb-3 font-normal text-gray-500 leading-tight">Hosted By: {event.host}</p>
       <p class="mb-3 font-normal text-gray-700 leading-tight">{new Date(event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})} -> {new Date(event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>

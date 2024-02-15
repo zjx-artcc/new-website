@@ -453,6 +453,19 @@ a {
   padding-top: 10px;
   padding-bottom: 20px; /* Adjust the padding as needed */
 }
+#elEventHeader .ipsCoverPhoto {
+  padding-top: 120px;
+}
+.ipsCoverPhoto, .ipsCoverPhoto .ipsFlex {
+  position: relative;
+}
+.ipsPageHead_special {
+  border-radius: var(--radius-1) var(--radius-1) 0px 0px;
+  padding: 15px;
+  color: #fff;
+  position: relative;
+  background-color: rgb( var(--theme-profile_header) );
+}
 
 @tailwind base;
 @tailwind components;

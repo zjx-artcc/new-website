@@ -4,7 +4,6 @@
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
 </script>
-
 <div class="pl-4" style="display: inline-block; height: 34px; line-height: 34px; vertical-align: middle;">
 	<a class="link-effect font-bold" href="/">
 		<span class="text-xl text-stone-50">Jacksonville</span>
