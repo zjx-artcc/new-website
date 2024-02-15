@@ -36,7 +36,7 @@
 </div>
 <div id="content" class="grid xl:grid-cols-3 lg:grid-cols-2 gap-4 justify-items-center align-middle mt-5 sm:grid-cols-1">
   {#each data.data as event}
-    <Card img="{event.banner}" href="/events/{event.id}" horizontal size="md" class="w-96">
+    <Card img="{event.banner}" href="/events/{event.id}" horizontal size="md" class="w-96 align-middle justify-center justify-items-center">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{event.name}</h5>
       <p class="mb-3 font-normal text-gray-500 leading-tight">Hosted By: {event.host}</p>
       <p class="mb-3 font-normal text-gray-700 leading-tight">{new Date(event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})} -> {new Date(event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
