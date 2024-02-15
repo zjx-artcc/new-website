@@ -29,11 +29,12 @@
   <div class="py-1.5 text-center">
     <nav class="py-2 mb-0">
       <a href="/" class="text-sky-500">Home</a>
+      <span class="text-gray-500">&#62;</span>
       <a href="/events" class="text-sky-500">Events</a>
     </nav>
   </div>
 </div>
-<div id="content" class="grid grid-cols-3 gap-4 justify-items-center align-middle">
+<div id="content" class="grid xl:grid-cols-3 lg:grid-cols-2 gap-4 justify-items-center align-middle mt-5 sm:grid-cols-1">
   {#each data.data as event}
     <Card img="{event.banner}" href="/events/{event.id}" horizontal size="md" class="w-96">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{event.name}</h5>
