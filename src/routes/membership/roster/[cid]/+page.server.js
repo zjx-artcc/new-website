@@ -31,6 +31,19 @@ export async function load({ params }) {
       data[0].rating = "C1"
       break;
     case 7:
+      data[0].rating = "C3"
+      break;
+    case 8:
+      data[0].rating = "I1"
+      break;
+    case 10:
+      data[0].rating = "I3"
+      break;
+    case 11:
+      data[0].rating = "SUP"
+      break;
+    case 12:
+      data[0].rating = "ADM"
       break;
   }
   return data[0]

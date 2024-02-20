@@ -17,8 +17,8 @@ export async function load({ params }) {
   for(let i = 0; i < data.length; i++) {
     switch(data[i].rating) {
       case 1:
-        data[i].rating = "OBS"
-        break;
+          data[i].rating = "OBS"
+          break;
       case 2:
         data[i].rating = "S1"
         break;
@@ -32,6 +32,19 @@ export async function load({ params }) {
         data[i].rating = "C1"
         break;
       case 7:
+        data[i].rating = "C3"
+        break;
+      case 8:
+        data[i].rating = "I1"
+        break;
+      case 10:
+        data[i].rating = "I3"
+        break;
+      case 11:
+        data[i].rating = "SUP"
+        break;
+      case 12:
+        data[i].rating = "ADM"
         break;
     }
 
