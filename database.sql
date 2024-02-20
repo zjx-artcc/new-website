@@ -12,7 +12,7 @@ $do$;
 
 --Setup roster table
 CREATE TABLE IF NOT EXISTS roster (
-    cid int8 PRIMARY KEY,
+    cid int8 PRIMARY KEY NOT NULL,
     email text NOT NULL,
     home_facility text NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
@@ -25,14 +25,29 @@ CREATE TABLE IF NOT EXISTS roster (
     initials text NOT NULL,
     first_name text NOT NULL,
     last_name text NOT NULL
-)
+);
 
 --Setup user table
 CREATE TABLE IF NOT EXISTS users (
-    cid int8 PRIMARY KEY,
+    cid int8 PRIMARY KEY NOT NULL,
     email text NOT NULL,
     authorization_code text,
     access_token text,
     refresh_token text,
     session_expiry timestamptz
-)
+);
+
+--Setup Event Table
+CREATE TABLE IF NOT EXISTS events (
+    id int8 PRIMARY KEY NOT NULL,
+    last_modified timestamptz NOT NULL DEFAULT now(),
+    created_by int8 NOT NULL REFERENCES roster(cid),
+    name text NOT NULL,
+    description text NOT NULL,
+    event_start timestamptz NOT NULL,
+    event_end timestamptz NOT NULL,
+    host text NOT NULL,
+    hidden bool NOT NULL DEFAULT true,
+    banner text NOT NULL,
+    positions jsonb
+);
