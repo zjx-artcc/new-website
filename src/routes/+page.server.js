@@ -1,6 +1,5 @@
 //@ts-nocheck
-
-import { supabase } from '../lib/supabaseClient';
+import { api }  from '../lib/api';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
@@ -13,11 +12,7 @@ export async function load({ params }) {
     notams: {},
   };
   {
-    const { data, error } = await supabase.from("stats").select("*").order('month_three', { ascending: false }).limit(3);
-    if (error) {
-      console.error(error);
-      return;
-    }
+    const data = await api.GET('controllers/stats/top');
     for(let i = 0; i < data.length; i++) {
       for (let j = 0; j < 3; j++) {
         let num = ['','one','two','three']
@@ -29,69 +24,19 @@ export async function load({ params }) {
     pageData.stats = data
   }
   {
-    const { data, error } = await supabase.from("roster").select("*").order("created_at", {ascending: false}).limit(3);
-    if (error) {
-      console.error(error);
-      return;
-    }
-    for(let i = 0; i < data.length; i++) {
-      switch(data[i].rating) {
-        case 1:
-          data[i].rating = "OBS"
-          break;
-        case 2:
-          data[i].rating = "S1"
-          break;
-        case 3:
-          data[i].rating = "S2"
-          break;
-        case 4:
-          data[i].rating = "S3"
-          break;
-        case 5:
-          data[i].rating = "C1"
-          break;
-        case 7:
-          data[i].rating = "C3"
-          break;
-        case 8:
-          data[i].rating = "I1"
-          break;
-        case 10:
-          data[i].rating = "I3"
-          break;
-        case 11:
-          data[i].rating = "SUP"
-          break;
-        case 12:
-          data[i].rating = "ADM"
-          break;
-      }
-    }
+    const data = await api.GET('controllers/newest')
     pageData.newController = data
   }
   {
-    const { data, error } = await supabase.from('events').select("*").eq('hidden', false).order("event_start", { ascending: true }).limit(3);
-    if (error) {
-      console.error(error);
-      return;
-    }
+    const data = await api.GET('events/next/3')
     pageData.events = data
   }
   {
-    const { data, error } = await supabase.from('bookings').select("*").order("booking_start", { ascending: true }).limit(3);
-    if (error) {
-      console.error(error);
-      return;
-    }
+    const data = await api.GET('bookings/next/3')
     pageData.bookings = data
   }
   {
-    const { data, error } = await supabase.from('notams').select("*").order("created_at", { ascending: true }).limit(15);
-    if (error) {
-      console.error(error);
-      return;
-    }
+    const data = await api.GET('notams/next/3')
     pageData.notams = data;
   }
   return pageData;
