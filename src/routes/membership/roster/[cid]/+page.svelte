@@ -46,7 +46,14 @@
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
 						Certifications
 					</h3>
-					<p class="text-sm text-muted-foreground">Read {data.first_name}'s certifications</p>
+					<p class="text-sm text-muted-foreground">
+						<ul>
+							<li>Enroute - {data.ctr_cert}</li>
+							<li>Approach - {data.app_certs}</li>
+							<li>Tower - {data.twr_certs}</li>
+							<li>Ground - {data.gnd_certs}</li>
+							<li>Delivery - {data.del_certs}</li>
+						</ul>
 				</div>
 				<div class="p-6 flex items-center justify-center">
 				</div>

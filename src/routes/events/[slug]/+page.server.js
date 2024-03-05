@@ -5,7 +5,7 @@ import { api } from '../../../lib/api';
 // eslint-disable-next-line no-unused-vars
 export async function load({ params }) {
   const eventId = params.slug;
-  if (eventId == undefined) {
+  if (eventId == undefined) { 
     redirect(404, '/404');
   } else {
     const data = await api.GET(`events/${eventId}`);
