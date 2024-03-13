@@ -15,39 +15,6 @@ export async function load({ params }) {
     return;
   }
   for(let i = 0; i < data.length; i++) {
-    switch(data[i].rating) {
-      case 1:
-          data[i].rating = "OBS"
-          break;
-      case 2:
-        data[i].rating = "S1"
-        break;
-      case 3:
-        data[i].rating = "S2"
-        break;
-      case 4:
-        data[i].rating = "S3"
-        break;
-      case 5:
-        data[i].rating = "C1"
-        break;
-      case 7:
-        data[i].rating = "C3"
-        break;
-      case 8:
-        data[i].rating = "I1"
-        break;
-      case 10:
-        data[i].rating = "I3"
-        break;
-      case 11:
-        data[i].rating = "SUP"
-        break;
-      case 12:
-        data[i].rating = "ADM"
-        break;
-    }
-
     console.log(data[i]);
     data[i].del_cert = getCerts(data[i].del_cert)
     data[i].gnd_cert = getCerts(data[i].gnd_cert)

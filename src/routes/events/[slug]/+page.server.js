@@ -8,7 +8,7 @@ export async function load({ params }) {
   if (eventId == undefined) { 
     redirect(404, '/404');
   } else {
-    const data = await api.GET(`events/${eventId}`);
+    const data = await api.GET(`events/event/${eventId}`);
     console.log(data);
     if (data[0] == 404) {
       redirect(404, '/404');
