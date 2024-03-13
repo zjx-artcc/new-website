@@ -13,14 +13,7 @@ export async function load({ params }) {
   };
   {
     const data = await api.GET('controllers/stats/top');
-    for(let i = 0; i < data.length; i++) {
-      for (let j = 0; j < 3; j++) {
-        let num = ['','one','two','three']
-        if (data[i][`month_${num[j+1]}`] == null) {
-          data[i][`month_${num[j+1]}`] = "0:00"
-        }
-      }
-    }
+    console.log(data)
     pageData.stats = data
   }
   {

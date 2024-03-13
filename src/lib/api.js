@@ -3,7 +3,6 @@
 class Api {
   async GET(endpoint) {
     const url = `http://zjx.svalencia.me/${endpoint}`;
-    console.log(url);
     const res = await fetch(url);
     if (res.status == 404) {
       return 404;

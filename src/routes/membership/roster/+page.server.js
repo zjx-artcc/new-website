@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-import { supabase } from '../../../lib/supabaseClient';
+import { api } from '$lib/api';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
@@ -9,17 +9,13 @@ export async function load({ params }) {
     home: [],
     visiting: [],
   }
-  const { data, error } = await supabase.from("roster").select("*").order('first_name', { ascending: true })
-  if (error) {
-    console.error(error);
-    return;
-  }
+  const data = await api.GET('controllers/all');
   for(let i = 0; i < data.length; i++) {
     console.log(data[i]);
-    data[i].del_cert = getCerts(data[i].del_cert)
-    data[i].gnd_cert = getCerts(data[i].gnd_cert)
-    data[i].twr_cert = getCerts(data[i].twr_cert)
-    data[i].app_cert = getCerts(data[i].app_cert)
+    data[i].del_certs = getCerts(data[i].del_certs)
+    data[i].gnd_certs = getCerts(data[i].gnd_certs)
+    data[i].twr_certs = getCerts(data[i].twr_certs)
+    data[i].app_certs = getCerts(data[i].app_certs)
     data[i].ctr_cert = getCenterCert(data[i].ctr_cert)
 
     if (data[i].home_facility == "ZJX") {
@@ -28,6 +24,7 @@ export async function load({ params }) {
       pageData.visiting.push(data[i])
     }
   }
+  console.log(pageData);
   return {
     pageData
   }
