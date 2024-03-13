@@ -1,6 +1,4 @@
 //@ts-nocheck 
-
-import { supabase } from '../../lib/supabaseClient';
 import { redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
@@ -10,7 +8,7 @@ export async function load({ params, url, cookies }) {
   if (url.search.includes("?code")) {
     let code = url.search.split("?code=")[1];
     console.log(code);
-    redirect(302,`http://localhost:4500/auth/oauth?code=${code}`)
+    redirect(302,`http://zjx.svalencia.me/auth/oauth?code=${code}`)
   } else if (url.search.includes("?session")) {
     let sessionId = url.search.split("?session=")[1].split("&")[0];
     let cid = url.search.split("?session=")[1].split("&")[1].split("cid=")[1];
