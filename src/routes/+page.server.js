@@ -12,7 +12,7 @@ export async function load({ params }) {
     notams: {},
   };
   {
-    const data = await api.GET('controllers/stats/top');
+    const data = await api.GET('stats/top/3');
     console.log(data)
     pageData.stats = data
   }

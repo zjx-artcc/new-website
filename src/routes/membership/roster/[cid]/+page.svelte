@@ -4,6 +4,7 @@
 	import '../../../../app.css';
 	import Navbar from '../../../../components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
+	import ATCCard from '../../../../components/ATCCard.svelte';
 	export let data;
 	console.log(data);
 </script>
@@ -19,8 +20,8 @@
 			class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]"
 		>
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-			<h1 class="text-6xl text-white font-bold pt-3">{data.first_name} {data.last_name}</h1>
-			<h3 class="text-3xl text-white pt-3">{data.home_facility} - {data.rating}</h3>
+			<h1 class="text-6xl text-white font-bold pt-3">{data.certs.first_name} {data.certs.last_name}</h1>
+			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
 		</div>
 	</div>
 </header>
@@ -35,7 +36,18 @@
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
 						Recent Sessions
 					</h3>
-					<p class="text-sm text-muted-foreground">View {data.first_name}'s recent sesisons</p>
+					<p class="text-sm text-muted-foreground">Last 5 Sessions</p>
+					<ul>
+						{#each data.sessions as session}
+							<ATCCard
+								style="width: 100%"
+								name="{session.position}"
+								position="{Math.round(session.duration/60000)} minutes"
+								startDate={session.logon_time.toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+								endDate={new Date(session.logon_time.getTime() + session.duration).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+							/>
+						{/each}
+					</ul>
 				</div>
 				<div class="p-6 flex items-center justify-center">
 					
@@ -48,11 +60,11 @@
 					</h3>
 					<p class="text-sm text-muted-foreground">
 						<ul>
-							<li>Enroute - {data.ctr_cert}</li>
-							<li>Approach - {data.app_certs}</li>
-							<li>Tower - {data.twr_certs}</li>
-							<li>Ground - {data.gnd_certs}</li>
-							<li>Delivery - {data.del_certs}</li>
+							<li>Enroute - {data.certs.ctr_cert}</li>
+							<li>Approach - {data.certs.app_certs}</li>
+							<li>Tower - {data.certs.twr_certs}</li>
+							<li>Ground - {data.certs.gnd_certs}</li>
+							<li>Delivery - {data.certs.del_certs}</li>
 						</ul>
 				</div>
 				<div class="p-6 flex items-center justify-center">

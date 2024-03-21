@@ -8,7 +8,17 @@ export async function load({ params }) {
   if (params.cid == undefined) {
     svelteError(404, 'User not found');
   }
-  const data = await api.GET(`controllers/controller/${params.cid}`);
+  let pageData = {
+    certs: {},
+    sessions: {}
+  }
+  pageData.certs = await api.GET(`controllers/controller/${params.cid}`);
+  let data = await api.GET(`stats/${params.cid}/last/5`);
   console.log(data);
-  return data;
+  for (let i = 0; i < data.length; i++) {
+    data[i].logon_time = new Date(data[i].logon_time);
+  }
+  pageData.sessions = data;
+  console.log(pageData);
+  return pageData;
 }
