@@ -9,7 +9,11 @@
 
 <header class="bg-gray-700 block" id="myTopnav">
 	<div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-		<Navbar />
+		{#if data.loggedIn}
+			<Navbar loggedIn="true"/>
+		{:else}
+			<Navbar loggedIn="false"/>
+		{/if}
 	</div>
 	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; ">
 		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
@@ -39,7 +43,11 @@
 			<tbody>
 				{#each data.pageData.home as controller}
 				<tr>
-					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.first_name} {controller.last_name} ({controller.initials})</td>
+					{#if controller.staff_level != 'None' }
+						<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.first_name} {controller.last_name} ({controller.initials}) - {controller.staff_level}</td>
+					{:else}
+						<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.first_name} {controller.last_name} ({controller.initials})</td>
+					{/if}
 					<td class="text-center align-top border-2 border-solid px-2 py-5"><a href="/membership/roster/{controller.cid}">{controller.cid}</a></td>
 					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.rating}</td>
 					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.del_certs.color}">{controller.del_certs.cert}</p></td>

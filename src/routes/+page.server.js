@@ -3,14 +3,18 @@ import { api }  from '../lib/api';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
-export async function load({ params }) {
+export async function load({ params, cookies }) {
   let pageData = {
+    loggedIn: false,
     stats: {},
     newController: {},
     events: {},
     bookings: {},
     notams: {},
   };
+  if (cookies.get("session")) {
+    pageData.loggedIn = true;
+  }
   {
     const data = await api.GET('stats/top/3');
     console.log(data)
@@ -32,5 +36,6 @@ export async function load({ params }) {
     const data = await api.GET('notams/next/3')
     pageData.notams = data;
   }
+  console.log(pageData);
   return pageData;
 }

@@ -1,10 +1,10 @@
 <script>
 	//@ts-nocheck
 	import { Card, Button, Toggle } from 'flowbite-svelte';
-	import '../../../../app.css';
-	import Navbar from '../../../../components/Navbar.svelte';
+	import '../../../../../app.css';
+	import Navbar from '../../../../../components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
-	import ATCCard from '../../../../components/ATCCard.svelte';
+	import ATCCard from '../../../../../components/ATCCard.svelte';
 	export let data;
 	console.log(data);
 </script>
@@ -24,7 +24,8 @@
 			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
 			{#if data.staffInteger > 0}
 				<div class="pt-4">
-					<a href="/membership/roster/{data.certs.cid}/manage" class="bg-blue-500 text-white px-2 rounded-md text-xl">Manage Member</a>
+					<button class="bg-red-500 text-white px-2 rounded-md text-xl">Discard</button>
+					<button class="bg-green-500 text-white px-2 rounded-md text-xl">Save</button>
 				</div>
 			{/if}
 		</div>

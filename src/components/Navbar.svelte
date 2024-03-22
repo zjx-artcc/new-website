@@ -1,8 +1,9 @@
 <script>
-// @ts-nocheck
+	//@ts-nocheck
 	import Icon from '@iconify/svelte';
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
+	export let loggedIn; 
 </script>
 <div class="pl-4" style="display: inline-block; height: 34px; line-height: 34px; vertical-align: middle;">
 	<a class="link-effect font-bold" href="/">
@@ -35,4 +36,8 @@
 	</DropdownItem>
 </Dropdown>
 <a href="/events" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ion:calendar" class="pt-1.5" style="width: 30px; height: 25px" /> Events</a>
-<a href="/login" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5" style="width: 30px; height: 25px" /> Login</a>
+{#if loggedIn == true}
+	<a href="/login" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5" style="width: 30px; height: 25px" /> Profile</a>
+{:else}
+	<a href="/login" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5" style="width: 30px; height: 25px" /> Login</a>
+{/if}

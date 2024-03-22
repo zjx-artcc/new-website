@@ -1,5 +1,6 @@
 //@ts-nocheck 
 import { redirect } from '@sveltejs/kit';
+import { api } from '$lib/api';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
@@ -19,7 +20,25 @@ export async function load({ params, url, cookies }) {
       secure: false,
       maxAge: 604800,
     });
-    console.log(cid);
+    let controller = await api.GET(`controllers/controller/${cid}`);
+    cookies.set("cid", cid, {
+      path: '/',
+      httpOnly: false,
+      secure: false,
+      maxAge: 604800,
+    })
+    cookies.set("sl", controller.staff_level, {
+      path: '/',
+      httpOnly: false,
+      secure: false,
+      maxAge: 604800,
+    })
+    cookies.set("si", controller.staff_integer, {
+      path: '/',
+      httpOnly: false,
+      secure: false,
+      maxAge: 604800,
+    })
     redirect(302, `/membership/roster/${cid}`)
   }
   redirect(302,'https://auth-dev.vatsim.net/oauth/authorize?response_type=code&client_id=736&scope=full_name email vatsim_details country');

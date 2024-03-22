@@ -4,19 +4,31 @@ import { api } from '$lib/api';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
-export async function load({ params }) {
+export async function load({ params, cookies }) {
   let pageData = {
+    loggedIn: false,
     home: [],
     visiting: [],
   }
+  if (cookies.get("session")) {
+    pageData.loggedIn = true;
+  }
   const data = await api.GET('controllers/all');
   for(let i = 0; i < data.length; i++) {
-    console.log(data[i]);
+    let flagged = false;
+    if (data[i].del_certs == undefined) {
+      console.log(data[i]);
+      flagged = true;
+    }
     data[i].del_certs = getCerts(data[i].del_certs)
     data[i].gnd_certs = getCerts(data[i].gnd_certs)
     data[i].twr_certs = getCerts(data[i].twr_certs)
     data[i].app_certs = getCerts(data[i].app_certs)
     data[i].ctr_cert = getCenterCert(data[i].ctr_cert)
+
+    if (flagged) {
+      console.log(data[i])
+    }
 
     if (data[i].home_facility == "ZJX") {
       pageData.home.push(data[i])
@@ -24,7 +36,6 @@ export async function load({ params }) {
       pageData.visiting.push(data[i])
     }
   }
-  console.log(pageData);
   return {
     pageData
   }
@@ -32,27 +43,27 @@ export async function load({ params }) {
 
 function getCerts(input) {
   switch(input) {
-    case 0: {
+    case 'Uncertified': {
       return {
-        cert: "Not Certified",
+        cert: input,
         color: "#868E96"
       }
     }
-    case 1: {
+    case 'Tier 1 (MCO) Certified': {
       return {
-        cert: "Tier 1 Certified",
+        cert: input,
         color: "#9ccc65"
       }
     }
-    case 1.5: {
+    case "Tier 1 (MCO) Solo Certified": {
       return {
-        cert: "Tier 1 Solo",
+        cert: input,
         color: "#ffca28"
       }
     }
-    case 2: {
+    case 'Tier 2 (JAX/PNS) Certified': {
       return {
-        cert: "Tier 2 Certified",
+        cert: input,
         color: "#42a5f5"
       }
     }
@@ -67,21 +78,21 @@ function getCerts(input) {
 
 function getCenterCert(input) {
   switch(input) {
-    case 1: {
+    case 'Certified': {
       return {
-        cert: "Certified",
+        cert: input,
         color: "#9ccc65"
       }
     }
-    case 0: {
+    case 'Uncertified': {
       return {
-        cert: "Not Certified",
+        cert: input,
         color: "#868E96"
       }
     }
-    case 2: {
+    case 'Solo Certified': {
       return {
-        cert: "Solo",
+        cert: input,
         color: "#ffca28"
       }
     }
