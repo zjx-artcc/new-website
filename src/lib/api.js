@@ -12,25 +12,21 @@ class Api {
     }
     return res.json();
   }
-  async POST(endpoint) {
+  async POST(endpoint, data) {
     const url = this.baseUrl + endpoint;
-    console.log(url);
+    console.log(url, JSON.stringify(data));
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify(data)
     });
     return res.json();
   }
 }
 
-let api = undefined;
-if (process.env.NODE_ENV == 'PRODUCTION') {
-  api = new Api('https://zjx.svalencia.me/');
-} else {
-  api = new Api('http://localhost:4500/');
-}
+let api = new Api('http://localhost:4500/');
 
 export { api };
 
