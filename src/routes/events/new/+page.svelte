@@ -5,6 +5,7 @@
   import Icon from '@iconify/svelte';
 	import { api } from '$lib/api';
 	import { redirect } from '@sveltejs/kit';
+  import { writable } from 'svelte/store';
   export let data;
   console.log(data);
 
@@ -19,6 +20,12 @@
       }
     }
   }
+
+  function addPosition() {
+    console.log("Adding position")
+    event.positions.push({position: "", controller: ""})
+    eventStore.set(event);
+  }
   
   let event = {
     last_modified: new Date(),
@@ -30,8 +37,10 @@
     host: "",
     hidden: true,
     banner: "",
-    positions: [{}]
+    positions: []
   }
+
+  let eventStore = writable(event);
 </script>
 
 
@@ -85,7 +94,30 @@
     </div>
     <div class="text-center flex-1 m-2 h-fit mt-20 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Position Assignments:</h1>
-      <p>Debug:</p>
+      {#if event.positions.length == 0}
+        <div id="positions" class="pt-5">No positions available</div>
+      {:else}
+        {#each event.positions as position}
+          {#if position.controller == ''}
+            <div id="positions" class="pt-5 inline-flex">
+              <p class="text-left pr-5">{position.position}: </p>
+              <p class="text-right">Not assigned</p>
+            </div>
+            <br>
+          {:else}
+            <div id="positions" class="pt-5 inline-flex">
+              <p class="text-left pr-5">{position.position}: </p>
+              <p class="text-right">{position.controller}</p> 
+            </div>
+          {/if}
+        {/each}
+      {/if}
+      <div class="py-5">
+        <button class="bg-green-400 px-2 pt-1 pb-2 text-white" on:click={addPosition}><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
+      </div>
+    </div>
+    <div class="text-center flex-1 m-2 h-fit mt-20 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
+      <h1 class="font-bold">Debug:</h1>
       <p>{JSON.stringify(event)}</p>
     </div>
 </div>

@@ -4,7 +4,16 @@
   import Navbar from '../../../../components/Navbar.svelte';
   import Icon from '@iconify/svelte';
   export let data;
-  console.log(data);
+  let saved = true;
+  let positions = [];
+
+  function addPosition() {
+    positions.push(1);
+  }
+
+  $: {
+    console.log(saved);
+  }
 
   function prompt() {
     if(confirm("Are you sure you want to delete this event?")) {
@@ -30,9 +39,9 @@
         <h3 class="text-3xl text-white pt-3">{new Date(data.event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})} <Icon icon="material-symbols:arrow-right-alt" /> {new Date(data.event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})}</h3>
         {#if data.staffInteger > 0}
           <div class="pt-4">
-            <button class="bg-red-500 text-white px-2 rounded-md text-xl">Discard Changes</button>
+            <button class="bg-red-500 text-white px-2 pt-1 pb-2 rounded-md text-xl">Discard Changes</button>
             <span class="px-1"></span>
-					  <button class="bg-green-500 text-white px-2 rounded-md text-xl">Save Changes</button>
+					  <button class="bg-green-500 text-white px-2 pt-1 pb-2 rounded-md text-xl">Save Changes</button>
           </div>
         {/if}
       </div>
@@ -59,6 +68,17 @@
     </nav>
   </div>
 </div>
+<div>
+  <div class="text-center flex-1 m-2 h-fit mt-20 px-5 py-5 outline outline-slate-200 rounded-sm">
+    <h1 class="font-bold">Event Details:</h1>
+    <p class="py-2">Event Name: <input class="outline outline-1" bind:value={data.event.name} on:change={() => saved=false}></p>
+    <p class="py-2">Event Start: <input class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" bind:value={data.event.event_start}></p>
+    <p class="py-2">Event End: <input class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" bind:value={data.event.event_end}></p>
+    <p class="py-2">Host: <input class="outline outline-1" bind:value={data.event.host}></p>
+    <p class="py-2">Banner URL: <input class="outline outline-1" bind:value={data.event.banner}></p>
+    <p class="py-2">Hidden? <input type="checkbox" bind:checked={data.event.hidden}/></p>
+  </div>
+</div>
 
 <div id="content" class="flex flex-wrap justify-center align-middle">
   <!--EVENT DESCRIPTION-->
@@ -69,8 +89,14 @@
     <div class="text-center flex-1 m-2 h-fit mt-20 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Position Assignments:</h1>
       {#if data.event.positions == null}
-        <div id="positions" class="pt-5">No positions available</div>
-        <button><Icon icon=""/>Add Position</button>
+        <div id="positions" class="py-5">No positions available</div>
+        {#each positions as position}
+          <div id="positions" class="pt-5 inline-flex">
+            <input type="text" class="pr-5" placeholder="Position" bind:value={position.position}/>
+            <input type="text" class="pr-5" placeholder="Controller" bind:value={position.controller}/>
+          </div>
+        {/each}
+        <button class="bg-green-400 px-2 pt-1 pb-2 text-white" on:click={addPosition}><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
       {:else}
         {#each data.event.positions as position}
           {#if position.controller == ''}
