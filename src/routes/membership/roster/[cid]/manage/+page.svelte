@@ -24,8 +24,8 @@
 			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
 			{#if data.staffInteger > 0}
 				<div class="pt-4">
-					<button class="bg-red-500 text-white px-2 rounded-md text-xl">Discard</button>
-					<button class="bg-green-500 text-white px-2 rounded-md text-xl">Save</button>
+					<button class="bg-red-500 text-white px-2 rounded-md text-xl">Discard Changes</button>
+					<button class="bg-green-500 text-white px-2 rounded-md text-xl">Save Changes</button>
 				</div>
 			{/if}
 		</div>

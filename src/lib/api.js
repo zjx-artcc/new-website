@@ -26,7 +26,7 @@ class Api {
   }
 }
 
-let api = new Api('http://localhost:4500/');
+let api = new Api('http://zjx.svalencia.me/');
 
 export { api };
 
