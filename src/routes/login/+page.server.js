@@ -13,7 +13,8 @@ export async function load({ params, url, cookies }) {
   } else if (url.search.includes("?session")) {
     let sessionId = url.search.split("?session=")[1].split("&")[0];
     let cid = url.search.split("?session=")[1].split("&")[1].split("cid=")[1];
-    console.log(sessionId);
+    let expires = url.search.split("?session=")[1].split("&expires=")[1];
+    console.log(expires);
     cookies.set('session', sessionId, {
       path: '/',
       httpOnly: false,
