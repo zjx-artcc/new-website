@@ -6,11 +6,7 @@ import { api } from '$lib/api';
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, url, cookies }) {
   console.log(url.search);
-  if (url.search.includes("?code")) {
-    let code = url.search.split("?code=")[1];
-    console.log(code);
-    redirect(302,`http://localhost:4500/auth/oauth?code=${code}`)
-  } else if (url.search.includes("?session")) {
+  if (url.search.includes("?session")) {
     let sessionId = url.search.split("?session=")[1].split("&")[0];
     let cid = url.search.split("?session=")[1].split("&")[1].split("cid=")[1];
     let expires = url.search.split("?session=")[1].split("&expires=")[1];
@@ -19,26 +15,26 @@ export async function load({ params, url, cookies }) {
       path: '/',
       httpOnly: false,
       secure: false,
-      maxAge: 604800,
+      maxAge: expires,
     });
     let controller = await api.GET(`controllers/controller/${cid}`);
     cookies.set("cid", cid, {
       path: '/',
       httpOnly: false,
       secure: false,
-      maxAge: 604800,
+      maxAge: expires,
     })
     cookies.set("sl", controller.staff_level, {
       path: '/',
       httpOnly: false,
       secure: false,
-      maxAge: 604800,
+      maxAge: expires,
     })
     cookies.set("si", controller.staff_integer, {
       path: '/',
       httpOnly: false,
       secure: false,
-      maxAge: 604800,
+      maxAge: expires,
     })
     redirect(302, `/membership/roster/${cid}`)
   }

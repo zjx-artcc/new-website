@@ -3,44 +3,18 @@
   import '../../../app.css';
   import Navbar from '../../../components/Navbar.svelte';
   import Icon from '@iconify/svelte';
-	import { api } from '$lib/api';
-	import { redirect } from '@sveltejs/kit';
-  import { writable } from 'svelte/store';
+  import { required, useForm, validators } from 'svelte-use-form'
   export let data;
+  const form = useForm();
   console.log(data);
 
-  async function submit() {
-    console.log(event);
-    event.event_start = new Date(event.event_start);
-    event.event_end = new Date(event.event_end);
-    if ([1, 2, 3, 4, 9, 10].includes(data.staffInteger)) {
-      let data = await api.POST('events/create', event);
-      if (data.id > 0) {
-        redirect(307, `/events/${data.id}`)
-      }
-    }
+  let columns = ['Position', 'Controller']
+  let newRow = [...columns];
+  let tableData = [];
+  function addRow() {
+    tableData = [...tableData, [...newRow]];
+    newRow = columns;
   }
-
-  function addPosition() {
-    console.log("Adding position")
-    event.positions.push({position: "", controller: ""})
-    eventStore.set(event);
-  }
-  
-  let event = {
-    last_modified: new Date(),
-    created_by: data.cid,
-    name: "",
-    description: "",
-    event_start: undefined,
-    event_end: undefined,
-    host: "",
-    hidden: true,
-    banner: "",
-    positions: []
-  }
-
-  let eventStore = writable(event);
 </script>
 
 
@@ -55,15 +29,12 @@
       <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
         <h1 class="text-6xl text-white font-bold pt-3">New Event</h1>
-        <div class="pt-5">
-          <button on:click={submit} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
-        </div>
       </div>
     </div>
   </div>
 </header>
 <div id="breadcrumbs" class="border-b z-4">
-  <div class="py-1.5 text-center">
+  <div class="pt-1.5 text-center">
     <nav class="py-2 mb-0">
       <a href="/" class="text-sky-500">Home</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
@@ -72,52 +43,85 @@
     </nav>
   </div>
 </div>
-<div>
-  <div class="text-center flex-1 m-2 h-fit mt-20 px-5 py-5 outline outline-slate-200 rounded-sm">
-    <h1 class="font-bold">Event Details:</h1>
-    <p class="py-2">Event Name: <input class="outline outline-1" bind:value={event.name}></p>
-    <p class="py-2">Event Start: <input class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" bind:value={event.event_start}></p>
-    <p class="py-2">Event End: <input class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" bind:value={event.event_end}></p>
-    <p class="py-2">Host: <input class="outline outline-1" bind:value={event.host}></p>
-    <p class="py-2">Banner URL: <input class="outline outline-1" bind:value={event.banner}></p>
-    <p class="py-2">Hidden? <input type="checkbox" bind:checked={event.hidden}/></p>
+<form use:form method="POST">
+  <div>
+    <div class="text-center flex-1 h-fit px-5 py-2.5 outline outline-slate-200 rounded-sm">
+      <h1 class="font-bold">Event Details:</h1>
+      <table class="mx-auto">
+        <tr class="py-2">
+          <td class="px-2">
+            <label class="pb-1" for="name">Event Name:</label>
+            <br>
+            <input name="name" id="name" class="outline outline-1" use:validators={[required]}>
+          </td>
+          <td class="px-2">
+            <label class="pb-1" for="start">Event Start:</label>
+            <br>
+            <input name="start" id="start" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]}>
+          </td>
+        </tr>
+        <tr class="py-2">
+          <td class="px-2">
+            <label for="host" class="pb-1">Host:</label>
+            <br>
+            <input name="host" id="host" class="outline outline-1" use:validators={[required]}>
+          </td>
+          <td class="px-2">
+            <label for="end" class="pb-1">Event End:</label>
+            <br>
+            <input name="end" id="end" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]}>
+          </td>
+        </tr>
+        <tr class="py-2">
+          <td class="px-2">
+            <label for="banner" class="pb-1">Banner URL:</label>
+            <br>
+            <input name="banner" id="banner" class="outline outline-1" use:validators={[required]}>
+          </td>
+          <td>
+            <label for="hidden" class="pb-1">Hide Event:</label>
+            <br>
+            <input name="hidden" id="hidden" type="checkbox" checked/>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
-</div>
-
-<div id="content" class="flex flex-wrap justify-center align-middle">
-  <!--EVENT DESCRIPTION-->
-    <div class="text-center flex-1 m-2 h-fit mt-20 px-5 py-5 outline outline-slate-200 rounded-sm">
+  
+  <div id="content" class="flex flex-wrap justify-center align-middle">
+    <!--EVENT DESCRIPTION-->
+    <div class="text-center flex-1 mt-1 px-5 py-2.5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Event Description:</h1>
       <div class="pt-5">
-        <textarea id="description" class="p-5 w-full h-96" placeholder="Event Description" bind:value={event.description}></textarea>
+        <textarea name="description" id="description" class="p-5 w-full" placeholder="Event Description" rows="5" cols="30" use:validators={[required]}></textarea>
       </div>
     </div>
-    <div class="text-center flex-1 m-2 h-fit mt-20 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
+    <div class="text-center flex-1 m-2 mt-1 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Position Assignments:</h1>
-      {#if event.positions.length == 0}
-        <div id="positions" class="pt-5">No positions available</div>
-      {:else}
-        {#each event.positions as position}
-          {#if position.controller == ''}
-            <div id="positions" class="pt-5 inline-flex">
-              <p class="text-left pr-5">{position.position}: </p>
-              <p class="text-right">Not assigned</p>
-            </div>
-            <br>
-          {:else}
-            <div id="positions" class="pt-5 inline-flex">
-              <p class="text-left pr-5">{position.position}: </p>
-              <p class="text-right">{position.controller}</p> 
-            </div>
-          {/if}
+      <hr>
+      <table class="mx-auto">
+        <tr>
+          {#each columns as column}
+            <th class="w-52">{column}</th>
+          {/each}
+        </tr>
+        {#each tableData as row}
+          <tr>
+            {#each row as cell}
+              <td class="w-52">
+                <input class="outline outline-1" value={cell}/>
+              </td>
+            {/each}
+          </tr>
         {/each}
-      {/if}
+      </table>
+      <hr>
       <div class="py-5">
-        <button class="bg-green-400 px-2 pt-1 pb-2 text-white" on:click={addPosition}><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
+        <button on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
       </div>
     </div>
-    <div class="text-center flex-1 m-2 h-fit mt-20 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
-      <h1 class="font-bold">Debug:</h1>
-      <p>{JSON.stringify(event)}</p>
-    </div>
-</div>
+  </div>
+  <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm">
+    <button disabled={!$form.valid} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
+  </div>
+</form>
