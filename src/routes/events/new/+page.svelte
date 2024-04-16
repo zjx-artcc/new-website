@@ -108,9 +108,8 @@
         </tr>
         {#each tableData as row, i (i)}
           <tr>
-            <td><input name="position{i}" id="position{i}" placeholder={row[0]}></td>
-            <td><input name="controller{i}" id="controller{i}" placeholder={row[1]}></td>
-            <td><input type="number" name="rows" id="rows" style="display: none;" value={i}></td>
+            <td><input name="positions" id="positions" placeholder={row[0]} use:validators={[required]}></td>
+            <td><input name="controllers" id="controllers" placeholder={row[1]}></td>
           </tr>
         {/each}
       </table>
