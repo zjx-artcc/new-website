@@ -5,6 +5,7 @@
   import Icon from '@iconify/svelte';
   import { required, useForm, validators } from 'svelte-use-form'
   export let data;
+  let rows = 0;
   const form = useForm();
   console.log(data);
 
@@ -105,23 +106,21 @@
             <th class="w-52">{column}</th>
           {/each}
         </tr>
-        {#each tableData as row}
+        {#each tableData as row, i (i)}
           <tr>
-            {#each row as cell}
-              <td class="w-52">
-                <input class="outline outline-1" value={cell}/>
-              </td>
-            {/each}
+            <td><input name="position{i}" id="position{i}" placeholder={row[0]}></td>
+            <td><input name="controller{i}" id="controller{i}" placeholder={row[1]}></td>
+            <td><input type="number" name="rows" id="rows" style="display: none;" value={i}></td>
           </tr>
         {/each}
       </table>
       <hr>
       <div class="py-5">
-        <button on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
+        <button type="button" on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
       </div>
     </div>
   </div>
   <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm">
-    <button disabled={!$form.valid} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
+    <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
   </div>
 </form>

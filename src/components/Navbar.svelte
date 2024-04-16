@@ -36,8 +36,8 @@
 	</DropdownItem>
 </Dropdown>
 <a href="/events" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ion:calendar" class="pt-1.5" style="width: 30px; height: 25px" /> Events</a>
-{#if loggedIn == true}
-	<a href="/login" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5" style="width: 30px; height: 25px" /> Profile</a>
+{#if loggedIn}
+	<a href="/me" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-person" class="pt-1.5" style="width: 30px; height: 25px" /> Profile</a>
 {:else}
 	<a href="/login" class="text-lg text-stone-200 inline-flex" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5" style="width: 30px; height: 25px" /> Login</a>
 {/if}
