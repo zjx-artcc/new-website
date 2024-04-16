@@ -1,4 +1,6 @@
 //@ts-nocheck
+import { api } from '$lib/api';
+import { redirect } from '@sveltejs/kit';
 export const prerender = false;
 
 /** @type {import('./$types').PageLoad} */
@@ -26,12 +28,12 @@ export const actions = {
     let controllers = formData.getAll("controllers");
     console.log(positions);
     let event = {
-      last_modified: Date.now(),
+      last_modified: new Date().toISOString(),
       created_by: cookies.get("cid"),
       name: formData.get("name"),
       description: formData.get("description"),
-      event_start: formData.get("start"),
-      event_end: formData.get("end"),
+      event_start: new Date(formData.get("start")).toISOString(),
+      event_end: new Date(formData.get("end")).toISOString(),
       host: formData.get("host"),
       hidden: formData.get("hidden") == "on" ? true : false,
       banner: formData.get("banner"),
@@ -52,6 +54,8 @@ export const actions = {
         controller: controllers
       })
     }
-    console.log(event);
+    let eventId = await api.POST("events/create", event);
+    console.log(eventId);
+    redirect(302, `/events/${eventId.id}`)
   }
 }
