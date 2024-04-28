@@ -19,6 +19,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+
 "@ampproject/remapping@npm:^2.2.1":
   version: 2.2.1
   resolution: "@ampproject/remapping@npm:2.2.1"
