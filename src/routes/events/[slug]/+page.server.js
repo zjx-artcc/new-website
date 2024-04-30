@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { error, redirect } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit';
 import { api } from '../../../lib/api';
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
