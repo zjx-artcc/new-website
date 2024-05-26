@@ -49,7 +49,7 @@
 	<main class="container mx-auto p-4">
 		<section class="my-6">
 			<section class="my-6">
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 columns-1">
 					<div class="bg-white shadow p-4">
 						<h3 class="font-semibold mb-2">ZJX News</h3>
 						<table class="table-auto w-full">
@@ -69,18 +69,14 @@
 						</table>
 						<span class=" mt-4 block text-center justify-center items-center">
 							For More Information, 
-							<a href="discord.gg" style="width: 100%; text-decoration: none; color: blue;">Join the Discord!</a>
+							<a href="https://discord.gg" style="width: 100%; text-decoration: none; color: blue;">Join the Discord!</a>
 						</span>
 					</div>
 					<div class="bg-white shadow p-4">
 						<h3 class="font-semibold mb-2">Upcoming Events</h3>
 						<!-- New controller list goes here -->
 						<div class="table-responsive">
-							<table
-								class="table table-striped table-hover table-leftpadded mb-0"
-								width="100%"
-								cellspacing="0"
-							>
+							<table class="table table-striped table-hover table-leftpadded mb-0" width="100%" cellspacing="0">
 								<tbody>
 									{#each data.events as event}
 									<tr style="background-color: rgba(255, 255, 255);">
@@ -110,6 +106,7 @@
 					</div>
 				</div>
 			</section>
+			<!--Footer cards-->
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				<!-- News -->
 				<div class="bg-white shadow p-4">

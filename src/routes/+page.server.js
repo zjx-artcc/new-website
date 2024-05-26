@@ -17,25 +17,23 @@ export async function load({ params, cookies }) {
   }
   {
     const data = await api.GET('stats/top/3');
-    console.log(data)
-    pageData.stats = data
+    pageData.stats = data.stats;
   }
   {
-    const data = await api.GET('controllers/newest')
-    pageData.newController = data
+    const data = await api.GET('controllers/newest');
+    pageData.newController = data.newControllers;
   }
   {
-    const data = await api.GET('events/next/3')
-    pageData.events = data
+    const data = await api.GET('events/next/3');
+    pageData.events = data.events;
   }
   {
-    const data = await api.GET('bookings/next/3')
-    pageData.bookings = data
+    const data = await api.GET('bookings/next/3');
+    pageData.bookings = data.bookings;
   }
   {
-    const data = await api.GET('notams/next/3')
-    pageData.notams = data;
+    const data = await api.GET('notams/next/3');
+    pageData.notams = data.notams;
   }
-  console.log(pageData);
   return pageData;
 }

@@ -21,7 +21,6 @@ export async function load({ params, cookies }) {
     error(404, 'Not Found');
   } else {
     const data = await api.GET(`events/event/${eventId}`);
-    console.log(data);
     if (data[0] == 404) {
       redirect(404, '/404');
     } else {

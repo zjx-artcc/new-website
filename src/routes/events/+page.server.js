@@ -12,8 +12,7 @@ export async function load({ params, cookies }) {
     pageData.loggedIn = true;
     pageData.staffInteger = parseInt(cookies.get("si"));
   }
-  const data = await api.GET('events/');
-  console.log(data);
-  pageData.events = data;
+  const data = await api.GET('events/all');
+  pageData.events = data.events;
   return pageData;
 }

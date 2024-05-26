@@ -30,7 +30,7 @@
         <h3 class="text-3xl text-white pt-3">{new Date(data.event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})} <Icon icon="material-symbols:arrow-right-alt" /> {new Date(data.event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})}</h3>
         {#if data.staffInteger > 0}
           <div class="pt-4">
-            <a href="/events/{data.event.id}/manage" class="bg-blue-500 text-white px-2 rounded-md text-xl">Manage Event</a>
+            <a href="/events/{data.event.id}/edit" class="bg-blue-500 text-white px-2 rounded-md text-xl">Edit Event</a>
             <button class="bg-red-500 text-white px-2 rounded-md text-xl" on:click={prompt}>Delete Event</button>
           </div>
         {/if}

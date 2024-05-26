@@ -1,7 +1,6 @@
 <script>
+  // @ts-nocheck
 	import { useForm } from 'svelte-use-form';
-
-  //@ts-nocheck
   import '../../../../app.css';
   import Navbar from '../../../../components/Navbar.svelte';
   import Icon from '@iconify/svelte';

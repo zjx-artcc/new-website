@@ -5,7 +5,6 @@ class Api {
   }
   async GET(endpoint) {
     const url = this.baseUrl + endpoint;
-    console.log(url);
     const res = await fetch(url);
     if (res.status == 404) {
       return 404;
