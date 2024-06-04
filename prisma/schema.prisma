@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model bookings {
+  id            BigInt   @id @default(autoincrement())
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  position      String
+  booking_start DateTime @db.Timestamptz(6)
+  booking_end   DateTime @db.Timestamptz(6)
+  cid           BigInt
+  roster        roster   @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model events {
+  id            BigInt   @id @default(autoincrement())
+  last_modified DateTime @default(now()) @db.Timestamptz(6)
+  created_by    BigInt
+  name          String
+  description   String
+  event_start   DateTime @db.Timestamptz(6)
+  event_end     DateTime @db.Timestamptz(6)
+  host          String
+  hidden        Boolean  @default(true)
+  banner        String
+  positions     Json?
+  roster        roster   @relation(fields: [created_by], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model notams {
+  id         BigInt   @id
+  created_at DateTime @db.Timestamptz(6)
+  author     BigInt
+  body       String
+  roster     roster   @relation(fields: [author], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model roster {
+  cid           BigInt     @id
+  email         String
+  home_facility String
+  created_at    DateTime   @default(now()) @db.Timestamptz(6)
+  rating        BigInt
+  del_certs     Float
+  gnd_certs     Float
+  twr_certs     Float
+  app_certs     Float
+  ctr_cert      BigInt
+  initials      String
+  first_name    String
+  last_name     String
+  staff_level   BigInt     @default(0)
+  mentor_level  BigInt?    @default(0)
+  bookings      bookings[]
+  events        events[]
+  notams        notams[]
+  sessions      sessions[]
+  stats         stats?
+}
+
+model sessions {
+  id          BigInt    @id
+  cid         BigInt?
+  callsign    String?   @db.VarChar(255)
+  frequency   String?   @db.VarChar(255)
+  logon_time  DateTime? @db.Timestamptz(6)
+  last_update DateTime? @db.Timestamptz(6)
+  duration    Int?
+  roster      roster?   @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model stats {
+  cid         BigInt @id
+  month_one   Float  @default(0.0)
+  month_two   Float  @default(0.0)
+  month_three Float  @default(0.0)
+  roster      roster @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  cid                BigInt  @id
+  email              String
+  authorization_code String?
+  access_token       String?
+  refresh_token      String?
+  first_name         String
+  last_name          String
+  session_expires    BigInt?
+}

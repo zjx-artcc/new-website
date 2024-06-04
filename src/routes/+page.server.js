@@ -1,9 +1,8 @@
 //@ts-nocheck
-import { api }  from '../lib/api';
+import { getHours, getRating, prisma } from '$lib/db';
 
 /** @type {import('./$types').PageLoad} */
-// eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies }) {
+export async function load({ cookies }) {
   let pageData = {
     loggedIn: false,
     stats: {},
@@ -16,24 +15,90 @@ export async function load({ params, cookies }) {
     pageData.loggedIn = true;
   }
   {
-    const data = await api.GET('stats/top/3');
-    pageData.stats = data.stats;
+    const data = await prisma.stats.findMany({
+      take: 3,
+      orderBy: {
+        month_three: 'desc',
+      },
+      select: {
+        month_three: true,
+        cid: true
+      }
+    });
+    for (let i = 0; i < data.length; i++) {
+      data[i].cid = parseInt(data[i].cid.toString())
+      const user = await prisma.roster.findFirst({
+        where: {
+          cid: data[i].cid,
+        },
+        select: {
+          first_name: true,
+          last_name: true
+        }
+      });
+      data[i].first_name = user.first_name;
+      data[i].last_name = user.last_name;
+      data[i].month_three = getHours(data[i].month_three);
+    }
+    pageData.stats = data;
   }
   {
-    const data = await api.GET('controllers/newest');
-    pageData.newController = data.newControllers;
+    const data = await prisma.roster.findMany({
+      take: 3,
+      orderBy: {
+        created_at: 'desc',
+      },
+      select: {
+        first_name: true,
+        last_name: true,
+        rating: true,
+        created_at: true
+      }
+    });
+    for (let i = 0; i < data.length; i++) {
+      data[i].rating = getRating(parseInt(data[i].rating.toString()));
+    }
+    pageData.newController = data;
   }
   {
-    const data = await api.GET('events/next/3');
-    pageData.events = data.events;
+    const data = await prisma.events.findMany({
+      take: 3,
+      orderBy: {
+        event_start: 'asc',
+      }
+    });
+    pageData.events = data;
   }
   {
-    const data = await api.GET('bookings/next/3');
-    pageData.bookings = data.bookings;
+    const data = await prisma.bookings.findMany({
+      take: 3,
+      orderBy: {
+        booking_start: 'asc'
+      }
+    })
+    for (let i = 0; i < data.length; i++) {
+      const user = await prisma.roster.findFirst({
+        where: {
+          cid: data[i].cid,
+        },
+        select: {
+          first_name: true,
+          last_name: true
+        }
+      });
+      data[i].first_name = user.first_name;
+      data[i].last_name = user.last_name;
+    }
+    pageData.bookings = data;
   }
   {
-    const data = await api.GET('notams/next/3');
-    pageData.notams = data.notams;
+    const data = await prisma.notams.findMany({
+      take: 3,
+      orderBy: {
+        created_at: 'desc'
+      }
+    })
+    pageData.notams = data;
   }
   return pageData;
 }

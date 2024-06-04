@@ -4,7 +4,7 @@
   import '../../../../app.css';
   import Navbar from '../../../../components/Navbar.svelte';
   import Icon from '@iconify/svelte';
-  export let data;
+  export let data
 
   console.log(data);
   let saved = true;

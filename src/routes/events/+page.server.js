@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { api } from '../../lib/api';
+import { prisma } from '$lib/db';
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies }) {
@@ -12,7 +12,11 @@ export async function load({ params, cookies }) {
     pageData.loggedIn = true;
     pageData.staffInteger = parseInt(cookies.get("si"));
   }
-  const data = await api.GET('events/all');
-  pageData.events = data.events;
+  const data = await prisma.events.findMany({
+    orderBy: {
+      event_start: 'asc'
+    }
+  });
+  pageData.events = data;
   return pageData;
 }

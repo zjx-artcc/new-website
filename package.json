@@ -30,6 +30,7 @@
 	"type": "module",
 	"dependencies": {
 		"@iconify/svelte": "^3.1.6",
+		"@prisma/client": "^5.15.0",
 		"@supabase/supabase-js": "^2.39.3",
 		"autoprefixer": "^10.4.16",
 		"colorthief": "^2.4.0",
