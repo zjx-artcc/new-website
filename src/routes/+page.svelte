@@ -50,13 +50,13 @@
 		<section class="my-6">
 			<section class="my-6">
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 columns-1">
-					<div class="bg-white shadow p-4">
+					<div class="bg-white shadow p-4" style="width: auto;">
 						<h3 class="font-semibold mb-2">ZJX News</h3>
-						<table class="table-auto w-full border border-collapse border-slate-500">
+						<table class="table-auto w-full">
 							<thead>
 								<tr class="pt-4">
-									<th class="pt-4 border border-slate-500">Date:</th>
-									<th class="pt-4 border border-slate-500">NOTAM:</th>
+									<th class="pt-4 border border-slate-500 inline-block align-middle w-full border-collapse">Date:</th>
+									<th class="pt-4 border border-slate-500 w-50 border-collapse">NOTAM:</th>
 								</tr>
 							</thead>
 							<tbody class="text-center">
@@ -72,8 +72,7 @@
 							For More Information, 
 							<a href="https://discord.gg" style="width: 100%; text-decoration: none; color: blue;">Join the Discord!</a>
 						</span>
-					</div>
-					<div class="bg-white shadow p-4">
+						<hr class="bg-slate-500 my-2 h-0.5">
 						<h3 class="font-semibold mb-2">Upcoming Events</h3>
 						<!-- New controller list goes here -->
 						<div class="table-responsive">
@@ -105,19 +104,17 @@
 							</table>
 						</div>
 					</div>
-				</div>
-			</section>
-			<!--Footer cards-->
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				<!-- News -->
-				<div class="bg-white shadow p-4">
-					<h3 class="font-semibold mb-2">This Month's Stats</h3>
-					<div class="bg-white shadow-md rounded p-4">
-						<div class="flex items-center mb-4">
-							<div class="text-blue-600 font-bold text-lg mr-2">01:42</div>
-							<div class="text-gray-600">Hours Controlled This Month</div>
-						</div>
-						<div class="flex flex-col items-center">
+					<div class="bg-white shadow p-4" style="width:75% float: right;">
+						<h3 class="font-semibold mb-2">Online Controllers</h3>
+						
+						<h3 class="font-semibold mb-2">This Month's Stats</h3>
+						<div class="bg-white shadow-md rounded p-4">
+							<div class="flex flex-col items-center">
+								<div class="text-xl font-bold text-blue-600 mr-2">Hours Controlled This Month:</div>
+								<div class="font-bold text-gray-800 mr-2 text-right">01:42</div>
+							</div>
+							<hr class="my-2 fill-black">
+							<div class="flex flex-col items-center">
 								<div class="text-yellow-500 text-left">★★★</div>
 								<div class="font-bold text-gray-800 mr-2 text-right">{data.stats[0].first_name} {data.stats[0].last_name}</div>
 								<div class="text-gray-800 mr-2 text-right">{data.stats[0].month_three} hours</div>
@@ -129,10 +126,14 @@
 								<span class="text-red-500">★</span>
 								<div class="font-bold text-gray-800 mr-2">{data.stats[2].first_name} {data.stats[2].last_name}</div>
 								<div class="text-gray-800 mr-2 text-right">{data.stats[2].month_three} hours</div>
+							</div>
 						</div>
 					</div>
 				</div>
-
+			</section>
+			<!--Footer cards-->
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<!-- News -->
 				<!-- Upcoming Events -->
 				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>

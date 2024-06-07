@@ -10,6 +10,7 @@ export async function load({ cookies }) {
     events: {},
     bookings: {},
     notams: {},
+    online: {}
   };
   if (cookies.get("session")) {
     pageData.loggedIn = true;
@@ -62,7 +63,7 @@ export async function load({ cookies }) {
   }
   {
     const data = await prisma.events.findMany({
-      take: 3,
+      take: 2,
       orderBy: {
         event_start: 'asc',
       }
@@ -99,6 +100,22 @@ export async function load({ cookies }) {
       }
     })
     pageData.notams = data;
+  }
+  {
+    const data = await prisma.sessions.findMany({
+      take: 3,
+      orderBy: {
+        logon_time: 'desc'
+      }
+    })
+    pageData.online = [];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].last_update.getTime() < (new Date().getTime() - 60000)) {
+        console.log(data[i])
+        pageData.online.push(data[i])
+      }
+    }
+    console.log(pageData.online.length)
   }
   return pageData;
 }
