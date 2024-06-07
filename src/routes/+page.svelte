@@ -15,7 +15,7 @@
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
-	<div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
+	<div class="flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
 		<Navbar loggedIn={data.loggedIn} />
 	</div>
 	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 560px; ">
@@ -27,7 +27,7 @@
 	</div>
 </header>
 <body>
-	<div class="flex flex-wrap justify-center">
+	<div class="flex flex-wrap justify-center mt-10 mb-5">
 		<Card
 			title="Top Controller of {currentMonthName}"
 			subtext="{data.stats[0].first_name} {data.stats[0].last_name}" timestamp="{data.stats[0].month_three} HOURS"
@@ -52,18 +52,19 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 columns-1">
 					<div class="bg-white shadow p-4">
 						<h3 class="font-semibold mb-2">ZJX News</h3>
-						<table class="table-auto w-full">
-							<thead />
-							<tbody>
+						<table class="table-auto w-full border border-collapse border-slate-500">
+							<thead>
 								<tr class="pt-4">
-									<td style="width:30%;" class="pt-4">Date:</td>
-									<td style="width:70%;" class="pt-4">NOTAM:</td>
+									<th class="pt-4 border border-slate-500">Date:</th>
+									<th class="pt-4 border border-slate-500">NOTAM:</th>
 								</tr>
+							</thead>
+							<tbody class="text-center">
 								{#each data.notams as notam}
-								<NewsCard
-									date="{new Date(notam.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}"
-									description="{notam.body}"
-								/>
+								<tr>
+									<td class="pt-4 border border-slate-500">{new Date(notam.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+									<td class="pt-4 border border-slate-500">{notam.body}</td>
+								</tr>
 								{/each}
 							</tbody>
 						</table>

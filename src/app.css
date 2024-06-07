@@ -467,6 +467,11 @@ a {
   background-color: rgb( var(--theme-profile_header) );
 }
 
+.navbarIcon {
+  width: 30px;
+  height: 25px;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

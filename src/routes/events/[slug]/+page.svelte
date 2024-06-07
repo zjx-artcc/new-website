@@ -19,22 +19,22 @@
   <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
     <Navbar loggedIn={data.loggedIn}/>
   </div>
-<div class="relative">
-  <div class="absolute inset-0 bg-cover bg-center" style="background-image: url({data.event.banner}); filter: blur(5px)  brightness(60%); border: 0;"></div>
   <div class="relative">
-    <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
-      <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-      <h1 class="text-6xl text-white font-bold pt-3">{data.event.name}</h1>
-      <h3 class="text-3xl text-white pt-3">{new Date(data.event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})} <Icon icon="material-symbols:arrow-right-alt" /> {new Date(data.event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})}</h3>
-      {#if data.staffInteger > 0}
-        <div class="pt-4">
-          <a href="/events/{data.event.id}/edit" class="bg-blue-500 text-white px-2 rounded-md text-xl">Edit Event</a>
-          <button class="bg-red-500 text-white px-2 rounded-md text-xl" on:click={prompt}>Delete Event</button>
-        </div>
-      {/if}
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url({data.event.banner}); filter: blur(5px)  brightness(60%); border: 0;"></div>
+    <div class="relative">
+      <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
+        <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
+        <h1 class="text-6xl text-white font-bold pt-3">{data.event.name}</h1>
+        <h3 class="text-3xl text-white pt-3">{new Date(data.event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})} <Icon icon="material-symbols:arrow-right-alt" /> {new Date(data.event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})}</h3>
+        {#if data.staffInteger > 0}
+          <div class="pt-4">
+            <a href="/events/{data.event.id}/edit" class="bg-blue-500 text-white px-2 rounded-md text-xl">Edit Event</a>
+            <button class="bg-red-500 text-white px-2 rounded-md text-xl" on:click={prompt}>Delete Event</button>
+          </div>
+        {/if}
+      </div>
     </div>
   </div>
-</div>
 </header>
 <div id="breadcrumbs" class="border-b z-4">
   <div class="py-1.5 text-center">
