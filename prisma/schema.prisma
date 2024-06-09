@@ -54,7 +54,7 @@ model roster {
   initials      String
   first_name    String
   last_name     String
-  staff_level   BigInt     @default(0)
+  staff_roles   String     @default(dbgenerated("0"))
   mentor_level  BigInt?    @default(0)
   bookings      bookings[]
   events        events[]

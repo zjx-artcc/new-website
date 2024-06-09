@@ -129,7 +129,6 @@ export async function load({ cookies }) {
       pageData.online[i].first_name = user.first_name;
       pageData.online[i].last_name = user.last_name;
     }
-    console.log(pageData.online.length)
   }
   {
     const data = await prisma.stats.aggregate({

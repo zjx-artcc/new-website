@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { error, redirect } from '@sveltejs/kit'
-import { api } from '../../../../lib/api';
+import { prisma } from '$lib/db'
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies }) {
@@ -20,8 +20,12 @@ export async function load({ params, cookies }) {
     console.log("Undefined")
     error(404, 'Not Found');
   } else {
-    const data = await api.GET(`events/event/${eventId}`);
-    if (data[0] == 404) {
+    const data = await prisma.events.findUnique({
+      where: {
+        id: eventId
+      }
+    })
+    if (data == null) {
       redirect(404, '/404');
     } else {
       pageData.event = data;

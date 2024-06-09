@@ -120,7 +120,7 @@
 								</tbody>
 							</table>
 						</div>
-						<hr class="my-5">
+						<hr class="mb-5">
 						<div class="bg-white shadow-md rounded p-4">
 							<h3 class="font-semibold mb-2">This Month's Stats</h3>
 							<div class="flex flex-col items-center">

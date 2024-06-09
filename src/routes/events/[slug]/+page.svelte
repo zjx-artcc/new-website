@@ -5,14 +5,6 @@
   import Icon from '@iconify/svelte';
   export let data;
   console.log(data);
-
-  function prompt() {
-    if(confirm("Are you sure you want to delete this event?")) {
-      //Delete event
-    } else {
-      alert("Event has not been deleted.")
-    }
-  }
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
