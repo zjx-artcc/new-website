@@ -10,7 +10,8 @@ export async function load({ cookies }) {
     events: {},
     bookings: {},
     notams: {},
-    online: {}
+    online: {},
+    totalHours: 0
   };
   if (cookies.get("session")) {
     pageData.loggedIn = true;
@@ -115,7 +116,28 @@ export async function load({ cookies }) {
         pageData.online.push(data[i])
       }
     }
+    for (let i = 0; i < pageData.online.length; i++) {
+      const user = await prisma.roster.findFirst({
+        where: {
+          cid: pageData.online[i].cid,
+        },
+        select: {
+          first_name: true,
+          last_name: true
+        }
+      })
+      pageData.online[i].first_name = user.first_name;
+      pageData.online[i].last_name = user.last_name;
+    }
     console.log(pageData.online.length)
+  }
+  {
+    const data = await prisma.stats.aggregate({
+      _sum: {
+        month_three: true
+      }
+    })
+    pageData.totalHours = getHours(data._sum.month_three);
   }
   return pageData;
 }

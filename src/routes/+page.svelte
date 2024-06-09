@@ -105,15 +105,28 @@
 						</div>
 					</div>
 					<div class="bg-white shadow p-4" style="width:75% float: right;">
-						<h3 class="font-semibold mb-2">Online Controllers</h3>
-						
-						<h3 class="font-semibold mb-2">This Month's Stats</h3>
 						<div class="bg-white shadow-md rounded p-4">
+							<h3 class="font-semibold mb-2">Online Controllers</h3>
+							<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
+								<tbody>
+									{#each data.online as onlineController}
+									<ATCCard
+										name="{onlineController.callsign}"
+										position="Online Since:"
+										startDate="{onlineController.first_name} {onlineController.last_name}"
+										endDate={new Date(onlineController.logon_time).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+									/>
+									{/each}
+								</tbody>
+							</table>
+						</div>
+						<hr class="my-5">
+						<div class="bg-white shadow-md rounded p-4">
+							<h3 class="font-semibold mb-2">This Month's Stats</h3>
 							<div class="flex flex-col items-center">
 								<div class="text-xl font-bold text-blue-600 mr-2">Hours Controlled This Month:</div>
-								<div class="font-bold text-gray-800 mr-2 text-right">01:42</div>
+								<div class="font-bold text-gray-800 mr-2 text-right">{data.totalHours}</div>
 							</div>
-							<hr class="my-2 fill-black">
 							<div class="flex flex-col items-center">
 								<div class="text-yellow-500 text-left">★★★</div>
 								<div class="font-bold text-gray-800 mr-2 text-right">{data.stats[0].first_name} {data.stats[0].last_name}</div>
@@ -132,7 +145,7 @@
 				</div>
 			</section>
 			<!--Footer cards-->
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 				<!-- News -->
 				<!-- Upcoming Events -->
 				<div class="bg-white shadow p-4">
