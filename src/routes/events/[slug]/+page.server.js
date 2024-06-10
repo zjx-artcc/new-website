@@ -1,32 +1,36 @@
 //@ts-nocheck
 import { error, redirect } from '@sveltejs/kit';
-import { api } from '../../../lib/api';
+import { getStaffRoles, prisma } from '$lib/db';
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies }) {
   let pageData = {
     loggedIn: false,
-    staffInteger: 0,
+    canEdit: false,
     cid: 0,
     event: {}
   }
   if (cookies.get("session")) {
     pageData.loggedIn = true;
-    pageData.staffInteger = parseInt(cookies.get("si"));
     pageData.cid = parseInt(cookies.get("cid"));
   }
   const eventId = params.slug;
   if (eventId == "undefined") { 
-    console.log("Undefined")
     error(404, 'Not Found');
   } else {
-    console.log(eventId);
-    const data = await api.GET(`events/event/${eventId}`);
-    if (data[0] == 404) {
+    const data = await prisma.events.findFirst({
+      where: {
+        id: eventId
+      }
+    })
+    if (data == null) {
       redirect(404, '/404');
     } else {
       pageData.event = data;
     }
-    return pageData;
   }
+  
+  pageData.canEdit = await getStaffRoles(pageData.cid);
+
+  return pageData;
 }

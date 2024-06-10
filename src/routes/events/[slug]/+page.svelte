@@ -4,7 +4,6 @@
   import Navbar from '../../../components/Navbar.svelte';
   import Icon from '@iconify/svelte';
   export let data;
-  console.log(data);
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
@@ -18,10 +17,9 @@
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
         <h1 class="text-6xl text-white font-bold pt-3">{data.event.name}</h1>
         <h3 class="text-3xl text-white pt-3">{new Date(data.event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})} <Icon icon="material-symbols:arrow-right-alt" /> {new Date(data.event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})}</h3>
-        {#if data.staffInteger > 0}
+        {#if data.canEdit}
           <div class="pt-4">
             <a href="/events/{data.event.id}/edit" class="bg-blue-500 text-white px-2 rounded-md text-xl">Edit Event</a>
-            <button class="bg-red-500 text-white px-2 rounded-md text-xl" on:click={prompt}>Delete Event</button>
           </div>
         {/if}
       </div>

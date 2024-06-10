@@ -1,18 +1,17 @@
 //@ts-nocheck
 import { error, redirect } from '@sveltejs/kit'
-import { prisma } from '$lib/db'
+import { getStaffRoles, prisma } from '$lib/db'
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies }) {
   let pageData = {
     loggedIn: false,
-    staffInteger: 0,
+    canEdit: false,
     cid: 0,
     event: {}
   }
   if (cookies.get("session")) {
     pageData.loggedIn = true;
-    pageData.staffInteger = parseInt(cookies.get("si"));
     pageData.cid = parseInt(cookies.get("cid"));
   }
   const eventId = params.slug;
@@ -30,6 +29,12 @@ export async function load({ params, cookies }) {
     } else {
       pageData.event = data;
     }
-    return pageData;
   }
+
+  pageData.canEdit = await getStaffRoles(pageData.cid);
+  if (pageData.canEdit == false) {
+    error(403, 'Forbidden');
+  }
+
+  return pageData;
 }

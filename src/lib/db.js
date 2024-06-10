@@ -32,3 +32,20 @@ export function getHours(input) {
   let minutes = Math.round((input - hours) * 60).toString().padStart(2, "0");
   return `${hours}:${minutes}`;
 }
+
+export async function getStaffRoles(cid) {
+  let data = await prisma.roster.findFirst({
+    where: {
+      cid: cid
+    },
+    select: {
+      staff_roles: true
+    }
+  })
+  data = data.staff_roles.split(",");
+  if (data.includes("ATM") || data.includes("DATM") || data.includes("EC") || data.includes("AEC") || data.includes("WM") || data.includes("AWM")) {
+    return true;
+  } else {
+    return false;
+  }
+}
