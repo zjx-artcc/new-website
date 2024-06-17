@@ -51,7 +51,7 @@
     </nav>
   </div>
 </div>
-<form use:form>
+<form use:form method="POST">
   <div>
     <div class="text-center flex-1 m-2 h-fit mt-20 px-5 py-5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Event Details:</h1>
@@ -60,7 +60,7 @@
           <td class="px-2">
             <label for="name" class="pb-1">Event Name:</label>
             <br>
-            <input name="name" id="name" class="outline outline-1" bind:value={data.event.name} on:change={() => saved=false}>
+            <input name="name" id="name" class="px-2 outline outline-1" value={data.event.name} on:change={() => saved=false}>
           </td>
           <td class="px-2">
             <label for="start" class="pb-1">Event Start:</label>
@@ -74,9 +74,9 @@
           </td>
         </tr>
       </table>
-      <p class="py-2">Host: <input class="outline outline-1" bind:value={data.event.host}></p>
-      <p class="py-2">Banner URL: <input class="outline outline-1" bind:value={data.event.banner}></p>
-      <p class="py-2">Hidden? <input type="checkbox" bind:checked={data.event.hidden}/></p>
+      <p class="py-2">Host: <input type="text" class="ml-2 px-2 outline outline-1" ></p>
+      <p class="py-2">Banner URL: <input class="ml-2 px-2 outline outline-1" value={data.event.banner}></p>
+      <p class="py-2">Hidden? <input type="checkbox" checked={data.event.hidden}/></p>
     </div>
   </div>
   
