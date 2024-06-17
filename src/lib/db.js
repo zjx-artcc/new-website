@@ -49,3 +49,14 @@ export async function getStaffRoles(cid) {
     return false;
   }
 }
+
+export function formatDate(input) {
+  let dateTime = new Date(input);
+  let year = dateTime.getFullYear();
+  let month = (dateTime.getMonth() + 1).toString().padStart(2, "0");
+  let day = dateTime.getDate().toString().padStart(2, "0");
+  let hours = dateTime.getHours().toString().padStart(2, "0");
+  let minutes = dateTime.getMinutes().toString().padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}

@@ -4,6 +4,7 @@
   import '../../../../app.css';
   import Navbar from '../../../../components/Navbar.svelte';
   import Icon from '@iconify/svelte';
+	import { onMount } from 'svelte';
   export let data
   let saved = true;
   let positions = data.event.positions;
@@ -23,9 +24,9 @@
     <Navbar loggedIn={data.loggedIn}/>
   </div>
 
-  <div class="relative z-0">
+  <div class="relative z-">
     <div class="absolute inset-0 bg-cover bg-center z-1" style="background-image: url({data.event.banner}); filter: blur(5px)  brightness(60%);"></div>
-    <div class="relative z-2">
+    <div class="relative">
       <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
         <h1 class="text-6xl text-white font-bold pt-3">{data.event.name}</h1>
@@ -50,7 +51,7 @@
     </nav>
   </div>
 </div>
-<form>
+<form use:form>
   <div>
     <div class="text-center flex-1 m-2 h-fit mt-20 px-5 py-5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Event Details:</h1>
@@ -64,12 +65,12 @@
           <td class="px-2">
             <label for="start" class="pb-1">Event Start:</label>
             <br>
-            <input name="start" id="start" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" bind:value={new Date(data.event.event_start).toISOString()}>
+            <input name="start" id="start" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" bind:value={data.event.temp_start}>
           </td>
           <td class="px-2">
             <label for="end" class="pb-1">Event End:</label>
             <br>
-            <input class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" bind:value={data.event.event_end}>
+            <input class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" bind:value={data.event.temp_end}>
           </td>
         </tr>
       </table>

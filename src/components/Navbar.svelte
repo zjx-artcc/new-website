@@ -11,7 +11,7 @@
 		<span class="text-xl text-sky-500"> ARTCC</span>
 	</a>
 </div>
-<div class="space-x-16 pl-10">
+<div class="space-x-16 pl-10 z-10">
 	<Button class="text-lg text-stone-200 inline-flex align-middle"><Icon icon="mdi:airplane" class="w-7 h-7 pr-1.5"/> Pilots<ChevronDownSolid class="w-6 h-6 pt-1 pl-3"/></Button>
 	<Dropdown>
 		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">

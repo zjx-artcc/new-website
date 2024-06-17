@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { error, redirect } from '@sveltejs/kit'
-import { getStaffRoles, prisma } from '$lib/db'
+import { formatDate, getStaffRoles, prisma } from '$lib/db'
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies }) {
@@ -35,6 +35,8 @@ export async function load({ params, cookies }) {
   if (pageData.canEdit == false) {
     error(403, 'Forbidden');
   }
+  pageData.event.temp_start = formatDate(pageData.event.event_start);
+  pageData.event.temp_end = formatDate(pageData.event.event_end);
 
   return pageData;
 }
