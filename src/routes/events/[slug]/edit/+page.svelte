@@ -32,8 +32,8 @@
         <h1 class="text-6xl text-white font-bold pt-3">{data.event.name}</h1>
         <h3 class="text-3xl text-white pt-3">{new Date(data.event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})} <Icon icon="material-symbols:arrow-right-alt" /> {new Date(data.event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})}</h3>
         <div class="pt-4">
-          <button type="button" class="bg-green-500 text-white px-2 pt-1 pb-2 rounded-md text-xl">Save Changes</button>
-          <button type="button" on:click={prompt} class="bg-red-500 text-white px-2 pt-1 pb-2 rounded-md text-xl">Discard Changes</button>
+          <button type="button" class="bg-green-500 text-white px-2 align-middle rounded-md text-xl mr-2">Save Changes</button>
+          <button type="button" on:click={prompt} class="bg-red-500 text-white px-2 align-middle rounded-md text-xl ml-2">Discard Changes</button>
           <span class="px-1"></span>
         </div>
       </div>

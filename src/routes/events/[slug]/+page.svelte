@@ -19,7 +19,7 @@
         <h3 class="text-3xl text-white pt-3">{new Date(data.event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})} <Icon icon="material-symbols:arrow-right-alt" /> {new Date(data.event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric'})}</h3>
         {#if data.canEdit}
           <div class="pt-4">
-            <a href="/events/{data.event.id}/edit" class="bg-blue-500 text-white px-2 rounded-md text-xl">Edit Event</a>
+            <a href="/events/{data.event.id}/edit" class="bg-blue-500 text-white px-2 align-middle rounded-md text-xl">Edit Event</a>
           </div>
         {/if}
       </div>
