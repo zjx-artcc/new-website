@@ -13,7 +13,7 @@ export async function load({ cookies }) {
     online: {},
     totalHours: 0
   };
-  if (cookies.get("session")) {
+  if (cookies.get("cid")) {
     pageData.loggedIn = true;
   }
   {

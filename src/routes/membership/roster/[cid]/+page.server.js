@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 import { error as svelteError } from '@sveltejs/kit'
-import { api } from '$lib/api';
+import { prisma, getRating } from '$lib/db';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies }) {
@@ -14,17 +14,32 @@ export async function load({ params, cookies }) {
     certs: {},
     sessions: {}
   }
-  if (cookies.get("session")) {
+  if (cookies.get("cid")) {
     pageData.loggedIn = true;
-    pageData.staffInteger = parseInt(cookies.get("si"));
   }
-  pageData.certs = await api.GET(`controllers/controller/${params.cid}`);
-  let data = await api.GET(`stats/${params.cid}/last/5`);
-  console.log(data);
-  for (let i = 0; i < data.length; i++) {
-    data[i].logon_time = new Date(data[i].logon_time);
+  {
+    let data = await prisma.roster.findUnique({
+      where: {
+        cid: parseInt(params.cid)
+      },
+    });
+    console.log(data);
+    data.rating = getRating(data.rating);
+    pageData.certs = data
   }
-  pageData.sessions = data;
-  console.log(pageData);
+  {
+    let data = await prisma.sessions.findMany({
+      where: {
+        cid: parseInt(params.cid)
+      },
+      take: 5
+    });
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+      data[i].logon_time = new Date(data[i].logon_time);
+    }
+    pageData.sessions = data;
+    console.log(pageData);
+  }
   return pageData;
 }
