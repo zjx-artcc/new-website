@@ -42,6 +42,9 @@ export async function getStaffRoles(cid) {
       staff_roles: true
     }
   })
+  if (data == null) {
+	  return ""
+  }
   data = data.staff_roles.split(",");
   if (data.includes("ATM") || data.includes("DATM") || data.includes("EC") || data.includes("AEC") || data.includes("WM") || data.includes("AWM")) {
     return true;

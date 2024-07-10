@@ -25,6 +25,7 @@ export async function load({ params, cookies }) {
     });
     console.log(data);
     data.rating = getRating(data.rating);
+    console.log(data.rating);
     pageData.certs = data
   }
   {
