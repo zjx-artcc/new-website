@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 import { error as svelteError } from '@sveltejs/kit'
-import { prisma, getRating } from '$lib/db';
+import { prisma, getRating, getStaffRoles, getCerts, getCtrCerts } from '$lib/db';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies }) {
@@ -10,12 +10,13 @@ export async function load({ params, cookies }) {
   }
   let pageData = {
     loggedIn: false,
-    staffInteger: 0,
+    canEdit: false,
     certs: {},
     sessions: {}
   }
   if (cookies.get("cid")) {
     pageData.loggedIn = true;
+    pageData.canEdit = await getStaffRoles(parseInt(cookies.get("cid")), "event");
   }
   {
     let data = await prisma.roster.findUnique({
@@ -23,9 +24,12 @@ export async function load({ params, cookies }) {
         cid: parseInt(params.cid)
       },
     });
-    console.log(data);
-    data.rating = getRating(data.rating);
-    console.log(data.rating);
+    data.del_certs = getCerts(data.del_certs);
+    data.gnd_certs = getCerts(data.gnd_certs);
+    data.twr_certs = getCerts(data.twr_certs);
+    data.app_certs = getCerts(data.app_certs);
+    data.ctr_cert = getCtrCerts(data.ctr_cert);
+    data.rating = getRating(parseInt(data.rating));
     pageData.certs = data
   }
   {
@@ -33,14 +37,12 @@ export async function load({ params, cookies }) {
       where: {
         cid: parseInt(params.cid)
       },
-      take: 5
+      take: 5,
     });
-    console.log(data);
     for (let i = 0; i < data.length; i++) {
       data[i].logon_time = new Date(data[i].logon_time);
     }
     pageData.sessions = data;
-    console.log(pageData);
   }
   return pageData;
 }

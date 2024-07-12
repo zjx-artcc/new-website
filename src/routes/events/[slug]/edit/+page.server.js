@@ -10,9 +10,8 @@ export async function load({ params, cookies }) {
     cid: 0,
     event: {}
   }
-  if (cookies.get("session")) {
+  if (cookies.get("cid")) {
     pageData.loggedIn = true;
-    pageData.cid = parseInt(cookies.get("cid"));
   }
   const eventId = params.slug;
   if (eventId == "undefined") { 

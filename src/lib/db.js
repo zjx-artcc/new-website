@@ -33,7 +33,7 @@ export function getHours(input) {
   return `${hours}:${minutes}`;
 }
 
-export async function getStaffRoles(cid) {
+export async function getStaffRoles(cid, type) {
   let data = await prisma.roster.findFirst({
     where: {
       cid: cid
@@ -45,11 +45,23 @@ export async function getStaffRoles(cid) {
   if (data == null) {
 	  return ""
   }
-  data = data.staff_roles.split(",");
-  if (data.includes("ATM") || data.includes("DATM") || data.includes("EC") || data.includes("AEC") || data.includes("WM") || data.includes("AWM")) {
-    return true;
-  } else {
-    return false;
+  data = data.staff_roles.toString();
+  switch(type) {
+    case "event": {
+      if (data.includes("ATM")) {
+        return true;
+      }
+      break;
+    }
+    case "roster": {
+      if (data.includes("ATM")) {
+        return true;
+      }
+      break;
+    }
+    default: {
+      return false;
+    }
   }
 }
 
@@ -62,4 +74,35 @@ export function formatDate(input) {
   let minutes = dateTime.getMinutes().toString().padStart(2, "0");
 
   return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+export function getCerts(certInt) {
+  switch(certInt) {
+    case 1: {
+      return "Tier 1 Certified";
+    }
+    case 1.5: {
+      return "Tier 1 Solo"
+    }
+    case 2: {
+      return "Tier 2 Certified";
+    }
+    case 2.5: {
+      return "Tier 2 Solo"
+    }
+    case 3: {
+      return "Unrestricted Certified";
+    }
+    default: {
+      return "Not Certified";
+    }
+  }
+}
+
+export function getCtrCerts(certInt) {
+  if (certInt == 1) {
+    return "Center Certified"
+  } else {
+    return "Not Certified"
+  }
 }

@@ -18,7 +18,7 @@
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
 			<h1 class="text-6xl text-white font-bold pt-3">{data.certs.first_name} {data.certs.last_name}</h1>
 			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
-			{#if data.staffInteger > 0}
+			{#if data.canEdit}
 				<div class="pt-4">
 					<a href="/membership/roster/{data.certs.cid}/manage" class="bg-blue-500 text-white px-2 rounded-md text-xl">Manage Member</a>
 				</div>
@@ -74,9 +74,9 @@
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						{data.first_name}'s Blank Space
+						{data.certs.first_name}'s Blank Space
 					</h3>
-					<p class="text-sm text-muted-foreground">{data.first_name}'s Blank Space</p>
+					<p class="text-sm text-muted-foreground">{data.certs.first_name}'s Blank Space</p>
 				</div>
 				<div class="p-6 flex items-center justify-center">
 				</div>
@@ -84,9 +84,9 @@
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						{data.first_name}'s Blank space
+						{data.certs.first_name}'s Blank space
 					</h3>
-					<p class="text-sm text-muted-foreground">{data.first_name}'s Blank Space</p>
+					<p class="text-sm text-muted-foreground">{data.certs.first_name}'s Blank Space</p>
 				</div>
 				<div class="p-6 flex items-center justify-center">
 				</div>

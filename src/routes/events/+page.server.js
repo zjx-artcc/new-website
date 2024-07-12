@@ -8,9 +8,8 @@ export async function load({ params, cookies }) {
     staffInteger: 0,
     events: []
   };
-  if (cookies.get("session")) {
+  if (cookies.get("cid")) {
     pageData.loggedIn = true;
-    pageData.staffInteger = parseInt(cookies.get("si"));
   }
   const data = await prisma.events.findMany({
     orderBy: {
