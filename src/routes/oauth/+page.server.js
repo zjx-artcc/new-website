@@ -9,6 +9,8 @@ export async function load({ url, cookies }) {
   if (url.pathname == "/oauth") {
     let code = url.searchParams.get("code");
     let formBody = [];
+    //* This is the info for the dev environment provided by VATSIM
+    //* Once we move to production, this will be protected in .env
     let body = {
       "grant_type": "authorization_code",
       "client_id": "736",
