@@ -40,7 +40,6 @@ export async function load({ url, cookies }) {
       }
     });
     let userObject = await userRequest.json();
-    console.log(userObject.data.personal)
     let user = {
       cid: parseInt(userObject.data.cid),
       email: userObject.data.personal.email,
