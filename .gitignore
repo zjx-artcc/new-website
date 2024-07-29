@@ -13,3 +13,7 @@ vite.config.ts.timestamp-*
 .idea*
 .vscode
 .vscode*
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
