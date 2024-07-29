@@ -40,6 +40,6 @@
 	{#if loggedIn}
 		<a href="/me" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" /> Profile</a>
 	{:else}
-		<a href="/login" class="text-lg text-stone-200 inline-flex " id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</a>
+		<a href="/login" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</a>
 	{/if}
 </div>
