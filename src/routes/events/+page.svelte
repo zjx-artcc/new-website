@@ -37,7 +37,7 @@
 </div>
 <div id="content" class="flex flex-wrap justify-center">
   {#each data.events as event}
-    <Card img="{event.banner}" href="/events/{event.id}" horizontal size="md" style="width: 33rem;" class="align-middle justify-center justify-items-center m-10">
+    <Card img="{event.banner}" href="/events/{event.id}" class="w-1/4 align-middle justify-center justify-items-center m-10">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{event.name}</h5>
       <p class="mb-3 font-normal text-gray-500 leading-tight">Hosted By: {event.host}</p>
       <p class="mb-3 font-normal text-gray-700 leading-tight">{new Date(event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})} -> {new Date(event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
