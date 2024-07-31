@@ -3,6 +3,7 @@
 	import Icon from '@iconify/svelte';
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
+	import { signIn } from '@auth/sveltekit/client'
 	export let loggedIn; 
 </script>
 <div class="pl-4 inline-block align-middle">
@@ -40,6 +41,6 @@
 	{#if loggedIn}
 		<a href="/me" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" /> Profile</a>
 	{:else}
-		<a href="/login" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</a>
+		<button on:click={signIn} class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</button>
 	{/if}
 </div>

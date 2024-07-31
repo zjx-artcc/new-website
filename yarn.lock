@@ -48,6 +48,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@auth/prisma-adapter@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "@auth/prisma-adapter@npm:2.4.2"
+  dependencies:
+    "@auth/core": "npm:0.34.2"
+  peerDependencies:
+    "@prisma/client": ">=2.26.0 || >=3 || >=4 || >=5"
+  checksum: c291f4e0cb7e07a36146d0c4d39d2fc95d77c2b414c562c8b552dfddd8cb86da24b76deec3eaf31af89a3a4e06f3337c2f476f866b56522345b2a999357900c7
+  languageName: node
+  linkType: hard
+
 "@auth/sveltekit@npm:^1.4.2":
   version: 1.4.2
   resolution: "@auth/sveltekit@npm:1.4.2"
@@ -4519,6 +4530,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zjx-svelte@workspace:."
   dependencies:
+    "@auth/prisma-adapter": "npm:^2.4.2"
     "@auth/sveltekit": "npm:^1.4.2"
     "@iconify/svelte": "npm:^3.1.6"
     "@prisma/client": "npm:^5.15.0"
