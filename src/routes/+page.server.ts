@@ -1,8 +1,8 @@
 //@ts-nocheck
 import { getHours, getRating, prisma } from '$lib/db';
+import type { PageServerLoad } from './$types';
 
-/** @type {import('./$types').PageLoad} */
-export async function load({ cookies }) {
+export const load: PageServerLoad = async ({ cookies, events }) => {
   let pageData = {
     loggedIn: false,
     stats: {},
@@ -13,7 +13,8 @@ export async function load({ cookies }) {
     online: {},
     totalHours: 0
   };
-  if (cookies.get("cid")) {
+  const session = await events.locals.auth();
+  if (session?.user?.userId) {
     pageData.loggedIn = true;
   }
   {
