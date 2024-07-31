@@ -2,7 +2,7 @@
 import { getHours, getRating, prisma } from '$lib/db';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, events }) => {
+export const load: PageServerLoad = async ({ cookies }) => {
   let pageData = {
     loggedIn: false,
     stats: {},
@@ -13,10 +13,6 @@ export const load: PageServerLoad = async ({ cookies, events }) => {
     online: {},
     totalHours: 0
   };
-  const session = await events.locals.auth();
-  if (session?.user?.userId) {
-    pageData.loggedIn = true;
-  }
   {
     const data = await prisma.stats.findMany({
       take: 3,
