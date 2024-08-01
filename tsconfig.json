@@ -2,6 +2,7 @@
   "compilerOptions": {
     "strict": false,
     "allowUnreachableCode": false,
+    "allowImportingTsExtensions": true
   },
   "extends": "./.svelte-kit/tsconfig.json"
 }

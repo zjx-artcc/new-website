@@ -1,8 +1,8 @@
 <script>
   //@ts-nocheck
   import { Card, Button, Toggle } from 'flowbite-svelte';
-  import '../../../app.css';
-  import Navbar from '../../../components/Navbar.svelte';
+  import '../../app.css';
+  import Navbar from '../../components/Navbar.svelte';
   import Icon from '@iconify/svelte';
 	export let data;
 </script>

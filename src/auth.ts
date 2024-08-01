@@ -1,4 +1,4 @@
-import { prisma } from "$lib/db";
+import { prisma } from "$lib/db.ts";
 import { SvelteKitAuth } from "@auth/sveltekit";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 
@@ -25,7 +25,8 @@ export const { handle } = SvelteKitAuth({
     async profile(profile) {
       return {
         id: profile.data.cid,
-        email: profile.data.personal.email
+        email: profile.data.personal.email,
+        cid: profile.data.cid,
       };
     }
   }],

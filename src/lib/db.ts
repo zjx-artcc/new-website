@@ -54,7 +54,7 @@ export async function getStaffRoles(cid, type) {
       break;
     }
     case "roster": {
-      if (data.includes("ATM")) {
+      if (data.includes("ATM") || data.includes("WM")) {
         return true;
       }
       break;

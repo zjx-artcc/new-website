@@ -84,6 +84,7 @@ model stats {
 
 model User {
   id            String          @id @default(cuid())
+  cid           String
   name          String?
   email         String          @unique
   emailVerified DateTime?

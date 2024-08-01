@@ -5,6 +5,8 @@
 	import { ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
 	import { signIn } from '@auth/sveltekit/client'
 	import { page } from '$app/stores';
+
+	console.log($page.data.session);
 </script>
 <div class="pl-4 inline-block align-middle">
 	<a class="link-effect font-bold" href="/">
@@ -38,8 +40,8 @@
 		</DropdownItem>
 	</Dropdown>
 	<a href="/events" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ion:calendar" class="pt-1.5 navbarIcon" /> Events</a>
-	{#if !$page.data.session?.user?.id}
-		<a href="/me" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" /> Profile</a>
+	{#if $page.data.session != null}
+		<a href="/roster/{$page.data.session.user.cid}" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" /> Profile</a>
 	{:else}
 		<button on:click={signIn} class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</button>
 	{/if}
