@@ -22,7 +22,7 @@
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
 			<h1 class="text-6xl text-white font-bold pt-3">{data.certs.first_name} {data.certs.last_name}</h1>
 			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
-			<div class="grid-cols-2 pt-4">
+			<div class="pt-4">
 				{#if data.canEdit}
 					<a href="/roster/{data.certs.cid}/manage" class="bg-blue-500 text-white px-2 pb-1 mx-2 rounded-md text-xl">Manage</a>
 				{/if}
