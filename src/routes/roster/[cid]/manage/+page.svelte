@@ -24,7 +24,7 @@
 			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
 			{#if data.canEdit}
 				<div class="pt-4">
-					<button class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Discard Changes</button>
+					<a href="/roster/{data.certs.cid}" class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Discard Changes</a>
 					<button class="bg-green-500 text-white px-2 pb-1 rounded-md text-xl">Save Changes</button>
 				</div>
 			{/if}
@@ -61,9 +61,7 @@
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						Certifications
-					</h3>
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Certifications</h3>
 					<p class="text-sm text-muted-foreground">
 						<ul>
 							<li>Enroute - {data.certs.ctr_cert}</li>
@@ -78,10 +76,8 @@
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						{data.first_name}'s Blank Space
-					</h3>
-					<p class="text-sm text-muted-foreground">{data.first_name}'s Blank Space</p>
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Recent Training</h3>
+					<p class="text-sm text-muted-foreground">Last 5 Training Tickets</p>
 				</div>
 				<div class="p-6 flex items-center justify-center">
 				</div>
@@ -89,9 +85,9 @@
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						{data.first_name}'s Blank space
+						{data.certs.first_name}'s Blank space
 					</h3>
-					<p class="text-sm text-muted-foreground">{data.first_name}'s Blank Space</p>
+					<p class="text-sm text-muted-foreground">{data.certs.first_name}'s Blank Space</p>
 				</div>
 				<div class="p-6 flex items-center justify-center">
 				</div>

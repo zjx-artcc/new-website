@@ -80,19 +80,15 @@
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						{data.certs.first_name}'s Blank Space
-					</h3>
-					<p class="text-sm text-muted-foreground">{data.certs.first_name}'s Blank Space</p>
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Recent Training</h3>
+					<p class="text-sm text-muted-foreground">Last 5 Training Sessions</p>
 				</div>
 				<div class="p-6 flex items-center justify-center">
 				</div>
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						{data.certs.first_name}'s Blank space
-					</h3>
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">{data.certs.first_name}'s Blank Space</h3>
 					<p class="text-sm text-muted-foreground">{data.certs.first_name}'s Blank Space</p>
 				</div>
 				<div class="p-6 flex items-center justify-center">
