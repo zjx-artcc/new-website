@@ -18,20 +18,18 @@
 		<Navbar loggedIn={data.loggedIn} />
 	</div>
 	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; ">
-		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
+		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem] place-content-evenly">
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
 			<h1 class="text-6xl text-white font-bold pt-3">{data.certs.first_name} {data.certs.last_name}</h1>
 			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
-			{#if data.canEdit}
-				<div class="pt-4">
-					<button on:click={redirect(301, `/roster/${data.certs.cid}/manage`)} class="bg-blue-500 text-white px-2 pb-1 rounded-md text-xl">Manage Member</button>
-				</div>
-			{/if}
-			{#if $page.data.session.user != null && $page.data.session.user.cid == data.certs.cid.toString()}
-				<div class="pt-4">
+			<div class="grid-cols-2 pt-4">
+				{#if data.canEdit}
+					<a href="/roster/{data.certs.cid}/manage" class="bg-blue-500 text-white px-2 pb-1 mx-2 rounded-md text-xl">Manage</a>
+				{/if}
+				{#if $page.data.session.user != null && $page.data.session.user.cid == data.certs.cid.toString()}
 					<button on:click={() => { signOut({callbackUrl: '/', redirect: true})}} class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Log Out</button>
-				</div>
-			{/if}
+				{/if}
+			</div>
 		</div>
 	</div>
 </header>

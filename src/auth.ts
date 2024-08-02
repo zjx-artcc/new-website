@@ -1,6 +1,8 @@
 import { prisma } from "$lib/db.ts";
 import { SvelteKitAuth } from "@auth/sveltekit";
 import { PrismaAdapter } from "@auth/prisma-adapter"
+import * as dotenv from "dotenv";
+dotenv.config();
 
 export const { handle } = SvelteKitAuth({
   debug: true,
@@ -8,20 +10,20 @@ export const { handle } = SvelteKitAuth({
   trustHost: true,
   providers:[{
     id: "vatsim-dev",
-    name: "VATSIM Connect Development Environment",
+    name: "VATSIM Connect",
     type: "oauth",
     authorization: {
-      url: "https://auth-dev.vatsim.net/oauth/authorize?response_type=code",
+      url: process.env.CONNECT_URL,
       params: {
         scope: "full_name email"
       }
     },
-    clientId: "736",
-    clientSecret: "LxbXWaebRBfB4TfnrcIX4EGFhh5BksRcDb57RaZ2",
+    clientId: process.env.CONNECT_ID,
+    clientSecret: process.env.CONNECT_SECRET,
     token: {
-      url: "https://auth-dev.vatsim.net/oauth/token",
+      url: process.env.TOKEN_URL,
     },
-    userinfo: "https://auth-dev.vatsim.net/api/user",
+    userinfo: process.env.USER_INFO_URL,
     async profile(profile) {
       return {
         id: profile.data.cid,
