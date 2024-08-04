@@ -2,6 +2,10 @@
 import { PrismaClient } from "@prisma/client";
 export const prisma = new PrismaClient();
 
+//* Begin utility functions
+//TODO: Add JSDoc comments
+
+
 export function getRating(ratingInt) {
   switch(ratingInt) {
     case 1:
@@ -65,6 +69,7 @@ export async function getStaffRoles(cid, type) {
   }
 }
 
+//* Format to UTC Date
 export function formatDate(input) {
   let dateTime = new Date(input);
   let year = dateTime.getFullYear();
@@ -76,7 +81,12 @@ export function formatDate(input) {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-export function getCerts(certInt) {
+/**
+ * Converts certifcation integer to string
+ * @param certInt An integer representing the certification level
+ * @returns {String} The certification level as a string
+ */
+export function getCerts(certInt: number): string {
   switch(certInt) {
     case 1: {
       return "Tier 1 Certified";
@@ -99,9 +109,12 @@ export function getCerts(certInt) {
   }
 }
 
+//* Same thing but for center certs which are trinary
 export function getCtrCerts(certInt) {
   if (certInt == 1) {
     return "Center Certified"
+  } else if (certInt == 1.5) {
+    return "Center Solo"
   } else {
     return "Not Certified"
   }
