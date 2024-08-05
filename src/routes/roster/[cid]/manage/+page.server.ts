@@ -14,10 +14,6 @@ export async function load({ params, cookies }) {
     certs: {},
     sessions: {}
   }
-  if (cookies.get("cid")) {
-    pageData.loggedIn = true;
-    pageData.canEdit = await getStaffRoles(parseInt(cookies.get("cid")), "event");
-  }
   {
     let data: roster = await prisma.roster.findUnique({
       where: {
