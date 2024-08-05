@@ -2,7 +2,6 @@
 
 import { error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCerts, getCtrCerts } from '$lib/db';
-import type { roster } from '@prisma/client';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies }) {
@@ -21,11 +20,11 @@ export async function load({ params, cookies }) {
       },
     });
     data.cid = parseInt(data.cid);
-    data.del_certs = getCerts(data.del_certs);
-    data.gnd_certs = getCerts(data.gnd_certs);
-    data.twr_certs = getCerts(data.twr_certs);
-    data.app_certs = getCerts(data.app_certs);
-    data.ctr_cert = getCtrCerts(data.ctr_cert);
+    data.del_certs = data.del_certs;
+    data.gnd_certs = data.gnd_certs;
+    data.twr_certs = data.twr_certs;
+    data.app_certs = data.app_certs;
+    data.ctr_cert = parseInt(data.ctr_cert);
     data.rating = getRating(parseInt(data.rating));
     pageData.certs = data
 

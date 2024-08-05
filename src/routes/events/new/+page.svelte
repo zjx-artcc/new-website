@@ -1,7 +1,7 @@
 <script>
   //@ts-nocheck
   import '../../../app.css';
-  import Navbar from '../../../components/Navbar.svelte';
+  import Navbar from '../../../lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
   import { required, useForm, validators } from 'svelte-use-form'
   export let data;

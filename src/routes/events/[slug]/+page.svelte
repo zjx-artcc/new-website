@@ -1,7 +1,7 @@
 <script>
   //@ts-nocheck
   import '../../../app.css';
-  import Navbar from '../../../components/Navbar.svelte';
+  import Navbar from '../../../lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
   export let data;
 </script>

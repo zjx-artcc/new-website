@@ -1,5 +1,8 @@
 // @ts-nocheck
 import { PrismaClient } from "@prisma/client";
+import type { roster } from '@prisma/client';
+import { redirect } from "@sveltejs/kit";
+
 export const prisma = new PrismaClient();
 
 //* Begin utility functions
@@ -117,5 +120,20 @@ export function getCtrCerts(certInt) {
     return "Center Solo"
   } else {
     return "Not Certified"
+  }
+}
+
+export function saveUser(user: roster) {
+  let data = prisma.roster.upsert({
+    where: {
+      cid: user.cid
+    },
+    update: user,
+    create: user
+  })
+  if (data == null) {
+    return false;
+  } else {
+    return redirect(302, `/roster/${parseInt(user.cid)}`)
   }
 }

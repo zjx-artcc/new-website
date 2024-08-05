@@ -1,16 +1,15 @@
 <script>
 	//@ts-nocheck
 	import { Card, Button, Toggle } from 'flowbite-svelte';
-	import '../../../app.css';
-	import Navbar from '../../../components/Navbar.svelte';
+	import '$lib/app.css';
+	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
-	import ATCCard from '../../../components/ATCCard.svelte';
+	import ATCCard from '$lib/components/ATCCard.svelte';
 	import { page } from '$app/stores';
 	import { signOut } from '@auth/sveltekit/client';
 	import { redirect } from '@sveltejs/kit';
 
 	export let data;
-	console.log(data.certs.cid.toString());
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">

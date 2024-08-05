@@ -1,13 +1,12 @@
 <script>
 	// @ts-nocheck
-
-	import '../app.css';
-	import Navbar from '../components/Navbar.svelte';
+	import '$lib/app.css';
+	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
-	import Card from '../components/Card.svelte';
-	import EventCard from '../components/EventCard.svelte';
-	import NewsCard from '../components/NewsCard.svelte';
-	import ATCCard from '../components/ATCCard.svelte';
+	import Card from '$lib/components/Card.svelte';
+	import EventCard from '$lib/components/EventCard.svelte';
+	import NewsCard from '$lib/components/NewsCard.svelte';
+	import ATCCard from '$lib/components/ATCCard.svelte';
 
 	const today = new Date();
 	export let data;

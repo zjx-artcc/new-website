@@ -1,7 +1,7 @@
 <script lang="ts">
 	  import { Card, Button, Toggle } from 'flowbite-svelte';
   import '../../app.css';
-  import Navbar from '../../components/Navbar.svelte';
+  import Navbar from '../../lib/components/Navbar.svelte';
 
 </script>
 <header class="bg-gray-700 block" id="myTopnav">

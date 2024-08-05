@@ -1,10 +1,11 @@
 <script>
 	//@ts-nocheck
 	import { Card, Button, Toggle } from 'flowbite-svelte';
-	import '../../../../app.css';
-	import Navbar from '../../../../components/Navbar.svelte';
+	import '$lib/app.css';
+	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
-	import ATCCard from '../../../../components/ATCCard.svelte';
+	import ATCCard from '$lib/components/ATCCard.svelte';
+	import { saveUser } from "$lib/db";
 	export let data;
 	console.log(data);
 </script>
@@ -25,7 +26,7 @@
 			{#if data.canEdit}
 				<div class="pt-4">
 					<a href="/roster/{data.certs.cid}" class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Discard Changes</a>
-					<button class="bg-green-500 text-white px-2 pb-1 rounded-md text-xl">Save Changes</button>
+					<button on:click={saveUser(data.certs)} class="bg-green-500 text-white px-2 pb-1 rounded-md text-xl">Save Changes</button>
 				</div>
 			{/if}
 		</div>
@@ -55,26 +56,70 @@
 						{/each}
 					</ul>
 				</div>
-				<div class="p-6 flex items-center justify-center">
-					
-				</div>
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Certifications</h3>
-					<p class="text-sm text-muted-foreground">
-						<ul>
-							<li>Enroute - {data.certs.ctr_cert}</li>
-							<li>Approach - {data.certs.app_certs}</li>
-							<li>Tower - {data.certs.twr_certs}</li>
-							<li>Ground - {data.certs.gnd_certs}</li>
-							<li>Delivery - {data.certs.del_certs}</li>
-						</ul>
-				</div>
-				<div class="p-6 flex items-center justify-center">
-				</div>
-			</div>
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+				<form method="POST">
+					<div class="flex flex-col space-y-1.5 p-6">
+						<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Certifications</h3>
+						<p class="text-sm text-muted-foreground">
+							<ul>
+								<li>
+									<label for="enroute">Enroute:</label>
+									<select id="enroute" name="enroute" bind:value={data.certs.ctr_cert}>
+										<option value="{1}">Certified</option>
+										<option value="{1.5}">Solo Certified</option>
+										<option value="{0}">Not Certified</option>
+									</select>
+								</li>
+								<li>
+									<label for="tracon">Approach:</label>
+									<select id="tracon" name="tracon" bind:value="{data.certs.app_certs}">
+										<option value="{1}">Tier 1 Certified</option>
+										<option value="{1.5}">Tier 1 Solo</option>
+										<option value="{2}">Tier 2 Certified</option>
+										<option value="{2.5}">Tier 2 Solo</option>
+										<option value="{3}">Unrestricted</option>
+										<option value="{0}">Not Certified</option>
+									</select>
+								</li>
+								<li>
+									<label for="tower">Tower:</label>
+									<select id="tower" name="tower" bind:value="{data.certs.twr_certs}">
+										<option value="{1}">Tier 1 Certified</option>
+										<option value="{1.5}">Tier 1 Solo</option>
+										<option value="{2}">Tier 2 Certified</option>
+										<option value="{2.5}">Tier 2 Solo</option>
+										<option value="{3}">Unrestricted</option>
+										<option value="{0}">Not Certified</option>
+									</select>
+								</li>
+								<li>
+									<label for="ground">Ground:</label>
+									<select id="ground" name="ground" bind:value="{data.certs.gnd_certs}">
+										<option value="{1}">Tier 1 Certified</option>
+										<option value="{1.5}">Tier 1 Solo</option>
+										<option value="{2}">Tier 2 Certified</option>
+										<option value="{2.5}">Tier 2 Solo</option>
+										<option value="{3}">Unrestricted</option>
+										<option value="{0}">Not Certified</option>
+									</select>
+								</li>
+								<li>
+									<label for="delivery">Delivery:</label>
+									<select id="delivery" name="delivery" bind:value="{data.certs.del_certs}">
+										<option value="{1}">Tier 1 Certified</option>
+										<option value="{1.5}">Tier 1 Solo</option>
+										<option value="{2}">Tier 2 Certified</option>
+										<option value="{2.5}">Tier 2 Solo</option>
+										<option value="{3}">Unrestricted</option>
+										<option value="{0}">Not Certified</option>
+									</select>
+								</li>
+							</ul>
+						</div>
+					</form>
+					</div>
+					<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Recent Training</h3>
 					<p class="text-sm text-muted-foreground">Last 5 Training Tickets</p>

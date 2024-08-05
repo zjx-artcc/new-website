@@ -2,7 +2,7 @@
   // @ts-nocheck
 	import { useForm } from 'svelte-use-form';
   import '../../../../app.css';
-  import Navbar from '../../../../components/Navbar.svelte';
+  import Navbar from '../../../../lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
   export let data
