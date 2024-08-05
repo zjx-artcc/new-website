@@ -122,18 +122,3 @@ export function getCtrCerts(certInt) {
     return "Not Certified"
   }
 }
-
-export function saveUser(user: roster) {
-  let data = prisma.roster.upsert({
-    where: {
-      cid: user.cid
-    },
-    update: user,
-    create: user
-  })
-  if (data == null) {
-    return false;
-  } else {
-    return redirect(302, `/roster/${parseInt(user.cid)}`)
-  }
-}

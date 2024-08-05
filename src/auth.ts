@@ -5,7 +5,6 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export const { handle } = SvelteKitAuth({
-  debug: true,
   adapter: PrismaAdapter(prisma),
   trustHost: true,
   providers:[{

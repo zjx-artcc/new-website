@@ -44,3 +44,47 @@ export async function load({ params, cookies }) {
   }
   return pageData;
 }
+
+/** @type {import('./types').Actions} */
+export const actions = {
+  default: async({cookies, request}) => {
+    const formData = await request.formData();
+    let user = await prisma.roster.findUnique({
+      where: {
+        cid: parseInt(formData.get('cid'))
+      }
+    });
+    if (user == null) {
+      return {
+        status: 404,
+        body: {
+          error: "User not found"
+        }
+      }
+    } else {
+      // Sanitize data from database
+      // For some reason bigints are turned with n
+      // Example: The number stored is 5, it returns 5n
+      user.cid = parseInt(user.cid);
+      user.rating = parseInt(user.rating);
+      user.mentor_level = parseInt(user.mentor_level);
+
+      // Update certifications based on the form data
+      user.del_certs = parseInt(formData.get('delivery'));
+      user.gnd_certs = parseInt(formData.get('ground'));
+      user.twr_certs = parseInt(formData.get('tower'));
+      user.app_certs = parseInt(formData.get('tracon'));
+      user.ctr_cert = parseInt(formData.get('enroute'));
+
+      let update = await prisma.roster.update({
+        where: {
+          cid: user.cid
+        },
+        data: user
+      })
+      if (update != null) {
+        window.alert("User updated successfully");
+      }
+    }
+  }
+}
