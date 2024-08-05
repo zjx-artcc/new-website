@@ -82,9 +82,6 @@ export const actions = {
         },
         data: user
       })
-      if (update != null) {
-        window.alert("User updated successfully");
-      }
     }
   }
 }
