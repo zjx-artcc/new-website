@@ -91,7 +91,9 @@
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">{data.certs.first_name}'s Personal Info</h3>
 					<p class="text-sm text-muted-foreground">
 						<ul>
-							<li>Email: {data.certs.email}</li>
+							{#if data.certs.cid == $page.data.session.user.cid}
+								<li>Email: {data.certs.email}</li>
+							{/if}
 							<li>CID: {data.certs.cid}</li>
 							<li>Operating Initials: {data.certs.initials}</li>
 							<li>Joined: {new Date(data.certs.created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</li>
