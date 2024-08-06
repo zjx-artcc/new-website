@@ -1,6 +1,5 @@
 //@ts-nocheck
-
-import { api } from '$lib/api';
+import { prisma, getCerts, getCtrCerts, getRating } from '$lib/db';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
@@ -10,21 +9,23 @@ export async function load({ params, cookies }) {
     home: [],
     visiting: [],
   }
-  if (cookies.get("session")) {
-    pageData.loggedIn = true;
-  }
-  const data = await api.GET('controllers/all');
+  const data = await prisma.roster.findMany({
+    orderBy: {
+      last_name: 'asc'
+    }
+  })
   for(let i = 0; i < data.length; i++) {
     let flagged = false;
     if (data[i].del_certs == undefined) {
       console.log(data[i]);
       flagged = true;
     }
-    data[i].del_certs = getCerts(data[i].del_certs)
-    data[i].gnd_certs = getCerts(data[i].gnd_certs)
-    data[i].twr_certs = getCerts(data[i].twr_certs)
-    data[i].app_certs = getCerts(data[i].app_certs)
-    data[i].ctr_cert = getCenterCert(data[i].ctr_cert)
+    data[i].del_certs = getCertsColor(data[i].del_certs)
+    data[i].gnd_certs = getCertsColor(data[i].gnd_certs)
+    data[i].twr_certs = getCertsColor(data[i].twr_certs)
+    data[i].app_certs = getCertsColor(data[i].app_certs)
+    data[i].ctr_cert = getCtrCertColor(parseInt(data[i].ctr_cert))
+    data[i].rating = getRating(parseInt(data[i].rating))
 
     if (flagged) {
       console.log(data[i])
@@ -41,58 +42,58 @@ export async function load({ params, cookies }) {
   }
 }
 
-function getCerts(input) {
+function getCertsColor(input: number): {cert: number, color: string} {
   switch(input) {
-    case 'Uncertified': {
+    case 0: {
       return {
-        cert: input,
+        cert: getCerts(input),
         color: "#868E96"
       }
     }
-    case 'Tier 1 (MCO) Certified': {
+    case 1: {
       return {
-        cert: input,
+        cert: getCerts(input),
         color: "#9ccc65"
       }
     }
-    case "Tier 1 (MCO) Solo Certified": {
+    case 1.5: {
       return {
-        cert: input,
+        cert: getCerts(input),
         color: "#ffca28"
       }
     }
-    case 'Tier 2 (JAX/PNS) Certified': {
+    case 2: {
       return {
-        cert: input,
+        cert: getCerts(input),
         color: "#42a5f5"
       }
     }
     case 2.5: {
       return {
-        cert: "Tier 2 Solo",
+        cert: getCerts(input),
         color: "#ffca28"
       }
     }
   }
 }
 
-function getCenterCert(input) {
+function getCtrCertColor(input: number): {cert: number, color: string} {
   switch(input) {
-    case 'Certified': {
+    case 1: {
       return {
-        cert: input,
+        cert: getCtrCerts(input),
         color: "#9ccc65"
       }
     }
-    case 'Uncertified': {
+    case 0: {
       return {
-        cert: input,
+        cert: getCtrCerts(input),
         color: "#868E96"
       }
     }
-    case 'Solo Certified': {
+    case 1.5: {
       return {
-        cert: input,
+        cert: getCtrCerts(input),
         color: "#ffca28"
       }
     }

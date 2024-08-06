@@ -73,6 +73,7 @@
 							<li>Ground - {data.certs.gnd_certs}</li>
 							<li>Delivery - {data.certs.del_certs}</li>
 						</ul>
+					<!-- <p> is auto closed by </ul>-->
 				</div>
 				<div class="p-6 flex items-center justify-center">
 				</div>
@@ -87,18 +88,18 @@
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">{data.certs.first_name}'s Blank Space</h3>
-					<p class="text-sm text-muted-foreground">{data.certs.first_name}'s Blank Space</p>
-				</div>
-				<div class="p-6 flex items-center justify-center">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">{data.certs.first_name}'s Personal Info</h3>
+					<p class="text-sm text-muted-foreground">
+						<ul>
+							<li>Email: {data.certs.email}</li>
+							<li>CID: {data.certs.cid}</li>
+							<li>Operating Initials: {data.certs.initials}</li>
+							<li>Joined: {new Date(data.certs.created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</li>
+							<li>Last Rating Change: {new Date(data.certs.rating_changed).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</li>
+						</ul>
+					<!-- <p> is auto closed by </ul>-->
 				</div>
 			</div>
 		</div>
-		
 	</main>
 </div>
-<!--
-<div id="content" class="bg-white align-middle text-center">
-	
-</div>
--->

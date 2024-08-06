@@ -34,12 +34,12 @@
 	<Button class="text-lg text-stone-200 inline-flex align-middle"><Icon icon="ic:baseline-people" class="w-7 h-7 pr-1.5" />Membership<ChevronDownSolid class="w-6 h-6 pt-1 pl-3"/></Button>
 	<Dropdown>
 		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
-			<a href="/membership/roster"><span>Roster</span></a>
+			<a href="/roster"><span>Roster</span></a>
 		</DropdownItem>
 	</Dropdown>
 	<a href="/events" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ion:calendar" class="pt-1.5 navbarIcon" /> Events</a>
 	{#if $page.data.session != null}
-		<a href="/roster/{$page.data.session.user.cid}" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" /> Profile</a>
+		<a href="/roster/{$page.data.session.user.cid}" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" />Profile</a>
 	{:else}
 		<button on:click={signIn} class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</button>
 	{/if}

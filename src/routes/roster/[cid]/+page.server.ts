@@ -3,9 +3,10 @@
 import { error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCerts, getCtrCerts } from '$lib/db';
 import type { roster } from '@prisma/client';
+import { page } from '$app/stores';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params, cookies }) {
+export async function load({ params, cookies, locals }) {
   if (params.cid == undefined) {
     svelteError(404, 'User not found');
   }
@@ -14,10 +15,7 @@ export async function load({ params, cookies }) {
     certs: {},
     sessions: {}
   }
-  if (cookies.get("cid")) {
-    pageData.loggedIn = true;
-    pageData.canEdit = await getStaffRoles(parseInt(cookies.get("cid")), "event");
-  }
+  pageData.canEdit = await getStaffRoles(parseInt((await (locals.getSession())).user.cid), "roster");
   {
     let data: roster = await prisma.roster.findUnique({
       where: {
@@ -31,9 +29,8 @@ export async function load({ params, cookies }) {
     data.app_certs = getCerts(data.app_certs);
     data.ctr_cert = getCtrCerts(data.ctr_cert);
     data.rating = getRating(parseInt(data.rating));
+    console.log(data);
     pageData.certs = data
-
-    pageData.canEdit = await getStaffRoles(data.cid, "roster");
   }
   {
     let data = await prisma.sessions.findMany({

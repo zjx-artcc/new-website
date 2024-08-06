@@ -40,7 +40,7 @@ export function getHours(input) {
   return `${hours}:${minutes}`;
 }
 
-export async function getStaffRoles(cid, type) {
+export async function getStaffRoles(cid: number, type: string): boolean {
   let data = await prisma.roster.findFirst({
     where: {
       cid: cid
@@ -55,7 +55,7 @@ export async function getStaffRoles(cid, type) {
   data = data.staff_roles.toString();
   switch(type) {
     case "event": {
-      if (data.includes("ATM")) {
+      if (data.includes("ATM") || data.includes("WM")) {
         return true;
       }
       break;
