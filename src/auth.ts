@@ -22,10 +22,11 @@ export const { handle } = SvelteKitAuth({
     token: {
       url: process.env.TOKEN_URL,
     },
+    allowDangerousEmailAccountLinking: true,
     userinfo: process.env.USER_INFO_URL,
     async profile(profile) {
       return {
-        id: profile.data.cid,
+        name: profile.data.personal.name_full,
         email: profile.data.personal.email,
         cid: profile.data.cid,
       };
