@@ -46,13 +46,17 @@
 					<p class="text-sm text-muted-foreground">Last 5 Controlling Sessions</p>
 					<ul>
 						{#each data.sessions as session}
-							<ATCCard
-								style="width: 100%"
-								name="{session.position}"
-								position="{Math.round(session.duration/60000)} minutes"
-								startDate={session.logon_time.toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
-								endDate={new Date(session.logon_time.getTime() + session.duration).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
-							/>
+							<li>
+								<div class="flex justify-between mt-3">
+									<p class="text-sm text-left w-1/2">{session.callsign}</p>
+									<p class="text-sm text-right w-1/2">{Math.round(session.duration/60000)} Minutes</p>
+								</div>
+								<div class="flex justify-between mb-3">
+									<p class="text-sm text-left">{session.logon_time.toLocaleString(undefined, {month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short'})}</p>
+									<p class="inline">-></p>
+									<p class="text-sm text-right">{session.last_update.toLocaleString(undefined, {month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short'})}</p>
+								</div>
+							</li>
 						{/each}
 					</ul>
 				</div>
