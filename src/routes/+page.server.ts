@@ -100,19 +100,16 @@ export const load: PageServerLoad = async ({ cookies }) => {
     pageData.notams = data;
   }
   {
-    const data = await prisma.sessions.findMany({
+    const data = await prisma.online_controllers.findMany({
       take: 3,
       orderBy: {
         logon_time: 'desc'
       }
     })
-    pageData.online = [];
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].last_update.getTime() < (new Date().getTime() - 60000)) {
-        console.log(data[i])
-        pageData.online.push(data[i])
-      }
+    if (data == null) {
+      throw new Error('No data found');
     }
+    pageData.online = data;
     for (let i = 0; i < pageData.online.length; i++) {
       const user = await prisma.roster.findFirst({
         where: {

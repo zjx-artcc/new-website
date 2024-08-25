@@ -41,38 +41,39 @@ model notams {
 }
 
 model roster {
-  cid            BigInt     @id
-  email          String
-  home_facility  String
-  created_at     DateTime   @default(now()) @db.Timestamptz(6)
-  rating_changed DateTime   @default(now()) @db.Timestamptz(6)
-  rating         BigInt
-  del_certs      Float
-  gnd_certs      Float
-  twr_certs      Float
-  app_certs      Float
-  ctr_cert       BigInt
-  initials       String
-  first_name     String
-  last_name      String
-  staff_roles    String     @default(dbgenerated("0"))
-  mentor_level   BigInt?    @default(0)
-  bookings       bookings[]
-  events         events[]
-  notams         notams[]
-  sessions       sessions[]
-  stats          stats?
+  cid                BigInt               @id
+  email              String
+  home_facility      String
+  created_at         DateTime             @default(now()) @db.Timestamptz(6)
+  rating             BigInt
+  del_certs          Float
+  gnd_certs          Float
+  twr_certs          Float
+  app_certs          Float
+  ctr_cert           BigInt
+  initials           String
+  first_name         String
+  last_name          String
+  staff_roles        String
+  mentor_level       BigInt?              @default(0)
+  rating_changed     DateTime?            @default(now()) @db.Timestamptz(6)
+  bookings           bookings[]
+  events             events[]
+  notams             notams[]
+  online_controllers online_controllers[]
+  sessions           sessions[]
+  stats              stats?
 }
 
 model sessions {
   id          BigInt    @id
-  cid         BigInt?
+  cid         BigInt
   callsign    String?   @db.VarChar(255)
   frequency   String?   @db.VarChar(255)
   logon_time  DateTime? @db.Timestamptz(6)
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
-  roster      roster?   @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+  roster      roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model stats {
@@ -84,19 +85,18 @@ model stats {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  cid           String
+  id            String    @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  cid           String
   accounts      Account[]
   sessions      Session[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -109,29 +109,37 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
+}
+
+model online_controllers {
+  id          BigInt    @id
+  cid         BigInt?
+  callsign    String?   @db.VarChar(255)
+  frequency   String?   @db.VarChar(255)
+  logon_time  DateTime? @db.Timestamptz(6)
+  last_update DateTime? @db.Timestamptz(6)
+  duration    Int?
+  roster      roster?   @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
 }
