@@ -17,10 +17,10 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const data = await prisma.stats.findMany({
       take: 3,
       orderBy: {
-        month_three: 'desc',
+        month_one: 'desc',
       },
       select: {
-        month_three: true,
+        month_one: true,
         cid: true
       }
     });
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
       });
       data[i].first_name = user.first_name;
       data[i].last_name = user.last_name;
-      data[i].month_three = getHours(data[i].month_three);
+      data[i].month_one = getHours(data[i].month_one);
     }
     pageData.stats = data;
   }
@@ -127,10 +127,10 @@ export const load: PageServerLoad = async ({ cookies }) => {
   {
     const data = await prisma.stats.aggregate({
       _sum: {
-        month_three: true
+        month_one: true
       }
     })
-    pageData.totalHours = getHours(data._sum.month_three);
+    pageData.totalHours = getHours(data._sum.month_one);
   }
   return pageData;
 }

@@ -29,7 +29,7 @@
 	<div class="flex flex-wrap justify-center mt-10 mb-5">
 		<Card
 			title="Top Controller of {currentMonthName}"
-			subtext="{data.stats[0].first_name} {data.stats[0].last_name}" timestamp="{data.stats[0].month_three} HOURS"
+			subtext="{data.stats[0].first_name} {data.stats[0].last_name}" timestamp="{data.stats[0].month_one} HOURS"
 			icon="ant-design:hourglass-twotone"
 		/>
 		<Card
@@ -129,15 +129,15 @@
 							<div class="flex flex-col items-center">
 								<div class="text-yellow-500 text-left">★★★</div>
 								<div class="font-bold text-gray-800 mr-2 text-right">{data.stats[0].first_name} {data.stats[0].last_name}</div>
-								<div class="text-gray-800 mr-2 text-right">{data.stats[0].month_three} hours</div>
+								<div class="text-gray-800 mr-2 text-right">{data.stats[0].month_one} hours</div>
 								<br>
 								<span class="text-gray-500">★★</span>
 								<div class="font-bold text-gray-800 mr-2">{data.stats[1].first_name} {data.stats[1].last_name}</div>
-								<div class="text-gray-800 mr-2 text-right">{data.stats[1].month_three} hours</div>
+								<div class="text-gray-800 mr-2 text-right">{data.stats[1].month_one} hours</div>
 								<br>
 								<span class="text-red-500">★</span>
 								<div class="font-bold text-gray-800 mr-2">{data.stats[2].first_name} {data.stats[2].last_name}</div>
-								<div class="text-gray-800 mr-2 text-right">{data.stats[2].month_three} hours</div>
+								<div class="text-gray-800 mr-2 text-right">{data.stats[2].month_one} hours</div>
 							</div>
 						</div>
 					</div>
