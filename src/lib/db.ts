@@ -54,7 +54,7 @@ export async function getStaffRoles(cid: number, type: string): boolean {
   }
   data = data.staff_roles.toString();
   switch(type) {
-    case "event": {
+    case "events": {
       if (data.includes("ATM") || data.includes("WM")) {
         return true;
       }

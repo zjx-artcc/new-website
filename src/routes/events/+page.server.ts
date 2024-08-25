@@ -1,16 +1,13 @@
 //@ts-nocheck
-import { prisma } from '$lib/db';
+import { prisma, getStaffRoles } from '$lib/db';
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies }) {
+export async function load({ params, cookies, locals }) {
   let pageData = {
-    loggedIn: false,
-    staffInteger: 0,
+    canEdit: false,
     events: []
   };
-  if (cookies.get("cid")) {
-    pageData.loggedIn = true;
-  }
+  pageData.canEdit = await getStaffRoles(parseInt((await (locals.getSession())).user.cid), "events");
   const data = await prisma.events.findMany({
     orderBy: {
       event_start: 'asc'

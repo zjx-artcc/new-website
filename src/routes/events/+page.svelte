@@ -17,7 +17,7 @@
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
 			<h1 class="text-6xl text-white font-bold pt-3">Events Center</h1>
 			<h3 class="text-3xl text-white pt-3">Jacksonville ARTCC</h3>
-      {#if data.staffInteger > 0}
+      {#if data.canEdit}
 				<div class="pt-4">
 					<a href="/events/new" class="bg-blue-500 text-white px-2 py-1 rounded-md text-xl">+ Add Event</a>
 				</div>

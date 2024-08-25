@@ -1,13 +1,22 @@
-<script>
+<script lang="ts">
   //@ts-nocheck
-  import '../../../app.css';
-  import Navbar from '../../../lib/components/Navbar.svelte';
+  import '$lib/app.css';
+  import Navbar from '$lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
   import { required, useForm, validators } from 'svelte-use-form'
   export let data;
   let rows = 0;
   const form = useForm();
-  console.log(data);
+  let event = {
+    name: '',
+    start: '',
+    end: '',
+    host: '',
+    banner: '',
+    hidden: false,
+    description: '',
+    positions: []
+  }
 
   let columns = ['Position', 'Controller']
   let newRow = [...columns];
@@ -53,36 +62,36 @@
           <td class="px-2">
             <label class="pb-1" for="name">Event Name:</label>
             <br>
-            <input name="name" id="name" class="outline outline-1" use:validators={[required]}>
+            <input name="name" id="name" class="outline outline-1" use:validators={[required]} bind:value={event.name}>
           </td>
           <td class="px-2">
             <label class="pb-1" for="start">Event Start:</label>
             <br>
-            <input name="start" id="start" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]}>
+            <input name="start" id="start" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]} bind:value={event.start}>
           </td>
         </tr>
         <tr class="py-2">
           <td class="px-2">
             <label for="host" class="pb-1">Host:</label>
             <br>
-            <input name="host" id="host" class="outline outline-1" use:validators={[required]}>
+            <input name="host" id="host" class="outline outline-1" use:validators={[required]} bind:value={event.host}>
           </td>
           <td class="px-2">
             <label for="end" class="pb-1">Event End:</label>
             <br>
-            <input name="end" id="end" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]}>
+            <input name="end" id="end" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]} bind:value={event.end}>
           </td>
         </tr>
         <tr class="py-2">
           <td class="px-2">
             <label for="banner" class="pb-1">Banner URL:</label>
             <br>
-            <input name="banner" id="banner" class="outline outline-1" use:validators={[required]}>
+            <input name="banner" id="banner" class="outline outline-1" use:validators={[required]} bind:value={event.banner}>
           </td>
           <td>
             <label for="hidden" class="pb-1">Hide Event:</label>
             <br>
-            <input name="hidden" id="hidden" type="checkbox" checked/>
+            <input name="hidden" id="hidden" type="checkbox" checked bind:value={event.hidden}/>
           </td>
         </tr>
       </table>

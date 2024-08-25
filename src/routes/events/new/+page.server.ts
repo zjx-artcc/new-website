@@ -1,35 +1,30 @@
 //@ts-nocheck
 import { api } from '$lib/api';
 import { redirect } from '@sveltejs/kit';
+import { prisma, getStaffRoles } from '$lib/db';
 export const prerender = false;
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies }) {
+export async function load({ params, cookies, locals }) {
   let pageData = {
     loggedIn: false,
-    staffInteger: 0,
-    cid: 0
+    canEdit: false,
   }
-  if (cookies.get("session")) {
-    pageData.loggedIn = true;
-    pageData.staffInteger = parseInt(cookies.get("si"));
-    pageData.cid = parseInt(cookies.get("cid"));
-  }
-
+  pageData.canEdit = await getStaffRoles(parseInt((await (locals.getSession())).user.cid), "events");
   return pageData;
 }
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  default: async({ request, cookies }) => {
+  default: async({ request, cookies, locals }) => {
     const formData = await request.formData();
     let positions = formData.getAll("positions");
     let controllers = formData.getAll("controllers");
     console.log(positions);
     let event = {
       last_modified: new Date().toISOString(),
-      created_by: cookies.get("cid"),
+      created_by: (await locals.getSession()).user.cid,
       name: formData.get("name"),
       description: formData.get("description"),
       event_start: new Date(formData.get("start")).toISOString(),
@@ -54,8 +49,12 @@ export const actions = {
         controller: controllers
       })
     }
-    let eventId = await api.POST("events/create", event);
-    console.log(eventId);
-    redirect(302, `/events/${eventId.id}`)
+    let data = await prisma.events.create({
+      data: event,
+      select: {
+        id: true
+      }
+    })
+    redirect(302, `/events/${data.id.toString()}`)
   }
 }
