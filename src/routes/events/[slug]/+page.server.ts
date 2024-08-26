@@ -3,14 +3,13 @@ import { error, redirect } from '@sveltejs/kit';
 import { getStaffRoles, prisma } from '$lib/db';
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies }) {
+export async function load({ params, cookies, locals }) {
   let pageData = {
     loggedIn: false,
     canEdit: false,
-    cid: 0,
     event: {}
   }
-  if (cookies.get("cid")) {
+  if (locals.getSession().user) {
     pageData.loggedIn = true;
   }
   const eventId = params.slug;
@@ -29,7 +28,7 @@ export async function load({ params, cookies }) {
     }
   }
   
-  pageData.canEdit = await getStaffRoles(pageData.cid, "event");
+  pageData.canEdit = await getStaffRoles((await locals.getSession()).user.cid, "events");
 
   return pageData;
 }

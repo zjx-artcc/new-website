@@ -3,11 +3,14 @@ import { prisma, getCerts, getCtrCerts, getRating } from '$lib/db';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies }) {
+export async function load({ params, cookies, locals }) {
   let pageData = {
     loggedIn: false,
     home: [],
     visiting: [],
+  }
+  if (locals.getSession().user) {
+    pageData.loggedIn = true;
   }
   const data = await prisma.roster.findMany({
     orderBy: {
