@@ -2,9 +2,18 @@
   //@ts-nocheck
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
+	import { prisma } from '$lib/db';
   import Icon from '@iconify/svelte';
   export let data;
-  console.log(data.event);
+
+  async function requestPosition() {
+    console.log('Requesting Position');
+    await prisma.position_requests.create({
+      data: {
+        cid: data.user.cid,
+      }
+    })
+  }
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
@@ -54,7 +63,7 @@
           {#if position.controller == ''}
             <div id="positions" class="pt-5 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
-              <p class="text-right">Not assigned</p>
+              <button on:click={() => requestPosition()} class="text-right">Request Position</button>
             </div>
             <br>
           {:else}
