@@ -65,7 +65,7 @@ export const actions = {
         event.positions.push({
           type: "",
           position: position,
-          controllers: controllers[i] == null ? "" : controllers[i]
+          controller: controllers[i] == null ? "" : controllers[i]
         })
       })
     }

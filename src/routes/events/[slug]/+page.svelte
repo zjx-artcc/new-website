@@ -4,6 +4,7 @@
   import Navbar from '$lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
   export let data;
+  console.log(data.event);
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
