@@ -45,6 +45,8 @@ export async function load({ params, cookies, locals }) {
 export const actions = {
   default: async({ request }) => {
     const formData = await request.formData();
+    let positions = formData.getAll("positions");
+    let controllers = formData.getAll("controllers");
     let event = {
       id: formData.get("id"),
       last_modified: new Date().toISOString(),
@@ -58,11 +60,31 @@ export const actions = {
       banner: formData.get("banner"),
       positions: []
     }
+    if (Array.isArray(positions)) {
+      positions.forEach((position, i) => {
+        event.positions.push({
+          type: "",
+          position: position,
+          controllers: controllers[i] == null ? "" : controllers[i]
+        })
+      })
+    }
+    console.log(event);
     let data = await prisma.events.update({
       where: {
         id: BigInt(event.id)
       },
       data: event
     })
+    if (data == null) {
+      return {
+        status: 500,
+        body: {
+          error: "Unable to update event"
+        }
+      }
+    } else {
+      redirect(302, `/events/${data.id}`)
+    }
   }
 }

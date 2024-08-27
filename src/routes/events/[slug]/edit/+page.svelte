@@ -8,14 +8,17 @@
   let rows = 0;
   const form = useForm();
   let event = data.event;
-
+  
   let columns = ['Position', 'Controller']
-  let newRow = [...columns];
   let tableData = [];
-  function addRow() {
-    tableData = [...tableData, [...newRow]];
-    newRow = columns;
+  function addRow(data1: string='', data2: string='') {
+    tableData = [...tableData, [data1, data2]];
+    console.log(tableData);
   }
+  event.positions.forEach((position) => {
+    addRow(position.position, position.controller);
+  });
+
 </script>
 
 
@@ -110,14 +113,14 @@
         </tr>
         {#each tableData as row, i (i)}
           <tr>
-            <td><input name="positions" id="positions" placeholder={row[0]} use:validators={[required]}></td>
-            <td><input name="controllers" id="controllers" placeholder={row[1]}></td>
+            <td><input name="positions" id="positions" bind:value={row[0]} use:validators={[required]}></td>
+            <td><input name="controllers" id="controllers" bind:value={row[1]}></td>
           </tr>
         {/each}
       </table>
       <hr>
       <div class="py-5">
-        <button type="button" on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
+        <button type="button" on:click={() => addRow('','')} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
       </div>
     </div>
   </div>
