@@ -4,7 +4,6 @@ import { json } from '@sveltejs/kit';
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
   const {cid, position, event} = await request.json();
-  console.log(cid, position, event);
   await prisma.position_requests.create({
     data: {
       cid: cid,

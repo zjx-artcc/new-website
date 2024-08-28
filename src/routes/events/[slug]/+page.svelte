@@ -1,5 +1,6 @@
 <script lang="ts">
   //@ts-nocheck
+	import { invalidateAll } from '$app/navigation';
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
 	import { prisma } from '$lib/db';
@@ -10,7 +11,6 @@
   async function requestPosition(position: string) {
     let cid = data.cid;
     let event = parseInt(data.event.id);
-    console.log('Requesting Position');
     const response = await fetch(`/events/${event}`, {
       method: 'POST',
       headers: {
@@ -19,9 +19,8 @@
       body: JSON.stringify({cid, position, event})
     })
     let res = await response.json();
-    //Jank sleep function here to allow time for everything
     if (res.success) {
-      redirect(302, `/events/${data.event.id}`);
+      invalidateAll();
     }
   }
 </script>

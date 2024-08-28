@@ -3,21 +3,32 @@
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
+	import { onMount } from 'svelte';
   import { required, useForm, validators } from 'svelte-use-form'
+
   export let data;
-  let rows = 0;
+  
   const form = useForm();
   let event = data.event;
+
+  onMount(() => {
+    event.positions.forEach((position) => {
+      console.log(position);
+      addRow(position.position, position.controller);
+    });
+  })
   
   let columns = ['Position', 'Controller']
   let tableData = [];
   function addRow(data1: string='', data2: string='') {
-    tableData = [...tableData, [data1, data2]];
     console.log(tableData);
+    if (tableData.length === 0) {
+      //array is empty, add first row
+      tableData = [[data1, data2]];
+    } else {
+      tableData = [...tableData, [data1, data2]];
+    }
   }
-  event.positions.forEach((position) => {
-    addRow(position.position, position.controller);
-  });
 
 </script>
 

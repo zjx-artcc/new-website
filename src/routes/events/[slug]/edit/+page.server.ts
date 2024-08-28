@@ -62,14 +62,81 @@ export const actions = {
     }
     if (Array.isArray(positions)) {
       positions.forEach((position, i) => {
+        let type = "";
+        switch(position.split("_")[1]) {
+          case "DEL": {
+            if (position.split("_")[0] == "MCO") {
+              type = 1.1;
+              break;
+            } else if (position.split("_")[0] == "JAX") {
+              type = 1.2;
+              break;
+            } else {
+              type = 1.3;
+              break;
+            }
+          }
+          case "GND": {
+            if (position.split("_")[0] == "MCO") {
+              type = 2.1;
+              break;
+            } else if (position.split("_")[0] == "JAX") {
+              type = 2.2;
+              break;
+            } else {
+              type = 2.3;
+              break;
+            }
+          }; 
+          case "TWR": {
+            if (position.split("_")[0] == "MCO") {
+              type = 3.1;
+              break;
+            } else if (position.split("_")[0] == "JAX") {
+              type = 3.2;
+              break;
+            } else {
+              type = 3.3;
+              break;
+            }
+          }
+          case "APP": {
+            if (position.split("_")[0] == "MCO") {
+              type = 4.1;
+              break;
+            } else if (position.split("_")[0] == "JAX") {
+              type = 4.2;
+              break;
+            } else {
+              type = 4.3;
+              break;
+            }
+          }
+          case "DEP": {
+            if (position.split("_")[0] == "MCO") {
+              type = 4.1;
+              break;
+            } else if (position.split("_")[0] == "JAX") {
+              type = 4.2;
+              break;
+            } else {
+              type = 4.3;
+              break;
+            }
+          }
+          case "CTR": {
+            type = 5;
+          }
+          default: break;
+        }
         event.positions.push({
-          type: "",
+          type: type,
           position: position,
           controller: controllers[i] == null ? "" : controllers[i]
         })
       })
     }
-    console.log(event);
+
     let data = await prisma.events.update({
       where: {
         id: BigInt(event.id)
