@@ -1,18 +1,28 @@
-<script>
+<script lang="ts">
   //@ts-nocheck
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
 	import { prisma } from '$lib/db';
   import Icon from '@iconify/svelte';
+	import { redirect } from '@sveltejs/kit';
   export let data;
 
-  async function requestPosition() {
+  async function requestPosition(position: string) {
+    let cid = data.cid;
+    let event = parseInt(data.event.id);
     console.log('Requesting Position');
-    await prisma.position_requests.create({
-      data: {
-        cid: data.user.cid,
-      }
+    const response = await fetch(`/events/${event}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({cid, position, event})
     })
+    let res = await response.json();
+    //Jank sleep function here to allow time for everything
+    if (res.success) {
+      redirect(302, `/events/${data.event.id}`);
+    }
   }
 </script>
 
@@ -59,20 +69,32 @@
       {#if data.event.positions == null}
         <div id="positions" class="pt-5">No positions available</div>
       {:else}
-        {#each data.event.positions as position}
-          {#if position.controller == ''}
-            <div id="positions" class="pt-5 inline-flex">
+        <div id="positions" class="pt-5 grid grid-cols-1 align-middle ">
+          {#each data.event.positions as position}
+            {#if data.positionRequested.callsign == position.position}
+            <div id="positions" class="pt-2.5 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
-              <button on:click={() => requestPosition()} class="text-right">Request Position</button>
+              <p class="text-right">Position Request Recieved</p>
             </div>
-            <br>
-          {:else}
-            <div id="positions" class="pt-5 inline-flex">
+            {:else if data.positionRequested.done}
+            <div id="positions" class="pt-2.5 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
-              <p class="text-right">{position.controller}</p> 
+              <p class="text-right">You have already requested a position for this event</p>
             </div>
-          {/if}
-        {/each}
+            {:else if position.controller == ''}
+              <div id="positions" class="px-2.5 inline-flex">
+                <p class="text-left pr-5">{position.position}: </p>
+                <button on:click={() => requestPosition(position.position)} class="text-right">Request Position</button>
+              </div>
+              <br>
+            {:else}
+              <div id="positions" class="px-2.5 inline-flex">
+                <p class="text-left pr-5">{position.position}: </p>
+                <p class="text-right">{position.controller}</p> 
+              </div>
+            {/if}
+          {/each}
+        </div>
       {/if}
     </div>
 </div>

@@ -7,10 +7,13 @@ export async function load({ params, cookies, locals }) {
   let pageData = {
     loggedIn: false,
     canEdit: false,
+    positionRequested: {callsign: '', done: false},
+    cid: 0,
     event: {}
   }
-  if (locals.getSession().user) {
+  if ((await locals.auth()).user) {
     pageData.loggedIn = true;
+    pageData.cid = (await locals.auth()).user.cid;
   }
   const eventId = params.slug;
   if (eventId == "undefined") { 
@@ -27,8 +30,20 @@ export async function load({ params, cookies, locals }) {
       pageData.event = data;
     }
   }
+
+  let positionRequest = await prisma.position_requests.findFirst({
+    where: {
+      cid: pageData.cid,
+      event_id: pageData.event.id
+    }
+  })
+
+  if (positionRequest != null) {
+    pageData.positionRequested.done = true;
+    pageData.positionRequested.callsign = positionRequest.position;
+  }
   
-  pageData.canEdit = await getStaffRoles((await locals.getSession()).user.cid, "events");
+  pageData.canEdit = await getStaffRoles(pageData.cid, "events");
 
   return pageData;
 }
