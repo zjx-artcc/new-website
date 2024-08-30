@@ -147,7 +147,7 @@ model online_controllers {
 }
 
 model position_requests {
-  cid        BigInt  @default(autoincrement())
+  cid        BigInt
   event_id   BigInt?
   position   String
   request_id Int     @id(map: "request_id") @default(autoincrement())

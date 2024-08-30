@@ -29,7 +29,6 @@ export async function load({ params, cookies, locals }) {
     data.app_certs = getCerts(data.app_certs);
     data.ctr_cert = getCtrCerts(data.ctr_cert);
     data.rating = getRating(parseInt(data.rating));
-    console.log(data);
     pageData.certs = data
   }
   {
@@ -38,6 +37,9 @@ export async function load({ params, cookies, locals }) {
         cid: parseInt(params.cid)
       },
       take: 5,
+      orderBy: {
+        logon_time: 'desc'
+      }
     });
     for (let i = 0; i < data.length; i++) {
       data[i].logon_time = new Date(data[i].logon_time);
