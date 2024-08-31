@@ -27,7 +27,7 @@
 
 <header class="bg-gray-700 block" id="myTopnav">
   <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-    <Navbar loggedIn={data.loggedIn}/>
+    <Navbar/>
   </div>
   <div class="relative">
     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url({data.event.banner}); filter: blur(5px)  brightness(60%); border: 0;"></div>
@@ -73,19 +73,24 @@
             {#if data.positionRequested.callsign == position.position}
             <div id="positions" class="pt-2.5 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
-              <p class="text-right">Position Request Recieved</p>
+              <p class="text-right text-green-700">Position Request Recieved</p>
             </div>
             {:else if data.positionRequested.done}
             <div id="positions" class="pt-2.5 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
-              <p class="text-right">You have already requested a position for this event</p>
+              <p class="text-right text-red-600">You have already requested a position for this event</p>
             </div>
-            {:else if position.controller == ''}
+            {:else if position.canRequest}
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
-                <button on:click={() => requestPosition(position.position)} class="text-right">Request Position</button>
+                <button on:click={() => requestPosition(position.position)} class="text-right text-blue-500">Request Position</button>
               </div>
               <br>
+            {:else if !position.canRequest}
+              <div id="positions" class="px-2.5 inline-flex">
+                <p class="text-left pr-5">{position.position}: </p>
+                <p class="text-right text-red-600">You are not certified</p>
+              </div>
             {:else}
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
