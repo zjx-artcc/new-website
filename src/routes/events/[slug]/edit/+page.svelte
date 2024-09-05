@@ -13,7 +13,6 @@
 
   onMount(() => {
     event.positions.forEach((position) => {
-      console.log(position);
       addRow(position.position, position.controller);
     });
   })
@@ -125,7 +124,11 @@
         {#each tableData as row, i (i)}
           <tr>
             <td><input name="positions" id="positions" bind:value={row[0]} use:validators={[required]}></td>
-            <td><input name="controllers" id="controllers" bind:value={row[1]}></td>
+            <td><datalist name="controllers" id="controllers">
+              {#each data.positionRequests.filter((position) => position.position === row[0]) as controller}
+                <option value={controller.controller}></option>
+              {/each}
+            </td>
           </tr>
         {/each}
       </table>

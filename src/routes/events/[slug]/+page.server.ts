@@ -49,28 +49,30 @@ export async function load({ params, cookies, locals }) {
     if (user == null) {
       throw new Error("User cannot be found in the roster");
     }
-    pageData.event.positions.forEach((position: { type: number, position: string, controller: string }) => {
-      if (position.controller != '') {
-        position.canRequest = false; return;
-      }
-      switch(position.type) {
-        case 1.1: if (user.del_certs == 1) position.canRequest = true; break;
-        case 1.2: if (user.del_certs <= 2) position.canRequest = true; break;
-        case 1.3: if (user.del_certs <= 3) position.canRequest = true; break;
-        case 2.1: if (user.gnd_certs == 1) position.canRequest = true; break;
-        case 2.2: if (user.gnd_certs <= 2) position.canRequest = true; break;
-        case 2.3: if (user.gnd_certs <= 3) position.canRequest = true; break;
-        case 3.1: if (user.twr_certs == 1) position.canRequest = true; break;
-        case 3.2: if (user.twr_certs <= 2) position.canRequest = true; break;
-        case 3.3: if (user.twr_certs <= 3) position.canRequest = true; break;
-        case 4.1: if (user.app_certs == 1) position.canRequest = true; break;
-        case 4.2: if (user.app_certs <= 2) position.canRequest = true; break;
-        case 4.3: if (user.app_certs <= 3) position.canRequest = true; break;
-        case 5: if (user.ctr_certs == 1) position.canRequest = true; break;
-        default: position.canRequest = false; break;
-      }
-    })
-    console.log(pageData.event.positions);
+    if (pageData.event.positions != null) {
+      pageData.event.positions.forEach((position: { type: number, position: string, controller: string }) => {
+        if (position.controller != '') {
+          position.canRequest = false; return;
+        }
+        switch(position.type) {
+          case 1.1: if (user.del_certs == 1) position.canRequest = true; break;
+          case 1.2: if (user.del_certs <= 2) position.canRequest = true; break;
+          case 1.3: if (user.del_certs <= 3) position.canRequest = true; break;
+          case 2.1: if (user.gnd_certs == 1) position.canRequest = true; break;
+          case 2.2: if (user.gnd_certs <= 2) position.canRequest = true; break;
+          case 2.3: if (user.gnd_certs <= 3) position.canRequest = true; break;
+          case 3.1: if (user.twr_certs == 1) position.canRequest = true; break;
+          case 3.2: if (user.twr_certs <= 2) position.canRequest = true; break;
+          case 3.3: if (user.twr_certs <= 3) position.canRequest = true; break;
+          case 4.1: if (user.app_certs == 1) position.canRequest = true; break;
+          case 4.2: if (user.app_certs <= 2) position.canRequest = true; break;
+          case 4.3: if (user.app_certs <= 3) position.canRequest = true; break;
+          case 5: if (user.ctr_certs == 1) position.canRequest = true; break;
+          default: position.canRequest = false; break;
+        }
+      })
+      console.log(pageData.event.positions);
+    }
   }
   
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");

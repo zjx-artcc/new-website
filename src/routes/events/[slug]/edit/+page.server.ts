@@ -2,6 +2,7 @@
 import { error, redirect } from '@sveltejs/kit'
 import { formatDate, getStaffRoles, prisma } from '$lib/db'
 import { getPositionType } from '$lib/events.js';
+import { P } from 'flowbite-svelte';
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
@@ -9,7 +10,8 @@ export async function load({ params, cookies, locals }) {
     loggedIn: false,
     canEdit: false,
     cid: 0,
-    event: {}
+    event: {},
+    positionRequests: []
   }
   const session = locals.auth();
   if (!session?.user?.cid) {
@@ -38,6 +40,14 @@ export async function load({ params, cookies, locals }) {
   }
   pageData.event.start = formatDate(pageData.event.event_start);
   pageData.event.end = formatDate(pageData.event.event_end);
+  {
+    let data = await prisma.position_requests.findMany({
+      where: {
+        event_id: pageData.event.id
+      }
+    })
+    console.log(data);
+  }
 
   return pageData;
 }

@@ -7,7 +7,7 @@ export async function load({ params, cookies, locals }) {
     canEdit: false,
     events: []
   };
-  pageData.canEdit = await getStaffRoles(parseInt((await (locals.getSession())).user.cid), "events");
+  pageData.canEdit = await getStaffRoles(parseInt((await (locals.auth())).user.cid), "events");
   const data = await prisma.events.findMany({
     orderBy: {
       event_start: 'asc'
