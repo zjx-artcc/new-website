@@ -3,31 +3,16 @@
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
-	import { onMount } from 'svelte';
   import { required, useForm, validators } from 'svelte-use-form'
 
   export let data;
   
   const form = useForm();
   let event = data.event;
-
-  onMount(() => {
-    event.positions.forEach((position) => {
-      addRow(position.position, position.controller);
-    });
-  })
+  let positions = event.positions;
+  console.log(positions);
   
   let columns = ['Position', 'Controller']
-  let tableData = [];
-  function addRow(data1: string='', data2: string='') {
-    console.log(tableData);
-    if (tableData.length === 0) {
-      //array is empty, add first row
-      tableData = [[data1, data2]];
-    } else {
-      tableData = [...tableData, [data1, data2]];
-    }
-  }
 
 </script>
 
@@ -121,20 +106,21 @@
             <th class="w-52">{column}</th>
           {/each}
         </tr>
-        {#each tableData as row, i (i)}
+        {#each positions as row}
           <tr>
-            <td><input name="positions" id="positions" bind:value={row[0]} use:validators={[required]}></td>
-            <td><datalist name="controllers" id="controllers">
+            <td><input name="positions" id="positions" bind:value={row.position} use:validators={[required]}></td>
+            <!--<td><datalist name="controllers" id="controllers">
               {#each data.positionRequests.filter((position) => position.position === row[0]) as controller}
                 <option value={controller.controller}></option>
               {/each}
             </td>
+            -->
           </tr>
         {/each}
       </table>
       <hr>
       <div class="py-5">
-        <button type="button" on:click={() => addRow('','')} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
+        <button type="button" on:click={() => positions.push({position: '', controller: ''})} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
       </div>
     </div>
   </div>
