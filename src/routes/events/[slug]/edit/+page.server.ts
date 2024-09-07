@@ -7,16 +7,13 @@ import { P } from 'flowbite-svelte';
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
   let pageData = {
-    loggedIn: false,
     canEdit: false,
     cid: 0,
     event: {},
     positionRequests: []
   }
-  const session = locals.auth();
-  if (!session?.user?.cid) {
-    pageData.loggedIn = true;
-    pageData.cid = (await locals.getSession()).user.cid;
+  if ((await locals.auth()).user) {
+    pageData.cid = (await locals.auth()).user.cid;
   }
   const eventId = params.slug;
   if (eventId == "undefined") { 
@@ -35,18 +32,18 @@ export async function load({ params, cookies, locals }) {
     }
   }
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
-  if (pageData.canEdit == false) {
+  if (!pageData.canEdit) {
     error(403, 'Forbidden');
   }
   pageData.event.start = formatDate(pageData.event.event_start);
   pageData.event.end = formatDate(pageData.event.event_end);
+
   {
     let data = await prisma.position_requests.findMany({
       where: {
         event_id: pageData.event.id
       }
     })
-    console.log(data);
   }
 
   return pageData;

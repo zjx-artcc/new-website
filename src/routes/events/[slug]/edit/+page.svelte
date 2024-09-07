@@ -9,8 +9,9 @@
   
   const form = useForm();
   let event = data.event;
-  let positions = event.positions;
-  console.log(positions);
+  let positions;
+  $: positions = event.positions;
+  $: console.log(positions);
   
   let columns = ['Position', 'Controller']
 
@@ -19,12 +20,12 @@
 
 <header class="bg-gray-700 block" id="myTopnav">
   <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-    <Navbar loggedIn={data.loggedIn}/>
+    <Navbar class="z-0"/>
   </div>
 
-  <div class="relative z-0">
-    <div class="absolute inset-0 bg-cover bg-center z-1" style="background-image: url('/KJAXNIGHT.png'); filter: blur(5px)  brightness(60%);"></div>
-    <div class="relative z-2">
+  <div class="relative z-1">
+    <div class="absolute inset-0 bg-cover bg-center z-2" style="background-image: url('/KJAXNIGHT.png'); filter: blur(5px)  brightness(60%);"></div>
+    <div class="relative z-3">
       <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
         <h1 class="text-6xl text-white font-bold pt-3">Update {data.event.name} event</h1>
@@ -106,17 +107,19 @@
             <th class="w-52">{column}</th>
           {/each}
         </tr>
-        {#each positions as row}
-          <tr>
-            <td><input name="positions" id="positions" bind:value={row.position} use:validators={[required]}></td>
-            <!--<td><datalist name="controllers" id="controllers">
-              {#each data.positionRequests.filter((position) => position.position === row[0]) as controller}
-                <option value={controller.controller}></option>
-              {/each}
-            </td>
-            -->
-          </tr>
-        {/each}
+        {#key event.positions}
+          {#each positions as row}
+            <tr>
+              <td><input name="positions" id="positions" bind:value={row.position} use:validators={[required]}></td>
+              <!--<td><datalist name="controllers" id="controllers">
+                {#each data.positionRequests.filter((position) => position.position === row[0]) as controller}
+                  <option value={controller.controller}></option>
+                {/each}
+              </td>
+              -->
+            </tr>
+          {/each}
+        {/key}
       </table>
       <hr>
       <div class="py-5">
