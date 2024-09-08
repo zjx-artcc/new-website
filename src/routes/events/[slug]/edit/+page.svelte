@@ -107,7 +107,7 @@
             <th class="w-52">{column}</th>
           {/each}
         </tr>
-        {#key event.positions}
+        {#key $positions}
           {#each positions as row}
             <tr>
               <td><input name="positions" id="positions" bind:value={row.position} use:validators={[required]}></td>

@@ -2,7 +2,6 @@
 import { error, redirect } from '@sveltejs/kit'
 import { formatDate, getStaffRoles, prisma } from '$lib/db'
 import { getPositionType } from '$lib/events.js';
-import { P } from 'flowbite-svelte';
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
