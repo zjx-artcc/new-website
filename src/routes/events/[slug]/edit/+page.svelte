@@ -9,31 +9,33 @@
   
   const form = useForm();
   let event = data.event;
-  let positions;
-  $: positions = event.positions;
-  $: console.log(positions);
-  
+  let positions = event.positions;
   let columns = ['Position', 'Controller']
+
+  function addRow() {
+    positions.push({position: '', controller: ''});
+    positions = positions;
+    console.log(positions);
+  }
 
 </script>
 
-
 <header class="bg-gray-700 block" id="myTopnav">
-  <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-    <Navbar class="z-0"/>
+  <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto z-0">
+    <Navbar/>
   </div>
 
-  <div class="relative z-1">
-    <div class="absolute inset-0 bg-cover bg-center z-2" style="background-image: url('/KJAXNIGHT.png'); filter: blur(5px)  brightness(60%);"></div>
-    <div class="relative z-3">
+  <div class="relative -z-1">
+    <div class="absolute inset-0 bg-cover bg-center -z-2" style="background-image: url('/KJAXNIGHT.png'); filter: blur(5px)  brightness(60%);"></div>
+    <div class="relative -z-3">
       <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-        <h1 class="text-6xl text-white font-bold pt-3">Update {data.event.name} event</h1>
+        <h1 class="text-6xl text-white font-bold pt-3">Update {data.event.name}</h1>
       </div>
     </div>
   </div>
 </header>
-<div id="breadcrumbs" class="border-b z-4">
+<div id="breadcrumbs" class="border-b -z-4">
   <div class="pt-1.5 text-center">
     <nav class="py-2 mb-0">
       <a href="/" class="text-sky-500">Home</a>
@@ -107,10 +109,10 @@
             <th class="w-52">{column}</th>
           {/each}
         </tr>
-        {#key $positions}
-          {#each positions as row}
+        {#key positions.length}
+          {#each positions as row, i}
             <tr>
-              <td><input name="positions" id="positions" bind:value={row.position} use:validators={[required]}></td>
+              <td><input name="position-{i}" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]}></td>
               <!--<td><datalist name="controllers" id="controllers">
                 {#each data.positionRequests.filter((position) => position.position === row[0]) as controller}
                   <option value={controller.controller}></option>
@@ -123,7 +125,7 @@
       </table>
       <hr>
       <div class="py-5">
-        <button type="button" on:click={() => positions.push({position: '', controller: ''})} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
+        <button type="button" on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
       </div>
     </div>
   </div>

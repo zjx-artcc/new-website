@@ -54,6 +54,7 @@ export const actions = {
     const formData = await request.formData();
     let positions = formData.getAll("positions");
     let controllers = formData.getAll("controllers");
+    console.log(positions);
     let event = {
       id: formData.get("id"),
       last_modified: new Date().toISOString(),
