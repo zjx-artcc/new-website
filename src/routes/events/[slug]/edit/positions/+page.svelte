@@ -8,8 +8,7 @@
   export let data;
   
   const form = useForm();
-  let event = data.event;
-  let positions = event.positions;
+  let positions = data.positions;
   let columns = ['Position', 'Controller']
   let newPosition = '';
 
@@ -32,7 +31,7 @@
     <div class="relative -z-3">
       <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-        <h1 class="text-6xl text-white font-bold pt-3">Update {data.event.name} positions</h1>
+        <h1 class="text-6xl text-white font-bold pt-3">Update {data.eventName} positions</h1>
       </div>
     </div>
   </div>
@@ -44,16 +43,14 @@
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
       <a href="/events" class="text-sky-500">Events</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/events/{data.event.id}" class="text-sky-500">{data.event.name}</a>
+      <a href="/events/{data.eventId}" class="text-sky-500">{data.eventName}</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/events/{data.event.id}/edit/positions" class="text-sky-500">Positions</a>
+      <a href="/events/{data.eventId}/edit/positions" class="text-sky-500">Positions</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
     </nav>
   </div>
 </div>
 <form use:form method="POST">
-  <input type="hidden" name="id" value={event.id}>
-  <input type="hidden" name="created_by" value={event.created_by}>
   <div id="content" class="flex flex-wrap justify-center align-middle">
     <div class="text-center flex-1 m-2 mt-1 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Position Assignments:</h1>

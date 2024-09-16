@@ -8,8 +8,8 @@ export async function load({ params, cookies, locals }) {
   let pageData = {
     canEdit: false,
     cid: 0,
-    event: {},
-    positionRequests: []
+    positionRequests: [],
+    eventId: 0,
   }
   if ((await locals.auth()).user) {
     pageData.cid = (await locals.auth()).user.cid;
@@ -27,20 +27,21 @@ export async function load({ params, cookies, locals }) {
     if (data == null) {
       redirect(302, '/404');
     } else {
-      pageData.event = data;
+      pageData.eventName = data.name;
+      pageData.eventBanner = data.banner;
+      pageData.positions = data.positions;
+      pageData.eventId = eventId;
     }
   }
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
   if (!pageData.canEdit) {
     error(403, 'Forbidden');
   }
-  pageData.event.start = formatDate(pageData.event.event_start);
-  pageData.event.end = formatDate(pageData.event.event_end);
 
   {
     let data = await prisma.position_requests.findMany({
       where: {
-        event_id: pageData.event.id
+        event_id: eventId
       }
     })
   }
