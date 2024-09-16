@@ -2,6 +2,7 @@
   //@ts-nocheck
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
+  import Footer from "$lib/components/Footer.svelte"
   import Icon from '@iconify/svelte';
   import { required, useForm, validators } from 'svelte-use-form'
   export let data;
@@ -122,3 +123,4 @@
     <i class="text-blue-500">You must save the event to create positions</i>
   </div>
 </form>
+<Footer />

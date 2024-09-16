@@ -7,6 +7,7 @@
 	import EventCard from '$lib/components/EventCard.svelte';
 	import NewsCard from '$lib/components/NewsCard.svelte';
 	import ATCCard from '$lib/components/ATCCard.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	const today = new Date();
 	export let data;
@@ -250,20 +251,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- Copyright Info -->
-			<div class="font-size-xs clearfix border-t pt-20 pb-10">
-				<div class="float-left">
-					© Copyright <span class="js-year-copy">2024</span> Jacksonville ARTCC. All rights reserved.
-				</div>
-				<div class="float-right">
-					<a href="https://github.com/ZJX-ARTCC/jacksonville-issue-tracker/issues/new/choose" target="_blank">
-						<i class="fas fa-bug text-pulse" /> 
-						Log a bug or Request a feature
-					</a>
-				</div>
-			</div>
-			<!-- END Copyright Info -->
-			<!-- END Footer Navigation -->
+			<Footer />
 		</div>
 	</footer>
 </body>
