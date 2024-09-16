@@ -8,8 +8,9 @@ export const prerender = false;
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
   let pageData = {
-    loggedIn: false,
     canEdit: false,
+    cid: 0,
+    positionRequests: [],
   }
   pageData.canEdit = await getStaffRoles(parseInt((await (locals.getSession())).user.cid), "events");
   return pageData;
