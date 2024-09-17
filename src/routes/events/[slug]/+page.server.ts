@@ -24,7 +24,7 @@ export async function load({ params, cookies, locals }) {
       }
     })
     if (data == null) {
-      redirect(404, '/404');
+      redirect(302, '/404');
     } else {
       pageData.event = data;
     }
