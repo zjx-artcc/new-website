@@ -3,6 +3,7 @@
   import { Card, Button, Toggle } from 'flowbite-svelte';
   import '$lib/app.css';
   import Navbar from '../../lib/components/Navbar.svelte';
+  import Footer from "../../lib/components/Footer.svelte"
   import Icon from '@iconify/svelte';
   export let data;
   console.log(data);
@@ -44,3 +45,4 @@
     </Card>
   {/each}
 </div>
+<Footer />

@@ -97,3 +97,24 @@ export const actions = {
     }
   }
 }
+
+function sortPositions(a, b) {
+  //Get airport and type
+  const airportA = a.split('_')[0];
+  const airportB = b.split('_')[0];
+  const positionTypeA = a.split('_')[1];
+  const positionTypeB = b.split('_')[1];
+
+  //Sort by airport then type
+  if (airportA < airportB) {
+    return -1;
+  } else if (airportA > airportB) {
+    return 1;
+  } else if (positionTypeA < positionTypeB) {
+    return -1;
+  } else if (positionTypeA > positionTypeB) {
+    return 1;
+  } else {
+    return 0;
+  }
+}

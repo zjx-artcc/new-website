@@ -3,6 +3,7 @@
 	import { invalidateAll } from '$app/navigation';
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
+  import Footer from '$lib/components/Footer.svelte';
 	import { prisma } from '$lib/db';
   import Icon from '@iconify/svelte';
 	import { redirect } from '@sveltejs/kit';
@@ -102,3 +103,4 @@
       {/if}
     </div>
 </div>
+<Footer />
