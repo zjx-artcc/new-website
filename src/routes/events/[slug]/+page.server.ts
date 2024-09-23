@@ -27,8 +27,16 @@ export async function load({ params, cookies, locals }) {
       redirect(302, '/404');
     } else {
       pageData.event = data;
+      pageData.event.positions = JSON.parse(pageData.event.positions);
     }
   }
+  let positions = pageData.event.positions;
+  const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR']
+  positions.sort((a, b) => {
+    return a.type - b.type;
+  });
+  pageData.event.positions = positions;
+  console.log(positions);
 
   let positionRequest = await prisma.position_requests.findFirst({
     where: {
@@ -50,7 +58,7 @@ export async function load({ params, cookies, locals }) {
       throw new Error("User cannot be found in the roster");
     }
     if (pageData.event.positions != null) {
-      pageData.event.positions.forEach((position: { type: number, position: string, controller: string }) => {
+      positions.forEach((position: { type: number, position: string, controller: string }) => {
         if (position.controller != '') {
           position.canRequest = false; return;
         }
@@ -71,7 +79,6 @@ export async function load({ params, cookies, locals }) {
           default: position.canRequest = false; break;
         }
       })
-      console.log(pageData.event.positions);
     }
   }
   

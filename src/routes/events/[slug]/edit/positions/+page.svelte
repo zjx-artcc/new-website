@@ -10,8 +10,9 @@
   
   const form = useForm();
   let positions = data.positions;
-  let columns = ['Position', 'Controller']
+  let columns = ['Position', 'Controller', 'Remove']
   let newPosition = '';
+  console.log(typeof positions);
 
   function addRow() {
     positions.push({position: newPosition, controller: ''});
@@ -34,6 +35,14 @@
     if (res.success) {
       throw redirect(303, `/events/${event}/edit`);
     }
+  }
+
+  function removePosition(index: number) {
+    //Remove position based on index
+    console.log(typeof positions);
+    positions.splice(index, 1);
+    positions = positions;
+    console.log(positions);
   }
 
 </script>
@@ -87,6 +96,7 @@
                 <option value={controller.controller}></option>
               {/each}
             </td>
+              <td><button type="button" class="bg-red-600 text-white p-1 rounded-lg text-sm" on:click={() => removePosition(i)}>Remove</button></td>
           </tr>
         {/each}
       {/key}

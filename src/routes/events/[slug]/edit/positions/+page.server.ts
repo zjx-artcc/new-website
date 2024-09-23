@@ -29,7 +29,7 @@ export async function load({ params, cookies, locals }) {
     } else {
       pageData.eventName = data.name;
       pageData.eventBanner = data.banner;
-      pageData.positions = data.positions;
+      pageData.positions = JSON.parse(data.positions);
       pageData.eventId = eventId;
     }
   }
