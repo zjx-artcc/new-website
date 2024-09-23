@@ -3,6 +3,7 @@
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
+	import { redirect } from '@sveltejs/kit';
   import { required, useForm, validators } from 'svelte-use-form'
 
   export let data;
@@ -17,6 +18,22 @@
     positions = positions;
     newPosition = '';
     console.log(positions);
+  }
+
+  async function submitPositions() {
+    let cid = data.cid;
+    let event = parseInt(data.eventId)
+    const req = await fetch(`/events/${event}/edit/positions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({cid, positions, event})
+    })
+    let res = await req.json();
+    if (res.success) {
+      throw redirect(303, `/events/${event}/edit`);
+    }
   }
 
 </script>
@@ -50,39 +67,37 @@
     </nav>
   </div>
 </div>
-<form use:form method="POST">
-  <div id="content" class="flex flex-wrap justify-center align-middle">
-    <div class="text-center flex-1 m-2 mt-1 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
-      <h1 class="font-bold">Position Assignments:</h1>
-      <hr>
-      <table class="mx-auto">
-        <tr>
-          {#each columns as column}
-            <th class="w-52">{column}</th>
-          {/each}
-        </tr>
-        {#key positions.length}
-          {#each positions as row, i}
-            <tr>
-              <td><input name="position-{i}" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]}></td>
-              <td>
-                <datalist name="controllers" id="controllers">
-                {#each data.positionRequests.filter((position) => position.position === row[0]) as controller}
-                  <option value={controller.controller}></option>
-                {/each}
-              </td>
-            </tr>
-          {/each}
-        {/key}
-      </table>
-      <hr>
-      <div class="py-5">
-        <input bind:value={newPosition}  class="outline outline-1" />
-        <button type="button" on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
-      </div>
+<div id="content" class="flex flex-wrap justify-center align-middle">
+  <div class="text-center flex-1 m-2 mt-1 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
+    <h1 class="font-bold">Position Assignments:</h1>
+    <hr>
+    <table class="mx-auto">
+      <tr>
+        {#each columns as column}
+          <th class="w-52">{column}</th>
+        {/each}
+      </tr>
+      {#key positions.length}
+        {#each positions as row, i}
+          <tr>
+            <td><input name="position-{i}" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
+            <td>
+              <datalist name="controllers" id="controllers">
+              {#each data.positionRequests.filter((position) => position.position === row[0]) as controller}
+                <option value={controller.controller}></option>
+              {/each}
+            </td>
+          </tr>
+        {/each}
+      {/key}
+    </table>
+    <hr>
+    <div class="pb-5">
+      <input bind:value={newPosition} autocomplete="off" data-1p-ignore class="outline outline-1" />
+      <button type="button" disabled={!newPosition.length > 0} on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
     </div>
   </div>
-  <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm">
-    <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
-  </div>
-</form>
+</div>
+<div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm">
+  <button type="button" on:click={submitPositions} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
+</div>

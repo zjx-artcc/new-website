@@ -12,14 +12,14 @@
   async function requestPosition(position: string) {
     let cid = data.cid;
     let event = parseInt(data.event.id);
-    const response = await fetch(`/events/${event}`, {
+    const req = await fetch(`/events/${event}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({cid, position, event})
     })
-    let res = await response.json();
+    let res = await req.json();
     if (res.success) {
       invalidateAll();
     }
