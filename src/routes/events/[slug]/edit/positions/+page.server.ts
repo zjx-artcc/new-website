@@ -17,34 +17,55 @@ export async function load({ params, cookies, locals }) {
   const eventId = params.slug;
   if (eventId == "undefined") { 
     console.log("Undefined")
-    error(404, 'Not Found');
-  } else {
-    const data = await prisma.events.findUnique({
-      where: {
-        id: eventId
-      }
-    })
-    if (data == null) {
-      redirect(302, '/404');
-    } else {
-      pageData.eventName = data.name;
-      pageData.eventBanner = data.banner;
-      pageData.positions = JSON.parse(data.positions);
-      pageData.eventId = eventId;
-    }
-  }
+    redirect(302, '/404');
+  } 
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
   if (!pageData.canEdit) {
     error(403, 'Forbidden');
   }
 
-  {
-    let data = await prisma.position_requests.findMany({
-      where: {
-        event_id: eventId
-      }
-    })
+  const data = await prisma.events.findUnique({
+    where: {
+      id: eventId
+    }
+  })
+  if (data == null) {
+    redirect(302, '/404');
   }
+  pageData.eventName = data.name;
+  pageData.eventBanner = data.banner;
+  pageData.eventId = eventId;
+
+  let positions: Position[] = JSON.parse(data.positions);
+  
+  let positionRequests: RawPositionRequest[] = await prisma.position_requests.findMany({
+    where: {
+      event_id: eventId
+    }
+  })
+
+  console.log(positionRequests);
+
+  positionRequests.forEach(async (request) => {
+    if (request.event_id != eventId) {
+      return;
+
+    }
+    let position = positions.find((position) => position.position == request.position);
+    let cont = await prisma.roster.findFirst({
+      where: { cid: request.cid },
+      select: { first_name: true, last_name: true }
+    })
+    if (cont == null) {
+      return;
+    }
+    if (position.requests == undefined) {
+      position.requests = [];
+      position.requests.push(request);
+    }
+  });
+
+  pageData.positions = positions;
 
   return pageData;
 }
@@ -76,4 +97,22 @@ function sortPositions(a, b) {
   } else {
     return 0;
   }
+}
+
+class Position {
+  type: Number;
+  position: String;
+  Controller: String;
+  requests: PositionRequest[];
+}
+
+class PositionRequest {
+  position: String;
+  request_id: Number;
+  controller: String;
+}
+
+class RawPositionRequest extends PositionRequest {
+  cid: Number
+  event_id: Number;
 }

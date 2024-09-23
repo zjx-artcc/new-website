@@ -12,7 +12,7 @@
   let positions = data.positions;
   let columns = ['Position', 'Controller', 'Remove']
   let newPosition = '';
-  console.log(typeof positions);
+  console.log(positions)
 
   function addRow() {
     positions.push({position: newPosition, controller: ''});
