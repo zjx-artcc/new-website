@@ -42,14 +42,11 @@ export async function load({ params, cookies, locals }) {
     where: {
       event_id: eventId
     }
-  })
-
-  console.log(positionRequests);
+  });
 
   positionRequests.forEach(async (request) => {
     if (request.event_id != eventId) {
       return;
-
     }
     let position = positions.find((position) => position.position == request.position);
     let cont = await prisma.roster.findFirst({
@@ -59,23 +56,16 @@ export async function load({ params, cookies, locals }) {
     if (cont == null) {
       return;
     }
+    let posReq: PositionRequest = { controller: `${cont.first_name} ${cont.last_name}`, position: request.position, request_id: request.request_id };
     if (position.requests == undefined) {
       position.requests = [];
-      position.requests.push(request);
+      position.requests.push(posReq);
     }
   });
 
   pageData.positions = positions;
 
   return pageData;
-}
-
-/** @type {import('./$types').Actions} */
-export const actions = {
-  default: async({ request }) => {
-    const formData = await request.formData();
-    
-  }
 }
 
 function sortPositions(a, b) {

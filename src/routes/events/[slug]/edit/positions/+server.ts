@@ -12,8 +12,9 @@ export async function POST({request}) {
     if (positions[i].type == undefined) {
       positions[i].type = getPositionType(positions[i].position);
     }
-    console.log(positions[i].type);
   }
+
+  console.log(positions);
   
   let eventData = await prisma.events.findUnique({
     where: {

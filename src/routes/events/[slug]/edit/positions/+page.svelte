@@ -12,13 +12,11 @@
   let positions = data.positions;
   let columns = ['Position', 'Controller', 'Remove']
   let newPosition = '';
-  console.log(positions)
 
   function addRow() {
     positions.push({position: newPosition, controller: ''});
     positions = positions;
     newPosition = '';
-    console.log(positions);
   }
 
   async function submitPositions() {
@@ -43,6 +41,11 @@
     positions.splice(index, 1);
     positions = positions;
     console.log(positions);
+  }
+
+  function assignController(position: String, controller: String) {
+    //Assign controller to position
+    console.log(position, controller);
   }
 
 </script>
@@ -91,12 +94,20 @@
           <tr>
             <td><input name="position-{i}" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
             <td>
-              <datalist name="controllers" id="controllers">
-              {#each data.positionRequests.filter((position) => position.position === row[0]) as controller}
-                <option value={controller.controller}></option>
-              {/each}
+              {#if row.requests != undefined}
+                <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}">
+                  <option value=''></option>
+                  {#each row.requests as request}
+                    <option value={request.controller}>{request.controller}</option>
+                  {/each}
+                </select>
+              {:else}
+                <select name="controllers" id="controllers" disabled>
+                  <option value="No controllers available">No controllers available</option>
+                </select>
+              {/if}
             </td>
-              <td><button type="button" class="bg-red-600 text-white p-1 rounded-lg text-sm" on:click={() => removePosition(i)}>Remove</button></td>
+            <td><button type="button" class="bg-red-600 text-white p-1 rounded-lg text-sm" on:click={() => removePosition(i)}>Remove</button></td>
           </tr>
         {/each}
       {/key}
