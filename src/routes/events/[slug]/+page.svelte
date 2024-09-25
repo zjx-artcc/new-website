@@ -71,16 +71,26 @@
       {:else}
         <div id="positions" class="pt-5 grid grid-cols-1 align-middle ">
           {#each data.event.positions as position}
-            {#if data.positionRequested.callsign == position.position}
-            <div id="positions" class="pt-2.5 inline-flex">
+            {#if position.controller != ''}
+            <div id="positions" class="p-2 inline-flex">
+              <p class="text-left pr-5">{position.position}: </p>
+              <p class="text-right">{position.controller}</p>
+            </div>
+            {:else if data.positionRequested.callsign == position.position}
+            <div id="positions" class="p-2 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
               <p class="text-right text-green-700">Position Request Recieved</p>
             </div>
             {:else if data.positionRequested.done}
-            <div id="positions" class="pt-2.5 inline-flex">
+            <div id="positions" class="p-2 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
               <p class="text-right text-red-600">You have already requested a position for this event</p>
             </div>
+            {:else if !data.canRequest}
+              <div id="positions" class="px-2.5 inline-flex">
+                <p class="text-left pr-5">{position.position}: </p>
+                <p class="text-right text-yellow-600">You are not allowed to request another position</p> 
+              </div>
             {:else if position.canRequest}
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
@@ -91,11 +101,6 @@
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
                 <p class="text-right text-red-600">You are not certified</p>
-              </div>
-            {:else}
-              <div id="positions" class="px-2.5 inline-flex">
-                <p class="text-left pr-5">{position.position}: </p>
-                <p class="text-right">{position.controller}</p> 
               </div>
             {/if}
           {/each}

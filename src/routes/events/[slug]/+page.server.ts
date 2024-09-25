@@ -9,7 +9,8 @@ export async function load({ params, cookies, locals }) {
     canEdit: false,
     positionRequested: {callsign: '', done: false},
     cid: 0,
-    event: {}
+    event: {},
+    canRequest: true
   }
   if ((await locals.auth()).user) {
     pageData.cid = (await locals.auth()).user.cid;
@@ -36,7 +37,6 @@ export async function load({ params, cookies, locals }) {
     return a.type - b.type;
   });
   pageData.event.positions = positions;
-  console.log(positions);
 
   let positionRequest = await prisma.position_requests.findFirst({
     where: {
@@ -59,29 +59,35 @@ export async function load({ params, cookies, locals }) {
     }
     if (pageData.event.positions != null) {
       positions.forEach((position: { type: number, position: string, controller: string }) => {
+        console.log(position.position, position.controller == `${user.first_name} ${user.last_name}`);
+        if (position.controller == `${user.first_name} ${user.last_name}`) {
+          console.log(position)
+          pageData.canRequest = false; return;
+        }
         if (position.controller != '') {
           position.canRequest = false; return;
         }
+        console.log(position.position, position.type, user.twr_certs);
         switch(position.type) {
           case 1.1: if (user.del_certs == 1) position.canRequest = true; break;
-          case 1.2: if (user.del_certs <= 2) position.canRequest = true; break;
-          case 1.3: if (user.del_certs <= 3) position.canRequest = true; break;
+          case 1.2: if (user.del_certs > 0 && user.del_certs <= 2) position.canRequest = true; break;
+          case 1.3: if (user.del_certs > 0 && user.del_certs <= 3) position.canRequest = true; break;
           case 2.1: if (user.gnd_certs == 1) position.canRequest = true; break;
-          case 2.2: if (user.gnd_certs <= 2) position.canRequest = true; break;
-          case 2.3: if (user.gnd_certs <= 3) position.canRequest = true; break;
+          case 2.2: if (user.gnd_certs > 0 && user.gnd_certs <= 2) position.canRequest = true; break;
+          case 2.3: if (user.gnd_certs > 0 && user.gnd_certs <= 3) position.canRequest = true; break;
           case 3.1: if (user.twr_certs == 1) position.canRequest = true; break;
-          case 3.2: if (user.twr_certs <= 2) position.canRequest = true; break;
-          case 3.3: if (user.twr_certs <= 3) position.canRequest = true; break;
+          case 3.2: if (user.twr_certs > 0 && user.twr_certs <= 2) position.canRequest = true; break;
+          case 3.3: if (user.twr_certs > 0 && user.twr_certs <= 3) position.canRequest = true; break;
           case 4.1: if (user.app_certs == 1) position.canRequest = true; break;
-          case 4.2: if (user.app_certs <= 2) position.canRequest = true; break;
-          case 4.3: if (user.app_certs <= 3) position.canRequest = true; break;
+          case 4.2: if (user.app_certs > 0 && user.app_certs <= 2) position.canRequest = true; break;
+          case 4.3: if (user.app_certs > 0 && user.app_certs <= 3) position.canRequest = true; break;
           case 5: if (user.ctr_certs == 1) position.canRequest = true; break;
           default: position.canRequest = false; break;
         }
       })
     }
   }
-  
+  console.log(pageData.canRequest);
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
 
   return pageData;
