@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Controllers can only sign up for one position
 - Added a footer
 - Added a way for staff to update a controller’s certs
+- Added a way for staff to assign positions to a controller
 
 ### Changed
 - Restyled the home page
