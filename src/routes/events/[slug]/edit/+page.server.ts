@@ -52,9 +52,6 @@ export async function load({ params, cookies, locals }) {
 export const actions = {
   default: async({ request }) => {
     const formData = await request.formData();
-    let positions = formData.getAll("positions");
-    let controllers = formData.getAll("controllers");
-    console.log(positions);
     let event = {
       id: formData.get("id"),
       last_modified: new Date().toISOString(),
@@ -65,18 +62,9 @@ export const actions = {
       event_end: new Date(formData.get("end")).toISOString(),
       host: formData.get("host"),
       hidden: formData.get("hidden") == "on" ? true : false,
-      banner: formData.get("banner"),
-      positions: []
+      banner: formData.get("banner")
     }
-    positions.forEach(async (position, i) => {
-      console.log(position);
-      let type = await getPositionType(position);
-      event.positions.push({
-        type: type,
-        position: position,
-        controller: controllers[i] == null ? "" : controllers[i]
-      })
-    })
+    
 
     let data = await prisma.events.update({
       where: {

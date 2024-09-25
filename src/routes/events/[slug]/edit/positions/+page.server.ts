@@ -17,7 +17,7 @@ export async function load({ params, cookies, locals }) {
   const eventId = params.slug;
   if (eventId == "undefined") { 
     console.log("Undefined")
-    redirect(302, '/404');
+    throw redirect(302, '/404');
   } 
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
   if (!pageData.canEdit) {
@@ -30,7 +30,7 @@ export async function load({ params, cookies, locals }) {
     }
   })
   if (data == null) {
-    redirect(302, '/404');
+    throw redirect(302, '/404');
   }
   pageData.eventName = data.name;
   pageData.eventBanner = data.banner;
@@ -61,6 +61,11 @@ export async function load({ params, cookies, locals }) {
       position.requests = [];
       position.requests.push(posReq);
     }
+  });
+
+  const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR']
+  positions.sort((a, b) => {
+    return a.type - b.type;
   });
 
   pageData.positions = positions;

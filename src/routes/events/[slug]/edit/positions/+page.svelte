@@ -3,7 +3,7 @@
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
-	import { redirect } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
   import { required, useForm, validators } from 'svelte-use-form'
 
   export let data;
@@ -31,7 +31,8 @@
     })
     let res = await req.json();
     if (res.success) {
-      throw redirect(303, `/events/${event}/edit`);
+      console.log("Redirecting");
+      goto(`/events/${event}/edit`);
     }
   }
 
@@ -118,7 +119,7 @@
     </table>
     <hr>
     <div class="pb-5">
-      <input bind:value={newPosition} autocomplete="off" data-1p-ignore class="outline outline-1" />
+      <input bind:value={newPosition} autocomplete="off" on:keypress={(e) => {if (e.key === 'Enter') addRow();}} data-1p-ignore class="outline outline-1" />
       <button type="button" disabled={!newPosition.length > 0} on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
     </div>
   </div>
