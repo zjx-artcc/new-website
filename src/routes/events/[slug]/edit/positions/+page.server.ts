@@ -44,24 +44,28 @@ export async function load({ params, cookies, locals }) {
     }
   });
 
-  positionRequests.forEach(async (request) => {
-    if (request.event_id != eventId) {
-      return;
-    }
-    let position = positions.find((position) => position.position == request.position);
-    let cont = await prisma.roster.findFirst({
-      where: { cid: request.cid },
-      select: { first_name: true, last_name: true }
-    })
-    if (cont == null) {
-      return;
-    }
-    let posReq: PositionRequest = { controller: `${cont.first_name} ${cont.last_name}`, position: request.position, request_id: request.request_id };
-    if (position.requests == undefined) {
-      position.requests = [];
-      position.requests.push(posReq);
-    }
-  });
+  console.log(positionRequests);
+  
+  if (positionRequests.length > 0) {
+    positionRequests.forEach(async (request) => {
+      if (request.event_id != eventId) {
+        return;
+      }
+      let position = positions.find((position) => position.position == request.position);
+      let cont = await prisma.roster.findFirst({
+        where: { cid: request.cid },
+        select: { first_name: true, last_name: true }
+      })
+      if (cont == null) {
+        return;
+      }
+      let posReq: PositionRequest = { controller: `${cont.first_name} ${cont.last_name}`, position: request.position, request_id: request.request_id };
+      if (position.requests == undefined) {
+        position.requests = [];
+        position.requests.push(posReq);
+      }
+    });
+  }
 
   const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR']
   positions.sort((a, b) => {

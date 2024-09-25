@@ -40,6 +40,7 @@
         {#if data.canEdit}
           <div class="pt-4">
             <a href="/events/{data.event.id}/edit" class="bg-blue-500 text-white px-2 align-middle rounded-md text-xl">Edit Event</a>
+            <a href="/events/{data.event.id}/delete" class="bg-red-500 text-white px-2 align-middle rounded-md text-xl">Delete Event</a>
           </div>
         {/if}
       </div>
