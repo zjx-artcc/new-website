@@ -92,17 +92,21 @@
       {#key positions.length}
         {#each positions as row, i}
           <tr>
-            <td><input name="position-{i}" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
+            <td><input name="position-{i}" class="p-0.5 rounded-md text-center" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
             <td>
               {#if row.requests != undefined}
-                <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}">
+                <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center">
                   <option value=''></option>
                   {#each row.requests as request}
                     <option value={request.controller}>{request.controller}</option>
                   {/each}
                 </select>
+              {:else if row.controller != ''}
+                <select value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center" disabled >
+                  <option>{row.controller}</option>
+                </select>
               {:else}
-                <select name="controllers" id="controllers" disabled>
+                <select name="controllers" id="controllers" disabled class="p-1 rounded-md text-center">
                   <option value="No controllers available">No controllers available</option>
                 </select>
               {/if}
@@ -120,5 +124,6 @@
   </div>
 </div>
 <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm">
+  <p class="-mb-4 italic">Clicking this button finalizes assigned positions and emails the affected controllers</p><br>
   <button type="button" on:click={submitPositions} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
 </div>

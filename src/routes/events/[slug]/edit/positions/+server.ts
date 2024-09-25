@@ -13,8 +13,6 @@ export async function POST({request}) {
       positions[i].type = getPositionType(positions[i].position);
     }
   }
-
-  console.log(positions);
   
   let eventData = await prisma.events.findUnique({
     where: {
@@ -23,19 +21,36 @@ export async function POST({request}) {
   })
   if (eventData == null) {
     return json({success: false, message: "unable to find event"})
-  } else {
-    eventData.positions = JSON.stringify(positions);
-    console.log(eventData);
   }
+ 
 
+  //Strip requests property from each position and remove requests for position
+  for (let i = 0; i < positions.length; i++) {
+    delete positions[i].requests;
+    if (positions[i].controller != "") {
+      await prisma.position_requests.deleteMany({
+        where: {
+          event_id: event,
+          position: positions[i].position.toString()
+        }
+      })
+    }
+  }
+  console.log(eventData.positions);
+
+  
+  eventData.positions = JSON.stringify(positions);
   eventData.last_modified = new Date();
 
+  //Update events table
   await prisma.events.update({
     where: {
       id: BigInt(event)
     },
     data: eventData
   })
+
+ 
 
   return json({success: true})
 }
@@ -44,7 +59,7 @@ class Position {
   type: Number;
   position: String;
   controller: String;
-
+  requests: any[];
 }
 
 function getPositionType(position: String): Number {
