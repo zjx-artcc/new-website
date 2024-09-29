@@ -81,11 +81,6 @@
               <p class="text-left pr-5">{position.position}: </p>
               <p class="text-right text-green-700">Position Request Recieved</p>
             </div>
-            {:else if data.positionRequested.done}
-            <div id="positions" class="p-2 inline-flex">
-              <p class="text-left pr-5">{position.position}: </p>
-              <p class="text-right text-red-600">You have already requested a position for this event</p>
-            </div>
             {:else if !data.canRequest}
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
