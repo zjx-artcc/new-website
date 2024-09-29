@@ -31,7 +31,7 @@
 		"@auth/prisma-adapter": "^2.4.2",
 		"@auth/sveltekit": "^1.4.2",
 		"@iconify/svelte": "^3.1.6",
-		"@prisma/client": "^5.17.0",
+		"@prisma/client": "^5.20.0",
 		"@supabase/supabase-js": "^2.39.3",
 		"autoprefixer": "^10.4.16",
 		"colorthief": "^2.4.0",
