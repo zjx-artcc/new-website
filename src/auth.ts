@@ -27,10 +27,20 @@ export const { handle } = SvelteKitAuth({
     allowDangerousEmailAccountLinking: true,
     userinfo: process.env.USER_INFO_DEV_URL,
     async profile(profile) {
+      let data = await prisma.roster.findFirst({
+        where: {
+          cid: profile.data.cid
+        }
+      })
+      let rostered = false;
+      if (data != null) {
+        rostered = true;
+      }
       return {
         name: profile.data.personal.name_full,
         email: profile.data.personal.email,
         cid: profile.data.cid,
+        rostered: rostered
       };
     }
   }],
