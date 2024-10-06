@@ -9,7 +9,7 @@
 
 <header class="bg-gray-700 block" id="myTopnav">
 	<div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-		<Navbar loggedIn={data.loggedIn} />
+		<Navbar />
 	</div>
 	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; ">
 		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
