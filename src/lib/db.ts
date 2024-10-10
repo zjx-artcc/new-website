@@ -9,7 +9,7 @@ export const prisma = new PrismaClient();
 //TODO: Add JSDoc comments
 
 
-export function getRating(ratingInt) {
+export function getRating(ratingInt: number): string {
   switch(ratingInt) {
     case 1:
       return "OBS"
