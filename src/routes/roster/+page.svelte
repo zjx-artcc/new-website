@@ -75,7 +75,7 @@
 				{#each data.pageData.visiting as controller}
 				<tr>
 					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.first_name} {controller.last_name} ({controller.initials}) - {controller.home_facility}</td>
-					<td class="text-center align-top border-2 border-solid px-2 py-5"><a href="/membership/roster/{controller.cid}">{controller.cid}</a></td>
+					<td class="text-center align-top border-2 border-solid px-2 py-5"><a href="/roster/{controller.cid}">{controller.cid}</a></td>
 					<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.rating}</td>
 					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.del_certs.color}">{controller.del_certs.cert}</p></td>
 					<td class="text-center align-top border-2 border-solid px-2 py-5"><p class="px-1 py-1 rounded-md" style="background-color: {controller.gnd_certs.color}">{controller.gnd_certs.cert}</p></td>
