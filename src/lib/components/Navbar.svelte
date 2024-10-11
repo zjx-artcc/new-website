@@ -5,9 +5,6 @@
 	import { ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
 	import { signIn } from '@auth/sveltekit/client'
 	import { page } from '$app/stores';
-	if ($page.data.session != null) {
-		console.log($page.data.session.user);
-	}
 </script>
 <div class="pl-4 inline-block align-middle">
 	<a class="link-effect font-bold" href="/">

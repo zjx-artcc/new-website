@@ -10,7 +10,9 @@ export async function load({locals}) {
     email: '',
     rating: '',
     numRating: 0,
-    homeFacility: ''
+    homeFacility: '',
+    sopCourse: false,
+    ratingChanged: null
   };
   if ((await locals.auth()).user.cid) {
     user.cid = (await locals.auth()).user.cid;
@@ -32,8 +34,8 @@ export async function load({locals}) {
   user.rating = getRating(parseInt(data.rating));
   user.numRating = data.rating;
   user.homeFacility = data.home_facility;
-
-  console.log(user);
+  user.sopCourse = data.sop_course;
+  user.ratingChanged = new Date(data.rating_changed);
 
   return user;
 }

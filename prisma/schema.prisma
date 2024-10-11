@@ -58,6 +58,7 @@ model roster {
   staff_roles        String
   mentor_level       BigInt?              @default(0)
   rating_changed     DateTime?            @default(now()) @db.Timestamptz(6)
+  sop_course         Boolean
   bookings           bookings[]
   events             events[]
   notams             notams[]
@@ -83,7 +84,7 @@ model stats {
   month_one   Float  @default(0.0)
   month_two   Float  @default(0.0)
   month_three Float  @default(0.0)
-  roster      roster @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+  roster      roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model User {

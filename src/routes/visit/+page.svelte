@@ -12,7 +12,8 @@
   import { page } from '$app/stores';
 
 	export let data;
-
+	
+	let visitingDate = new Date().setDate(new Date().getDate() - 90);
   const form = useForm();
 </script>
 
@@ -72,8 +73,17 @@
 						{:else}
 							<p>❌ Controller has earned S3 rating or higher</p>
 						{/if}
-						<p>ZJX SOP Course has been completed</p>
-						<p>Has held current rating for at least 90 days</p>
+						{#if data.sopCourse}
+							<p>✅ ZJX SOP Course has been completed</p>
+						{:else}
+							<p>❌ ZJX SOP Course has been completed</p>
+						{/if}
+						{#if data.ratingChanged.valueOf() >= visitingDate }
+							<p>✅ Has held current rating for at least 90 days</p>
+						{:else}
+							<p>❌ Has held current rating for at least 90 days</p>
+						{/if}
+						<!--TODO: After adding new properties to roster sync-->
 						<p>Has been a member of their home facility for at least 90 days</p>
 					</td>
 				</tr>
