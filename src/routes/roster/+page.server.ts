@@ -9,9 +9,6 @@ export async function load({ params, cookies, locals }) {
     home: [],
     visiting: [],
   }
-  if (locals.getSession().user) {
-    pageData.loggedIn = true;
-  }
   const data = await prisma.roster.findMany({
     orderBy: {
       last_name: 'asc'
