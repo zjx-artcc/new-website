@@ -33,6 +33,18 @@
 	</div>
 </header>
 
+<div id="breadcrumbs" class="border-b">
+  <div class="py-1.5 text-center">
+    <nav class="py-2 mb-0">
+      <a href="/" class="text-sky-500">Home</a>
+      <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
+      <a href="/roster" class="text-sky-500">Roster</a>
+			<Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
+      <a href="/roster/{data.certs.cid}" class="text-sky-500">{data.certs.cid}</a>
+    </nav>
+  </div>
+</div>
+
 <div class="flex flex-col w-full min-h-screen">
 	<main class="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
 		<div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4 lg:gap-8">
