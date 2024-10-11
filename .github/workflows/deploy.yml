@@ -1,0 +1,15 @@
+name: Deploy to test
+
+on:
+  push:
+    branches: 'master'
+  workflow_dispatch:
+
+jobs:
+  build_site:
+    runs-on: self-hosted
+    steps:
+    - name: Setup
+      uses: actions/checkout@v2
+    - name: Deploy
+      run: docker compose up --build -d

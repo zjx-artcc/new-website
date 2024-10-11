@@ -1,0 +1,16 @@
+services:
+  website:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PORT: "3700"
+      HOST: "0.0.0.0"
+      AUTH_SECRET: ${AUTH_SECRET}
+      CONNECT_URL: ${CONNECT_URL}
+      CONNECT_ID: ${CONNECT_ID}
+      CONNECT_SECRET: ${CONNECT_SECRET}
+      TOKEN_URL: ${TOKEN_URL}
+      USER_INFO_URL: ${USER_INFO_URL}
+    ports:
+      - "3700:3700"

@@ -10,7 +10,7 @@ export const { handle } = SvelteKitAuth({
   adapter: PrismaAdapter(prisma),
   trustHost: true,
   providers:[{
-    id: "vatsim-dev",
+    id: "vatsim",
     name: "VATSIM Connect",
     type: "oauth",
     authorization: {
@@ -19,13 +19,13 @@ export const { handle } = SvelteKitAuth({
         scope: "full_name email"
       }
     },
-    clientId: process.env.CONNECT_DEV_ID,
-    clientSecret: process.env.CONNECT_DEV_SECRET,
+    clientId: process.env.CONNECT_ID,
+    clientSecret: process.env.CONNECT_SECRET,
     token: {
-      url: process.env.TOKEN_DEV_URL,
+      url: process.env.TOKEN_URL,
     },
     allowDangerousEmailAccountLinking: true,
-    userinfo: process.env.USER_INFO_DEV_URL,
+    userinfo: process.env.USER_INFO_URL,
     async profile(profile) {
       let data = await prisma.roster.findFirst({
         where: {
