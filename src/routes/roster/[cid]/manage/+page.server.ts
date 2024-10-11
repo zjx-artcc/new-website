@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-import { error as svelteError } from '@sveltejs/kit'
+import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCerts, getCtrCerts } from '$lib/db';
 
 /** @type {import('./$types').PageLoad} */
@@ -82,6 +82,10 @@ export const actions = {
         },
         data: user
       })
+
+      if (update != null) {
+        redirect(302, `/roster/${user.cid}`);
+      }
     }
   }
 }
