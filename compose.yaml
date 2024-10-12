@@ -6,6 +6,7 @@ services:
       NODE_ENV: production
       PORT: "3700"
       HOST: "0.0.0.0"
+      DATABASE_URL: ${DATABASE_URL}
       AUTH_SECRET: ${AUTH_SECRET}
       CONNECT_URL: ${CONNECT_URL}
       CONNECT_ID: ${CONNECT_ID}

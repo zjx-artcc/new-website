@@ -14,6 +14,7 @@ jobs:
     - name: Deploy
       run: docker compose up --build -d
     env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
       CONNECT_URL: ${{ secrets.CONNECT_URL }}
       CONNECT_ID: ${{ secrets.CONNECT_ID }}
