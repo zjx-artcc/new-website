@@ -4,8 +4,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import * as dotenv from "dotenv";
 dotenv.config();
 
-let CONNECT_URL = process.env.NODE_ENV == 'production' ? process.env.CONNECT_URL : process.env.CONNECT_DEV_URL;
-
 export const { handle } = SvelteKitAuth({
   adapter: PrismaAdapter(prisma),
   trustHost: true,
@@ -14,7 +12,7 @@ export const { handle } = SvelteKitAuth({
     name: "VATSIM Connect",
     type: "oauth",
     authorization: {
-      url: CONNECT_URL,
+      url: process.env.CONNECT_URL,
       params: {
         scope: "full_name email"
       }
