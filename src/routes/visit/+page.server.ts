@@ -12,8 +12,8 @@ export async function load({locals}) {
     numRating: 0,
     homeFacility: '',
     sopCourse: false,
-    ratingChanged: null,
-    ninetyDays: false
+    ratingNinetyDays: false,
+    rosterNinetyDays: false
   };
   if ((await locals.auth()).user.cid) {
     user.cid = (await locals.auth()).user.cid;
@@ -32,9 +32,16 @@ export async function load({locals}) {
   let date: Date = new Date();
   let joinDate: Date = data.created_at;
   joinDate.setDate(joinDate.getDate() + 90);
+
+  let ratingDate: Date = data.rating_changed;
+  ratingDate.setDate(ratingDate.getDate() + 90);
   
   if (date > joinDate) {
     user.ninetyDays = true
+  }
+
+  if (date > ratingDate) {
+    user.ratingNinetyDays = true;
   }
 
   user.firstName = data.first_name;

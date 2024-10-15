@@ -78,12 +78,12 @@
 						{:else}
 							<p>❌ ZJX SOP Course has been completed</p>
 						{/if}
-						{#if data.ratingChanged.valueOf() >= visitingDate }
+						{#if data.ratingNinetyDays }
 							<p>✅ Has held current rating for at least 90 days</p>
 						{:else}
 							<p>❌ Has held current rating for at least 90 days</p>
 						{/if}
-						{#if data.ninetyDays}
+						{#if data.rosterNinetyDays}
 							<p>✅ Has been a member of their home facility for at least 90 days</p>
 						{:else}
 							<p>❌ Has been a member of their home facility for at least 90 days</p>
