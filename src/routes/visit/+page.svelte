@@ -83,8 +83,11 @@
 						{:else}
 							<p>❌ Has held current rating for at least 90 days</p>
 						{/if}
-						<!--TODO: After adding new properties to roster sync-->
-						<p>Has been a member of their home facility for at least 90 days</p>
+						{#if data.ninetyDays}
+							<p>✅ Has been a member of their home facility for at least 90 days</p>
+						{:else}
+							<p>❌ Has been a member of their home facility for at least 90 days</p>
+						{/if}
 					</td>
 				</tr>
 			</table>

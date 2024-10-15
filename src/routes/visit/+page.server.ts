@@ -46,7 +46,6 @@ export async function load({locals}) {
   user.sopCourse = data.sop_course;
   user.ratingChanged = new Date(data.rating_changed);
 
-  console.log(user);
 
   return user;
 }
