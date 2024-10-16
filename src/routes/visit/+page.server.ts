@@ -56,3 +56,22 @@ export async function load({locals}) {
 
   return user;
 }
+
+/** @type {import('./$types').Actions} */
+export const actions = {
+  default: async({request, locals}) => {
+    const formData = await request.formData();
+
+    let user = {
+      cid: formData.get('cid'),
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      rating: formData.get("rating"),
+      facility: formData.get("facility"),
+      reason: formData.get("reason")
+    }
+
+    console.log(user);
+  }
+}
