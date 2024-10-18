@@ -6,6 +6,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
+		"preinstall": "npx only-allow pnpm",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
@@ -46,7 +47,6 @@
 		"tailwindcss": "^3.4.3"
 	},
 	"volta": {
-		"node": "21.5.0",
-		"yarn": "4.0.2"
+		"node": "21.5.0"
 	}
 }

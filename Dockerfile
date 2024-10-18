@@ -8,13 +8,13 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN yarn install --production
+RUN pnpm i --production
 
 RUN npm i -g prisma
 
 RUN prisma generate
 
-RUN yarn build
+RUN pnpm build
 
 USER node
 
