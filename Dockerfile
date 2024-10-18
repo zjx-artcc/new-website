@@ -8,9 +8,10 @@ WORKDIR /usr/src/app
 
 COPY . .
 
+RUN npm i -g prisma pnpm
+
 RUN pnpm i --production
 
-RUN npm i -g prisma
 
 RUN prisma generate
 
