@@ -58,7 +58,7 @@ model roster {
   staff_roles        String
   mentor_level       BigInt?              @default(0)
   rating_changed     DateTime?            @default(now()) @db.Timestamptz(6)
-  sop_course         Boolean
+  sop_course         Boolean              @default(false)
   bookings           bookings[]
   events             events[]
   notams             notams[]
@@ -66,6 +66,7 @@ model roster {
   position_requests  position_requests[]
   sessions           sessions[]
   stats              stats?
+  visit_requests     visit_requests[]
 }
 
 model sessions {
@@ -155,4 +156,11 @@ model position_requests {
   request_id Int     @id(map: "request_id") @default(autoincrement())
   roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
   events     events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
+}
+
+model visit_requests {
+  id     BigInt    @id
+  cid    BigInt
+  reason String
+  roster roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "visit_requests_roster_cid_fk")
 }

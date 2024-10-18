@@ -145,8 +145,12 @@
 		</div>
 	</div>
 	<div class="text-center flex-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">
-		<i class="text-blue-500">If all of the information appears correct, please click submit.</i><br>
-		<button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-0.5 rounded-md text-xl">Submit</button>
+		{#if data.canVisit}
+			<i class="text-blue-500">If all of the information appears correct, please click submit.</i><br>
+			<button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-0.5 rounded-md text-xl">Submit</button>
+		{:else}
+			<i class="text-red-500">You are not eligible to visit Jacksonville ARTCC at this time.</i>
+		{/if}
 	</div>
 </form>
 

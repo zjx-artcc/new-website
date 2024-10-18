@@ -1,6 +1,7 @@
 //@ts-nocheck
 
 import { prisma, getRating } from '$lib/db';
+import { redirect } from '@sveltejs/kit';
 
 export async function load({locals}) {
   let user = {
@@ -13,7 +14,8 @@ export async function load({locals}) {
     homeFacility: '',
     sopCourse: false,
     ratingNinetyDays: false,
-    rosterNinetyDays: false
+    rosterNinetyDays: false,
+    canVisit: false,
   };
   if ((await locals.auth()).user.cid) {
     user.cid = (await locals.auth()).user.cid;
@@ -53,6 +55,15 @@ export async function load({locals}) {
   user.sopCourse = data.sop_course;
   user.ratingChanged = new Date(data.rating_changed);
 
+  if (user.rating >= 4) {
+    if (user.sopCourse) {
+      if (user.ratingNinetyDays) {
+        if (user.rosterNinetyDays) {
+          user.canVisit = true;
+        }
+      }
+    }
+  }
 
   return user;
 }
@@ -72,6 +83,16 @@ export const actions = {
       reason: formData.get("reason")
     }
 
-    console.log(user);
+    let data = await prisma.visit_requests.create({
+      data: {
+        id: (new Date().getMilliseconds()) * user.cid,
+        cid: user.cid,
+        reason: user.reason
+      }
+    })
+
+    if (data != null) {
+      redirect(301, '/visit/success')
+    }
   }
 }
