@@ -10,8 +10,7 @@ COPY . .
 
 RUN npm i -g prisma pnpm
 
-RUN pnpm i --production
-
+RUN pnpm i
 
 RUN prisma generate
 
