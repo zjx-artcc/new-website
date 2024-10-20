@@ -118,7 +118,13 @@ model visit_requests {
 }
 
 model User {
-  id Int @id(map: "User_pkey")
+  id              Int @id(map: "User_pkey")
+  firstName       String
+  lastName        String
+  rating          Int
+  email           String
+  division        String
+  facility        String
 
   sessions Session[]
 }

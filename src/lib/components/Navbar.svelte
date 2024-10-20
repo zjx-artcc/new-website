@@ -3,7 +3,6 @@
 	import Icon from '@iconify/svelte';
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
-	import { signIn } from '@auth/sveltekit/client'
 	import { page } from '$app/stores';
 </script>
 <div class="pl-4 inline-block align-middle">
@@ -46,6 +45,6 @@
 	{#if $page.data.session != null}
 		<a href="/roster/{$page.data.session.user.cid}" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" />Profile</a>
 	{:else}
-		<button on:click={signIn} class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</button>
+		<a href="/login" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</a>
 	{/if}
 </div>

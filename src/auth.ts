@@ -1,5 +1,4 @@
 import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from "$lib/oauth";
-import type { RequestEvent } from "@sveltejs/kit";
 
 export const handle = async ({ event, resolve}) => {
   const token = event.cookies.get("session") ?? null;

@@ -1,3 +1,4 @@
+import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/oauth";
 import { RequestEvent } from "@sveltejs/kit";
 
 export async function GET(event: RequestEvent): Promise<Response> {
@@ -9,7 +10,15 @@ export async function GET(event: RequestEvent): Promise<Response> {
   }
   let token = await getToken(code);
   let user = await getUser(token);
-  console.log(user);
+  const sessionToken = generateSessionToken();
+  const session = await createSession(token, user.id);
+  setSessionTokenCookie(event, sessionToken, session.expiresAt);
+  return new Response(null, {
+    status: 302,
+    headers: {
+      'Location': '/'
+    }
+  })
 }
 
 async function getUser(token: string): Promise<User> {
@@ -29,7 +38,7 @@ async function getUser(token: string): Promise<User> {
     rating: res.data.vatsim.rating,
     email: res.data.personal.email,
     division: res.data.vatsim.division,
-    artcc: ""
+    facility: ""
   }
 
   if (user.division === "USA") {
@@ -39,7 +48,7 @@ async function getUser(token: string): Promise<User> {
     })
     const vatusaRes = await vatusaReq.json();
     console.log(vatusaRes);
-    user.artcc = vatusaRes.artcc;
+    user.facility = vatusaRes.artcc;
   }
   return user;
 }
@@ -80,5 +89,5 @@ type User = {
   rating: number,
   email: string,
   division: string,
-  artcc: string
+  facility: string
 }
