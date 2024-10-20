@@ -2,7 +2,11 @@
   "compilerOptions": {
     "strict": false,
     "allowUnreachableCode": false,
-    "allowImportingTsExtensions": true
-  },
-  "extends": "./.svelte-kit/tsconfig.json"
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "$lib/*": ["src/lib/*"],
+    }
+  }
 }
