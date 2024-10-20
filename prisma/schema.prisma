@@ -1,3 +1,5 @@
+//TODO: Move away from BigInt to Int where possible
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -88,56 +90,6 @@ model stats {
   roster      roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  cid           String
-  rostered      Boolean?
-  accounts      Account[]
-  sessions      Session[]
-}
-
-model Account {
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([provider, providerAccountId])
-}
-
-model Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@id([identifier, token])
-}
-
 model online_controllers {
   id          BigInt    @id
   cid         BigInt?
@@ -159,8 +111,22 @@ model position_requests {
 }
 
 model visit_requests {
-  id     BigInt    @id
+  id     BigInt @id
   cid    BigInt
   reason String
   roster roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "visit_requests_roster_cid_fk")
+}
+
+model User {
+  id Int @id(map: "User_pkey")
+
+  sessions Session[]
+}
+
+model Session {
+  id        String    @id
+  userId    Int
+  expiresAt DateTime
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 }

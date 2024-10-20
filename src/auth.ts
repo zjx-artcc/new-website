@@ -1,62 +1,22 @@
-import { prisma } from "$lib/db.ts";
-import { SvelteKitAuth } from "@auth/sveltekit";
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import * as dotenv from "dotenv";
-dotenv.config();
+import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from "$lib/oauth";
+import type { RequestEvent } from "@sveltejs/kit";
 
-export const { handle } = SvelteKitAuth({
-  adapter: PrismaAdapter(prisma),
-  trustHost: true,
-  providers:[{
-    id: "vatsim",
-    name: "VATSIM Connect",
-    type: "oauth",
-    authorization: {
-      url: process.env.CONNECT_URL,
-      params: {
-        scope: "full_name email"
-      }
-    },
-    clientId: process.env.CONNECT_ID,
-    clientSecret: process.env.CONNECT_SECRET,
-    token: {
-      url: process.env.TOKEN_URL,
-    },
-    allowDangerousEmailAccountLinking: true,
-    userinfo: process.env.USER_INFO_URL,
-    async profile(profile) {
-      let data = await prisma.roster.findFirst({
-        where: {
-          cid: profile.data.cid
-        }
-      })
-      let rostered = false;
-      if (data != null) {
-        rostered = true;
-      }
-      return {
-        name: profile.data.personal.name_full,
-        email: profile.data.personal.email,
-        cid: profile.data.cid,
-        rostered: rostered
-      };
-    }
-  }],
-  callbacks: {
-    async session({ session, token, newSession, trigger }) {
-      if (session && token) {
-        let u = token.user;
-        delete u["tokens"];
-        
-        //@ts-ignore
-        session.user = u;
-      }
+export const handle = async ({ event, resolve}) => {
+  const token = event.cookies.get("session") ?? null;
+  if (token === null) {
+    event.locals.user = null;
+    event.locals.session = null;
+    return resolve(event);
+  }
 
-      return session;
-    }
-  },
-  session: {
-    strategy: "database"
-  },
-  secret: process.env.AUTH_SECRET
-})
+  const { session, user } = await validateSessionToken(token);
+  if (session !== null) {
+    setSessionTokenCookie(event, token, session.expiresAt);
+  } else {
+    deleteSessionTokenCookie(event);
+  }
+
+  event.locals.session = session;
+  event.locals.user = user;
+  return resolve(event);
+}
