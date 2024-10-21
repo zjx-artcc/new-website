@@ -1,8 +1,16 @@
 import { prisma } from "$lib/db.ts";
-import { SvelteKitAuth } from "@auth/sveltekit";
+import SvelteKitAuth, {type DefaultSession}  from "@auth/sveltekit";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import * as dotenv from "dotenv";
 dotenv.config();
+
+declare module "@auth/sveltekit" {
+  interface Session {
+    user: {
+      cid: number
+    } & DefaultSession["user"]
+  }
+}
 
 export const { handle } = SvelteKitAuth({
   adapter: PrismaAdapter(prisma),
