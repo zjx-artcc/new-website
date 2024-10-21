@@ -20,21 +20,15 @@
         },
         {
             title: "Facility Engineer",
-            name: "None",
+            name: "Howard Snider",
             category: "ARTCC Facility Team",
             email: "fe@zjxartcc.org"
         },
         {
             title: "Assistant Facility Engineer",
-            name: "Donald Kowalewski",
+            name: "Donald Kolaweski",
             category: "ARTCC Facility Team",
             email: "afe@zjxartcc.org"
-        },
-        {
-            title: "Assistant Facility Engineer",
-            name: "John Doe",
-            category: "ARTCC Facility Team",
-            email: "jdoe@zjxartcc.org"
         },
         {
             title: "Training Administrator",
@@ -50,15 +44,45 @@
         },
         {
             title: "Instructor",
+            name: "Connor O'brien",
+            category: "ARTCC Training Team",
+            email: "connor.obrien@vatusa.net"
+        },
+        {
+            title: "Instructor",
+            name: "Damien Lunior",
+            category: "ARTCC Training Team",
+            email: "connor.obrien@vatusa.net"
+        },
+        {
+            title: "Instructor",
             name: "Howard Snider",
             category: "ARTCC Training Team",
             email: "fe@zjxartcc.org"
+        },
+        {
+            title: "Instructor",
+            name: "Michael Knight",
+            category: "ARTCC Training Team",
+            email: "michael.knight@vatusa.net"
         },
         {
             title: "Mentor",
             name: "Angel Ledesma",
             category: "ARTCC Training Team",
             email: "angel.ledesma@vatusa.net"
+        },
+        {
+            title: "Mentor",
+            name: "Martin Mejia",
+            category: "ARTCC Training Team",
+            email: "martin.mejia@vatusa.net"
+        },
+        {
+            title: "Mentor",
+            name: "Nicholas Ader",
+            category: "ARTCC Training Team",
+            email: "nicholas.ader@vatusa.net"
         },
         {
             title: "Events Coordinator",
@@ -89,6 +113,12 @@
             name: "Samuel Valencia",
             category: "ARTCC Web Team",
             email: "wm@zjxartcc.org"
+        },
+        {
+            title: "Assistant Webmaster",
+            name: "Christopher Mangan",
+            category: "ARTCC Web Team",
+            email: "awm@zjxartcc.org"
         }
     ];
 
@@ -125,8 +155,8 @@
                 <h2 class="text-4xl text-center my-4">{category}</h2>
                 <div class="flex flex-wrap justify-center">
                     {#each groupedStaffData[category] as staff}
-                        {#if !staff.title.includes("Assistant")}
-                            <div class="leader-card-wide">
+                        {#if !staff.title.includes("Assistant") && !staff.title.includes("Instructor") && !staff.title.includes("Mentor")}
+                            <div class="leader-card">
                                 <h3 class="text-2xl font-bold">{staff.title}</h3>
                                 <p class="text-xl">{staff.name}</p>
                                 <div class="flex justify-center mt-2">
@@ -137,7 +167,7 @@
                             </div>
                             <div class="flex flex-wrap justify-center w-full">
                                 {#each groupedStaffData[category].filter(subsetStaff => subsetStaff.title.includes("Assistant") && subsetStaff.title.includes(staff.title.split(" ")[0])) as subsetStaff, i}
-                                    <div class="subset-card" style="flex: 0 0 48%; margin: 1%;">
+                                    <div class="subset-card">
                                         <h3 class="text-2xl font-bold">{subsetStaff.title}</h3>
                                         <p class="text-xl">{subsetStaff.name}</p>
                                         <div class="flex justify-center mt-2">
@@ -152,7 +182,8 @@
                                 {/each}
                                 <div class="flex flex-wrap justify-center w-full">
                                     {#each groupedStaffData[category].filter(subsetStaff => subsetStaff.title.includes("Instructor")) as instructor}
-                                        <div class="instructor-card">
+                                        <div class="sub-sub-card">
+                                            <h3 class="text-2xl font-bold">{instructor.title}</h3>
                                             <p class="text-xl">{instructor.name}</p>
                                             <div class="flex justify-center mt-2">
                                                 <a href={"mailto:" + instructor.email} class="text-gray-800">
@@ -164,7 +195,8 @@
                                 </div>
                                 <div class="flex flex-wrap justify-center w-full">
                                     {#each groupedStaffData[category].filter(subsetStaff => subsetStaff.title.includes("Mentor")) as mentor}
-                                        <div class="mentor-card">
+                                        <div class="sub-sub-card">
+                                            <h3 class="text-2xl font-bold">{mentor.title}</h3>
                                             <p class="text-xl">{mentor.name}</p>
                                             <div class="flex justify-center mt-2">
                                                 <a href={"mailto:" + mentor.email} class="text-gray-800">
@@ -186,53 +218,38 @@
 <Footer />
 
 <style>
-    .bg-light-blue {
-        background-color: #e0f7fa; /* Light blue background */
-    }
 
-
-    .leader-card-wide {
-        border-left: 5px solid red; /* Red line on the side */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+    .leader-card { /* Facility team laeds i.e TA/EC */
+        border-left: 5px solid rgb(252, 195, 13); 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
         padding: 16px;
         margin: 8px;
         border-radius: 8px;
-        width: 1300px; /* Increased width for engineers */
+        width: 800px; 
         text-align: center;
-        background-color: white; /* Ensure cards have a white background */
+        background-color: white; 
     }
 
     .subset-card {
-        border-left: 5px solid blue; /* Blue line on the side */
+        border-left: 5px solid rgb(94, 193, 212); /* Blue line on the side */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
         padding: 16px;
         margin: 8px;
         border-radius: 8px;
-        width: 80px; /* Half width of leader card with margin */
+        width: 400px; /* Half width of leader card */
         text-align: center;
         background-color: white; /* Ensure cards have a white background */
     }
 
-    .instructor-card {
-        border-left: 5px solid green; /* Green line on the side */
+    .sub-sub-card {
+        border-left: 5px solid rgb(224, 241, 245); /* Green line on the side */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
         padding: 16px;
         margin: 8px;
         border-radius: 8px;
-        width:300px; /* Quarter width of leader card */
+        width: 200px; /* Quarter width of leader card */
         text-align: center;
-        background-color: #e0ffe0; /* Light green background */
-    }
-
-    .mentor-card {
-        border-left: 5px solid purple; /* Purple line on the side */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
-        padding: 16px;
-        margin: 8px;
-        border-radius: 8px;
-        width: 300px; /* Quarter width of leader card */
-        text-align: center;
-        background-color: #e0e0ff; /* Light purple background */
+        background-color: white; /* Light green background */
     }
 
     .text-gray-800 {
