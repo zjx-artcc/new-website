@@ -9,9 +9,6 @@ export async function load({ params, cookies, locals }) {
     home: [],
     visiting: [],
   }
-  if (locals.getSession().user) {
-    pageData.loggedIn = true;
-  }
   const data = await prisma.roster.findMany({
     orderBy: {
       last_name: 'asc'
@@ -30,6 +27,8 @@ export async function load({ params, cookies, locals }) {
     data[i].ctr_cert = getCtrCertColor(parseInt(data[i].ctr_cert))
     data[i].rating = getRating(parseInt(data[i].rating))
 
+    console.log(data[i]);
+
     if (flagged) {
       console.log(data[i])
     }
@@ -46,6 +45,7 @@ export async function load({ params, cookies, locals }) {
 }
 
 function getCertsColor(input: number): {cert: number, color: string} {
+  console.log(input);
   switch(input) {
     case 0: {
       return {
@@ -75,6 +75,12 @@ function getCertsColor(input: number): {cert: number, color: string} {
       return {
         cert: getCerts(input),
         color: "#ffca28"
+      }
+    }
+    case 3: {
+      return {
+        cert: getCerts(input),
+        color: "#ffc800"
       }
     }
   }

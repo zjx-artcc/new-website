@@ -1,0 +1,23 @@
+name: Deploy to test
+
+on:
+  push:
+    branches: 'master'
+  workflow_dispatch:
+
+jobs:
+  build_site:
+    runs-on: self-hosted
+    steps:
+    - name: Setup
+      uses: actions/checkout@v2
+    - name: Deploy
+      run: docker compose up --build -d
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      CONNECT_URL: ${{ secrets.CONNECT_URL }}
+      CONNECT_ID: ${{ secrets.CONNECT_ID }}
+      CONNECT_SECRET: ${{ secrets.CONNECT_SECRET }}
+      TOKEN_URL: ${{ secrets.TOKEN_URL }}
+      USER_INFO_URL: ${{ secrets.USER_INFO_URL }}
