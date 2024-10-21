@@ -2,6 +2,8 @@
     //@ts-nocheck
     import "$lib/app.css"
     import ActivityMonitorRow from "$lib/components/ActivityMonitorRow.svelte";
+
+    export let data;
 </script>
 
 
@@ -22,7 +24,10 @@
             </thead>
 
             <tbody>
-                <ActivityMonitorRow controller="Chris Mangan" ninetyDayTime="3" thirtyDayTime="2"/>
+                {#each data.activityData as user}
+                    <ActivityMonitorRow controller={user.first_name + " " + user.last_name} ninetyDayTime="3" thirtyDayTime="2"/>
+                {/each}
+                
                 <ActivityMonitorRow controller="very bad zjx boy" ninetyDayTime="2" thirtyDayTime="2"/>
             </tbody>
         </table>
