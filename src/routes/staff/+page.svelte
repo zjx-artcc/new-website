@@ -230,26 +230,26 @@
         background-color: white; 
     }
 
-    .subset-card {
-        border-left: 5px solid rgb(94, 193, 212); /* Blue line on the side */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+    .subset-card { /* Assistant Facility team laeds i.e ATA/AEC */
+        border-left: 5px solid rgb(94, 193, 212); 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
         padding: 16px;
         margin: 8px;
         border-radius: 8px;
-        width: 400px; /* Half width of leader card */
+        width: 400px; 
         text-align: center;
-        background-color: white; /* Ensure cards have a white background */
+        background-color: white; 
     }
 
-    .sub-sub-card {
-        border-left: 5px solid rgb(224, 241, 245); /* Green line on the side */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+    .sub-sub-card { /* MTR/INS */
+        border-left: 5px solid rgb(224, 241, 245); 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 16px;
         margin: 8px;
         border-radius: 8px;
-        width: 200px; /* Quarter width of leader card */
+        width: 200px;
         text-align: center;
-        background-color: white; /* Light green background */
+        background-color: white; 
     }
 
     .text-gray-800 {
@@ -257,7 +257,7 @@
     }
 
     .text-3xl {
-        font-size: 1.875rem; /* 30px */
+        font-size: 1.875rem; 
     }
 
     .mt-2 {
