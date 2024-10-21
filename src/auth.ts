@@ -43,7 +43,8 @@ export const { handle } = SvelteKitAuth({
     }
   }],
   callbacks: {
-    async session({ session, token, newSession, trigger }) {
+    async session({ session, token, user }) {
+      session.user.cid = user.cid
       if (session && token) {
         let u = token.user;
         delete u["tokens"];

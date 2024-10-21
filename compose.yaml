@@ -13,6 +13,7 @@ services:
       CONNECT_SECRET: ${CONNECT_SECRET}
       TOKEN_URL: ${TOKEN_URL}
       USER_INFO_URL: ${USER_INFO_URL}
+      AUTH_SECRET: ${AUTH_SECRET}
     ports:
       - "3700:3700"
     network_mode: bridge
