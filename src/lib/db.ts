@@ -8,7 +8,6 @@ export const prisma = new PrismaClient();
 //* Begin utility functions
 //TODO: Add JSDoc comments
 
-
 export function getRating(ratingInt: number): string {
   switch(ratingInt) {
     case 1:
