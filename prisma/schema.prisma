@@ -124,6 +124,13 @@ model visit_requests {
 }
 model User {
   id            Int      @id
+  firstName     String   @map("first_name")
+  lastName      String   @map("last_name")
+  email         String   @unique
+  division      String
+  facility      String
+  rating        Int
+
   sessions      Session[]
 
   @@map("user_test")

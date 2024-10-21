@@ -13,7 +13,7 @@ export function generateSessionToken(): string {
 }
 
 export async function createSession(token: string, userId: number): Promise<Session> {
-  const sessionId = encodeBase32LowerCaseNoPadding(sha256(new TextEncoder().encode(token)));
+  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const session: Session = {
     id: sessionId,
     userId,
@@ -60,7 +60,7 @@ export async function invalidateSession(sessionId: string): Promise<void> {
 export type SessionValidationResult = | {session: Session; user: User } | { session: null; user: null };
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date): void {
-  event.cookies.set("session", token, {
+  event.cookies.set("auth_session", token, {
     httpOnly: true,
     sameSite: "lax",
     expires: expiresAt,
@@ -69,7 +69,7 @@ export function setSessionTokenCookie(event: RequestEvent, token: string, expire
 }
 
 export function deleteSessionTokenCookie(event: RequestEvent): void {
-  event.cookies.set("session", "", {
+  event.cookies.set("auth_session", "", {
     httpOnly: true,
     sameSite: "lax",
     maxAge: 0,
