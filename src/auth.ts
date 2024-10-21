@@ -1,5 +1,6 @@
 import { prisma } from "$lib/db.ts";
-import SvelteKitAuth, {type DefaultSession}  from "@auth/sveltekit";
+import { SvelteKitAuth } from "@auth/sveltekit";
+import { type DefaultSession } from "@auth/sveltekit";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import * as dotenv from "dotenv";
 dotenv.config();
