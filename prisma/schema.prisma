@@ -88,22 +88,6 @@ model stats {
   roster      roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model User {
-  id            Int      @id
-  sessions      Session[]
-
-  @@map("user_test")
-}
-
-model Session {
-  id           String @id
-  userId       Int
-  expiresAt    DateTime
-
-  user         User  @relation(references: [id], fields: [userId], onDelete: Cascade)
-  @@map("sessions_test")
-}
-
 model VerificationToken {
   identifier String
   token      String
@@ -133,8 +117,70 @@ model position_requests {
 }
 
 model visit_requests {
-  id     BigInt    @id
+  id     BigInt @id
   cid    BigInt
   reason String
   roster roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "visit_requests_roster_cid_fk")
+}
+model User {
+  id            Int      @id
+  sessions      Session[]
+
+  @@map("user_test")
+}
+
+model Session {
+  id           String @id
+  userId       Int
+  expiresAt    DateTime
+
+  user         User  @relation(references: [id], fields: [userId], onDelete: Cascade)
+  @@map("sessions_test")
+}
+
+model AAccount {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+  User              SUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("Account")
+
+  @@id([provider, providerAccountId])
+}
+
+model OLD_Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+  User         SUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("Session")
+}
+
+model SUser {
+  id            String    @id
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+  cid           String
+  rostered      Boolean?
+  Account       AAccount[]
+  Session       OLD_Session[]
+
+  @@map("User")
 }
