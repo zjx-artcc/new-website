@@ -1,6 +1,7 @@
 import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from '$lib/oauth';
 
 export const load = async (event) => {
+  
   const token = event.cookies.get('auth_session') ?? null;
   if (token === null) {
     return {}

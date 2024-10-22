@@ -1,31 +1,31 @@
 import { prisma } from "$lib/db"
 
-//ts-nocheck
-/** @type {import('./$types').PageLoad} */
+//@ts-nocheck
 export const load = async ({ params, cookies, locals }) => {
     let pageData = {
         controllers: []
     }
     const activityData = await prisma.roster.findMany({
-        relationLoadStrategy: "join",
         select: {
-            "first_name": true,
-            "last_name": true,
-            "cid": true
-        },
-        include: {
+            cid: true,
+            first_name: true,
+            last_name: true,
+            rating: true,
+            home_facility: true,
+            created_at: true,
             sessions: {
                 select: {
-                    
-                }
+                    "duration": true,
+                    "logon_time": true
+                },
             }
         },
         orderBy: {
-            last_name: 'asc'
+            first_name: 'asc'
           }
+        
     });
-
-
+    //console.log(activityData)
     return {
         activityData
     }
