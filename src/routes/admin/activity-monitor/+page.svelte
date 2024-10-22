@@ -41,12 +41,13 @@
         cid: "",
         rating: "",
         home_facility: "",
+        date_joined: "",
         controllingHoursQuarter: 0,
         trainingHoursQuarter: 0,
         totalHoursQuarter: 0
     }
     export let dataTable = [];
-
+    export let test;
     // Init years table
     for(let i = currentDate.getUTCFullYear(); i >= 2023; i--) {
         years.push(i)
@@ -57,13 +58,15 @@
         let temp = {...activityTemplate}
         temp.name = data.activityData[i].first_name + " " + data.activityData[i].last_name
         temp.cid = data.activityData[i].cid
-        temp.rating = getRating(data.activityData[i].rating)
+        temp.rating = getRating(parseInt(data.activityData[i].rating))
+        test = temp.rating
+        temp.date_joined = new Date(data.activityData[i].created_at)
         temp.home_facility = data.activityData[i].home_facility
 
         dataTable.push(temp)
+        updateTable()
     }
 </script>
-
 
 <div class="my-5">
     <div class="flex justify-center">
