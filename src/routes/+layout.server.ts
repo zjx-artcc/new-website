@@ -13,5 +13,5 @@ export const load = async (event) => {
   }
   //@ts-ignore
   setSessionTokenCookie(event, token, session.expiresAt);
-  return { session, user }
+  return { "session": { ...session, user} }
 }
