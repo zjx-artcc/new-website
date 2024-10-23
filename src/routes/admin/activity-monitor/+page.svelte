@@ -25,7 +25,37 @@
         }
     }
     export const updateTable = (e) => {
-        
+        // Process hours per quarter
+        const beginDate: number = Date.UTC(selectedYear, (quarterInt*3-4), 0, 0, 0, 0, 0)
+        const endDate: number = Date.UTC(selectedYear, (quarterInt*3-1), 31, 0, 0, 0, 0)
+        for(let i = 0; i < data.userData.length; i++) {
+            // Reset Times
+
+            let controllingMseconds: number =  0;
+            for(let j = 0; j < data.userData[i].sessions.length; j++) {
+                const session = data.userData[i].sessions[j]
+                if (session.logon_time.getTime() >= beginDate && session.logon_time.getTime() <= endDate) {
+                    controllingMseconds += session.duration
+                }
+            }
+            data.userData[i].controllingHoursQuarter = user.controllingMsecondsQuarter / 3600000
+            data.userData[i].timeFormat = (user.controllingMsecondsQuarter / 3600000).toString().padStart(2, "0") + ":" + (user.controllingMsecondsQuarter / 60000 % 60).toString().padStart(2, "0")
+        }
+    }
+
+    export const formatTimeString: string = (milliseconds: number) => {
+        const hours = Math.floor(milliseconds / 3600000)
+        const minutes = Math.floor(milliseconds / 60000 % 60)
+
+        if (hours < 10) {
+            hours = "0" + hours
+        }
+
+        if (minutes < 10) {
+            hours = "0" + minutes
+        }
+
+        return hours + ":" + minutes
     }
 
     // variables
@@ -36,39 +66,17 @@
     export let years = [];
     export let selectedYear: number;
     export let quarterInt: number = getCurrentQuarter();
-    export let activityTemplate = {
-        name: "",
-        cid: "",
-        rating: "",
-        home_facility: "",
-        date_joined: "",
-        controllingHoursQuarter: 0,
-        trainingHoursQuarter: 0,
-        totalHoursQuarter: 0
-    }
-    export let dataTable = [];
-    export let test;
+
     // Init years table
     for(let i = currentDate.getUTCFullYear(); i >= 2023; i--) {
         years.push(i)
     }
-
-    // Init Table
-    for(let i = 0; i < data.activityData.length; i++) {
-        let temp = {...activityTemplate}
-        temp.name = data.activityData[i].first_name + " " + data.activityData[i].last_name
-        temp.cid = data.activityData[i].cid
-        temp.rating = getRating(parseInt(data.activityData[i].rating))
-        test = temp.rating
-        temp.date_joined = new Date(data.activityData[i].created_at)
-        temp.home_facility = data.activityData[i].home_facility
-
-        dataTable.push(temp)
-        updateTable()
-    }
+   
+   
 </script>
 
 <div class="my-5">
+    
     <div class="flex justify-center">
         <h1 class="text-xl text-sky-500 font-bold align-left">Activity Monitor</h1>
     </div>
@@ -109,17 +117,17 @@
                 </tr>
             </thead>
             <tbody>
-                {#each dataTable as user}
+                {#each data.userData as user}
                     <tr class={user.home_facility == "ZJX" ? "bg-sky-100" : "bg-grey-100"}>
                         <td class="px-2 text-center">
                             <div class="flex-wrap justify-center px-1">
-                                <span class="flex justify-center font-bold">{user.name}</span>
-                                <span class="flex justify-center italic">{user.cid} - {user.rating}</span>
+                                <span class="flex justify-center font-bold">{user.first_name} {user.last_name}</span>
+                                <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.rating))}</span>
                             </div>
                         </td>
                         <td class="text-center text-xl">{user.home_facility}</td>
-                        <td class="px-2 text-center text-xl">3:00</td>
-                        <td class="px-2 text-center text-xl">3:00</td>
+                        <td class="px-2 text-center text-xl">{user.controllingMsecondsQuarter}</td>
+                        <td class="px-2 text-center text-xl">-:--</td>
                         <td class={user.totalHoursQuarter < 3 ? "px-2 text-center text-xl bg-red-100" : "px-2 text-center text-xl bg-green-100"}>3:00</td>
                         <td class={"px-2 text-center" + (3 < 3 ? "bg-red-100" : "bg-green-low-opacity")}>{3 < 3 ? "Yes" : "No"}</td>
                     </tr>
