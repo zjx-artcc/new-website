@@ -6,14 +6,15 @@ import { Prisma } from "@prisma/client";
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
   let pageData = {
-    canEdit: false,
     positionRequested: {callsign: '', done: false},
     cid: 0,
     event: {},
     canRequest: true
   }
-  if ((await locals.auth()).user) {
-    pageData.cid = (await locals.auth()).user.cid;
+  if (locals.session == null) {
+    pageData.canRequest = false;
+  } else {
+    pageData.cid = locals.session.userId;
   }
   const eventId = params.slug;
   if (eventId == "undefined") { 
@@ -28,6 +29,7 @@ export async function load({ params, cookies, locals }) {
       redirect(302, '/404');
     } else {
       pageData.event = data;
+      console.log(pageData.event.positions);
       pageData.event.positions = JSON.parse(pageData.event.positions);
     }
   }

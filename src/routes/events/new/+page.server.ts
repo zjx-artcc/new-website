@@ -8,11 +8,18 @@ export const prerender = false;
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
   let pageData = {
-    canEdit: false,
     cid: 0,
     positionRequests: [],
   }
-  pageData.canEdit = await getStaffRoles(parseInt((await (locals.getSession())).user.cid), "events");
+  console.log(locals.session);
+  if (locals.session == null) {
+    redirect(302, '/login')
+  } else {
+    pageData.cid = locals.session.userId;
+    if (!getStaffRole(pageData.cid, "events")) {
+      redirect(302, '/404')
+    }
+  }
   return pageData;
 }
 
