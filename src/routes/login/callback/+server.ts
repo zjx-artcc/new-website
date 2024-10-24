@@ -1,6 +1,7 @@
 import { prisma } from "$lib/db";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/session";
 import type { RequestEvent } from "@sveltejs/kit";
+import type { User } from "@prisma/client";
 
 export async function GET(event: RequestEvent): Promise<Response> {
   const code = event.url.searchParams.get("code");
@@ -15,7 +16,14 @@ export async function GET(event: RequestEvent): Promise<Response> {
     where: {
       id: user.id
     },
-    update: user,
+    update: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      rating: user.rating,
+      email: user.email,
+      division: user.division,
+      facility: user.facility
+    },
     create: user
   })
   const sessionToken = generateSessionToken();
@@ -47,7 +55,8 @@ async function getUser(token: string): Promise<User> {
     rating: res.data.vatsim.rating.id,
     email: res.data.personal.email,
     division: res.data.vatsim.division.id,
-    facility: ""
+    facility: "",
+    roles: ""
   }
 
   if (user.division == "USA") {
@@ -92,14 +101,4 @@ async function getToken(code: string): Promise<string> {
   })
   const res = await req.json();
   return res.access_token;
-}
-
-type User = {
-  id: number,
-  firstName: string,
-  lastName: string,
-  rating: number,
-  email: string,
-  division: string,
-  facility: string
 }

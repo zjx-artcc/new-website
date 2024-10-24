@@ -130,6 +130,7 @@ model User {
   division      String
   facility      String
   rating        Int
+  roles         String
 
   sessions      Session[]
 
