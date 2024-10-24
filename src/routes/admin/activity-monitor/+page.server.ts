@@ -25,11 +25,7 @@ export const load = async ({ params, cookies, locals }) => {
           }
         
     });
-    console.log(typeof(userData[4].sessions[2].logon_time))
-    console.log(userData[4].sessions[2].logon_time.getTime())
-    console.log(userData[4].sessions[2].logon_time.toUTCString())
-    console.log((userData[4].sessions[2].logon_time.getTime() >= Date.UTC(2024, (4*3-4), 0, 0, 0, 0, 0)) && (userData[4].sessions[2].logon_time.getTime() <= Date.UTC(2024, (4*3-1), 31, 0, 0, 0, 0)))
-    console.log(Date.UTC(2024, (4*3-1), 31, 0, 0, 0, 0))
+
     return {
         userData
     }
