@@ -26,9 +26,6 @@
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
-  <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-    <Navbar/>
-  </div>
   <div class="relative">
     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url({data.event.banner}); filter: blur(5px)  brightness(60%); border: 0;"></div>
     <div class="relative">
@@ -66,7 +63,7 @@
     </div>
     <div class="text-center flex-1 m-2 h-fit mt-20 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Position Assignments:</h1>
-      {#if data.event.positions == null}
+      {#if data.event.positions.length == 0}
         <div id="positions" class="pt-5">No positions available</div>
       {:else}
         <div id="positions" class="pt-5 grid grid-cols-1 align-middle ">

@@ -16,7 +16,7 @@ export async function load({ params, cookies, locals }) {
     redirect(302, '/login')
   } else {
     pageData.cid = locals.session.userId;
-    if (!getStaffRole(pageData.cid, "events")) {
+    if (!getStaffRoles(pageData.cid, "events")) {
       redirect(302, '/404')
     }
   }
@@ -29,7 +29,7 @@ export const actions = {
     const formData = await request.formData();
     let event = {
       last_modified: new Date().toISOString(),
-      created_by: (await locals.getSession()).user.cid,
+      created_by: locals.session.userId,
       name: formData.get("name"),
       description: formData.get("description"),
       event_start: new Date(formData.get("start")).toISOString(),

@@ -7,8 +7,9 @@ export async function load({ params, cookies, locals }) {
     canEdit: false,
     events: []
   };
-  if (locals.session == null) {
-    pageData.canEdit = false;
+  console.log(locals.session);
+  if (locals.session != null) {
+    pageData.canEdit = await getStaffRoles(locals.session.userId, "events");
   }
   const data = await prisma.events.findMany({
     orderBy: {
