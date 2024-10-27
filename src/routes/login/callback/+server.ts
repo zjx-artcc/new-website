@@ -1,7 +1,7 @@
 import { prisma } from "$lib/db";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/session";
 import type { RequestEvent } from "@sveltejs/kit";
-import type { User } from "@prisma/client";
+import { Prisma, type User } from "@prisma/client";
 
 export async function GET(event: RequestEvent): Promise<Response> {
   const code = event.url.searchParams.get("code");
@@ -12,6 +12,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
   }
   let token = await getToken(code);
   let user = await getUser(token);
+  console.log(user);
   await prisma.user.upsert({
     where: {
       id: user.id
@@ -22,7 +23,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
       rating: user.rating,
       email: user.email,
       division: user.division,
-      facility: user.facility
+      facility: user.facility ?? undefined,
     },
     create: user
   })
