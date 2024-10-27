@@ -1,7 +1,7 @@
 import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from "$lib/oauth";
 
 export const handle = async ({ event, resolve}) => {
-  const token = event.cookies.get("session") ?? null;
+  const token = event.cookies.get("auth_session") ?? null;
   if (token === null) {
     event.locals.user = null;
     event.locals.session = null;

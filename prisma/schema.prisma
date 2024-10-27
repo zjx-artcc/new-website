@@ -66,12 +66,12 @@ model roster {
   notams             notams[]
   online_controllers online_controllers[]
   position_requests  position_requests[]
-  sessions           sessions[]
+  sessions           ControllingSessions[]
   stats              stats?
   visit_requests     visit_requests[]
 }
 
-model sessions {
+model ControllingSessions {
   id          BigInt    @id
   cid         BigInt
   callsign    String?   @db.VarChar(255)
@@ -80,6 +80,8 @@ model sessions {
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
   roster      roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("controller_sessions")
 }
 
 model stats {
@@ -116,23 +118,27 @@ model visit_requests {
   reason String
   roster roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "visit_requests_roster_cid_fk")
 }
-
 model User {
-  id              Int @id(map: "User_pkey")
-  firstName       String
-  lastName        String
-  rating          Int
-  email           String
-  division        String
-  facility        String
+  id            Int      @id
+  firstName     String   @map("first_name")
+  lastName      String   @map("last_name")
+  email         String   @unique
+  division      String
+  facility      String
+  rating        Int
+  roles         String
 
-  sessions Session[]
+  sessions      Session[]
+
+  @@map("users")
 }
 
 model Session {
-  id        String    @id
-  userId    Int
-  expiresAt DateTime
+  id           String @id
+  userId       Int
+  expiresAt    DateTime
 
-  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user         User  @relation(references: [id], fields: [userId], onDelete: Cascade)
+  @@map("web_sessions")
 }
+

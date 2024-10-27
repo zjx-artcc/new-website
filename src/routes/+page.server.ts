@@ -2,9 +2,8 @@
 import { getHours, getRating, prisma } from '$lib/db';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies }) => {
+export const load: PageServerLoad = async ({ cookies, locals }) => {
   let pageData = {
-    loggedIn: false,
     stats: {},
     newController: {},
     events: {},
@@ -13,6 +12,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     online: {},
     totalHours: 0
   };
+  console.log(locals.session)
   {
     const data = await prisma.stats.findMany({
       take: 3,
