@@ -69,7 +69,7 @@ async function getUser(token: string): Promise<User> {
       user.facility = "";
     } else {
       console.log(vatusaRes);
-      user.facility = vatusaRes.artcc;
+      user.facility = vatusaRes.facility;
     }
   }
   return user;
