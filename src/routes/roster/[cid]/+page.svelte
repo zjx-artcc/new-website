@@ -6,16 +6,13 @@
 	import Icon from '@iconify/svelte';
 	import ATCCard from '$lib/components/ATCCard.svelte';
 	import { page } from '$app/stores';
-	import { signOut } from '@auth/sveltekit/client';
 	import { redirect } from '@sveltejs/kit';
+	console.log($page.data.session);
 
 	export let data;
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
-	<div class="flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-		<Navbar loggedIn={data.loggedIn} />
-	</div>
 	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; ">
 		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem] place-content-evenly">
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
@@ -25,8 +22,8 @@
 				{#if data.canEdit}
 					<a href="/roster/{data.certs.cid}/manage" class="bg-blue-500 text-white px-2 pb-1 mx-2 rounded-md text-xl">Manage</a>
 				{/if}
-				{#if $page.data.session.user != null && $page.data.session.user.cid == data.certs.cid.toString()}
-					<button on:click={() => { signOut({callbackUrl: '/', redirect: true})}} class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Log Out</button>
+				{#if $page.data.session.user != null && $page.data.session.user.id == data.certs.cid.toString()}
+					<a href="/logout" class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Log Out</a>
 				{/if}
 			</div>
 		</div>
