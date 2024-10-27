@@ -68,6 +68,7 @@ async function getUser(token: string): Promise<User> {
     if (vatusaRes.data.status == 'error') {
       user.facility = "";
     } else {
+      console.log(vatusaRes);
       user.facility = vatusaRes.artcc;
     }
   }
