@@ -64,12 +64,12 @@ model roster {
   notams             notams[]
   online_controllers online_controllers[]
   position_requests  position_requests[]
-  sessions           sessions[]
+  sessions           ControllingSessions[]
   stats              stats?
   visit_requests     visit_requests[]
 }
 
-model sessions {
+model ControllingSessions {
   id          BigInt    @id
   cid         BigInt
   callsign    String?   @db.VarChar(255)
@@ -78,6 +78,8 @@ model sessions {
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
   roster      roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("controller_sessions")
 }
 
 model stats {
@@ -134,7 +136,7 @@ model User {
 
   sessions      Session[]
 
-  @@map("user_test")
+  @@map("users")
 }
 
 model Session {
@@ -143,52 +145,5 @@ model Session {
   expiresAt    DateTime
 
   user         User  @relation(references: [id], fields: [userId], onDelete: Cascade)
-  @@map("sessions_test")
-}
-
-model AAccount {
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime
-  User              SUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("Account")
-
-  @@id([provider, providerAccountId])
-}
-
-model OLD_Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime
-  User         SUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@map("Session")
-}
-
-model SUser {
-  id            String    @id
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime
-  cid           String
-  rostered      Boolean?
-  Account       AAccount[]
-  Session       OLD_Session[]
-
-  @@map("User")
+  @@map("web_sessions")
 }
