@@ -43,7 +43,7 @@
 	</Dropdown>
 	<a href="/events" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ion:calendar" class="pt-1.5 navbarIcon" /> Events</a>
 	{#if $page.data.session != null}
-		<a href="/roster/{$page.data.session.user.cid}" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" />Profile</a>
+		<a href="/roster/{$page.data.session.userId}" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" />Profile</a>
 	{:else}
 		<a href="/login" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</a>
 	{/if}

@@ -52,10 +52,6 @@
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
-  <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto z-0">
-    <Navbar/>
-  </div>
-
   <div class="relative -z-1">
     <div class="absolute inset-0 bg-cover bg-center -z-2" style="background-image: url('/KJAXNIGHT.png'); filter: blur(5px)  brightness(60%);"></div>
     <div class="relative -z-3">

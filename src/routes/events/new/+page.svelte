@@ -30,10 +30,6 @@
 
 
 <header class="bg-gray-700 block" id="myTopnav">
-  <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-    <Navbar/>
-  </div>
-
   <div class="relative z-0">
     <div class="absolute inset-0 bg-cover bg-center z-1" style="background-image: url('/KJAXNIGHT.png'); filter: blur(5px)  brightness(60%);"></div>
     <div class="relative z-2">
@@ -72,7 +68,7 @@
                 <td class="px-2">
                   <label class="pb-1" for="name">Event Name:</label>
                   <br>
-                  <input name="name" id="name" class="outline outline-1" use:validators={[required]} bind:value={event.name}>
+                  <input name="name" id="name" class="outline outline-1" use:validators={[required]} bind:value={event.name} autocomplete="off" data-1p-ignore>
                 </td>
                 <td class="px-2">
                   <label class="pb-1" for="start">Event Start:</label>

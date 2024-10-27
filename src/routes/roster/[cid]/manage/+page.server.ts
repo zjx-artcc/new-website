@@ -31,7 +31,7 @@ export async function load({ params, cookies }) {
     pageData.canEdit = await getStaffRoles(data.cid, "roster");
   }
   {
-    let data = await prisma.sessions.findMany({
+    let data = await prisma.controllingSessions.findMany({
       where: {
         cid: parseInt(params.cid)
       },
