@@ -1,5 +1,3 @@
-//TODO: Move away from BigInt to Int where possible
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -44,10 +42,10 @@ model notams {
 }
 
 model roster {
-  cid                BigInt               @id
+  cid                BigInt                @id
   email              String
   home_facility      String
-  created_at         DateTime             @default(now()) @db.Timestamptz(6)
+  created_at         DateTime              @default(now()) @db.Timestamptz(6)
   rating             BigInt
   del_certs          Float
   gnd_certs          Float
@@ -58,15 +56,15 @@ model roster {
   first_name         String
   last_name          String
   staff_roles        String
-  mentor_level       BigInt?              @default(0)
-  rating_changed     DateTime?            @default(now()) @db.Timestamptz(6)
-  sop_course         Boolean              @default(false)
+  mentor_level       BigInt?               @default(0)
+  rating_changed     DateTime?             @default(now()) @db.Timestamptz(6)
+  sop_course         Boolean               @default(false)
   bookings           bookings[]
+  sessions           ControllingSessions[]
   events             events[]
   notams             notams[]
   online_controllers online_controllers[]
   position_requests  position_requests[]
-  sessions           ControllingSessions[]
   stats              stats?
   visit_requests     visit_requests[]
 }
@@ -118,27 +116,34 @@ model visit_requests {
   reason String
   roster roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "visit_requests_roster_cid_fk")
 }
-model User {
-  id            Int      @id
-  firstName     String   @map("first_name")
-  lastName      String   @map("last_name")
-  email         String   @unique
-  division      String
-  facility      String
-  rating        Int
-  roles         String
 
-  sessions      Session[]
+model User {
+  id        Int       @id
+  firstName String    @map("first_name")
+  lastName  String    @map("last_name")
+  email     String    @unique
+  division  String
+  facility  String?
+  rating    Int
+  roles     String
+  sessions  Session[]
 
   @@map("users")
 }
 
 model Session {
-  id           String @id
-  userId       Int
-  expiresAt    DateTime
+  id        String   @id
+  userId    Int
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user         User  @relation(references: [id], fields: [userId], onDelete: Cascade)
   @@map("web_sessions")
 }
 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}

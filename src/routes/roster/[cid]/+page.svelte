@@ -7,9 +7,10 @@
 	import ATCCard from '$lib/components/ATCCard.svelte';
 	import { page } from '$app/stores';
 	import { redirect } from '@sveltejs/kit';
-	console.log($page.data.session);
 
 	export let data;
+	console.log($page.data.session.userId.toString());
+	console.log(data.certs.cid.toString());
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
@@ -22,7 +23,7 @@
 				{#if data.canEdit}
 					<a href="/roster/{data.certs.cid}/manage" class="bg-blue-500 text-white px-2 pb-1 mx-2 rounded-md text-xl">Manage</a>
 				{/if}
-				{#if $page.data.session.user != null && $page.data.session.user.id == data.certs.cid.toString()}
+				{#if $page.data.session != null && $page.data.session.userId.toString() == data.certs.cid.toString()}
 					<a href="/logout" class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Log Out</a>
 				{/if}
 			</div>
