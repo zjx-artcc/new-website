@@ -104,7 +104,7 @@
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">{data.certs.first_name}'s Personal Info</h3>
 					<p class="text-sm text-muted-foreground">
 						<ul>
-							{#if data.certs.cid == $page.data.session.user.cid}
+							{#if data.certs.cid == $page.data.session.userId}
 								<li>Email: {data.certs.email}</li>
 							{/if}
 							<li>CID: {data.certs.cid}</li>
