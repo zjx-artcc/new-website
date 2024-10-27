@@ -12,7 +12,6 @@ export async function GET(event: RequestEvent): Promise<Response> {
   }
   let token = await getToken(code);
   let user = await getUser(token);
-  console.log(user);
   await prisma.user.upsert({
     where: {
       id: user.id
@@ -25,7 +24,16 @@ export async function GET(event: RequestEvent): Promise<Response> {
       division: user.division,
       facility: user.facility ?? undefined,
     },
-    create: user
+    create: {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      rating: user.rating,
+      email: user.email,
+      division: user.division,
+      facility: user.facility ?? undefined,
+      roles: ""
+    }
   })
   const sessionToken = generateSessionToken();
   const session = await createSession(sessionToken, user.id);
@@ -69,7 +77,6 @@ async function getUser(token: string): Promise<User> {
     if (vatusaRes.data.status == 'error') {
       user.facility = "";
     } else {
-      console.log(vatusaRes);
       user.facility = vatusaRes.facility;
     }
   }

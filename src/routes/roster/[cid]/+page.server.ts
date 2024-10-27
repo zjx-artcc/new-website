@@ -15,9 +15,7 @@ export async function load({ params, cookies, locals }) {
     certs: {},
     sessions: {}
   }
-  console.log(locals.session);
   let cid = locals.session.userId;
-  console.log(cid);
   pageData.canEdit = await getStaffRoles(parseInt(locals.session.userId), "roster");
   {
     let data: roster = await prisma.roster.findUnique({
