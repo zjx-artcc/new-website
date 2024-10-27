@@ -1,3 +1,5 @@
+//TODO: Move away from BigInt to Int where possible
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -90,14 +92,6 @@ model stats {
   roster      roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@id([identifier, token])
-}
-
 model online_controllers {
   id          BigInt    @id
   cid         BigInt?
@@ -147,3 +141,4 @@ model Session {
   user         User  @relation(references: [id], fields: [userId], onDelete: Cascade)
   @@map("web_sessions")
 }
+

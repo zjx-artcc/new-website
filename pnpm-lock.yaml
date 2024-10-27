@@ -45,7 +45,7 @@ importers:
         specifier: ^8.4.31
         version: 8.4.47
       prisma:
-        specifier: ^5.18.0
+        specifier: ^5.21.1
         version: 5.21.1
       svelte-fontawesome:
         specifier: ^0.0.3
