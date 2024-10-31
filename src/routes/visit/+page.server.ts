@@ -73,7 +73,7 @@ export const actions = {
       reason: formData.get("reason")
     }
 
-    let data = await prisma.visit_requests.create({
+    let data = await prisma.VisitRequests.create({
       data: {
         id: (new Date().getMilliseconds()) * user.cid,
         cid: user.cid,
