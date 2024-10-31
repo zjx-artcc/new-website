@@ -1,3 +1,4 @@
+import { invalidateAll } from "$app/navigation";
 import { deleteSessionTokenCookie, invalidateSession } from "$lib/session";
 import { redirect } from "@sveltejs/kit";
 

@@ -126,6 +126,7 @@ model User {
   facility  String?
   rating    Int
   roles     String
+  rostered  Boolean?
   sessions  Session[]
 
   @@map("users")
