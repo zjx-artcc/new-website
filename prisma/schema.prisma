@@ -30,7 +30,7 @@ model events {
   banner            String
   positions         Json?
   roster            roster              @relation(fields: [created_by], references: [cid], onDelete: NoAction, onUpdate: NoAction)
-  position_requests position_requests[]
+  positionRequests  PositionRequests[]
 }
 
 model notams {
@@ -64,7 +64,7 @@ model roster {
   events             events[]
   notams             notams[]
   onlineControllers  OnlineControllers[]
-  position_requests  position_requests[]
+  positionRequests   PositionRequests[]
   stats              stats?
 }
 
@@ -102,13 +102,15 @@ model OnlineControllers {
   @@map("online_controllers")
 }
 
-model position_requests {
+model PositionRequests {
   cid        BigInt
   event_id   BigInt?
   position   String
   request_id Int     @id(map: "request_id") @default(autoincrement())
   roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
   events     events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
+
+  @@map("position_requests")
 }
 
 model VisitRequests {
