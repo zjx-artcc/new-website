@@ -30,7 +30,7 @@ model events {
   banner            String
   positions         Json?
   roster            roster              @relation(fields: [created_by], references: [cid], onDelete: NoAction, onUpdate: NoAction)
-  position_requests position_requests[]
+  positionRequests  PositionRequests[]
 }
 
 model notams {
@@ -63,10 +63,9 @@ model roster {
   sessions           ControllingSessions[]
   events             events[]
   notams             notams[]
-  online_controllers online_controllers[]
-  position_requests  position_requests[]
+  onlineControllers  OnlineControllers[]
+  positionRequests   PositionRequests[]
   stats              stats?
-  visit_requests     visit_requests[]
 }
 
 model ControllingSessions {
@@ -90,7 +89,7 @@ model stats {
   roster      roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model online_controllers {
+model OnlineControllers {
   id          BigInt    @id
   cid         BigInt?
   callsign    String?   @db.VarChar(255)
@@ -99,22 +98,28 @@ model online_controllers {
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
   roster      roster?   @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
+
+  @@map("online_controllers")
 }
 
-model position_requests {
+model PositionRequests {
   cid        BigInt
   event_id   BigInt?
   position   String
   request_id Int     @id(map: "request_id") @default(autoincrement())
   roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
   events     events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
+
+  @@map("position_requests")
 }
 
-model visit_requests {
+model VisitRequests {
   id     BigInt @id
-  cid    BigInt
+  cid    Int
   reason String
-  roster roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "visit_requests_roster_cid_fk")
+  User   User   @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+
+  @@map("visit_requests")
 }
 
 model User {
@@ -128,6 +133,7 @@ model User {
   roles     String
   rostered  Boolean?
   sessions  Session[]
+  visitRequests    VisitRequests[]
 
   @@map("users")
 }
