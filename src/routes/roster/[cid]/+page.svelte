@@ -9,16 +9,23 @@
 	import { redirect } from '@sveltejs/kit';
 
 	export let data;
-	console.log($page.data.session.userId.toString());
-	console.log(data.certs.cid.toString());
+	console.log(data);
 </script>
+
+<svelte:head>
+	<title>{data.certs.first_name} {data.certs.last_name} - Jacksonville ARTCC</title>
+</svelte:head>
 
 <header class="bg-gray-700 block" id="myTopnav">
 	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; ">
 		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem] place-content-evenly">
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-			<h1 class="text-6xl text-white font-bold pt-3">{data.certs.first_name} {data.certs.last_name}</h1>
-			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
+			<h1 class="text-6xl text-white font-bold pt-3">Welcome to Jacksonville, {data.certs.first_name} {data.certs.last_name}</h1>
+			<h3 class="text-2xl text-white pt-3">
+				{#each data.staffRoles as role}
+					<p class='inline rounded mx-2 px-1' style="background-color: {role.color}">{role.name}</p>
+				{/each}
+			</h3>
 			<div class="pt-4">
 				{#if data.canEdit}
 					<a href="/roster/{data.certs.cid}/manage" class="bg-blue-500 text-white px-2 pb-1 mx-2 rounded-md text-xl">Manage</a>
@@ -48,30 +55,34 @@
 		<div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4 lg:gap-8">
 		</div>
 		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-fit" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						Recent Sessions
+						Overview
 					</h3>
-					<p class="text-sm text-muted-foreground">Last 5 Controlling Sessions</p>
 					<ul>
-						{#each data.sessions as session}
-							<li>
-								<div class="flex justify-between mt-3">
-									<p class="text-sm text-left w-1/2">{session.callsign}</p>
-									<p class="text-sm text-right w-1/2">{Math.round(session.duration/60000)} Minutes</p>
-								</div>
-								<div class="flex justify-between mb-3">
-									<p class="text-sm text-left">{session.logon_time.toLocaleString(undefined, {month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short'})}</p>
-									<p class="inline">-></p>
-									<p class="text-sm text-right">{session.last_update.toLocaleString(undefined, {month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short'})}</p>
-								</div>
-							</li>
-						{/each}
+						<li>
+							<h3 class="text-base text-black">VATSIM CID:</h3>
+							<p class="text-sm text-slate-600">{data.certs.cid}</p>
+						</li>
+						<li>
+							<h3 class="text-base text-black">ARTCC Status:</h3>
+							<!--TODO: Tie into activity checker-->
+							<p class="text-sm text-green-600">Active</p>
+						</li>
+						<li>
+							<h3 class="text-base text-black">VATSIM Rating:</h3>
+							<p class="text-sm text-slate-600">{data.certs.rating}</p>
+						</li>
+						<li>
+							<h3 class="text-base text-black">Operating Initials:</h3>
+							<p class="text-sm text-slate-600">{data.certs.initials}</p>
+						</li>
+						<li>
+							<h3 class="text-base text-black">Last Promotion:</h3>
+							<p class="text-sm text-slate-600">{new Date(data.certs.rating_changed).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</p>
+						</li>
 					</ul>
-				</div>
-				<div class="p-6 flex items-center justify-center">
-					
 				</div>
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">

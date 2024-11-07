@@ -13,7 +13,8 @@ export async function load({ params, cookies, locals }) {
   let pageData = {
     canEdit: false,
     certs: {},
-    sessions: {}
+    sessions: {},
+    staffRoles: []
   }
   let cid = locals.session.userId;
   pageData.canEdit = await getStaffRoles(parseInt(locals.session.userId), "roster");
@@ -46,6 +47,16 @@ export async function load({ params, cookies, locals }) {
       data[i].logon_time = new Date(data[i].logon_time);
     }
     pageData.sessions = data;
+  }
+  let roles = pageData.certs.staff_roles.split(',');
+  for (let i = 0; i < roles.length; i++) {
+    switch(roles[i]) {
+      case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "#42a5f5"}); break;
+      case "WM": pageData.staffRoles.push({name: "Web Master", color: "#42a5f5"} ); break;
+      case "WT": pageData.staffRoles.push({name: "Web Team", color: "#ef5350"}); break;
+      default: break;
+    }
+
   }
   return pageData;
 }
