@@ -20,10 +20,10 @@
 	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; ">
 		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem] place-content-evenly">
 			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-			<h1 class="text-6xl text-white font-bold pt-3">Welcome to Jacksonville, {data.certs.first_name} {data.certs.last_name}</h1>
-			<h3 class="text-2xl text-white pt-3">
+			<h1 class="text-5xl text-white font-bold pt-3">Welcome to Jacksonville, {data.certs.first_name} {data.certs.last_name}</h1>
+			<h3 class="text-2xl text-white pt-4">
 				{#each data.staffRoles as role}
-					<p class='inline rounded mx-2 px-1' style="background-color: {role.color}">{role.name}</p>
+					<p class='inline rounded mx-2 px-2 py-0.5 {role.color}'>{role.name}</p>
 				{/each}
 			</h3>
 			<div class="pt-4">
@@ -50,83 +50,63 @@
   </div>
 </div>
 
-<div class="flex flex-col w-full min-h-screen">
-	<main class="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-		<div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4 lg:gap-8">
-		</div>
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-fit" data-v0-t="card">
-				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						Overview
-					</h3>
-					<ul>
-						<li>
-							<h3 class="text-base text-black">VATSIM CID:</h3>
-							<p class="text-sm text-slate-600">{data.certs.cid}</p>
-						</li>
-						<li>
-							<h3 class="text-base text-black">ARTCC Status:</h3>
-							<!--TODO: Tie into activity checker-->
-							<p class="text-sm text-green-600">Active</p>
-						</li>
-						<li>
-							<h3 class="text-base text-black">VATSIM Rating:</h3>
-							<p class="text-sm text-slate-600">{data.certs.rating}</p>
-						</li>
-						<li>
-							<h3 class="text-base text-black">Operating Initials:</h3>
-							<p class="text-sm text-slate-600">{data.certs.initials}</p>
-						</li>
-						<li>
-							<h3 class="text-base text-black">Last Promotion:</h3>
-							<p class="text-sm text-slate-600">{new Date(data.certs.rating_changed).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</p>
-						</li>
-					</ul>
+<table class="table-auto mx-5 my-2 ml-10 border">
+	<thead class="text-center border-b">
+		<tr>
+			<th class="text-2xl px-4 py-2 border-r">Overview</th>
+			<th class="text-2xl px-4 py-2">Certifications</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="px-2 border-r">
+				<div class="py-1">
+					<p class="text-lg">VATSIM CID:</p>
+					<p class="text-base text-slate-700">{data.certs.cid}</p>
 				</div>
-			</div>
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						Certifications
-					</h3>
-					<p class="text-sm text-muted-foreground">
-						<ul>
-							<li>Enroute - {data.certs.ctr_cert}</li>
-							<li>Approach - {data.certs.app_certs}</li>
-							<li>Tower - {data.certs.twr_certs}</li>
-							<li>Ground - {data.certs.gnd_certs}</li>
-							<li>Delivery - {data.certs.del_certs}</li>
-						</ul>
-					<!-- <p> is auto closed by </ul>-->
+				<div class="py-1">
+					<p class="text-lg">ARTCC Status:</p>
+					{#if 1 == 1}
+						<p class="text-base text-green-600">Active</p>
+					{:else}
+						<p class="text-base text-red-700">Inactive</p>
+					{/if}
 				</div>
-				<div class="p-6 flex items-center justify-center">
+				<div class="py-1">
+					<p class="text-lg">VATSIM Rating:</p>
+					<p class="text-base text-slate-700">{data.certs.rating}</p>
 				</div>
-			</div>
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Recent Training</h3>
-					<p class="text-sm text-muted-foreground">Last 5 Training Tickets</p>
+				<div class="py-1">
+					<p class="text-lg">Operating Initials:</p>
+					<p class="text-base text-slate-700">{data.certs.initials}</p>
 				</div>
-				<div class="p-6 flex items-center justify-center">
+				<div class="py-1">
+					<p class="text-lg">Last Promotion:</p>
+					<p class="text-base text-slate-700">{new Date(data.certs.rating_changed).toLocaleString('en-US',{ month: 'long',day: 'numeric',year: 'numeric' })}</p>
 				</div>
-			</div>
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">{data.certs.first_name}'s Personal Info</h3>
-					<p class="text-sm text-muted-foreground">
-						<ul>
-							{#if data.certs.cid == $page.data.session.userId}
-								<li>Email: {data.certs.email}</li>
-							{/if}
-							<li>CID: {data.certs.cid}</li>
-							<li>Operating Initials: {data.certs.initials}</li>
-							<li>Joined: {new Date(data.certs.created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</li>
-							<li>Last Rating Change: {new Date(data.certs.rating_changed).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</li>
-						</ul>
-					<!-- <p> is auto closed by </ul>-->
+			</td>
+			<td class="px-2 align-text-top">
+				<div class="py-1">
+					<p class="text-lg">Enroute:</p>
+					<p class="text-base {data.certs.ctr_cert.color}">{data.certs.ctr_cert.cert}</p>
 				</div>
-			</div>
-		</div>
-	</main>
-</div>
+				<div class="py-1">
+					<p class="text-lg">Approach:</p>
+					<p class="text-base {data.certs.app_certs.color}">{data.certs.app_certs.cert}</p>
+				</div>
+				<div class="py-1">
+					<p class="text-lg">Tower:</p>
+					<p class="text-base {data.certs.twr_certs.color}">{data.certs.twr_certs.cert}</p>
+				</div>
+				<div class="py-1">
+					<p class="text-lg">Ground:</p>
+					<p class="text-base {data.certs.gnd_certs.color}">{data.certs.gnd_certs.cert}</p>
+				</div>
+				<div class="py-1">
+					<p class="text-lg">Delivery:</p>
+					<p class="text-base {data.certs.del_certs.color}">{data.certs.del_certs.cert}</p>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>

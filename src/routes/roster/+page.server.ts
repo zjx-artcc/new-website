@@ -44,6 +44,7 @@ export async function load({ params, cookies, locals }) {
   }
 }
 
+//TODO: Remove in favor of function from db.ts
 function getCertsColor(input: number): {cert: number, color: string} {
   console.log(input);
   switch(input) {
@@ -86,6 +87,7 @@ function getCertsColor(input: number): {cert: number, color: string} {
   }
 }
 
+//TODO: Remove in favor of function from db.ts
 function getCtrCertColor(input: number): {cert: number, color: string} {
   switch(input) {
     case 1: {

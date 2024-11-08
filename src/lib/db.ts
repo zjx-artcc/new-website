@@ -114,6 +114,48 @@ export function getCerts(certInt: number): string {
   }
 }
 
+export function getCertsColor(input: number): {cert: number, color: string} {
+  console.log(input);
+  switch(input) {
+    case 0: {
+      return {
+        cert: getCerts(input),
+        color: "text-red-600"
+      }
+    }
+    case 1: {
+      return {
+        cert: getCerts(input),
+        color: "text-green-600"
+      }
+    }
+    case 1.5: {
+      return {
+        cert: getCerts(input),
+        color: "text-yellow-500"
+      }
+    }
+    case 2: {
+      return {
+        cert: getCerts(input),
+        color: "text-blue-500"
+      }
+    }
+    case 2.5: {
+      return {
+        cert: getCerts(input),
+        color: "text-yellow-500"
+      }
+    }
+    case 3: {
+      return {
+        cert: getCerts(input),
+        color: "text-yellow-500"
+      }
+    }
+  }
+}
+
 //* Same thing but for center certs which are trinary
 export function getCtrCerts(certInt) {
   if (certInt == 1) {
@@ -122,5 +164,28 @@ export function getCtrCerts(certInt) {
     return "Center Solo"
   } else {
     return "Not Certified"
+  }
+}
+
+export function getCtrCertColor(input: number): {cert: number, color: string} {
+  switch(input) {
+    case 1: {
+      return {
+        cert: getCtrCerts(input),
+        color: "text-green-600"
+      }
+    }
+    case 0: {
+      return {
+        cert: getCtrCerts(input),
+        color: "text-red-600"
+      }
+    }
+    case 1.5: {
+      return {
+        cert: getCtrCerts(input),
+        color: "text-yellow-500"
+      }
+    }
   }
 }
