@@ -6,14 +6,15 @@ import { Prisma } from "@prisma/client";
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
   let pageData = {
-    canEdit: false,
     positionRequested: {callsign: '', done: false},
     cid: 0,
     event: {},
     canRequest: true
   }
-  if ((await locals.auth()).user) {
-    pageData.cid = (await locals.auth()).user.cid;
+  if (locals.session == null) {
+    pageData.canRequest = false;
+  } else {
+    pageData.cid = locals.session.userId;
   }
   const eventId = params.slug;
   if (eventId == "undefined") { 
@@ -54,20 +55,14 @@ export async function load({ params, cookies, locals }) {
         cid: pageData.cid
       }
     })
-    if (user == null) {
-      throw new Error("User cannot be found in the roster");
-    }
-    if (pageData.event.positions != null) {
+    if (user != null && pageData.event.positions != null) {
       positions.forEach((position: { type: number, position: string, controller: string }) => {
-        console.log(position.position, position.controller == `${user.first_name} ${user.last_name}`);
         if (position.controller == `${user.first_name} ${user.last_name}`) {
-          console.log(position)
           pageData.canRequest = false; return;
         }
         if (position.controller != '') {
           position.canRequest = false; return;
         }
-        console.log(position.position, position.type, user.twr_certs);
         switch(position.type) {
           case 1.1: if (user.del_certs == 1) position.canRequest = true; break;
           case 1.2: if (user.del_certs > 0 && user.del_certs <= 2) position.canRequest = true; break;
@@ -87,7 +82,6 @@ export async function load({ params, cookies, locals }) {
       })
     }
   }
-  console.log(pageData.canRequest);
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
 
   return pageData;

@@ -11,8 +11,8 @@ export async function load({ params, cookies, locals }) {
     event: {},
     positionRequests: []
   }
-  if ((await locals.auth()).user) {
-    pageData.cid = (await locals.auth()).user.cid;
+  if (locals.session != null) {
+    pageData.cid = locals.session.userId;
   }
   const eventId = params.slug;
   if (eventId == "undefined") { 

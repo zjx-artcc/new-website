@@ -9,9 +9,6 @@
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
-	<div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-		<Navbar loggedIn={data.loggedIn} />
-	</div>
 	<div
 		style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; "
 	>
@@ -24,12 +21,12 @@
 				{data.certs.last_name}
 			</h1>
 			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
-				<div class="pt-4">
-					<a
-						href="/roster/{data.certs.cid}"
-						class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Discard Changes</a
-					>
-				</div>
+			<div class="pt-4">
+				<a
+					href="/roster/{data.certs.cid}"
+					class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Discard Changes</a
+				>
+			</div>
 		</div>
 	</div>
 </header>
@@ -74,7 +71,7 @@
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<form method="POST">
-					<input type="hidden" id="cid" name='cid' value="{data.certs.cid}">
+					<input type="hidden" id="cid" name="cid" value={data.certs.cid} />
 					<div class="flex flex-col space-y-1.5 p-6">
 						<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
 							Certifications
@@ -137,7 +134,8 @@
 					</div>
 					<button
 						type="submit"
-						class="bg-green-500 text-white px-2 pb-1 mx-5 mb-5 rounded-md text-md">Save Changes</button
+						class="bg-green-500 text-white px-2 pb-1 mx-5 mb-5 rounded-md text-md"
+						>Save Changes</button
 					>
 				</form>
 			</div>
@@ -152,15 +150,29 @@
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">{data.certs.first_name}'s Personal Info</h3>
-					<p class="text-sm text-muted-foreground">
-						<ul>
-							<li>Email: {data.certs.email}</li>
-							<li>CID: {data.certs.cid}</li>
-							<li>Operating Initials: {data.certs.initials}</li>
-							<li>Joined: {new Date(data.certs.created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</li>
-							<li>Last Rating Change: {new Date(data.certs.rating_changed).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}</li>
-						</ul>
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						{data.certs.first_name}'s Personal Info
+					</h3>
+					<p class="text-sm text-muted-foreground" />
+					<ul>
+						<li>Email: {data.certs.email}</li>
+						<li>CID: {data.certs.cid}</li>
+						<li>Operating Initials: {data.certs.initials}</li>
+						<li>
+							Joined: {new Date(data.certs.created_at).toLocaleString(undefined, {
+								month: 'long',
+								day: 'numeric',
+								year: 'numeric'
+							})}
+						</li>
+						<li>
+							Last Rating Change: {new Date(data.certs.rating_changed).toLocaleString(undefined, {
+								month: 'long',
+								day: 'numeric',
+								year: 'numeric'
+							})}
+						</li>
+					</ul>
 					<!-- <p> is auto closed by </ul>-->
 				</div>
 			</div>

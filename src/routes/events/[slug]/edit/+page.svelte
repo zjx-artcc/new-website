@@ -21,10 +21,6 @@
 </script>
 
 <header class="bg-gray-700 block" id="myTopnav">
-  <div class="justify-between flex flex-row max-w-6xl h-16 items-center my-0 mx-auto z-0">
-    <Navbar/>
-  </div>
-
   <div class="relative -z-1">
     <div class="absolute inset-0 bg-cover bg-center -z-2" style="background-image: url('/KJAXNIGHT.png'); filter: blur(5px)  brightness(60%);"></div>
     <div class="relative -z-3">
@@ -110,6 +106,6 @@
   <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">
     <a href='/events/{data.event.id}' class="bg-red-500 text-white px-2 py-1 rounded-md text-xl">Cancel</a>
     <a href='/events/{data.event.id}/edit/positions' class="bg-blue-500 text-white px-2 py-1 rounded-md text-xl">Edit Positions</a>
-    <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-0.5 rounded-md text-xl">Save</button>
+    <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
   </div>
 </form>

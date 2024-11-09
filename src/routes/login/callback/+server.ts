@@ -1,5 +1,7 @@
-import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/oauth";
-import { RequestEvent } from "@sveltejs/kit";
+import { prisma } from "$lib/db";
+import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/session";
+import type { RequestEvent } from "@sveltejs/kit";
+import { Prisma, type User } from "@prisma/client";
 
 export async function GET(event: RequestEvent): Promise<Response> {
   const code = event.url.searchParams.get("code");
@@ -10,12 +12,37 @@ export async function GET(event: RequestEvent): Promise<Response> {
   }
   let token = await getToken(code);
   let user = await getUser(token);
+  await prisma.user.upsert({
+    where: {
+      id: user.id
+    },
+    update: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      rating: user.rating,
+      email: user.email,
+      division: user.division,
+      facility: user.facility ?? undefined,
+    },
+    create: {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      rating: user.rating,
+      email: user.email,
+      division: user.division,
+      facility: user.facility ?? undefined,
+      roles: ""
+    }
+  })
   const sessionToken = generateSessionToken();
-  const session = await createSession(token, user.id);
+  const session = await createSession(sessionToken, user.id);
+  //@ts-ignore
   setSessionTokenCookie(event, sessionToken, session.expiresAt);
   return new Response(null, {
     status: 302,
     headers: {
+      //TODO: Change to user profile
       'Location': '/'
     }
   })
@@ -30,25 +57,28 @@ async function getUser(token: string): Promise<User> {
     }
   });
   const res = (await req.json());
-  console.log(res);
   let user: User = {
-    id: res.data.cid,
+    id: parseInt(res.data.cid),
     firstName: res.data.personal.name_first,
     lastName: res.data.personal.name_last,
-    rating: res.data.vatsim.rating,
+    rating: res.data.vatsim.rating.id,
     email: res.data.personal.email,
-    division: res.data.vatsim.division,
-    facility: ""
+    division: res.data.vatsim.division.id,
+    facility: "",
+    roles: ""
   }
 
-  if (user.division === "USA") {
+  if (user.division == "USA") {
     //User is in VATUSA
     const vatusaReq = await fetch(`https://api.vatusa.net/v2/user/${user.id}?apikey=${process.env.VATUSA_KEY}`, {
       method: 'GET'
     })
     const vatusaRes = await vatusaReq.json();
-    console.log(vatusaRes);
-    user.facility = vatusaRes.artcc;
+    if (vatusaRes.data.status == 'error') {
+      user.facility = "";
+    } else {
+      user.facility = vatusaRes.facility;
+    }
   }
   return user;
 }
@@ -80,14 +110,4 @@ async function getToken(code: string): Promise<string> {
   })
   const res = await req.json();
   return res.access_token;
-}
-
-type User = {
-  id: number,
-  firstName: string,
-  lastName: string,
-  rating: number,
-  email: string,
-  division: string,
-  facility: string
 }
