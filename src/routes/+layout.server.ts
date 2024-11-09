@@ -1,7 +1,7 @@
 import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from '$lib/oauth';
+import type {LayoutServerLoad} from './$types';
 
-export const load = async (event) => {
-  
+export const load: LayoutServerLoad = async (event) => {
   const token = event.cookies.get('auth_session') ?? null;
   if (token === null) {
     return {}
@@ -12,6 +12,6 @@ export const load = async (event) => {
     return {}
   }
   setSessionTokenCookie(event, token, session.expiresAt);
-  return { session }
+  return { "session": {...session, user} }
 
 }

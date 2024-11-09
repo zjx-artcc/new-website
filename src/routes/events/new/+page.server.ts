@@ -1,5 +1,4 @@
 //@ts-nocheck
-import { api } from '$lib/api';
 import { redirect } from '@sveltejs/kit';
 import { prisma, getStaffRoles } from '$lib/db';
 export const prerender = false;

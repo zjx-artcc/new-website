@@ -2,8 +2,9 @@
 
 import { prisma, getRating } from '$lib/db';
 import { redirect } from '@sveltejs/kit';
+import type {PageServerLoad} from './$types';
 
-export async function load({locals}) {
+export const load: PageServerLoad = async ({locals}) => {
   let user = {
     cid: 0,
     firstName: '',
@@ -17,41 +18,30 @@ export async function load({locals}) {
     rosterNinetyDays: false,
     canVisit: false,
   };
-  if ((await locals.auth()).user.cid) {
-    user.cid = (await locals.auth()).user.cid;
+  if (locals.session != null) {
+    user.cid = locals.session.userId;
   }
 
-  let data = await prisma.roster.findFirst({
+  let data = await prisma.user.findFirst({
     where: {
-      cid: user.cid
+      id: user.cid
     }
   })
 
   if (data == null) {
-    throw new Error("User cannot be found in the roster");
+    throw new Error("User does not exist");
   }
 
   let date: Date = new Date();
   let joinDate: Date = data.created_at;
-  joinDate.setDate(joinDate.getDate() + 90);
+  console.log(data);
 
-  let ratingDate: Date = data.rating_changed;
-  ratingDate.setDate(ratingDate.getDate() + 90);
-  
-  if (date > joinDate) {
-    user.ninetyDays = true
-  }
-
-  if (date > ratingDate) {
-    user.ratingNinetyDays = true;
-  }
-
-  user.firstName = data.first_name;
-  user.lastName = data.last_name;
+  user.firstName = data.firstName;
+  user.lastName = data.lastName;
   user.email = data.email;
   user.rating = getRating(parseInt(data.rating));
   user.numRating = data.rating;
-  user.homeFacility = data.home_facility;
+  user.homeFacility = data.facility == '' ? `VAT${data.division}` : data.facility;
   user.sopCourse = data.sop_course;
   user.ratingChanged = new Date(data.rating_changed);
 
@@ -83,7 +73,7 @@ export const actions = {
       reason: formData.get("reason")
     }
 
-    let data = await prisma.visit_requests.create({
+    let data = await prisma.VisitRequests.create({
       data: {
         id: (new Date().getMilliseconds()) * user.cid,
         cid: user.cid,

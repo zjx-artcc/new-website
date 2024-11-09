@@ -13,6 +13,9 @@ services:
       TOKEN_URL: ${TOKEN_URL}
       USER_INFO_URL: ${USER_INFO_URL}
       VATUSA_KEY: ${VATUSA_KEY}
+      SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN}
+      SENTRY_ORG: ${SENTRY_ORG}
+      SENTRY_PROJECT: ${SENTRY_PROJECT}
     ports:
       - "3700:3700"
     network_mode: bridge

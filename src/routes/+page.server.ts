@@ -100,7 +100,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     pageData.notams = data;
   }
   {
-    const data = await prisma.online_controllers.findMany({
+    const data = await prisma.OnlineControllers.findMany({
       take: 3,
       orderBy: {
         logon_time: 'desc'
