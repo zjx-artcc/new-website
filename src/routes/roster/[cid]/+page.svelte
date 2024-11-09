@@ -28,6 +28,7 @@
 				{/each}
 			</h3>
 			<div class="pt-4">
+				<!-- TODO: Remove in favor of admin actions column of table-->
 				{#if pageData.canEdit}
 					<a href="/roster/{pageData.certs.cid}/manage" class="bg-blue-500 text-white px-2 pb-1 mx-2 rounded-md text-xl">Manage</a>
 				{/if}
@@ -51,98 +52,190 @@
   </div>
 </div>
 
-<table class="table-fixed mx-5 my-2 ml-10 border border-slate-600">
-	<thead class="text-center">
-		<tr>
-			<th class="text-2xl px-4 py-2 border border-slate-600 w-40">Overview</th>
-			<th class="text-2xl px-4 py-2 border border-slate-600 w-72">Certifications</th>
-			<th class="text-2xl px-4 py-2 border border-slate-600" style="width:600px;">Last 10 Controlling Sessions</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td class="px-2 border border-slate-600">
-				<div class="py-1">
-					<p class="text-lg">VATSIM CID:</p>
-					<p class="text-base text-slate-700">{pageData.certs.cid}</p>
-				</div>
-				<div class="py-1">
-					<p class="text-lg">ARTCC Status:</p>
-					{#if 1 == 1}
-						<p class="text-base text-green-600">Active</p>
-					{:else}
-						<p class="text-base text-red-700">Inactive</p>
-					{/if}
-				</div>
-				<div class="py-1">
-					<p class="text-lg">VATSIM Rating:</p>
-					<p class="text-base text-slate-700">{pageData.certs.rating}</p>
-				</div>
-				<div class="py-1">
-					<p class="text-lg">Operating Initials:</p>
-					<p class="text-base text-slate-700">{pageData.certs.initials}</p>
-				</div>
-				<div class="py-1">
-					<p class="text-lg">Last Promotion:</p>
-					<p class="text-base text-slate-700">{new Date(pageData.certs.rating_changed).toLocaleString('en-US',{ month: 'long',day: 'numeric',year: 'numeric' })}</p>
-				</div>
-			</td>
-			<td class="px-2 border border-slate-600">
-				<div class="py-1">
-					<p class="text-lg">Enroute:</p>
-					<p class="text-base {pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
-				</div>
-				<div class="py-1">
-					<p class="text-lg">Approach:</p>
-					<p class="text-base {pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
-				</div>
-				<div class="py-1">
-					<p class="text-lg">Tower:</p>
-					<p class="text-base {pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
-				</div>
-				<div class="py-1">
-					<p class="text-lg">Ground:</p>
-					<p class="text-base {pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
-				</div>
-				<div class="py-1">
-					<p class="text-lg">Delivery:</p>
-					<p class="text-base {pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
-				</div>
-			</td>
-			<td class="align-text-top text-center -z-10 border border-slate-600">
-				<table class="border border-slate-600 table-fixed -m-0.5 z-0 h-80">
-					<thead>
-						<tr class="h-7">
-							<th class="text-lg px-2 py-1 border border-slate-600 w-32">Start Date</th>
-							<th class="text-lg px-2 py-1 border border-slate-600 w-28">Start Time</th>
-							<th class="text-lg px-2 py-1 border border-slate-600 w-28">End Time</th>
-							<th class="text-lg px-2 py-1 border border-slate-600 w-36">Position</th>
-							<th class="text-lg px-2 py-1 border border-slate-600 w-28">Duration</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each pageData.sessions as session}
-							{#if session != null}
-								<tr class="border h-7">
-									<td class="border border-slate-400" >{new Date(session.logon_time).toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'})}</td>
-									<td class="border border-slate-400" >{new Date(session.logon_time).toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hourCycle: 'h24', timeZoneName: 'short'}, )}</td>
-									<td class="border border-slate-400" >{new Date(session.last_update).toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hourCycle: 'h24', timeZoneName: 'short'}, )}</td>
-									<td class="border border-slate-400" >{session.callsign}</td>
-									<td class="border border-slate-400" >{session.duration}</td>
-								</tr>
-							{:else}
-								<tr class="h-7">
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr>
-							{/if}
-						{/each}
-					</tbody>
-				</table>
-			</td>
-		</tr>
-	</tbody>
-</table>
+<main class="flex justify-center">
+	<table class="table-fixed mx-5 my-2 ml-10 border border-slate-600">
+		<thead class="text-center">
+			<tr>
+				<th class="text-2xl px-4 py-2 border border-slate-600 w-40">Overview</th>
+				<th class="text-2xl px-4 py-2 border border-slate-600 w-72">Certifications</th>
+				<th class="text-2xl px-4 py-2 border border-slate-600" style="width:600px;">Last 10 Controlling Sessions</th>
+				<th class="text-2xl px-4 py-2 border border-slate-600" style="width:600px;">Last 10 Training Sessions</th>
+				{#if pageData.canEdit}
+					<th class="text-2xl px-4 py-2 border border-slate-600 w-30">Admin Actions</th>
+				{/if}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="px-2 border border-slate-600">
+					<div class="py-1">
+						<p class="text-lg">VATSIM CID:</p>
+						<p class="text-base text-slate-700">{pageData.certs.cid}</p>
+					</div>
+					<div class="py-1">
+						<p class="text-lg">ARTCC Status:</p>
+						{#if 1 == 1}
+							<p class="text-base text-green-600">Active</p>
+						{:else}
+							<p class="text-base text-red-700">Inactive</p>
+						{/if}
+					</div>
+					<div class="py-1">
+						<p class="text-lg">VATSIM Rating:</p>
+						<p class="text-base text-slate-700">{pageData.certs.rating}</p>
+					</div>
+					<div class="py-1">
+						<p class="text-lg">Operating Initials:</p>
+						<p class="text-base text-slate-700">{pageData.certs.initials}</p>
+					</div>
+					<div class="py-1">
+						<p class="text-lg">Last Promotion:</p>
+						<p class="text-base text-slate-700">{new Date(pageData.certs.rating_changed).toLocaleString('en-US',{ month: 'long',day: 'numeric',year: 'numeric' })}</p>
+					</div>
+				</td>
+				<td class="px-2 border border-slate-600">
+					<div class="py-1">
+						<p class="text-lg">Enroute:</p>
+						<p class="text-base {pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
+					</div>
+					<div class="py-1">
+						<p class="text-lg">Approach:</p>
+						<p class="text-base {pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
+					</div>
+					<div class="py-1">
+						<p class="text-lg">Tower:</p>
+						<p class="text-base {pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
+					</div>
+					<div class="py-1">
+						<p class="text-lg">Ground:</p>
+						<p class="text-base {pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
+					</div>
+					<div class="py-1">
+						<p class="text-lg">Delivery:</p>
+						<p class="text-base {pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
+					</div>
+				</td>
+				<td class="align-text-top text-center -z-10 border border-slate-600">
+					<table class="border border-slate-600 table-fixed -m-0.5 z-0 h-80">
+						<thead>
+							<tr class="h-7">
+								<th class="text-lg px-2 py-1 border border-slate-600 w-32">Start Date</th>
+								<th class="text-lg px-2 py-1 border border-slate-600 w-28">Start Time</th>
+								<th class="text-lg px-2 py-1 border border-slate-600 w-28">End Time</th>
+								<th class="text-lg px-2 py-1 border border-slate-600 w-36">Position</th>
+								<th class="text-lg px-2 py-1 border border-slate-600 w-28">Duration</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each pageData.sessions as session}
+								{#if session != null}
+									<tr class="border h-7">
+										<td class="border border-slate-400" >{new Date(session.logon_time).toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'})}</td>
+										<td class="border border-slate-400" >{new Date(session.logon_time).toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hourCycle: 'h24', timeZoneName: 'short'}, )}</td>
+										<td class="border border-slate-400" >{new Date(session.last_update).toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hourCycle: 'h24', timeZoneName: 'short'}, )}</td>
+										<td class="border border-slate-400" >{session.callsign}</td>
+										<td class="border border-slate-400" >{session.duration}</td>
+									</tr>
+								{:else}
+									<tr class="h-7">
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+								{/if}
+							{/each}
+						</tbody>
+					</table>
+				</td>
+				<td class="align-text-top text-center -z-10 border border-slate-600">
+					<table class="border border-slate-600 table-fixed -m-0.5 z-0 h-80">
+						<thead>
+							<tr class="h-7">
+								<th class="text-lg px-2 py-1 border border-slate-600 w-32">Date</th>
+								<th class="text-lg px-2 py-1 border border-slate-600 w-28">Position</th>
+								<th class="text-lg px-2 py-1 border border-slate-600 w-28">Type</th>
+								<th class="text-lg px-2 py-1 border border-slate-600 w-36">Mentor</th>
+								<th class="text-lg px-2 py-1 border border-slate-600 w-28">Notes</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!--TODO: Replace with live data-->
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="h-7">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</main>

@@ -112,7 +112,9 @@ class PageData {
       app_certs: {cert: "", color: ""},
       ctr_cert: {cert: "", color: ""},
       rating: "",
-      staff_roles: ""
+      staff_roles: "",
+      first_name: "",
+      last_name: ""
     };
     this.sessions = [];
     this.staffRoles = [];
