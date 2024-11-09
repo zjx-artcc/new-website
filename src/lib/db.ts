@@ -8,7 +8,6 @@ export const prisma = new PrismaClient();
 //* Begin utility functions
 //TODO: Add JSDoc comments
 
-
 export function getRating(ratingInt: number): string {
   switch(ratingInt) {
     case 1:
@@ -55,7 +54,7 @@ export async function getStaffRoles(cid: number, type: string): boolean {
   data = data.roles.toString();
   switch(type) {
     case "events": {
-      if (data.includes("ATM") || data.includes("WM")) {
+      if (data.includes("ATM") || data.includes("WT")) {
         return true;
       } else {
         return false;
@@ -63,10 +62,15 @@ export async function getStaffRoles(cid: number, type: string): boolean {
       break;
     }
     case "roster": {
-      if (data.includes("ATM") || data.includes("WM")) {
+      if (data.includes("ATM") || data.includes("WT")) {
         return true;
       }
       break;
+    }
+    case "admin": {
+      if (data.includes("ATM") || data.includes("WT")) {
+        return true;
+      }
     }
     default: {
       return false;

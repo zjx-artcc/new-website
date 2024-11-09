@@ -12,6 +12,6 @@ export const load: LayoutServerLoad = async (event) => {
     return {}
   }
   setSessionTokenCookie(event, token, session.expiresAt);
-  return { "session": { ...session, user } }
+  return { "session": {...session, user} }
 
 }
