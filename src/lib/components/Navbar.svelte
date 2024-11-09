@@ -35,6 +35,9 @@
 		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
 			<a href="/roster"><span>Roster</span></a>
 		</DropdownItem>
+		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
+			<a href="/admin"><span>Admin</span></a>
+		</DropdownItem>
 		{#if $page.data.session != null && !$page.data.session.user.rostered}
 		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
 			<a href="/visit"><span>Visit vZJX</span></a>
