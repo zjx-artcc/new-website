@@ -34,10 +34,14 @@ export function getRating(ratingInt: number): string {
   }
 }
 
-export function getHours(input) {
+export function getHours(input: number):string {
   let hours = Math.floor(input);
   let minutes = Math.round((input - hours) * 60).toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
+  return `${hours.toString().padStart(2,"0")}:${minutes}`;
+}
+
+export function msToHours(input: number): string {
+  return getHours(input/(3.6e+6));
 }
 
 export async function getStaffRoles(cid: number, type: string): boolean {
@@ -114,7 +118,7 @@ export function getCerts(certInt: number): string {
   }
 }
 
-export function getCertsColor(input: number): {cert: number, color: string} {
+export function getCertsColor(input: number): {cert: string, color: string} {
   console.log(input);
   switch(input) {
     case 0: {
@@ -167,7 +171,7 @@ export function getCtrCerts(certInt) {
   }
 }
 
-export function getCtrCertColor(input: number): {cert: number, color: string} {
+export function getCtrCertColor(input: number): {cert: string, color: string} {
   switch(input) {
     case 1: {
       return {
