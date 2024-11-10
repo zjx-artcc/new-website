@@ -30,6 +30,9 @@ export async function load({ params, cookies, locals }) {
   pageData.certs.cid = Number(rosterData.cid);
   pageData.certs.first_name = rosterData.first_name;
   pageData.certs.last_name = rosterData.last_name;
+  pageData.certs.initials = rosterData.initials;
+  pageData.certs.staff_roles = rosterData.staff_roles;
+  pageData.certs.rating_changed = rosterData.rating_changed;
   pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
   pageData.certs.gnd_certs = getCertsColor(rosterData.gnd_certs);
   pageData.certs.twr_certs = getCertsColor(rosterData.twr_certs);
@@ -48,7 +51,7 @@ export async function load({ params, cookies, locals }) {
     }
   });
 
-  //Make process existing data
+  //Process existing data
   if (sessionsData != null) {
     for (let i = 0; i < sessionsData.length; i++) {
       let session: Sessions = {
@@ -91,6 +94,7 @@ class PageData {
     cid: number;
     first_name: string;
     last_name: string;
+    initials: string;
     del_certs: Certs;
     gnd_certs: Certs;
     twr_certs: Certs;
@@ -98,6 +102,7 @@ class PageData {
     ctr_cert: Certs;
     rating: string;
     staff_roles: string;
+    rating_changed: Date;
   };
   sessions: Sessions[];
   staffRoles: StaffRoles[];
@@ -114,7 +119,9 @@ class PageData {
       rating: "",
       staff_roles: "",
       first_name: "",
-      last_name: ""
+      last_name: "",
+      initials: "",
+      rating_changed: null
     };
     this.sessions = [];
     this.staffRoles = [];
@@ -133,7 +140,7 @@ type Sessions = {
   frequency: string
   logon_time: Date,
   last_update: Date,
-  duration: string
+  duration: string,
 }
 
 type Certs = {
