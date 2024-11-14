@@ -33,6 +33,7 @@ export async function load({ params, cookies, locals }) {
   pageData.certs.initials = rosterData.initials;
   pageData.certs.staff_roles = rosterData.staff_roles;
   pageData.certs.rating_changed = rosterData.rating_changed;
+  pageData.certs.facility = rosterData.home_facility;
   pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
   pageData.certs.gnd_certs = getCertsColor(rosterData.gnd_certs);
   pageData.certs.twr_certs = getCertsColor(rosterData.twr_certs);
@@ -103,6 +104,7 @@ class PageData {
     rating: string;
     staff_roles: string;
     rating_changed: Date;
+    facility: string;
   };
   sessions: Sessions[];
   staffRoles: StaffRoles[];
@@ -121,6 +123,7 @@ class PageData {
       first_name: "",
       last_name: "",
       initials: "",
+      facility: "",
       rating_changed: null
     };
     this.sessions = [];

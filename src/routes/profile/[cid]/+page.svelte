@@ -58,7 +58,13 @@
 			</div>
 			<div>
 				<h4 class="text-base">ARTCC Status:</h4>
-				<p class="text-sm text-green-600">Active</p>
+				{#if pageData.certs.facility == "ZJX"}
+					<p class="text-sm text-green-600">Home Controller</p>
+				{:else if pageData.certs.facility != null}
+					<p class="text-sm text-green-600">Visiting Controller</p>
+				{:else}
+					<p class="text-sm text-red-600">Inactive</p>
+				{/if}
 			</div>
 			<div>
 				<h4 class="text-base">VATSIM Rating:</h4>
@@ -179,7 +185,7 @@
 						{/if}
 					{/each}
 				</tbody>
-			</table>
+			</table> 
 		</div>
 	</div>
 	<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-56 ml-16 " data-v0-t="card">
@@ -188,7 +194,16 @@
 				Actions
 			</h3>
 			<hr class="px-1 border-slate-300">
-			
+			<div>
+				{#if pageData.certs.cid == $page.data.session.userId}
+				<p class="text-blue-500">Request Training</p>
+				<p class="text-blue-500">Request LOA</p>
+				{/if}
+				
+				{#if pageData.canEdit}
+					<a href="/roster/{pageData.certs.cid}/manage" class="text-blue-500">Edit User</a>
+				{/if}
+			</div>
 		</div>
 	</div>
 </div>
