@@ -67,8 +67,8 @@ export async function load({ params, cookies, locals }) {
     }
   }
 
-  //Make sure there are at least 10 rows so the table is complete
-  for (let i = pageData.sessions.length; i < 10; i++) {
+  //Make sure there are at least 5 rows so the table is complete
+  for (let i = pageData.sessions.length; i < 5; i++) {
     pageData.sessions.push(null);
   }
 

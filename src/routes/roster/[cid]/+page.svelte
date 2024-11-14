@@ -10,7 +10,7 @@
 
 	export let data;
 	let pageData = data.pageData;
-	console.log(pageData.sessions);
+	console.log(pageData);
 </script>
 
 <svelte:head>
@@ -45,7 +45,7 @@
   </div>
 </div>
 
-<div class="grid grid-cols-6 w-full min-h-fit gap-2 m-10">
+<div class="grid grid-cols-5 w-fit min-h-fit gap-2 m-10">
 	<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-48" data-v0-t="card">
 		<div class="flex flex-col space-y-1.5 p-6">
 			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
@@ -74,45 +74,121 @@
 			</div>
 		</div>
 	</div>
-	<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm -ml-40 w-48" data-v0-t="card">
 		<div class="flex flex-col space-y-1.5 p-6">
 			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
 				Certifications
 			</h3>
-			<p class="text-sm text-muted-foreground">
-				<ul>
-				</ul>
-			<!-- <p> is auto closed by </ul>-->
+			<hr class="px-1 border-slate-300">
+			<div>
+				<h4 class="text-base">Enroute:</h4>
+				<p class="text-sm {pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
+			</div>
+			<div>
+				<h4 class="text-base">Approach:</h4>
+				<p class="text-sm {pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
+			</div>
+			<div>
+				<h4 class="text-base">Tower:</h4>
+				<p class="text-sm {pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
+			</div>
+			<div>
+				<h4 class="text-base">Ground:</h4>
+				<p class="text-sm {pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
+			</div>
+			<div>
+				<h4 class="text-base">Delivery:</h4>
+				<p class="text-sm {pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
+			</div>
 		</div>
 		<div class="p-6 flex items-center justify-center">
 		</div>
 	</div>
-	<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm -ml-80 w-[536px]" data-v0-t="card">
 		<div class="flex flex-col space-y-1.5 p-6">
-			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Recent Training</h3>
-			<p class="text-sm text-muted-foreground">Last 5 Training Tickets</p>
-		</div>
-		<div class="p-6 flex items-center justify-center">
+			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				Recent Controlling Sessions
+			</h3>
+			<hr class="px-1 border-slate-300">
+			<table class="text-center">
+				<thead class="border-b">
+					<tr>
+						<th>Date</th>
+						<th>Start Time</th>
+						<th>End Time</th>
+						<th>Callsign</th>
+						<th>Duration</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each pageData.sessions as session}
+						{#if session != null}
+							<tr>
+								<td class="text-sm text-slate-600">{session.logon_time.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
+								<td class="text-sm text-slate-600">{session.logon_time.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+								<td class="text-sm text-slate-600">{session.last_update.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+								<td class="text-sm text-slate-600">{session.callsign}</td>
+								<td class="text-sm text-slate-600">{session.duration}</td>
+							</tr>
+						{:else}
+							<tr>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+							</tr>
+						{/if}
+					{/each}
+				</tbody>
+			</table>
 		</div>
 	</div>
-	<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm -ml-32 w-[536px]" data-v0-t="card">
 		<div class="flex flex-col space-y-1.5 p-6">
-			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight"> Personal Info</h3>
-			<p class="text-sm text-muted-foreground">
-				<ul>
-					
-				</ul>
-			<!-- <p> is auto closed by </ul>-->
+			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				Recent Training Sessions
+			</h3>
+			<hr class="px-1 border-slate-300">
+			<table class="text-center">
+				<thead class="border-b">
+					<tr>
+						<th>Date</th>
+						<th>Type</th>
+						<th>Position</th>
+						<th>Training Staff</th>
+						<th>Notes</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each pageData.sessions as session}
+						{#if session != null}
+							<tr>
+								<td class="text-sm text-slate-600">{session.logon_time.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
+								<td class="text-sm text-slate-600">{session.logon_time.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+								<td class="text-sm text-slate-600">{session.last_update.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+								<td class="text-sm text-slate-600">{session.callsign}</td>
+								<td class="text-sm text-slate-600"></td>
+							</tr>
+						{:else}
+							<tr>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+							</tr>
+						{/if}
+					{/each}
+				</tbody>
+			</table>
 		</div>
 	</div>
-	<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-56 ml-16 " data-v0-t="card">
 		<div class="flex flex-col space-y-1.5 p-6">
-			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight"> Personal Info</h3>
-			<p class="text-sm text-muted-foreground">
-				<ul>
-					
-				</ul>
-			<!-- <p> is auto closed by </ul>-->
+			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				Actions
+			</h3>
+			<hr class="px-1 border-slate-300">
+			
 		</div>
 	</div>
 </div>
