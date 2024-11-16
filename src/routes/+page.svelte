@@ -14,6 +14,9 @@
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>
 
+<svelte:head>
+	<title>Jacksonville ARTCC</title>
+</svelte:head>
 
 <header class="bg-gray-700 block" id="myTopnav">
 	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 560px; ">
