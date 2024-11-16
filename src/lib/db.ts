@@ -44,7 +44,7 @@ export function msToHours(input: number): string {
   return getHours(input/(3.6e+6));
 }
 
-export async function getStaffRoles(cid: number, type: string): boolean {
+export async function getStaffRoles(cid: number, type: string): Promise<boolean> {
   let data = await prisma.user.findFirst({
     where: {
       id: cid
@@ -54,7 +54,7 @@ export async function getStaffRoles(cid: number, type: string): boolean {
     }
   })
   if (data == null) {
-	  return ""
+	  return false
   }
   data = data.roles.toString();
   switch(type) {

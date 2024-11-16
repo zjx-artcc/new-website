@@ -60,10 +60,10 @@
 				<h4 class="text-base">ARTCC Status:</h4>
 				{#if pageData.certs.facility == "ZJX"}
 					<p class="text-sm text-green-600">Home Controller</p>
-				{:else if pageData.certs.facility != null}
+				{:else if pageData.certs.facility != null && pageData.onRoster}
 					<p class="text-sm text-green-600">Visiting Controller</p>
 				{:else}
-					<p class="text-sm text-red-600">Inactive</p>
+					<p class="text-sm text-red-600">Not Affiliated</p>
 				{/if}
 			</div>
 			<div>
@@ -76,7 +76,11 @@
 			</div>
 			<div>
 				<h4 class="text-base">Last Promotion:</h4>
-				<p class="text-sm text-slate-600">{pageData.certs.rating_changed.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
+				{#if pageData.certs.rating_changed != null}
+					<p class="text-sm text-slate-600">{pageData.certs.rating_changed.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
+				{:else}
+					<p class="text-sm text-slate-600">Not Available</p>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -195,11 +199,15 @@
 			</h3>
 			<hr class="px-1 border-slate-300">
 			<div>
-				{#if pageData.certs.cid == $page.data.session.userId}
-				<p class="text-blue-500">Request Training</p>
-				<p class="text-blue-500">Request LOA</p>
+				{#if pageData.certs.cid == $page.data.session.userId && pageData.onRoster}
+					<p class="text-blue-500">Request Training</p>
+					<p class="text-blue-500">Request LOA</p>
+					
 				{/if}
-				
+				{#if !pageData.onRoster}
+					<p class="text-blue-500">Request to Visit</p>
+					<p class="text-blue-500">Submit Feedback</p>
+				{/if}
 				{#if pageData.canEdit}
 					<a href="/roster/{pageData.certs.cid}/manage" class="text-blue-500">Edit User</a>
 				{/if}

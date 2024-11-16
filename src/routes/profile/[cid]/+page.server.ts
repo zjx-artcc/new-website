@@ -13,7 +13,7 @@ export async function load({ params, cookies, locals }) {
   let pageData: PageData = new PageData();
 
   //Check for user permissions from database
-  pageData.canEdit = getStaffRoles(locals.session.userId, "roster"); 
+  pageData.canEdit = await getStaffRoles(locals.session.userId, "roster"); 
   
   //Fetch roster data for user
   let rosterData: roster = await prisma.roster.findUnique({
@@ -22,24 +22,30 @@ export async function load({ params, cookies, locals }) {
     },
   });
 
-  if (rosterData == null) {
-    throw redirect(404, '/404');
+  if (rosterData != null) {
+    pageData.onRoster = true;
+    pageData.certs.cid = Number(rosterData.cid);
+    pageData.certs.first_name = rosterData.first_name;
+    pageData.certs.last_name = rosterData.last_name;
+    pageData.certs.initials = rosterData.initials;
+    pageData.certs.staff_roles = rosterData.staff_roles;
+    pageData.certs.rating_changed = rosterData.rating_changed;
+    pageData.certs.facility = rosterData.home_facility;
+    pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
+    pageData.certs.gnd_certs = getCertsColor(rosterData.gnd_certs);
+    pageData.certs.twr_certs = getCertsColor(rosterData.twr_certs);
+    pageData.certs.app_certs = getCertsColor(rosterData.app_certs);
+    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
+    pageData.certs.rating = getRating(Number(rosterData.rating));
+  } else {
+    pageData.certs.cid = locals.user.id;
+    pageData.certs.first_name = locals.user.firstName;
+    pageData.certs.last_name = locals.user.lastName;
+    pageData.certs.rating = getRating(locals.user.rating);
   }
 
   //Return data to page data
-  pageData.certs.cid = Number(rosterData.cid);
-  pageData.certs.first_name = rosterData.first_name;
-  pageData.certs.last_name = rosterData.last_name;
-  pageData.certs.initials = rosterData.initials;
-  pageData.certs.staff_roles = rosterData.staff_roles;
-  pageData.certs.rating_changed = rosterData.rating_changed;
-  pageData.certs.facility = rosterData.home_facility;
-  pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
-  pageData.certs.gnd_certs = getCertsColor(rosterData.gnd_certs);
-  pageData.certs.twr_certs = getCertsColor(rosterData.twr_certs);
-  pageData.certs.app_certs = getCertsColor(rosterData.app_certs);
-  pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
-  pageData.certs.rating = getRating(Number(rosterData.rating));
+  
 
   //Fetch sessions data for user
   let sessionsData: ControllingSessions[] = await prisma.controllingSessions.findMany({
@@ -86,10 +92,12 @@ export async function load({ params, cookies, locals }) {
       default: break;
     }
   }
+  console.log(pageData);
   return {pageData: {...pageData}};
 }
 
 class PageData {
+  onRoster: boolean;
   canEdit: boolean;
   certs: {
     cid: number;
@@ -110,19 +118,20 @@ class PageData {
   staffRoles: StaffRoles[];
 
   constructor() {
+    this.onRoster = false;
     this.canEdit = false;
     this.certs = {
       cid: 0,
-      del_certs: {cert: "", color: ""},
-      gnd_certs: {cert: "", color: ""},
-      twr_certs: {cert: "", color: ""},
-      app_certs: {cert: "", color: ""},
-      ctr_cert: {cert: "", color: ""},
+      del_certs: {cert: "None", color: ""},
+      gnd_certs: {cert: "None", color: ""},
+      twr_certs: {cert: "None", color: ""},
+      app_certs: {cert: "None", color: ""},
+      ctr_cert: {cert: "None", color: ""},
       rating: "",
       staff_roles: "",
       first_name: "",
       last_name: "",
-      initials: "",
+      initials: "None",
       facility: "",
       rating_changed: null
     };
