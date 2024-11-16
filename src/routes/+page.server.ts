@@ -12,7 +12,6 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     online: {},
     totalHours: 0
   };
-  console.log(locals.session)
   {
     const data = await prisma.stats.findMany({
       take: 3,

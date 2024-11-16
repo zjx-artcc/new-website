@@ -33,13 +33,17 @@ export function getRating(ratingInt: number): string {
   }
 }
 
-export function getHours(input) {
+export function getHours(input: number):string {
   let hours = Math.floor(input);
   let minutes = Math.round((input - hours) * 60).toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
+  return `${hours.toString().padStart(2,"0")}:${minutes}`;
 }
 
-export async function getStaffRoles(cid: number, type: string): boolean {
+export function msToHours(input: number): string {
+  return getHours(input/(3.6e+6));
+}
+
+export async function getStaffRoles(cid: number, type: string): Promise<boolean> {
   let data = await prisma.user.findFirst({
     where: {
       id: cid
@@ -49,7 +53,7 @@ export async function getStaffRoles(cid: number, type: string): boolean {
     }
   })
   if (data == null) {
-	  return ""
+	  return false
   }
   data = data.roles.toString();
   switch(type) {
@@ -118,6 +122,48 @@ export function getCerts(certInt: number): string {
   }
 }
 
+export function getCertsColor(input: number): {cert: string, color: string} {
+  console.log(input);
+  switch(input) {
+    case 0: {
+      return {
+        cert: getCerts(input),
+        color: "text-red-600"
+      }
+    }
+    case 1: {
+      return {
+        cert: getCerts(input),
+        color: "text-green-600"
+      }
+    }
+    case 1.5: {
+      return {
+        cert: getCerts(input),
+        color: "text-yellow-500"
+      }
+    }
+    case 2: {
+      return {
+        cert: getCerts(input),
+        color: "text-blue-500"
+      }
+    }
+    case 2.5: {
+      return {
+        cert: getCerts(input),
+        color: "text-yellow-500"
+      }
+    }
+    case 3: {
+      return {
+        cert: getCerts(input),
+        color: "text-yellow-500"
+      }
+    }
+  }
+}
+
 //* Same thing but for center certs which are trinary
 export function getCtrCerts(certInt) {
   if (certInt == 1) {
@@ -126,5 +172,28 @@ export function getCtrCerts(certInt) {
     return "Center Solo"
   } else {
     return "Not Certified"
+  }
+}
+
+export function getCtrCertColor(input: number): {cert: string, color: string} {
+  switch(input) {
+    case 1: {
+      return {
+        cert: getCtrCerts(input),
+        color: "text-green-600"
+      }
+    }
+    case 0: {
+      return {
+        cert: getCtrCerts(input),
+        color: "text-red-600"
+      }
+    }
+    case 1.5: {
+      return {
+        cert: getCtrCerts(input),
+        color: "text-yellow-500"
+      }
+    }
   }
 }
