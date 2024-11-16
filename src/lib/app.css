@@ -472,10 +472,6 @@ a {
   height: 25px;
 }
 
-table, th, td {
-  border: 1px solid black;
-}
-
 .bg-green-low-opacity {
   background-color: rgba(0, 255, 0, .3)
 }
