@@ -92,23 +92,23 @@
 			<hr class="px-1 border-slate-300">
 			<div>
 				<h4 class="text-base">Enroute:</h4>
-				<p class="text-sm {pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
+				<p class="text-sm text-{pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
 			</div>
 			<div>
 				<h4 class="text-base">Approach:</h4>
-				<p class="text-sm {pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
+				<p class="text-sm text-{pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
 			</div>
 			<div>
 				<h4 class="text-base">Tower:</h4>
-				<p class="text-sm {pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
+				<p class="text-sm text-{pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
 			</div>
 			<div>
 				<h4 class="text-base">Ground:</h4>
-				<p class="text-sm {pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
+				<p class="text-sm text-{pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
 			</div>
 			<div>
 				<h4 class="text-base">Delivery:</h4>
-				<p class="text-sm {pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
+				<p class="text-sm text-{pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
 			</div>
 		</div>
 		<div class="p-6 flex items-center justify-center">

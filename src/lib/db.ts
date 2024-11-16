@@ -3,7 +3,19 @@ import { PrismaClient } from "@prisma/client";
 import type { roster } from '@prisma/client';
 import { redirect } from "@sveltejs/kit";
 
-export const prisma = new PrismaClient();
+let prisma;
+
+if (process.env.NODE_ENV === "production") {
+  prisma = new PrismaClient();
+} else {
+  if (!global.prisma) {
+    global.prisma = new PrismaClient();
+  }
+
+  prisma = global.prisma;
+}
+
+export { prisma };
 
 //* Begin utility functions
 //TODO: Add JSDoc comments
@@ -94,71 +106,42 @@ export function formatDate(input) {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-/**
- * Converts certifcation integer to string
- * @param certInt An integer representing the certification level
- * @returns {String} The certification level as a string
- */
-export function getCerts(certInt: number): string {
-  switch(certInt) {
-    case 1: {
-      return "Tier 1 Certified";
-    }
-    case 1.5: {
-      return "Tier 1 Solo"
-    }
-    case 2: {
-      return "Tier 2 Certified";
-    }
-    case 2.5: {
-      return "Tier 2 Solo"
-    }
-    case 3: {
-      return "Unrestricted Certified";
-    }
-    default: {
-      return "Not Certified";
-    }
-  }
-}
-
 export function getCertsColor(input: number): {cert: string, color: string} {
-  console.log(input);
   switch(input) {
     case 0: {
       return {
-        cert: getCerts(input),
-        color: "text-red-600"
+        cert: "None",
+        color: "slate-500"
       }
     }
     case 1: {
       return {
-        cert: getCerts(input),
-        color: "text-green-600"
+        cert: "Tier 1",
+        color: "green-600"
       }
     }
     case 1.5: {
       return {
-        cert: getCerts(input),
-        color: "text-yellow-500"
+        cert: "Tier 1 Solo",
+        color: "amber-700"
       }
     }
     case 2: {
       return {
-        cert: getCerts(input),
-        color: "text-blue-500"
+        cert: "Tier 2",
+        color: "sky-700"
       }
     }
     case 2.5: {
       return {
-        cert: getCerts(input),
-        color: "text-yellow-500"
+        cert: "Tier 2 Solo",
+        color: "amber-700"
       }
     }
     case 3: {
       return {
-        cert: getCerts(input),
-        color: "text-yellow-500"
+        cert: "Unrestricted",
+        color: "indigo-700"
       }
     }
   }
@@ -171,7 +154,7 @@ export function getCtrCerts(certInt) {
   } else if (certInt == 1.5) {
     return "Center Solo"
   } else {
-    return "Not Certified"
+    return "None"
   }
 }
 
@@ -179,20 +162,20 @@ export function getCtrCertColor(input: number): {cert: string, color: string} {
   switch(input) {
     case 1: {
       return {
-        cert: getCtrCerts(input),
-        color: "text-green-600"
+        cert: "Certified",
+        color: "green-600"
       }
     }
     case 0: {
       return {
         cert: getCtrCerts(input),
-        color: "text-red-600"
+        color: "slate-500"
       }
     }
     case 1.5: {
       return {
         cert: getCtrCerts(input),
-        color: "text-yellow-500"
+        color: "yellow-500"
       }
     }
   }
