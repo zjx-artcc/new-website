@@ -38,15 +38,10 @@
 		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
 			<a href="/admin"><span>Admin</span></a>
 		</DropdownItem>
-		{#if $page.data.session != null && !$page.data.session.user.rostered}
-		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
-			<a href="/visit"><span>Visit vZJX</span></a>
-		</DropdownItem>
-		{/if}
 	</Dropdown>
 	<a href="/events" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ion:calendar" class="pt-1.5 navbarIcon" /> Events</a>
 	{#if $page.data.session != null}
-		<a href="/roster/{$page.data.session.userId}" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" />Profile</a>
+		<a href="/profile/{$page.data.session.userId}" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" />Profile</a>
 	{:else}
 		<a href="/login" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</a>
 	{/if}
