@@ -40,7 +40,7 @@
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
       <a href="/roster" class="text-sky-500">Roster</a>
 			<Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/roster/{pageData.certs.cid}" class="text-sky-500">{pageData.certs.cid}</a>
+      <a href="/profile/{pageData.certs.cid}" class="text-sky-500">{pageData.certs.cid}</a>
     </nav>
   </div>
 </div>
@@ -209,7 +209,7 @@
 					<p class="text-blue-500">Submit Feedback</p>
 				{/if}
 				{#if pageData.canEdit}
-					<a href="/roster/{pageData.certs.cid}/manage" class="text-blue-500">Edit User</a>
+					<a href="/profile/{pageData.certs.cid}/manage" class="text-blue-500">Edit User</a>
 				{/if}
 			</div>
 		</div>
