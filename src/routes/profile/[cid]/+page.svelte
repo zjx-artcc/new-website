@@ -46,7 +46,7 @@
 </div>
 
 <div class="grid grid-cols-5 w-fit min-h-fit gap-2 m-10">
-	<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-48" data-v0-t="card">
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-11/12" data-v0-t="card">
 		<div class="flex flex-col space-y-1.5 p-6">
 			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
 				Overview

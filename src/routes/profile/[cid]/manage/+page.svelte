@@ -1,181 +1,207 @@
 <script>
-	//@ts-nocheck
 	import { Card, Button, Toggle } from 'flowbite-svelte';
 	import '$lib/app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
 	import ATCCard from '$lib/components/ATCCard.svelte';
+	import { page } from '$app/stores';
+	import { redirect } from '@sveltejs/kit';
+	import _ from 'lodash';
+
 	export let data;
+	let pageData = data.pageData;
+	console.log(pageData);
 </script>
 
-<header class="bg-gray-700 block" id="myTopnav">
-	<div
-		style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; "
-	>
-		<div
-			class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem] place-content-evenly"
-		>
-			<img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-			<h1 class="text-6xl text-white font-bold pt-3">
-				{data.certs.first_name}
-				{data.certs.last_name}
-			</h1>
-			<h3 class="text-3xl text-white pt-3">{data.certs.home_facility} - {data.certs.rating}</h3>
-			<div class="pt-4">
-				<a
-					href="/roster/{data.certs.cid}"
-					class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Discard Changes</a
-				>
+<svelte:head>
+	<title>{pageData.certs.first_name} {pageData.certs.last_name} - Jacksonville ARTCC</title>
+</svelte:head>
+
+<div class="h-48">
+	<div class="block w-full place-content-center z-0 bg-[url('/KJAXNIGHT.png')] h-48">
+		<h1 class="text-4xl text-white font-bold text-center pt-10">Welcome back, {pageData.certs.first_name} {pageData.certs.last_name}!</h1>
+		<h3 class="text-xl text-white text-center pt-4">
+			{#each pageData.staffRoles as role}
+				<p class='inline rounded mx-2 px-2 py-0.5 {role.color}'>{role.name}</p>
+			{/each}
+		</h3>
+		<div class="pt-4 text-center">
+			{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.certs.cid.toString()}
+				<a href="/logout" class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Log Out</a>
+			{/if}
+		</div>
+	</div>
+</div>
+
+<div id="breadcrumbs" class="border-b">
+  <div class="py-1.5 text-center">
+    <nav class="py-2 mb-0">
+      <a href="/" class="text-sky-500">Home</a>
+      <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
+      <a href="/roster" class="text-sky-500">Roster</a>
+			<Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
+      <a href="/profile/{pageData.certs.cid}" class="text-sky-500">{pageData.certs.cid}</a>
+    </nav>
+  </div>
+</div>
+
+<div class="grid grid-cols-7 w-fit min-h-fit gap-2 m-2">
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-44" data-v0-t="card">
+		<div class="flex flex-col space-y-1.5 p-6">
+			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				Overview
+			</h3>
+			<hr class="px-1 border-slate-300">
+			<div>
+				<h4 class="text-base">VATSIM CID:</h4>
+				<p class="text-sm text-slate-600">{pageData.certs.cid}</p>
+			</div>
+			<div>
+				<h4 class="text-base">ARTCC Status:</h4>
+				{#if pageData.certs.facility == "ZJX"}
+					<p class="text-sm text-green-600">Home Controller</p>
+				{:else if pageData.certs.facility != null && pageData.onRoster}
+					<p class="text-sm text-green-600">Visiting Controller</p>
+				{:else}
+					<p class="text-sm text-red-600">Not Affiliated</p>
+				{/if}
+			</div>
+			<div>
+				<h4 class="text-base">VATSIM Rating:</h4>
+				<p class="text-sm text-slate-600">{pageData.certs.rating}</p>
+			</div>
+			<div>
+				<h4 class="text-base">Operating Initials:</h4>
+				<p class="text-sm text-slate-600">{pageData.certs.initials}</p>
+			</div>
+			<div>
+				<h4 class="text-base">Last Promotion:</h4>
+				{#if pageData.certs.rating_changed != null}
+					<p class="text-sm text-slate-600">{pageData.certs.rating_changed.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
+				{:else}
+					<p class="text-sm text-slate-600">Not Available</p>
+				{/if}
 			</div>
 		</div>
 	</div>
-</header>
-
-<div class="flex flex-col w-full min-h-screen">
-	<main class="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-		<div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4 lg:gap-8" />
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						Recent Sessions
-					</h3>
-					<p class="text-sm text-muted-foreground">Last 5 Sessions</p>
-					<ul>
-						{#each data.sessions as session}
-							<ATCCard
-								style="width: 100%"
-								name={session.position}
-								position="{Math.round(session.duration / 60000)} minutes"
-								startDate={session.logon_time.toLocaleString(undefined, {
-									month: 'short',
-									day: 'numeric',
-									hour: 'numeric',
-									minute: 'numeric',
-									timeZoneName: 'short'
-								})}
-								endDate={new Date(session.logon_time.getTime() + session.duration).toLocaleString(
-									undefined,
-									{
-										month: 'short',
-										day: 'numeric',
-										hour: 'numeric',
-										minute: 'numeric',
-										timeZoneName: 'short'
-									}
-								)}
-							/>
-						{/each}
-					</ul>
-				</div>
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-44" data-v0-t="card">
+		<div class="flex flex-col space-y-1.5 p-6">
+			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				Certifications
+			</h3>
+			<hr class="px-1 border-slate-300">
+			<div>
+				<h4 class="text-base">Enroute:</h4>
+				<p class="text-sm text-{pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
 			</div>
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-				<form method="POST">
-					<input type="hidden" id="cid" name="cid" value={data.certs.cid} />
-					<div class="flex flex-col space-y-1.5 p-6">
-						<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-							Certifications
-						</h3>
-						<p class="text-sm text-muted-foreground" />
-						<ul>
-							<li>
-								<label for="enroute">Enroute:</label>
-								<select id="enroute" name="enroute" bind:value={data.certs.ctr_cert}>
-									<option value={1}>Certified</option>
-									<option value={1.5}>Solo Certified</option>
-									<option value={0}>Not Certified</option>
-								</select>
-							</li>
-							<li>
-								<label for="tracon">Approach:</label>
-								<select id="tracon" name="tracon" bind:value={data.certs.app_certs}>
-									<option value={1}>Tier 1 Certified</option>
-									<option value={1.5}>Tier 1 Solo</option>
-									<option value={2}>Tier 2 Certified</option>
-									<option value={2.5}>Tier 2 Solo</option>
-									<option value={3}>Unrestricted</option>
-									<option value={0}>Not Certified</option>
-								</select>
-							</li>
-							<li>
-								<label for="tower">Tower:</label>
-								<select id="tower" name="tower" bind:value={data.certs.twr_certs}>
-									<option value={1}>Tier 1 Certified</option>
-									<option value={1.5}>Tier 1 Solo</option>
-									<option value={2}>Tier 2 Certified</option>
-									<option value={2.5}>Tier 2 Solo</option>
-									<option value={3}>Unrestricted</option>
-									<option value={0}>Not Certified</option>
-								</select>
-							</li>
-							<li>
-								<label for="ground">Ground:</label>
-								<select id="ground" name="ground" bind:value={data.certs.gnd_certs}>
-									<option value={1}>Tier 1 Certified</option>
-									<option value={1.5}>Tier 1 Solo</option>
-									<option value={2}>Tier 2 Certified</option>
-									<option value={2.5}>Tier 2 Solo</option>
-									<option value={3}>Unrestricted</option>
-									<option value={0}>Not Certified</option>
-								</select>
-							</li>
-							<li>
-								<label for="delivery">Delivery:</label>
-								<select id="delivery" name="delivery" bind:value={data.certs.del_certs}>
-									<option value={1}>Tier 1 Certified</option>
-									<option value={1.5}>Tier 1 Solo</option>
-									<option value={2}>Tier 2 Certified</option>
-									<option value={2.5}>Tier 2 Solo</option>
-									<option value={3}>Unrestricted</option>
-									<option value={0}>Not Certified</option>
-								</select>
-							</li>
-						</ul>
-					</div>
-					<button
-						type="submit"
-						class="bg-green-500 text-white px-2 pb-1 mx-5 mb-5 rounded-md text-md"
-						>Save Changes</button
-					>
-				</form>
+			<div>
+				<h4 class="text-base">Approach:</h4>
+				<p class="text-sm text-{pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
 			</div>
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						Recent Training
-					</h3>
-					<p class="text-sm text-muted-foreground">Last 5 Training Tickets</p>
-				</div>
-				<div class="p-6 flex items-center justify-center" />
+			<div>
+				<h4 class="text-base">Tower:</h4>
+				<p class="text-sm text-{pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
 			</div>
-			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-						{data.certs.first_name}'s Personal Info
-					</h3>
-					<p class="text-sm text-muted-foreground" />
-					<ul>
-						<li>Email: {data.certs.email}</li>
-						<li>CID: {data.certs.cid}</li>
-						<li>Operating Initials: {data.certs.initials}</li>
-						<li>
-							Joined: {new Date(data.certs.created_at).toLocaleString(undefined, {
-								month: 'long',
-								day: 'numeric',
-								year: 'numeric'
-							})}
-						</li>
-						<li>
-							Last Rating Change: {new Date(data.certs.rating_changed).toLocaleString(undefined, {
-								month: 'long',
-								day: 'numeric',
-								year: 'numeric'
-							})}
-						</li>
-					</ul>
-					<!-- <p> is auto closed by </ul>-->
-				</div>
+			<div>
+				<h4 class="text-base">Ground:</h4>
+				<p class="text-sm text-{pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
+			</div>
+			<div>
+				<h4 class="text-base">Delivery:</h4>
+				<p class="text-sm text-{pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
 			</div>
 		</div>
-	</main>
+		<div class="p-6 flex items-center justify-center">
+		</div>
+	</div>
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm col-span-2 w-[536px]" data-v0-t="card">
+		<div class="flex flex-col space-y-1.5 p-6">
+			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				Recent Controlling Sessions
+			</h3>
+			<hr class="px-1 border-slate-300">
+			<table class="text-center">
+				<thead class="border-b">
+					<tr>
+						<th>Date</th>
+						<th>Start Time</th>
+						<th>End Time</th>
+						<th>Callsign</th>
+						<th>Duration</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each pageData.sessions as session}
+						{#if session != null}
+							<tr>
+								<td class="text-sm text-slate-600">{session.logon_time.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
+								<td class="text-sm text-slate-600">{session.logon_time.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+								<td class="text-sm text-slate-600">{session.last_update.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+								<td class="text-sm text-slate-600">{session.callsign}</td>
+								<td class="text-sm text-slate-600">{session.duration}</td>
+							</tr>
+						{:else}
+							<tr>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+							</tr>
+						{/if}
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm col-span-2" data-v0-t="card">
+		<div class="flex flex-col space-y-1.5 p-6">
+			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				Recent Training Sessions
+			</h3>
+			<hr class="px-1 border-slate-300">
+			<table class="text-center">
+				<thead class="border-b">
+					<tr>
+						<th>Date</th>
+						<th>Type</th>
+						<th>Position</th>
+						<th>Training Staff</th>
+						<th>Notes</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each pageData.sessions as session}
+						{#if session != null}
+							<tr>
+								<td class="text-sm text-slate-600">{session.logon_time.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
+								<td class="text-sm text-slate-600">{session.logon_time.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+								<td class="text-sm text-slate-600">{session.last_update.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+								<td class="text-sm text-slate-600">{session.callsign}</td>
+								<td class="text-sm text-slate-600"></td>
+							</tr>
+						{:else}
+							<tr>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+								<td class="text-sm text-slate-600"></td>
+							</tr>
+						{/if}
+					{/each}
+				</tbody>
+			</table> 
+		</div>
+	</div>
+	<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-56 ml-16 " data-v0-t="card">
+		<div class="flex flex-col space-y-1.5 p-6">
+			<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				Actions
+			</h3>
+			<hr class="px-1 border-slate-300">
+			<div>
+				<p class="text-blue-500">Save Changes</p>
+				<p class="text-blue-500">Discard Changes</p>
+			</div>
+		</div>
+	</div>
 </div>
