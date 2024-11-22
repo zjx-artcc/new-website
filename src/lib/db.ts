@@ -17,9 +17,12 @@ if (process.env.NODE_ENV === "production") {
 
 export { prisma };
 
-//* Begin utility functions
-//TODO: Add JSDoc comments
 
+/**
+ * 
+ * @param ratingInt - Integer Form of Rating
+ * @returns {string} Human Readable Rating
+ */
 export function getRating(ratingInt: number): string {
   switch(ratingInt) {
     case 1:
@@ -45,16 +48,32 @@ export function getRating(ratingInt: number): string {
   }
 }
 
+/**
+ * 
+ * @param input - Hours in Decimal Form
+ * @returns {string} Hours in HH:MM Format
+ */
 export function getHours(input: number):string {
   let hours = Math.floor(input);
   let minutes = Math.round((input - hours) * 60).toString().padStart(2, "0");
   return `${hours.toString().padStart(2,"0")}:${minutes}`;
 }
 
+/**
+ * 
+ * @param input - Duration in Milliseconds
+ * @returns {string} Duration in HH:MM Format
+ */
 export function msToHours(input: number): string {
   return getHours(input/(3.6e+6));
 }
 
+/**
+ * 
+ * @param cid - User CID
+ * @param type - Type of page
+ * @returns {boolean} True if user has permission to access page
+ */
 export async function getStaffRoles(cid: number, type: string): Promise<boolean> {
   let data = await prisma.user.findFirst({
     where: {
@@ -94,8 +113,12 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
   }
 }
 
-//* Format to UTC Date
-export function formatDate(input) {
+/**
+ * 
+ * @param input - Date String
+ * @returns {string} Date in UTC Format
+ */
+export function formatDate(input): string {
   let dateTime = new Date(input);
   let year = dateTime.getFullYear();
   let month = (dateTime.getMonth() + 1).toString().padStart(2, "0");
@@ -106,6 +129,16 @@ export function formatDate(input) {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
+/**
+ * @typedef {Object} Certs
+ * @property {string} cert - Certification
+ * @property {string} color - Color for the page
+ */
+/**
+ * 
+ * @param input - Certification in Integer Form
+ * @returns {Certs} Certification and Color
+ */
 export function getCertsColor(input: number): {cert: string, color: string} {
   switch(input) {
     case 0: {
@@ -147,7 +180,11 @@ export function getCertsColor(input: number): {cert: string, color: string} {
   }
 }
 
-
+/**
+ * 
+ * @param input - Certification in Integer Form
+ * @returns {Certs} Certification and Color
+ */
 export function getCtrCertColor(input: number): {cert: string, color: string} {
   switch(input) {
     case 1: {
