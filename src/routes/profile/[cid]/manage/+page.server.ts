@@ -1,57 +1,108 @@
-//@ts-nocheck
-
 import { redirect, error as svelteError } from '@sveltejs/kit'
-import { prisma, getRating, getStaffRoles, getCerts, getCtrCerts } from '$lib/db';
+import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
+import type { roster, ControllingSessions } from '@prisma/client';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params, cookies }) {
+export async function load({ params, cookies, locals }) {
+  // Make sure valid parameter is passed
   if (params.cid == undefined) {
     svelteError(404, 'User not found');
   }
-  let pageData = {
-    canEdit: false,
-    certs: {},
-    sessions: {}
-  }
-  {
-    let data: roster = await prisma.roster.findUnique({
-      where: {
-        cid: parseInt(params.cid)
-      },
-    });
-    data.cid = parseInt(data.cid);
-    data.del_certs = data.del_certs;
-    data.gnd_certs = data.gnd_certs;
-    data.twr_certs = data.twr_certs;
-    data.app_certs = data.app_certs;
-    data.ctr_cert = parseInt(data.ctr_cert);
-    data.rating = getRating(parseInt(data.rating));
-    pageData.certs = data
 
-    pageData.canEdit = await getStaffRoles(data.cid, "roster");
+  //Setup page data 
+  let pageData: PageData = new PageData();
+
+  //Check for user permissions from database
+  console.log(locals.session);
+  pageData.canEdit = await getStaffRoles(locals.session.userId, "roster"); 
+  
+  //Fetch roster data for user
+  let rosterData: roster = await prisma.roster.findUnique({
+    where: {
+      cid: parseInt(params.cid)
+    },
+  });
+
+  if (rosterData != null) {
+    pageData.onRoster = true;
+    pageData.certs.cid = Number(rosterData.cid);
+    pageData.certs.first_name = rosterData.first_name;
+    pageData.certs.last_name = rosterData.last_name;
+    pageData.certs.initials = rosterData.initials;
+    pageData.certs.staff_roles = rosterData.staff_roles;
+    pageData.certs.rating_changed = rosterData.rating_changed;
+    pageData.certs.facility = rosterData.home_facility;
+    pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
+    pageData.certs.gnd_certs = getCertsColor(rosterData.gnd_certs);
+    pageData.certs.twr_certs = getCertsColor(rosterData.twr_certs);
+    pageData.certs.app_certs = getCertsColor(rosterData.app_certs);
+    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
+    pageData.certs.rating = getRating(Number(rosterData.rating));
+  } else {
+    pageData.certs.cid = locals.user.id;
+    pageData.certs.first_name = locals.user.firstName;
+    pageData.certs.last_name = locals.user.lastName;
+    pageData.certs.rating = getRating(locals.user.rating);
   }
-  {
-    let data = await prisma.controllingSessions.findMany({
-      where: {
-        cid: parseInt(params.cid)
-      },
-      take: 5,
-    });
-    for (let i = 0; i < data.length; i++) {
-      data[i].logon_time = new Date(data[i].logon_time);
+
+  //Return data to page data
+  
+
+  //Fetch sessions data for user
+  let sessionsData: ControllingSessions[] = await prisma.controllingSessions.findMany({
+    where: {
+      cid: parseInt(params.cid)
+    },
+    take: 10,
+    orderBy: {
+      logon_time: 'desc'
     }
-    pageData.sessions = data;
+  });
+
+  //Process existing data
+  if (sessionsData != null) {
+    for (let i = 0; i < sessionsData.length; i++) {
+      let session: Sessions = {
+        id: Number(sessionsData[i].id),
+        cid: Number(sessionsData[i].cid),
+        callsign: sessionsData[i].callsign,
+        frequency: sessionsData[i].frequency,
+        logon_time: sessionsData[i].logon_time,
+        last_update: sessionsData[i].last_update,
+        duration: msToHours(sessionsData[i].duration)
+      }
+      pageData.sessions.push(session);
+    }
   }
-  return pageData;
+
+  //Make sure there are at least 5 rows so the table is complete
+  for (let i = pageData.sessions.length; i < 5; i++) {
+    pageData.sessions.push(null);
+  }
+
+  //Get staff roles to display on user page
+  let roles = pageData.certs.staff_roles.split(',');
+
+  //Process them
+  for (let i = 0; i < roles.length; i++) {
+    switch(roles[i]) {
+      case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "bg-sky-500"}); break;
+      case "WM": pageData.staffRoles.push({name: "Web Master", color: "bg-sky-500"} ); break;
+      case "FE": pageData.staffRoles.push({name: "Facility Engineer", color: "bg-sky-500"}); break;
+      case "WT": pageData.staffRoles.push({name: "Web Team", color: "bg-red-500"}); break;
+      default: break;
+    }
+  }
+  return {pageData: {...pageData}};
 }
 
 /** @type {import('./types').Actions} */
 export const actions = {
-  default: async({cookies, request}) => {
+  default: async({cookies, request, params}) => {
     const formData = await request.formData();
-    let user = await prisma.roster.findUnique({
+    let user: roster = await prisma.roster.findUnique({
       where: {
-        cid: parseInt(formData.get('cid'))
+        cid: parseInt(params.cid)
       }
     });
     if (user == null) {
@@ -65,16 +116,18 @@ export const actions = {
       // Sanitize data from database
       // For some reason bigints are turned with n
       // Example: The number stored is 5, it returns 5n
-      user.cid = parseInt(user.cid);
-      user.rating = parseInt(user.rating);
-      user.mentor_level = parseInt(user.mentor_level);
+      user.cid = BigInt(user.cid);
+      user.rating = BigInt(user.rating);
+      user.mentor_level = BigInt(user.mentor_level);
 
       // Update certifications based on the form data
-      user.del_certs = parseInt(formData.get('delivery'));
-      user.gnd_certs = parseInt(formData.get('ground'));
-      user.twr_certs = parseInt(formData.get('tower'));
-      user.app_certs = parseInt(formData.get('tracon'));
-      user.ctr_cert = parseInt(formData.get('enroute'));
+      user.del_certs = getCertInt(formData.get('delivery').toString());
+      user.gnd_certs = getCertInt(formData.get('ground').toString());
+      user.twr_certs = getCertInt(formData.get('tower').toString());
+      user.app_certs = getCertInt(formData.get('tracon').toString());
+      user.ctr_cert = getCtrCertInt(formData.get('enroute').toString());
+
+      user.staff_roles = formData.getAll('roles').join(',');
 
       let update = await prisma.roster.update({
         where: {
@@ -84,8 +137,105 @@ export const actions = {
       })
 
       if (update != null) {
-        redirect(302, `/roster/${user.cid}`);
+        redirect(302, `/profile/${user.cid}`);
       }
     }
   }
+}
+
+function getCertInt(cert: string): number {
+  switch(cert) {
+    case "Not Certified": {
+      return 0;
+    }
+    case "Tier 1": {
+      return 1;
+    }
+    case "Tier 1 Solo": {
+      return 1.5;
+    }
+    case "Tier 2": {
+      return 2;
+    }
+    case "Tier 2 Solo": {
+      return 2.5;
+    }
+    case "Unrestricted": {
+      return 3;
+    }
+  }
+}
+
+function getCtrCertInt(cert: string): number {
+  if (cert == "Certified") {
+    return 1
+  } else if (cert == "Solo Certified") {
+    return 1.5
+  } else if (cert == "Not Certified"){
+    return 0
+  }
+}
+
+class PageData {
+  onRoster: boolean;
+  canEdit: boolean;
+  certs: {
+    cid: number;
+    first_name: string;
+    last_name: string;
+    initials: string;
+    del_certs: Certs;
+    gnd_certs: Certs;
+    twr_certs: Certs;
+    app_certs: Certs;
+    ctr_cert: Certs;
+    rating: string;
+    staff_roles: string;
+    rating_changed: Date;
+    facility: string;
+  };
+  sessions: Sessions[];
+  staffRoles: StaffRoles[];
+
+  constructor() {
+    this.onRoster = false;
+    this.canEdit = false;
+    this.certs = {
+      cid: 0,
+      del_certs: {cert: "None", color: ""},
+      gnd_certs: {cert: "None", color: ""},
+      twr_certs: {cert: "None", color: ""},
+      app_certs: {cert: "None", color: ""},
+      ctr_cert: {cert: "None", color: ""},
+      rating: "",
+      staff_roles: "",
+      first_name: "",
+      last_name: "",
+      initials: "None",
+      facility: "",
+      rating_changed: null
+    };
+    this.sessions = [];
+    this.staffRoles = [];
+  }
+}
+
+type StaffRoles = {
+  name: string,
+  color: string
+}
+
+type Sessions = {
+  id: number,
+  cid: number,
+  callsign: string
+  frequency: string
+  logon_time: Date,
+  last_update: Date,
+  duration: string,
+}
+
+type Certs = {
+  cert: string
+  color: string
 }

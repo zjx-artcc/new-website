@@ -44,9 +44,6 @@ export async function load({ params, cookies, locals }) {
     pageData.certs.rating = getRating(locals.user.rating);
   }
 
-  //Return data to page data
-  
-
   //Fetch sessions data for user
   let sessionsData: ControllingSessions[] = await prisma.controllingSessions.findMany({
     where: {
@@ -92,7 +89,6 @@ export async function load({ params, cookies, locals }) {
       default: break;
     }
   }
-  console.log(pageData);
   return {pageData: {...pageData}};
 }
 
