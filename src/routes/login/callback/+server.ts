@@ -12,6 +12,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
   }
   let token = await getToken(code);
   let user = await getUser(token);
+  let rostered = await prisma.roster.findUnique({where: {cid: user.id}, select: {cid: true}}) != null;
   await prisma.user.upsert({
     where: {
       id: user.id
@@ -23,6 +24,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
       email: user.email,
       division: user.division,
       facility: user.facility ?? undefined,
+      rostered: rostered
     },
     create: {
       id: user.id,
@@ -32,7 +34,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
       email: user.email,
       division: user.division,
       facility: user.facility ?? undefined,
-      roles: ""
+      roles: "",
+      rostered: rostered
     }
   })
   const sessionToken = generateSessionToken();
