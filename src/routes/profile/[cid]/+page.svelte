@@ -24,11 +24,6 @@
 				<p class='inline rounded mx-2 px-2 py-0.5 {role.color}'>{role.name}</p>
 			{/each}
 		</h3>
-		<div class="pt-4 text-center">
-			{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.certs.cid.toString()}
-				<a href="/logout" class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Log Out</a>
-			{/if}
-		</div>
 	</div>
 </div>
 
