@@ -93,7 +93,6 @@ export async function load({ params, cookies, locals }) {
       default: break;
     }
   }
-  console.log(pageData);
   return {pageData: {...pageData}};
 }
 
@@ -101,7 +100,7 @@ export async function load({ params, cookies, locals }) {
 export const actions = {
   default: async({cookies, request, params}) => {
     const formData = await request.formData();
-    let user = await prisma.roster.findUnique({
+    let user: roster = await prisma.roster.findUnique({
       where: {
         cid: parseInt(params.cid)
       }
@@ -117,9 +116,9 @@ export const actions = {
       // Sanitize data from database
       // For some reason bigints are turned with n
       // Example: The number stored is 5, it returns 5n
-      user.cid = parseInt(user.cid);
-      user.rating = parseInt(user.rating);
-      user.mentor_level = parseInt(user.mentor_level);
+      user.cid = BigInt(user.cid);
+      user.rating = BigInt(user.rating);
+      user.mentor_level = BigInt(user.mentor_level);
 
       // Update certifications based on the form data
       user.del_certs = getCertInt(formData.get('delivery').toString());
@@ -127,6 +126,8 @@ export const actions = {
       user.twr_certs = getCertInt(formData.get('tower').toString());
       user.app_certs = getCertInt(formData.get('tracon').toString());
       user.ctr_cert = getCtrCertInt(formData.get('enroute').toString());
+
+      user.staff_roles = formData.getAll('roles').join(',');
 
       let update = await prisma.roster.update({
         where: {

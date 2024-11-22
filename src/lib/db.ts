@@ -147,16 +147,6 @@ export function getCertsColor(input: number): {cert: string, color: string} {
   }
 }
 
-//* Same thing but for center certs which are trinary
-export function getCtrCerts(certInt) {
-  if (certInt == 1) {
-    return "Center Certified"
-  } else if (certInt == 1.5) {
-    return "Center Solo"
-  } else {
-    return "None"
-  }
-}
 
 export function getCtrCertColor(input: number): {cert: string, color: string} {
   switch(input) {
@@ -168,13 +158,13 @@ export function getCtrCertColor(input: number): {cert: string, color: string} {
     }
     case 0: {
       return {
-        cert: getCtrCerts(input),
+        cert: "Center Solo",
         color: "slate-500"
       }
     }
     case 1.5: {
       return {
-        cert: getCtrCerts(input),
+        cert: "None",
         color: "yellow-500"
       }
     }

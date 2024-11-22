@@ -37,7 +37,7 @@
 </div>
 <form method="POST">
 	<div class="flex justify-center items-center self-center w-screen">
-		<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 9.5% 11% 13.6%;">
+		<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 9.5% 11% 11% 9.5%;">
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm">
 				<div class="flex flex-col space-y-1.5 p-6">
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
@@ -132,6 +132,23 @@
 							<option value={"Tier 2 Solo"}>Tier 2 Solo</option>
 							<option value={"Unrestricted"}>Unrestricted</option>
 							<option value={"Not Certified"}>Not Certified</option>
+						</select>
+					</div>
+				</div>
+				<div class="p-6 flex items-center justify-center">
+				</div>
+			</div>
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+				<div class="flex flex-col space-y-1.5 p-6 ">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						Staff Roles
+					</h3>
+					<hr class="px-1 border-slate-300">
+					<div>
+						<select id="roles" name="roles" multiple bind:value={pageData.certs.staff_roles}>
+							<option value={"ATM"}>Air Traffic Manager</option>
+							<option value={"WM"}>Web Master</option>
+							<option value={"WT"}>Web Team</option>
 						</select>
 					</div>
 				</div>

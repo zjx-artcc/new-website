@@ -10,7 +10,6 @@
 
 	export let data;
 	let pageData = data.pageData;
-	console.log(pageData);
 </script>
 
 <svelte:head>
