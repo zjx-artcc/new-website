@@ -97,6 +97,84 @@ export async function load({ params, cookies, locals }) {
   return {pageData: {...pageData}};
 }
 
+/** @type {import('./types').Actions} */
+export const actions = {
+  default: async({cookies, request, params}) => {
+    const formData = await request.formData();
+    let user = await prisma.roster.findUnique({
+      where: {
+        cid: parseInt(params.cid)
+      }
+    });
+    if (user == null) {
+      return {
+        status: 404,
+        body: {
+          error: "User not found"
+        }
+      }
+    } else {
+      // Sanitize data from database
+      // For some reason bigints are turned with n
+      // Example: The number stored is 5, it returns 5n
+      user.cid = parseInt(user.cid);
+      user.rating = parseInt(user.rating);
+      user.mentor_level = parseInt(user.mentor_level);
+
+      // Update certifications based on the form data
+      user.del_certs = getCertInt(formData.get('delivery').toString());
+      user.gnd_certs = getCertInt(formData.get('ground').toString());
+      user.twr_certs = getCertInt(formData.get('tower').toString());
+      user.app_certs = getCertInt(formData.get('tracon').toString());
+      user.ctr_cert = getCtrCertInt(formData.get('enroute').toString());
+
+      let update = await prisma.roster.update({
+        where: {
+          cid: user.cid
+        },
+        data: user
+      })
+
+      if (update != null) {
+        redirect(302, `/profile/${user.cid}`);
+      }
+    }
+  }
+}
+
+function getCertInt(cert: string): number {
+  switch(cert) {
+    case "None": {
+      return 0;
+    }
+    case "Tier 1": {
+      return 1;
+    }
+    case "Tier 1 Solo": {
+      return 1.5;
+    }
+    case "Tier 2": {
+      return 2;
+    }
+    case "Tier 2 Solo": {
+      return 2.5;
+    }
+    case "Unrestricted": {
+      return 3;
+    }
+  }
+}
+
+function getCtrCertInt(cert: string): number {
+  if (cert == "Certified") {
+    return 1
+  } else if (cert == "Solo Certified") {
+    return 1.5
+  } else {
+    return 0
+  }
+}
+
 class PageData {
   onRoster: boolean;
   canEdit: boolean;
@@ -123,11 +201,11 @@ class PageData {
     this.canEdit = false;
     this.certs = {
       cid: 0,
-      del_certs: {cert: "None", color: "", int: 0},
-      gnd_certs: {cert: "None", color: "", int: 0},
-      twr_certs: {cert: "None", color: "", int: 0},
-      app_certs: {cert: "None", color: "", int: 0},
-      ctr_cert: {cert: "None", color: "", int: 0},
+      del_certs: {cert: "None", color: ""},
+      gnd_certs: {cert: "None", color: ""},
+      twr_certs: {cert: "None", color: ""},
+      app_certs: {cert: "None", color: ""},
+      ctr_cert: {cert: "None", color: ""},
       rating: "",
       staff_roles: "",
       first_name: "",
@@ -158,51 +236,5 @@ type Sessions = {
 
 type Certs = {
   cert: string
-  color: string,
-  int: number
-}
-
-/** @type {import('./types').Actions} */
-export const actions = {
-  default: async({cookies, request}) => {
-    const formData = await request.formData();
-    let user = await prisma.roster.findUnique({
-      where: {
-        cid: parseInt(formData.get('cid'))
-      }
-    });
-    if (user == null) {
-      return {
-        status: 404,
-        body: {
-          error: "User not found"
-        }
-      }
-    } else {
-      // Sanitize data from database
-      // For some reason bigints are turned with n
-      // Example: The number stored is 5, it returns 5n
-      user.cid = parseInt(user.cid);
-      user.rating = parseInt(user.rating);
-      user.mentor_level = parseInt(user.mentor_level);
-
-      // Update certifications based on the form data
-      user.del_certs = parseInt(formData.get('delivery'));
-      user.gnd_certs = parseInt(formData.get('ground'));
-      user.twr_certs = parseInt(formData.get('tower'));
-      user.app_certs = parseInt(formData.get('tracon'));
-      user.ctr_cert = parseInt(formData.get('enroute'));
-
-      let update = await prisma.roster.update({
-        where: {
-          cid: user.cid
-        },
-        data: user
-      })
-
-      if (update != null) {
-        redirect(302, `/roster/${user.cid}`);
-      }
-    }
-  }
+  color: string
 }

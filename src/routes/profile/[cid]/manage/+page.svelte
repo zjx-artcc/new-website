@@ -35,54 +35,53 @@
     </nav>
   </div>
 </div>
-
-<div class="flex justify-center items-center self-center w-screen">
-	<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 9.5% 11% 13.6%;">
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Overview
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<div>
-					<h4 class="text-base">VATSIM CID:</h4>
-					<p class="text-sm text-slate-600">{pageData.certs.cid}</p>
-				</div>
-				<div>
-					<h4 class="text-base">ARTCC Status:</h4>
-					{#if pageData.certs.facility == "ZJX"}
-						<p class="text-sm text-green-600">Home Controller</p>
-					{:else if pageData.certs.facility != null && pageData.onRoster}
-						<p class="text-sm text-green-600">Visiting Controller</p>
-					{:else}
-						<p class="text-sm text-red-600">Not Affiliated</p>
-					{/if}
-				</div>
-				<div>
-					<h4 class="text-base">VATSIM Rating:</h4>
-					<p class="text-sm text-slate-600">{pageData.certs.rating}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Operating Initials:</h4>
-					<p class="text-sm text-slate-600">{pageData.certs.initials}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Last Promotion:</h4>
-					{#if pageData.certs.rating_changed != null}
-						<p class="text-sm text-slate-600">{pageData.certs.rating_changed.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
-					{:else}
-						<p class="text-sm text-slate-600">Not Available</p>
-					{/if}
+<form method="POST">
+	<div class="flex justify-center items-center self-center w-screen">
+		<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 9.5% 11% 13.6%;">
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+				<div class="flex flex-col space-y-1.5 p-6">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						Overview
+					</h3>
+					<hr class="px-1 border-slate-300">
+					<div>
+						<h4 class="text-base">VATSIM CID:</h4>
+						<p class="text-sm text-slate-600">{pageData.certs.cid}</p>
+					</div>
+					<div>
+						<h4 class="text-base">ARTCC Status:</h4>
+						{#if pageData.certs.facility == "ZJX"}
+							<p class="text-sm text-green-600">Home Controller</p>
+						{:else if pageData.certs.facility != null && pageData.onRoster}
+							<p class="text-sm text-green-600">Visiting Controller</p>
+						{:else}
+							<p class="text-sm text-red-600">Not Affiliated</p>
+						{/if}
+					</div>
+					<div>
+						<h4 class="text-base">VATSIM Rating:</h4>
+						<p class="text-sm text-slate-600">{pageData.certs.rating}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Operating Initials:</h4>
+						<p class="text-sm text-slate-600">{pageData.certs.initials}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Last Promotion:</h4>
+						{#if pageData.certs.rating_changed != null}
+							<p class="text-sm text-slate-600">{pageData.certs.rating_changed.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
+						{:else}
+							<p class="text-sm text-slate-600">Not Available</p>
+						{/if}
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6 ">
-				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Certifications
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<form method="POST">
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+				<div class="flex flex-col space-y-1.5 p-6 ">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						Certifications
+					</h3>
+					<hr class="px-1 border-slate-300">
 					<div>
 						<label for="enroute" class="text-base">Enroute:</label>
 						<select id="enroute" name="enroute" class="pl-1" bind:value={pageData.certs.ctr_cert.cert}>
@@ -115,7 +114,7 @@
 					</div>
 					<div>
 						<label for="ground" class="text-base">Ground:</label>
-						<select id="ground" name="tower" class="pl-1" bind:value={pageData.certs.gnd_certs.cert}>
+						<select id="ground" name="ground" class="pl-1" bind:value={pageData.certs.gnd_certs.cert}>
 							<option value={"Tier 1"}>Tier 1 Certified</option>
 							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
 							<option value={"Tier 2"}>Tier 2 Certified</option>
@@ -135,22 +134,22 @@
 							<option value={"Not Certified"}>Not Certified</option>
 						</select>
 					</div>
-				</form>
+				</div>
+				<div class="p-6 flex items-center justify-center">
+				</div>
 			</div>
-			<div class="p-6 flex items-center justify-center">
-			</div>
-		</div>
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm " data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Actions
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<div>
-					<button type="submit" class="text-blue-500">Save Changes</button>
-					<p class="text-red-500">Discard Changes</p>
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm " data-v0-t="card">
+				<div class="flex flex-col space-y-1.5 p-6">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						Actions
+					</h3>
+					<hr class="px-1 border-slate-300">
+					<div>
+						<button type="submit" class="text-blue-500">Save Changes</button>
+						<p class="text-red-500">Discard Changes</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
+</form>
