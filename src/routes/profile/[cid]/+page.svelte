@@ -203,14 +203,16 @@
 					{#if pageData.certs.cid == $page.data.session.userId && pageData.onRoster}
 						<p class="text-blue-500">Request Training</p>
 						<p class="text-blue-500">Request LOA</p>
-						
 					{/if}
 					{#if !pageData.onRoster}
 						<p class="text-blue-500">Request to Visit</p>
 						<p class="text-blue-500">Submit Feedback</p>
 					{/if}
 					{#if pageData.canEdit}
-						<a href="/profile/{pageData.certs.cid}/manage" class="text-blue-500">Edit User</a>
+						<p><a href="/profile/{pageData.certs.cid}/manage" class="text-blue-500">Edit User</a></p>
+					{/if}
+					{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.certs.cid.toString()}
+						<p class="text-red-500"><a href="/logout">Log Out</a></p>
 					{/if}
 				</div>
 			</div>

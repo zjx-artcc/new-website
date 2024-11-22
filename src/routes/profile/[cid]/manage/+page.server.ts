@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
 import type { roster, ControllingSessions } from '@prisma/client';
@@ -124,11 +123,11 @@ class PageData {
     this.canEdit = false;
     this.certs = {
       cid: 0,
-      del_certs: {cert: "None", color: ""},
-      gnd_certs: {cert: "None", color: ""},
-      twr_certs: {cert: "None", color: ""},
-      app_certs: {cert: "None", color: ""},
-      ctr_cert: {cert: "None", color: ""},
+      del_certs: {cert: "None", color: "", int: 0},
+      gnd_certs: {cert: "None", color: "", int: 0},
+      twr_certs: {cert: "None", color: "", int: 0},
+      app_certs: {cert: "None", color: "", int: 0},
+      ctr_cert: {cert: "None", color: "", int: 0},
       rating: "",
       staff_roles: "",
       first_name: "",
@@ -160,6 +159,7 @@ type Sessions = {
 type Certs = {
   cert: string
   color: string,
+  int: number
 }
 
 /** @type {import('./types').Actions} */

@@ -1,16 +1,12 @@
 <script>
 	import { Card, Button, Toggle } from 'flowbite-svelte';
 	import '$lib/app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
-	import ATCCard from '$lib/components/ATCCard.svelte';
 	import { page } from '$app/stores';
-	import { redirect } from '@sveltejs/kit';
 	import _ from 'lodash';
 
 	export let data;
 	let pageData = data.pageData;
-	console.log(pageData);
 </script>
 
 <svelte:head>
@@ -25,11 +21,6 @@
 				<p class='inline rounded mx-2 px-2 py-0.5 {role.color}'>{role.name}</p>
 			{/each}
 		</h3>
-		<div class="pt-4 text-center">
-			{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.certs.cid.toString()}
-				<a href="/logout" class="bg-red-500 text-white px-2 pb-1 rounded-md text-xl">Log Out</a>
-			{/if}
-		</div>
 	</div>
 </div>
 
@@ -45,9 +36,9 @@
   </div>
 </div>
 
-<div class="flex justify-center items-center w-screen">
-	<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 9.5% 11% 32% 32% 13.6%;">
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+<div class="flex justify-center items-center self-center w-screen">
+	<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 9.5% 11% 13.6%;">
+		<div class="rounded-lg border bg-card text-card-foreground shadow-sm">
 			<div class="flex flex-col space-y-1.5 p-6">
 				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
 					Overview
@@ -86,111 +77,67 @@
 			</div>
 		</div>
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6">
+			<div class="flex flex-col space-y-1.5 p-6 ">
 				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
 					Certifications
 				</h3>
 				<hr class="px-1 border-slate-300">
-				<div>
-					<h4 class="text-base">Enroute:</h4>
-					<p class="text-sm text-{pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Approach:</h4>
-					<p class="text-sm text-{pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Tower:</h4>
-					<p class="text-sm text-{pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Ground:</h4>
-					<p class="text-sm text-{pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Delivery:</h4>
-					<p class="text-sm text-{pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
-				</div>
+				<form method="POST">
+					<div>
+						<label for="enroute" class="text-base">Enroute:</label>
+						<select id="enroute" name="enroute" class="pl-1" bind:value={pageData.certs.ctr_cert.cert}>
+							<option value={"Certified"}>Certified</option>
+							<option value={"Solo Certified"}>Solo Certified</option>
+							<option value={"Not Certified"}>Not Certified</option>
+						</select>
+					</div>
+					<div>
+						<label for="tracon" class="text-base">Approach:</label>
+						<select id="tracon" name="tracon" class="pl-1" bind:value={pageData.certs.app_certs.cert}>
+							<option value={"Tier 1"}>Tier 1 Certified</option>
+							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
+							<option value={"Tier 2"}>Tier 2 Certified</option>
+							<option value={"Tier 2 Solo"}>Tier 2 Solo</option>
+							<option value={"Unrestricted"}>Unrestricted</option>
+							<option value={"Not Certified"}>Not Certified</option>
+						</select>
+					</div>
+					<div>
+						<label for="tower" class="text-base">Tower:</label>
+						<select id="tower" name="tower" class="pl-1" bind:value={pageData.certs.twr_certs.cert}>
+							<option value={"Tier 1"}>Tier 1 Certified</option>
+							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
+							<option value={"Tier 2"}>Tier 2 Certified</option>
+							<option value={"Tier 2 Solo"}>Tier 2 Solo</option>
+							<option value={"Unrestricted"}>Unrestricted</option>
+							<option value={"Not Certified"}>Not Certified</option>
+						</select>
+					</div>
+					<div>
+						<label for="ground" class="text-base">Ground:</label>
+						<select id="ground" name="tower" class="pl-1" bind:value={pageData.certs.gnd_certs.cert}>
+							<option value={"Tier 1"}>Tier 1 Certified</option>
+							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
+							<option value={"Tier 2"}>Tier 2 Certified</option>
+							<option value={"Tier 2 Solo"}>Tier 2 Solo</option>
+							<option value={"Unrestricted"}>Unrestricted</option>
+							<option value={"Not Certified"}>Not Certified</option>
+						</select>
+					</div>
+					<div>
+						<label for="delivery" class="text-base">Delivery:</label>
+						<select id="delivery" name="delivery" class="pl-1" bind:value={pageData.certs.del_certs.cert}>
+							<option value={"Tier 1"}>Tier 1 Certified</option>
+							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
+							<option value={"Tier 2"}>Tier 2 Certified</option>
+							<option value={"Tier 2 Solo"}>Tier 2 Solo</option>
+							<option value={"Unrestricted"}>Unrestricted</option>
+							<option value={"Not Certified"}>Not Certified</option>
+						</select>
+					</div>
+				</form>
 			</div>
 			<div class="p-6 flex items-center justify-center">
-			</div>
-		</div>
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Recent Controlling Sessions
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<table class="text-center">
-					<thead class="border-b">
-						<tr>
-							<th>Date</th>
-							<th>Start Time</th>
-							<th>End Time</th>
-							<th>Callsign</th>
-							<th>Duration</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each pageData.sessions as session}
-							{#if session != null}
-								<tr>
-									<td class="text-sm text-slate-600">{session.logon_time.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
-									<td class="text-sm text-slate-600">{session.logon_time.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.last_update.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.callsign}</td>
-									<td class="text-sm text-slate-600">{session.duration}</td>
-								</tr>
-							{:else}
-								<tr>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-								</tr>
-							{/if}
-						{/each}
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Recent Training Sessions
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<table class="text-center">
-					<thead class="border-b">
-						<tr>
-							<th>Date</th>
-							<th>Type</th>
-							<th>Position</th>
-							<th>Training Staff</th>
-							<th>Notes</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each pageData.sessions as session}
-							{#if session != null}
-								<tr>
-									<td class="text-sm text-slate-600">{session.logon_time.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
-									<td class="text-sm text-slate-600">{session.logon_time.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.last_update.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.callsign}</td>
-									<td class="text-sm text-slate-600"></td>
-								</tr>
-							{:else}
-								<tr>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-								</tr>
-							{/if}
-						{/each}
-					</tbody>
-				</table> 
 			</div>
 		</div>
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm " data-v0-t="card">
@@ -200,8 +147,8 @@
 				</h3>
 				<hr class="px-1 border-slate-300">
 				<div>
-					<p class="text-blue-500">Save Changes</p>
-					<p class="text-blue-500">Discard Changes</p>
+					<button type="submit" class="text-blue-500">Save Changes</button>
+					<p class="text-red-500">Discard Changes</p>
 				</div>
 			</div>
 		</div>
