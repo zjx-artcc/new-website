@@ -145,7 +145,7 @@ export const actions = {
 
 function getCertInt(cert: string): number {
   switch(cert) {
-    case "None": {
+    case "Not Certified": {
       return 0;
     }
     case "Tier 1": {
@@ -171,7 +171,7 @@ function getCtrCertInt(cert: string): number {
     return 1
   } else if (cert == "Solo Certified") {
     return 1.5
-  } else {
+  } else if (cert == "Not Certified"){
     return 0
   }
 }

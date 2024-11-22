@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>{pageData.certs.first_name} {pageData.certs.last_name} - Jacksonville ARTCC</title>
+	<title>Editing {pageData.certs.first_name} {pageData.certs.last_name} - Jacksonville ARTCC</title>
 </svelte:head>
 
 <div class="h-48">

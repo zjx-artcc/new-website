@@ -143,7 +143,7 @@ export function getCertsColor(input: number): {cert: string, color: string} {
   switch(input) {
     case 0: {
       return {
-        cert: "None",
+        cert: "Not Certified",
         color: "slate-500"
       }
     }
@@ -195,13 +195,13 @@ export function getCtrCertColor(input: number): {cert: string, color: string} {
     }
     case 0: {
       return {
-        cert: "Center Solo",
+        cert: "Not Certified",
         color: "slate-500"
       }
     }
     case 1.5: {
       return {
-        cert: "None",
+        cert: "Solo Certified",
         color: "yellow-500"
       }
     }
