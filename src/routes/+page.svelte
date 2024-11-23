@@ -54,22 +54,7 @@
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 columns-1">
 				<div class="bg-white shadow p-4" style="width: auto;">
 					<h3 class="font-semibold mb-2">ZJX News</h3>
-					<table class="table-auto w-full">
-						<thead>
-							<tr class="pt-4">
-								<th class="pt-4 border border-slate-500 inline-block align-middle w-full border-collapse">Date:</th>
-								<th class="pt-4 border border-slate-500 w-50 border-collapse">NOTAM:</th>
-							</tr>
-						</thead>
-						<tbody class="text-center">
-							{#each data.notams as notam}
-							<tr>
-								<td class="pt-4 border border-slate-500">{new Date(notam.created_at).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-								<td class="pt-4 border border-slate-500">{notam.body}</td>
-							</tr>
-							{/each}
-						</tbody>
-					</table>
+					
 					<span class=" mt-4 block text-center justify-center items-center">
 						For More Information, 
 						<a href="https://discord.gg" style="width: 100%; text-decoration: none; color: blue;">Join the Discord!</a>

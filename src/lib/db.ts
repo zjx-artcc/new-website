@@ -1,9 +1,7 @@
-// @ts-nocheck
+//@ts-nocheck
 import { PrismaClient } from "@prisma/client";
-import type { roster } from '@prisma/client';
-import { redirect } from "@sveltejs/kit";
 
-let prisma;
+let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === "production") {
   prisma = new PrismaClient();
@@ -75,7 +73,7 @@ export function msToHours(input: number): string {
  * @returns {boolean} True if user has permission to access page
  */
 export async function getStaffRoles(cid: number, type: string): Promise<boolean> {
-  let data = await prisma.user.findFirst({
+  let data = await prisma.users.findFirst({
     where: {
       id: cid
     },

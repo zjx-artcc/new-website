@@ -7,139 +7,132 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model events {
-  id               BigInt             @id @default(autoincrement())
-  last_modified    DateTime           @default(now()) @db.Timestamptz(6)
-  created_by       BigInt
-  name             String
-  description      String
-  event_start      DateTime           @db.Timestamptz(6)
-  event_end        DateTime           @db.Timestamptz(6)
-  host             String
-  hidden           Boolean            @default(true)
-  banner           String
-  positions        Json?
-  roster           roster             @relation(fields: [created_by], references: [cid], onDelete: NoAction, onUpdate: NoAction)
-  positionRequests PositionRequests[]
-}
-
-model notams {
-  id         BigInt   @id
-  created_at DateTime @db.Timestamptz(6)
-  author     BigInt
-  body       String
-  roster     roster   @relation(fields: [author], references: [cid], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model roster {
-  cid               BigInt                @id
-  email             String
-  home_facility     String
-  created_at        DateTime              @default(now()) @db.Timestamptz(6)
-  rating            BigInt
-  del_certs         Float
-  gnd_certs         Float
-  twr_certs         Float
-  app_certs         Float
-  ctr_cert          Int
-  initials          String
-  first_name        String
-  last_name         String
-  staff_roles       String
-  mentor_level      BigInt?               @default(0)
-  rating_changed    DateTime?             @default(now()) @db.Timestamptz(6)
-  sop_course        Boolean               @default(false)
-  sessions          ControllingSessions[]
-  events            events[]
-  notams            notams[]
-  onlineControllers OnlineControllers[]
-  positionRequests  PositionRequests[]
-  stats             stats?
-}
-
-model ControllingSessions {
+model controller_sessions {
   id          BigInt    @id
-  cid         BigInt
+  cid         Int
   callsign    String?   @db.VarChar(255)
   frequency   String?   @db.VarChar(255)
   logon_time  DateTime? @db.Timestamptz(6)
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
   roster      roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
-
-  @@map("controller_sessions")
 }
 
-model stats {
-  cid         BigInt @id
-  month_one   Float  @default(0.0)
-  month_two   Float  @default(0.0)
-  month_three Float  @default(0.0)
-  roster      roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+model events {
+  id                BigInt              @id @default(autoincrement())
+  last_modified     DateTime            @default(now()) @db.Timestamptz(6)
+  created_by        Int
+  name              String
+  description       String
+  event_start       DateTime            @db.Timestamptz(6)
+  event_end         DateTime            @db.Timestamptz(6)
+  host              String
+  hidden            Boolean             @default(true)
+  banner            String
+  positions         Json?
+  roster            roster              @relation(fields: [created_by], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+  position_requests position_requests[]
 }
 
 model OnlineControllers {
   id          BigInt    @id
-  cid         BigInt?
+  cid         Int?
   callsign    String?   @db.VarChar(255)
   frequency   String?   @db.VarChar(255)
   logon_time  DateTime? @db.Timestamptz(6)
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
   roster      roster?   @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
-
   @@map("online_controllers")
 }
 
-model PositionRequests {
-  cid        BigInt
+model position_requests {
+  cid        Int
   event_id   BigInt?
   position   String
   request_id Int     @id(map: "request_id") @default(autoincrement())
   roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
   events     events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
-
-  @@map("position_requests")
 }
 
-model VisitRequests {
-  id     BigInt @id
-  cid    Int
-  reason String
-  User   User   @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+model roster {
+  cid                 Int                   @id
+  email               String
+  home_facility       String
+  created_at          DateTime              @default(now()) @db.Timestamptz(6)
+  rating              BigInt
+  del_certs           Float
+  gnd_certs           Float
+  twr_certs           Float
+  app_certs           Float
+  ctr_cert            Int
+  initials            String
+  first_name          String
+  last_name           String
+  staff_roles         String
+  mentor_level        BigInt?               @default(0)
+  rating_changed      DateTime?             @default(now()) @db.Timestamptz(6)
+  sop_course          Boolean               @default(false)
+  controller_sessions controller_sessions[]
+  events              events[]
+  onlineControllers   OnlineControllers[]
+  position_requests   position_requests[]
+  stats               Stats[]
+}
 
-  @@map("visit_requests")
+model Stats {
+  cid           Int    @id
+  month_one     Float  @default(0.0)
+  month_two     Float  @default(0.0)
+  month_three   Float  @default(0.0)
+  quarter_one   Float?
+  quarter_two   Float?
+  quarter_three Float?
+  quarter_four  Float?
+  ytd           Float?
+  all_time      Float?
+  delivery      Float?
+  ground        Float?
+  tower         Float?
+  tracon        Float?
+  enroute       Float?
+  mco_delivery  Float?
+  mco_ground    Float?
+  mco_tower     Float?
+  mco_tracon    Float?
+  roster        roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("stats")
 }
 
 model User {
-  id            Int             @id
-  firstName     String          @map("first_name")
-  lastName      String          @map("last_name")
-  email         String          @unique
-  division      String
-  facility      String?
-  rating        Int
-  roles         String
-  rostered      Boolean?
-  visitRequests VisitRequests[]
-  sessions      Session[]
+  id             Int              @id
+  first_name     String
+  last_name      String
+  email          String           @unique
+  division       String
+  facility       String?
+  rating         Int
+  roles          String
+  rostered       Boolean?
+  visit_requests visit_requests[]
+  sessions       WebSession[]
 
   @@map("users")
 }
 
-model Session {
+model visit_requests {
+  id     BigInt @id
+  cid    Int
+  reason String
+  users  User  @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+}
+
+model WebSession {
   id        String   @id
   userId    Int
   expiresAt DateTime
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("web_sessions")
-}
-
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@id([identifier, token])
 }

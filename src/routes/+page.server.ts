@@ -1,44 +1,36 @@
-//@ts-nocheck
 import { getHours, getRating, prisma } from '$lib/db';
+import type { Stats } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, locals }) => {
-  let pageData = {
-    stats: {},
-    newController: {},
-    events: {},
-    notams: {},
-    online: {},
-    totalHours: 0
-  };
-  {
-    const data = await prisma.stats.findMany({
-      take: 3,
-      orderBy: {
-        month_one: 'desc',
+  //Setup page data
+  let pageData = new PageData();
+
+  //Fetch top 3 controllers for the month
+  const data = await prisma.stats.findMany({
+    take: 3,
+    orderBy: {
+      month_one: 'desc',
+    },
+    select: {
+      month_one: true,
+      cid: true
+    }
+  });
+
+  //Get the top 3 controllers' names
+  for (let i = 0; i < data.length; i++) {
+    const user = await prisma.roster.findFirst({
+      where: {
+        cid: data[i].cid,
       },
       select: {
-        month_one: true,
-        cid: true
+        first_name: true,
+        last_name: true
       }
     });
-    for (let i = 0; i < data.length; i++) {
-      data[i].cid = parseInt(data[i].cid.toString())
-      const user = await prisma.roster.findFirst({
-        where: {
-          cid: data[i].cid,
-        },
-        select: {
-          first_name: true,
-          last_name: true
-        }
-      });
-      data[i].first_name = user.first_name;
-      data[i].last_name = user.last_name;
-      data[i].month_one = getHours(data[i].month_one);
-    }
-    pageData.stats = data;
   }
+  pageData.stats = data;
   {
     const data = await prisma.roster.findMany({
       take: 3,
@@ -65,15 +57,6 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       }
     });
     pageData.events = data;
-  }
-  {
-    const data = await prisma.notams.findMany({
-      take: 3,
-      orderBy: {
-        created_at: 'desc'
-      }
-    })
-    pageData.notams = data;
   }
   {
     const data = await prisma.OnlineControllers.findMany({
@@ -110,3 +93,15 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   }
   return pageData;
 }
+
+class PageData {
+  stats: {},
+  newController: {},
+  events: {},
+  online: {},
+  totalHours: 0
+
+  constructor() {
+
+  }
+};
