@@ -74,6 +74,10 @@
 							<p class="text-sm text-slate-600">Not Available</p>
 						{/if}
 					</div>
+					<div>
+						<h4 class="text-base">Hours:</h4>
+						<p class="text-sm text-slate-600">00:00</p>
+					</div>
 				</div>
 			</div>
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
