@@ -165,24 +165,6 @@
 					</tbody>
 				</table>
 			</div>
-
-			<!-- Expected ATC -->
-			<div class="bg-white shadow p-4">
-				<h3 class="font-semibold mb-2">Expected ATC</h3>
-				<p>Note: Expected coverage does not guarantee coverage will be present</p>
-				<table style="border-spacing: 0; border-collapse: collapse; width: 100%;">
-					<tbody>
-						{#each data.bookings as booking}
-						<ATCCard
-							name="{booking.first_name} {booking.last_name}"
-							position="{booking.position}"
-							startDate={new Date(booking.booking_start).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
-							endDate={new Date(booking.booking_end).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
-						/>
-						{/each}
-					</tbody>
-				</table>
-			</div>
 		</div>
 	</section>
 </main>

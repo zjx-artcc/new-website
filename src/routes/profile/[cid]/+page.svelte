@@ -8,6 +8,8 @@
 	import { redirect } from '@sveltejs/kit';
 	import _ from 'lodash';
 
+	let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 	export let data;
 	let pageData = data.pageData;
 </script>
@@ -40,42 +42,64 @@
 </div>
 
 <div class="flex justify-center items-center w-screen">
-	<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 9.5% 11% 32% 32% 13.6%;">
+	<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 16% 10% 32% 31% 9.5%;">
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 			<div class="flex flex-col space-y-1.5 p-6">
 				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
 					Overview
 				</h3>
 				<hr class="px-1 border-slate-300">
-				<div>
-					<h4 class="text-base">VATSIM CID:</h4>
-					<p class="text-sm text-slate-600">{pageData.certs.cid}</p>
-				</div>
-				<div>
-					<h4 class="text-base">ARTCC Status:</h4>
-					{#if pageData.certs.facility == "ZJX"}
-						<p class="text-sm text-green-600">Home Controller</p>
-					{:else if pageData.certs.facility != null && pageData.onRoster}
-						<p class="text-sm text-green-600">Visiting Controller</p>
-					{:else}
-						<p class="text-sm text-red-600">Not Affiliated</p>
-					{/if}
-				</div>
-				<div>
-					<h4 class="text-base">VATSIM Rating:</h4>
-					<p class="text-sm text-slate-600">{pageData.certs.rating}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Operating Initials:</h4>
-					<p class="text-sm text-slate-600">{pageData.certs.initials}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Last Promotion:</h4>
-					{#if pageData.certs.rating_changed != null}
-						<p class="text-sm text-slate-600">{pageData.certs.rating_changed.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
-					{:else}
-						<p class="text-sm text-slate-600">Not Available</p>
-					{/if}
+				<div class="grid grid-cols-2">
+					<div>
+						<h4 class="text-base">VATSIM CID:</h4>
+						<p class="text-sm text-slate-600">{pageData.certs.cid}</p>
+					</div>
+					<div>
+						<h4 class="text-base">ARTCC Status:</h4>
+						{#if pageData.certs.facility == "ZJX"}
+							<p class="text-sm text-green-600">Home Controller</p>
+						{:else if pageData.certs.facility != null && pageData.onRoster}
+							<p class="text-sm text-green-600">Visiting Controller</p>
+						{:else}
+							<p class="text-sm text-red-600">Not Affiliated</p>
+						{/if}
+					</div>
+					<div>
+						<h4 class="text-base">VATSIM Rating:</h4>
+						<p class="text-sm text-slate-600">{pageData.certs.rating}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Last Promotion:</h4>
+						{#if pageData.certs.rating_changed != null}
+							<p class="text-sm text-slate-600">{pageData.certs.rating_changed.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
+						{:else}
+							<p class="text-sm text-slate-600">Not Available</p>
+						{/if}
+					</div>
+					<div>
+						<h4 class="text-base">Operating Initials:</h4>
+						<p class="text-sm text-slate-600">{pageData.certs.initials}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Reward Tier:</h4>
+						<p class="text-sm text-slate-600">None</p>
+					</div>
+					<div>
+						<h4 class="text-base">{months[new Date().getUTCMonth() - 2]} Hours:</h4>
+						<p class="text-sm text-slate-600">00:00</p>
+					</div>
+					<div>
+						<h4 class="text-base">{months[new Date().getUTCMonth() - 1]} Hours:</h4>
+						<p class="text-sm text-slate-600">00:00</p>
+					</div>
+					<div>
+						<h4 class="text-base">{months[new Date().getUTCMonth()]} Hours:</h4>
+						<p class="text-sm text-slate-600">00:00</p>
+					</div>
+					<div>
+						<h4 class="text-base">All Time Hours:</h4>
+						<p class="text-sm text-slate-600">00:00</p>
+					</div>
 				</div>
 			</div>
 		</div>

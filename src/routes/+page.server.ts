@@ -7,7 +7,6 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     stats: {},
     newController: {},
     events: {},
-    bookings: {},
     notams: {},
     online: {},
     totalHours: 0
@@ -66,28 +65,6 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       }
     });
     pageData.events = data;
-  }
-  {
-    const data = await prisma.bookings.findMany({
-      take: 3,
-      orderBy: {
-        booking_start: 'asc'
-      }
-    })
-    for (let i = 0; i < data.length; i++) {
-      const user = await prisma.roster.findFirst({
-        where: {
-          cid: data[i].cid,
-        },
-        select: {
-          first_name: true,
-          last_name: true
-        }
-      });
-      data[i].first_name = user.first_name;
-      data[i].last_name = user.last_name;
-    }
-    pageData.bookings = data;
   }
   {
     const data = await prisma.notams.findMany({
