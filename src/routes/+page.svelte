@@ -11,6 +11,7 @@
 
 	const today = new Date();
 	export let data;
+	const pageData = data.pageData;
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>
 
@@ -32,19 +33,19 @@
 <div class="flex flex-wrap justify-center mt-10 mb-5">
 	<Card
 		title="Top Controller of {currentMonthName}"
-		subtext="{data.stats[0].first_name} {data.stats[0].last_name}" timestamp="{data.stats[0].month_one} HOURS"
+		subtext="{pageData.stats[0].firstName} {pageData.stats[0].lastName}" timestamp="{pageData.stats[0].hours} HOURS"
 		icon="ant-design:hourglass-twotone"
 	/>
 	<Card
 		title="Next Event"
-		subtext={data.events[0].name} 
-		timestamp={new Date(data.events[0].event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+		subtext={pageData.events[0].name} 
+		timestamp={pageData.events[0].start.toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
 		icon="ion:calendar"
 	/>
 	<Card
 		title="Newest Home Controller"
-		subtext="{data.newController[0].first_name} {data.newController[0].last_name} ({data.newController[0].rating})"
-		timestamp="Joined {new Date(data.newController[0].created_at).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric' })}"
+		subtext="{pageData.newControllers[0].firstName} {pageData.newControllers[0].lastName} ({pageData.newControllers[0].rating})"
+		timestamp="Joined {pageData.newControllers[0].joined.toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric' })}"
 		icon="material-symbols:person"
 	/>
 </div>
@@ -53,19 +54,11 @@
 		<section class="my-6">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 columns-1">
 				<div class="bg-white shadow p-4" style="width: auto;">
-					<h3 class="font-semibold mb-2">ZJX News</h3>
-					
-					<span class=" mt-4 block text-center justify-center items-center">
-						For More Information, 
-						<a href="https://discord.gg" style="width: 100%; text-decoration: none; color: blue;">Join the Discord!</a>
-					</span>
-					<hr class="bg-slate-500 my-2 h-0.5">
 					<h3 class="font-semibold mb-2">Upcoming Events</h3>
-					<!-- New controller list goes here -->
 					<div class="table-responsive">
 						<table class="table table-striped table-hover table-leftpadded mb-0" width="100%" cellspacing="0">
 							<tbody>
-								{#each data.events as event}
+								{#each pageData.events as event}
 								<tr style="background-color: rgba(255, 255, 255);">
 									<td style="width: 50%;" align="left">
 										<a href="/events/{event.id}/">
@@ -80,7 +73,7 @@
 										</a>
 										<div style="text-align:center; font-size: 20px;">Hosted by: {event.host}</div>
 										<br />
-										<div style="text-align:center; font-size: 20px;">{new Date(event.event_start).toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
+										<div style="text-align:center; font-size: 20px;">{event.start.toLocaleString(undefined, { month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</div>
 									</td>
 								</tr>
 								<tr>
@@ -96,14 +89,20 @@
 						<h3 class="font-semibold mb-2">Online Controllers</h3>
 						<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
 							<tbody>
-								{#each data.online as onlineController}
-								<ATCCard
-									name="{onlineController.callsign}"
-									position="Online Since:"
-									startDate="{onlineController.first_name} {onlineController.last_name}"
-									endDate={new Date(onlineController.logon_time).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
-								/>
-								{/each}
+								{#if pageData.online.length > 0}
+									{#each pageData.online as onlineController}
+									<ATCCard
+										name="{onlineController.callsign}"
+										position="Online Since:"
+										startDate="{onlineController.firstName} {onlineController.lastName}"
+										endDate={new Date(onlineController.logon_time).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+									/>
+									{/each}
+								{:else}
+									<tr>
+										<td colspan="2" class="text-center">No controllers online at this time.</td>
+									</tr>
+								{/if}
 							</tbody>
 						</table>
 					</div>
@@ -112,39 +111,36 @@
 						<h3 class="font-semibold mb-2">This Month's Stats</h3>
 						<div class="flex flex-col items-center">
 							<div class="text-xl font-bold text-blue-600 mr-2">Hours Controlled This Month:</div>
-							<div class="font-bold text-gray-800 mr-2 text-right">{data.totalHours}</div>
+							<div class="font-bold text-gray-800 mr-2 text-right">{pageData.totalHours}</div>
 						</div>
 						<div class="flex flex-col items-center">
 							<div class="text-yellow-500 text-left">★★★</div>
-							<div class="font-bold text-gray-800 mr-2 text-right">{data.stats[0].first_name} {data.stats[0].last_name}</div>
-							<div class="text-gray-800 mr-2 text-right">{data.stats[0].month_one} hours</div>
+							<div class="font-bold text-gray-800 mr-2 text-right">{pageData.stats[0].firstName} {pageData.stats[0].lastName}</div>
+							<div class="text-gray-800 mr-2 text-right">{pageData.stats[0].hours} hours</div>
 							<br>
 							<span class="text-gray-500">★★</span>
-							<div class="font-bold text-gray-800 mr-2">{data.stats[1].first_name} {data.stats[1].last_name}</div>
-							<div class="text-gray-800 mr-2 text-right">{data.stats[1].month_one} hours</div>
+							<div class="font-bold text-gray-800 mr-2">{pageData.stats[1].firstName} {pageData.stats[1].lastName}</div>
+							<div class="text-gray-800 mr-2 text-right">{pageData.stats[1].hours} hours</div>
 							<br>
 							<span class="text-red-500">★</span>
-							<div class="font-bold text-gray-800 mr-2">{data.stats[2].first_name} {data.stats[2].last_name}</div>
-							<div class="text-gray-800 mr-2 text-right">{data.stats[2].month_one} hours</div>
+							<div class="font-bold text-gray-800 mr-2">{pageData.stats[2].firstName} {pageData.stats[2].lastName}</div>
+							<div class="text-gray-800 mr-2 text-right">{pageData.stats[2].hours} hours</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
-		<!--Footer cards-->
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-			<!-- News -->
-			<!-- Upcoming Events -->
 			<div class="bg-white shadow p-4">
 				<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
 				<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
 					<tbody>
-						{#each data.newController as controller}
+						{#each pageData.newControllers as controller}
 						<ATCCard
-							name="{controller.first_name} {controller.last_name} ({controller.rating})"
+							name="{controller.firstName} {controller.lastName} ({controller.rating})"
 							position="Joined ZJX on:"
 							startDate=""
-							endDate="{new Date(controller.created_at).toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}"
+							endDate="{controller.joined.toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}"
 						/>
 						{/each}
 					</tbody>
@@ -153,8 +149,6 @@
 		</div>
 	</section>
 </main>
-
-<!-- Main Content -->
 
 <div
 	class="bg-image"
@@ -190,3 +184,4 @@
 		</div>
 	</div>
 </div>
+

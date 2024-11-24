@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model controller_sessions {
+model ControllerSessions {
   id          BigInt    @id
   cid         Int
   callsign    String?   @db.VarChar(255)
@@ -16,10 +16,12 @@ model controller_sessions {
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
   roster      roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("controller_sessions")
 }
 
 model events {
-  id                BigInt              @id @default(autoincrement())
+  id                Int                @id @default(autoincrement())
   last_modified     DateTime            @default(now()) @db.Timestamptz(6)
   created_by        Int
   name              String
@@ -43,12 +45,13 @@ model OnlineControllers {
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
   roster      roster?   @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
+
   @@map("online_controllers")
 }
 
 model position_requests {
   cid        Int
-  event_id   BigInt?
+  event_id   Int
   position   String
   request_id Int     @id(map: "request_id") @default(autoincrement())
   roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
@@ -60,7 +63,7 @@ model roster {
   email               String
   home_facility       String
   created_at          DateTime              @default(now()) @db.Timestamptz(6)
-  rating              BigInt
+  rating              Int
   del_certs           Float
   gnd_certs           Float
   twr_certs           Float
@@ -73,11 +76,11 @@ model roster {
   mentor_level        BigInt?               @default(0)
   rating_changed      DateTime?             @default(now()) @db.Timestamptz(6)
   sop_course          Boolean               @default(false)
-  controller_sessions controller_sessions[]
+  controllerSessions  ControllerSessions[]
   events              events[]
   onlineControllers   OnlineControllers[]
   position_requests   position_requests[]
-  stats               Stats[]
+  stats               Stats?
 }
 
 model Stats {
@@ -125,14 +128,14 @@ model visit_requests {
   id     BigInt @id
   cid    Int
   reason String
-  users  User  @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+  users  User   @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
 }
 
 model WebSession {
   id        String   @id
   userId    Int
   expiresAt DateTime
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("web_sessions")
 }

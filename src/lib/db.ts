@@ -52,6 +52,9 @@ export function getRating(ratingInt: number): string {
  * @returns {string} Hours in HH:MM Format
  */
 export function getHours(input: number):string {
+  if (input == 0) {
+    return "00:00";
+  }
   let hours = Math.floor(input);
   let minutes = Math.round((input - hours) * 60).toString().padStart(2, "0");
   return `${hours.toString().padStart(2,"0")}:${minutes}`;
