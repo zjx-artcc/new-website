@@ -72,48 +72,40 @@
 				<div class="bg-white shadow p-4" style="width: auto;">
 					<h3 class="font-semibold mb-2">Upcoming Events</h3>
 					<div class="table-responsive">
-						<table
-							class="table table-striped table-hover table-leftpadded mb-0"
-							width="100%"
-							cellspacing="0"
-						>
-							<tbody>
-								{#each pageData.events as event}
-									<tr style="background-color: rgba(255, 255, 255);">
-										<td style="width: 50%;" align="left">
-											<a href="/events/{event.id}/">
-												<img loading="lazy" width="100%" src={event.banner} alt={event.name} />
-											</a>
-										</td>
-										<td style="width: 50%;">
-											<a href="/events/{event.id}/">
-												<div style="text-align:center; font-size: 24px;">
-													<b>{event.name}</b>
-												</div>
-											</a>
-											<div style="text-align:center; font-size: 20px;">Hosted by: {event.host}</div>
-											<br />
-											<div style="text-align:center; font-size: 20px;">
-												{event.start.toLocaleString(undefined, {
-													month: 'short',
-													day: 'numeric',
-													year: 'numeric',
-													hour: 'numeric',
-													minute: 'numeric',
-													timeZoneName: 'short'
-												})}
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="2">&nbsp;</td>
-									</tr>
-								{/each}
-							</tbody>
-						</table>
+						{#each pageData.events as event}
+							<tr style="background-color: rgba(255, 255, 255);">
+								<td style="width: 50%;" align="left">
+									<a href="/events/{event.id}/">
+										<img loading="lazy" width="100%" src={event.banner} alt={event.name} />
+									</a>
+								</td>
+								<td style="width: 50%;">
+									<a href="/events/{event.id}/">
+										<div style="text-align:center; font-size: 24px;">
+											<b>{event.name}</b>
+										</div>
+									</a>
+									<div style="text-align:center; font-size: 20px;">Hosted by: {event.host}</div>
+									<br />
+									<div style="text-align:center; font-size: 20px;">
+										{event.start.toLocaleString(undefined, {
+											month: 'short',
+											day: 'numeric',
+											year: 'numeric',
+											hour: 'numeric',
+											minute: 'numeric',
+											timeZoneName: 'short'
+										})}
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">&nbsp;</td>
+							</tr>
+						{/each}
 					</div>
 				</div>
-				<div class="bg-white shadow p-4" style="float: right;">
+				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Online Controllers</h3>
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
 						<tbody>
@@ -140,8 +132,6 @@
 						</tbody>
 					</table>
 				</div>
-			</div>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 				<div class="bg-white shadow p-4">
 					<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
 					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
@@ -161,34 +151,34 @@
 						</tbody>
 					</table>
 				</div>
-			</div>
-			<div class="bg-white shadow p-4" style="float: right;">
-				<h3 class="font-semibold mb-2">This Month's Stats</h3>
-				<div class="flex flex-col items-center">
-					<div class="text-xl font-bold text-blue-600 mr-2">Hours Controlled This Month:</div>
-					<div class="font-bold text-gray-800 mr-2 text-right">{pageData.totalHours}</div>
-				</div>
-				<div class="flex flex-col items-center">
-					<div class="text-yellow-500 text-left">★★★</div>
-					<div class="font-bold text-gray-800 mr-2 text-right">
-						{pageData.stats[0].firstName}
-						{pageData.stats[0].lastName}
+				<div class="bg-white shadow p-4">
+					<h3 class="font-semibold mb-2">This Month's Stats</h3>
+					<div class="flex flex-col items-center">
+						<div class="text-xl font-bold text-blue-600 mr-2">Hours Controlled This Month:</div>
+						<div class="font-bold text-gray-800 mr-2 text-right">{pageData.totalHours}</div>
 					</div>
-					<div class="text-gray-800 mr-2 text-right">{pageData.stats[0].hours} hours</div>
-					<br />
-					<span class="text-gray-500">★★</span>
-					<div class="font-bold text-gray-800 mr-2">
-						{pageData.stats[1].firstName}
-						{pageData.stats[1].lastName}
+					<div class="flex flex-col items-center">
+						<div class="text-yellow-500 text-left">★★★</div>
+						<div class="font-bold text-gray-800 mr-2 text-right">
+							{pageData.stats[0].firstName}
+							{pageData.stats[0].lastName}
+						</div>
+						<div class="text-gray-800 mr-2 text-right">{pageData.stats[0].hours} hours</div>
+						<br />
+						<span class="text-gray-500">★★</span>
+						<div class="font-bold text-gray-800 mr-2">
+							{pageData.stats[1].firstName}
+							{pageData.stats[1].lastName}
+						</div>
+						<div class="text-gray-800 mr-2 text-right">{pageData.stats[1].hours} hours</div>
+						<br />
+						<span class="text-red-500">★</span>
+						<div class="font-bold text-gray-800 mr-2">
+							{pageData.stats[2].firstName}
+							{pageData.stats[2].lastName}
+						</div>
+						<div class="text-gray-800 mr-2 text-right">{pageData.stats[2].hours} hours</div>
 					</div>
-					<div class="text-gray-800 mr-2 text-right">{pageData.stats[1].hours} hours</div>
-					<br />
-					<span class="text-red-500">★</span>
-					<div class="font-bold text-gray-800 mr-2">
-						{pageData.stats[2].firstName}
-						{pageData.stats[2].lastName}
-					</div>
-					<div class="text-gray-800 mr-2 text-right">{pageData.stats[2].hours} hours</div>
 				</div>
 			</div>
 		</section>
