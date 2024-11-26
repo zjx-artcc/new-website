@@ -100,7 +100,7 @@ export async function load({ params, cookies, locals }) {
   for(let i = -1; i < 2; i++) {
     let month = new Date().getUTCMonth() - i;
     let quarter = (Math.floor(month / 3) + 1);
-    console.log(quarter);
+    return quarter;
   }
 
   return {pageData: {...pageData}};
