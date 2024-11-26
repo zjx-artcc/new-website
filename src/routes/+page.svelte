@@ -52,7 +52,7 @@
 <main class="container mx-auto p-4">
 	<section class="my-6">
 		<section class="my-6">
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 columns-1">
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<div class="bg-white shadow p-4" style="width: auto;">
 					<h3 class="font-semibold mb-2">Upcoming Events</h3>
 					<div class="table-responsive">
@@ -66,7 +66,7 @@
 										</a>
 									</td>
 									<td style="width: 50%;">
-										<a href="/events/314/">
+										<a href="/events/{event.id}/">
 											<div style="text-align:center; font-size: 24px;">
 												<b>{event.name}</b>
 											</div>
@@ -84,31 +84,29 @@
 						</table>
 					</div>
 				</div>
-				<div class="bg-white shadow p-4" style="width:75% float: right;">
-					<div class="bg-white shadow-md rounded p-4">
-						<h3 class="font-semibold mb-2">Online Controllers</h3>
-						<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
-							<tbody>
-								{#if pageData.online.length > 0}
-									{#each pageData.online as onlineController}
-									<ATCCard
-										name="{onlineController.callsign}"
-										position="Online Since:"
-										startDate="{onlineController.firstName} {onlineController.lastName}"
-										endDate={new Date(onlineController.logon_time).toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
-									/>
-									{/each}
-								{:else}
-									<tr>
-										<td colspan="2" class="text-center">No controllers online at this time.</td>
-									</tr>
-								{/if}
-							</tbody>
-						</table>
-					</div>
-					<hr class="mb-5">
-					<div class="bg-white shadow-md rounded p-4">
-						<h3 class="font-semibold mb-2">This Month's Stats</h3>
+				<div class="bg-white shadow p-4" style="float: right;">
+					<h3 class="font-semibold mb-2">Online Controllers</h3>
+					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
+						<tbody>
+							{#if pageData.online.length > 0}
+								{#each pageData.online as onlineController}
+								<ATCCard
+									name="{onlineController.callsign}"
+									position="Online Since:"
+									startDate="{onlineController.firstName} {onlineController.lastName}"
+									endDate={onlineController.logon.toLocaleString(undefined, { month: 'short',day: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}
+								/>
+								{/each}
+							{:else}
+								<tr>
+									<td colspan="2" class="text-center">No controllers online at this time.</td>
+								</tr>
+							{/if}
+						</tbody>
+					</table>
+				</div>
+				<div class="bg-white shadow p-4" style="float: right;">
+					<h3 class="font-semibold mb-2">This Month's Stats</h3>
 						<div class="flex flex-col items-center">
 							<div class="text-xl font-bold text-blue-600 mr-2">Hours Controlled This Month:</div>
 							<div class="font-bold text-gray-800 mr-2 text-right">{pageData.totalHours}</div>
@@ -126,7 +124,6 @@
 							<div class="font-bold text-gray-800 mr-2">{pageData.stats[2].firstName} {pageData.stats[2].lastName}</div>
 							<div class="text-gray-800 mr-2 text-right">{pageData.stats[2].hours} hours</div>
 						</div>
-					</div>
 				</div>
 			</div>
 		</section>
@@ -150,14 +147,8 @@
 	</section>
 </main>
 
-<div
-	class="bg-image"
-	style="background-image: url('/orl_aerial.jpg'); background-color: #f8f9fa; background-position: 0 50%; background-size: cover;"
->
-	<div
-		class="block-content block-content-full bg-primary-dark-op text-center"
-		style="padding-bottom: 18px; background-color: rgba(52, 58, 64, .8) !important; transition: opacity .2s ease-out; margin: 0 auto; padding: 18px 18px 1px; width: 100%; overflow-x: visible; text-align: center !important;"
-	>
+<div class="bg-image" style="background-image: url('/orl_aerial.jpg'); background-color: #f8f9fa; background-position: 0 50%; background-size: cover;">
+	<div class="block-content block-content-full bg-primary-dark-op text-center" style="padding-bottom: 18px; background-color: rgba(52, 58, 64, .8) !important; transition: opacity .2s ease-out; margin: 0 auto; padding: 18px 18px 1px; width: 100%; overflow-x: visible; text-align: center !important;">
 		<div class="py-[30px] js-appear-enabled animated fadeIn" data-toggle="appear">
 			<div class="justify-content-center py-[10px]">
 				<div class="iconStar">
