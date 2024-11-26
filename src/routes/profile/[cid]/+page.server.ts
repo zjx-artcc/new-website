@@ -97,7 +97,7 @@ export async function load({ params, cookies, locals }) {
   }
 
   //Fetch hours data for user
-  for(let i = 0; i > 3; i--) {
+  for(let i = -1; i < 2; i++) {
     let month = new Date().getUTCMonth() - i;
     let current_quarter = quarters(month);
     console.log(current_quarter);
