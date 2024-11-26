@@ -105,45 +105,45 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="bg-white shadow p-4" style="float: right;">
-					<h3 class="font-semibold mb-2">This Month's Stats</h3>
-						<div class="flex flex-col items-center">
-							<div class="text-xl font-bold text-blue-600 mr-2">Hours Controlled This Month:</div>
-							<div class="font-bold text-gray-800 mr-2 text-right">{pageData.totalHours}</div>
-						</div>
-						<div class="flex flex-col items-center">
-							<div class="text-yellow-500 text-left">★★★</div>
-							<div class="font-bold text-gray-800 mr-2 text-right">{pageData.stats[0].firstName} {pageData.stats[0].lastName}</div>
-							<div class="text-gray-800 mr-2 text-right">{pageData.stats[0].hours} hours</div>
-							<br>
-							<span class="text-gray-500">★★</span>
-							<div class="font-bold text-gray-800 mr-2">{pageData.stats[1].firstName} {pageData.stats[1].lastName}</div>
-							<div class="text-gray-800 mr-2 text-right">{pageData.stats[1].hours} hours</div>
-							<br>
-							<span class="text-red-500">★</span>
-							<div class="font-bold text-gray-800 mr-2">{pageData.stats[2].firstName} {pageData.stats[2].lastName}</div>
-							<div class="text-gray-800 mr-2 text-right">{pageData.stats[2].hours} hours</div>
-						</div>
+			</div>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+				<div class="bg-white shadow p-4">
+					<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
+					<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
+						<tbody>
+							{#each pageData.newControllers as controller}
+							<ATCCard
+								name="{controller.firstName} {controller.lastName} ({controller.rating})"
+								position="Joined ZJX on:"
+								startDate=""
+								endDate="{controller.joined.toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}"
+							/>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="bg-white shadow p-4" style="float: right;">
+				<h3 class="font-semibold mb-2">This Month's Stats</h3>
+				<div class="flex flex-col items-center">
+					<div class="text-xl font-bold text-blue-600 mr-2">Hours Controlled This Month:</div>
+					<div class="font-bold text-gray-800 mr-2 text-right">{pageData.totalHours}</div>
+				</div>
+				<div class="flex flex-col items-center">
+					<div class="text-yellow-500 text-left">★★★</div>
+					<div class="font-bold text-gray-800 mr-2 text-right">{pageData.stats[0].firstName} {pageData.stats[0].lastName}</div>
+					<div class="text-gray-800 mr-2 text-right">{pageData.stats[0].hours} hours</div>
+					<br>
+					<span class="text-gray-500">★★</span>
+					<div class="font-bold text-gray-800 mr-2">{pageData.stats[1].firstName} {pageData.stats[1].lastName}</div>
+					<div class="text-gray-800 mr-2 text-right">{pageData.stats[1].hours} hours</div>
+					<br>
+					<span class="text-red-500">★</span>
+					<div class="font-bold text-gray-800 mr-2">{pageData.stats[2].firstName} {pageData.stats[2].lastName}</div>
+					<div class="text-gray-800 mr-2 text-right">{pageData.stats[2].hours} hours</div>
 				</div>
 			</div>
 		</section>
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-			<div class="bg-white shadow p-4">
-				<h3 class="font-semibold mb-2">Welcome Our Newest Home Controllers</h3>
-				<table style="border-spacing: 0; border-collapse: collapse; width: 100%;" class="mt-9">
-					<tbody>
-						{#each pageData.newControllers as controller}
-						<ATCCard
-							name="{controller.firstName} {controller.lastName} ({controller.rating})"
-							position="Joined ZJX on:"
-							startDate=""
-							endDate="{controller.joined.toLocaleString(undefined, { month: 'long',day: 'numeric',year: 'numeric' })}"
-						/>
-						{/each}
-					</tbody>
-				</table>
-			</div>
-		</div>
 	</section>
 </main>
 
