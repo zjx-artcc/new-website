@@ -1,6 +1,10 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { roster, ControllingSessions } from '@prisma/client';
+import type { roster, ControllerSessions } from '@prisma/client';
+
+const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const months = ['month_three', 'month_two', 'month_one'];
+const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies, locals }) {
@@ -22,6 +26,7 @@ export async function load({ params, cookies, locals }) {
     },
   });
 
+  //If user exists, process the data 
   if (rosterData != null) {
     pageData.onRoster = true;
     pageData.certs.cid = Number(rosterData.cid);
@@ -38,14 +43,15 @@ export async function load({ params, cookies, locals }) {
     pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
     pageData.certs.rating = getRating(Number(rosterData.rating));
   } else {
+    //Or fill with auth data
     pageData.certs.cid = locals.user.id;
-    pageData.certs.first_name = locals.user.firstName;
-    pageData.certs.last_name = locals.user.lastName;
+    pageData.certs.first_name = locals.user.first_name;
+    pageData.certs.last_name = locals.user.last_name;
     pageData.certs.rating = getRating(locals.user.rating);
   }
 
   //Fetch sessions data for user
-  let sessionsData: ControllingSessions[] = await prisma.controllingSessions.findMany({
+  let sessionsData: ControllerSessions[] = await prisma.controllerSessions.findMany({
     where: {
       cid: parseInt(params.cid)
     },
@@ -89,6 +95,13 @@ export async function load({ params, cookies, locals }) {
       default: break;
     }
   }
+
+  //Fetch hours data for user
+  for(let i = 0; i > 3; i--) {
+    let month = new Date().getUTCMonth() - i;
+    let displayMonth = DisplayMonths[month];
+  }
+
   return {pageData: {...pageData}};
 }
 
@@ -110,6 +123,7 @@ class PageData {
     rating_changed: Date;
     facility: string;
   };
+  hours: Hours[];
   sessions: Sessions[];
   staffRoles: StaffRoles[];
 
@@ -134,6 +148,11 @@ class PageData {
     this.sessions = [];
     this.staffRoles = [];
   }
+}
+
+type Hours = {
+  month: string;
+  hours: string;
 }
 
 type StaffRoles = {

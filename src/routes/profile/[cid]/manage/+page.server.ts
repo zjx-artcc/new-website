@@ -1,6 +1,6 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { roster, ControllingSessions } from '@prisma/client';
+import type { roster, ControllerSessions } from '@prisma/client';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies, locals }) {
@@ -39,46 +39,10 @@ export async function load({ params, cookies, locals }) {
     pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
     pageData.certs.rating = getRating(Number(rosterData.rating));
   } else {
-    pageData.certs.cid = locals.user.id;
-    pageData.certs.first_name = locals.user.firstName;
-    pageData.certs.last_name = locals.user.lastName;
-    pageData.certs.rating = getRating(locals.user.rating);
+    redirect(302, '/404');
   }
 
   //Return data to page data
-  
-
-  //Fetch sessions data for user
-  let sessionsData: ControllingSessions[] = await prisma.controllingSessions.findMany({
-    where: {
-      cid: parseInt(params.cid)
-    },
-    take: 10,
-    orderBy: {
-      logon_time: 'desc'
-    }
-  });
-
-  //Process existing data
-  if (sessionsData != null) {
-    for (let i = 0; i < sessionsData.length; i++) {
-      let session: Sessions = {
-        id: Number(sessionsData[i].id),
-        cid: Number(sessionsData[i].cid),
-        callsign: sessionsData[i].callsign,
-        frequency: sessionsData[i].frequency,
-        logon_time: sessionsData[i].logon_time,
-        last_update: sessionsData[i].last_update,
-        duration: msToHours(sessionsData[i].duration)
-      }
-      pageData.sessions.push(session);
-    }
-  }
-
-  //Make sure there are at least 5 rows so the table is complete
-  for (let i = pageData.sessions.length; i < 5; i++) {
-    pageData.sessions.push(null);
-  }
 
   //Get staff roles to display on user page
   let roles = pageData.certs.staff_roles.split(',');
@@ -116,8 +80,8 @@ export const actions = {
       // Sanitize data from database
       // For some reason bigints are turned with n
       // Example: The number stored is 5, it returns 5n
-      user.cid = BigInt(user.cid);
-      user.rating = BigInt(user.rating);
+      user.cid = user.cid;
+      user.rating = user.rating;
       user.mentor_level = BigInt(user.mentor_level);
 
       // Update certifications based on the form data
