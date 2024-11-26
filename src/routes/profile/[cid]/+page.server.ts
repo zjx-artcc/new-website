@@ -3,8 +3,8 @@ import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHo
 import type { roster, ControllerSessions } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const quarters = map => { DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) };
 const months = ['month_three', 'month_two', 'month_one'];
-const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies, locals }) {
@@ -99,7 +99,8 @@ export async function load({ params, cookies, locals }) {
   //Fetch hours data for user
   for(let i = 0; i > 3; i--) {
     let month = new Date().getUTCMonth() - i;
-    let displayMonth = DisplayMonths[month];
+    let current_quarter = quarters(month);
+    console.log(current_quarter);
   }
 
   return {pageData: {...pageData}};
