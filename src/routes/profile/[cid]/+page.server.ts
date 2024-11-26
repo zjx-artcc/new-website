@@ -3,7 +3,7 @@ import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHo
 import type { roster, ControllerSessions } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const quarters = map => { DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) };
+const quarters_by_month = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
 const months = ['month_three', 'month_two', 'month_one'];
 
 /** @type {import('./$types').PageLoad} */
@@ -17,7 +17,7 @@ export async function load({ params, cookies, locals }) {
   let pageData: PageData = new PageData();
 
   //Check for user permissions from database
-  pageData.canEdit = await getStaffRoles(locals.session.userId, "roster"); 
+  pageData.canEdit = await getStaffRoles(locals.session.userId, "roster");
   
   //Fetch roster data for user
   let rosterData: roster = await prisma.roster.findUnique({
@@ -99,8 +99,8 @@ export async function load({ params, cookies, locals }) {
   //Fetch hours data for user
   for(let i = -1; i < 2; i++) {
     let month = new Date().getUTCMonth() - i;
-    let current_quarter = quarters(month);
-    console.log(current_quarter);
+    let quarter = (Math.floor(month / 3) + 1);
+    console.log(quarter);
   }
 
   return {pageData: {...pageData}};
