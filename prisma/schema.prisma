@@ -125,7 +125,7 @@ model User {
 }
 
 model visit_requests {
-  id     BigInt @id
+  id     Int @id
   cid    Int
   reason String
   users  User   @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")

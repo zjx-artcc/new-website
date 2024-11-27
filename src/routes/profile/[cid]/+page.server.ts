@@ -1,10 +1,10 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { roster, ControllerSessions } from '@prisma/client';
+import type { roster, ControllerSessions, Stats } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
-const months = ['month_three', 'month_two', 'month_one'];
+const months = ['month_one', 'month_two', 'month_three'];
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies, locals }) {
@@ -99,24 +99,26 @@ export async function load({ params, cookies, locals }) {
   let displayQuarters = quartersByMonth[Math.floor(new Date().getUTCMonth() / 3)]
   console.log(displayQuarters);
 
+  let hoursData = await prisma.stats.findFirst({
+    where: {
+      cid: pageData.certs.cid,
+    },
+  })
+  console.log(hoursData);
+
   for(let i = 0; i < 4; i++) {
     if (i == 3) {
-      let allTimeHours = await prisma.stats.findFirst({
-        where: {
-          cid: pageData.certs.cid,
-        },
-        select: {
-          all_time: true
-        }
-      })
-      console.log(allTimeHours);
       let hours: Hours = {
         month: "All Time",
-        hours: allTimeHours == null ? getHours(0) : getHours(allTimeHours.all_time),
+        hours: hoursData == null ? getHours(0) : getHours(hoursData.all_time),
       }
       pageData.hours.push(hours);
     } else {
-      console.log(displayQuarters[i]);
+      let hours: Hours = {
+        month: displayQuarters[i],
+        hours: hoursData == null ? getHours(0) : getHours(hoursData[months[i]]),
+      }
+      pageData.hours.push(hours);
     }
   }
 

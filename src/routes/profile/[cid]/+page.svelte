@@ -89,16 +89,16 @@
 						<p class="text-sm text-slate-600">{pageData.hours[0].hours}</p>
 					</div>
 					<div>
-						<h4 class="text-base">{months[new Date().getUTCMonth() - 1]} Hours:</h4>
-						<p class="text-sm text-slate-600">00:00</p>
+						<h4 class="text-base">{pageData.hours[1].month} Hours:</h4>
+						<p class="text-sm text-slate-600">{pageData.hours[1].hours}</p>
 					</div>
 					<div>
-						<h4 class="text-base">{months[new Date().getUTCMonth()]} Hours:</h4>
-						<p class="text-sm text-slate-600">00:00</p>
+						<h4 class="text-base">{pageData.hours[2].month} Hours:</h4>
+						<p class="text-sm text-slate-600">{pageData.hours[2].hours}</p>
 					</div>
 					<div>
-						<h4 class="text-base">All Time Hours:</h4>
-						<p class="text-sm text-slate-600">00:00</p>
+						<h4 class="text-base">{pageData.hours[3].month}</h4>
+						<p class="text-sm text-slate-600">{pageData.hours[3].hours}</p>
 					</div>
 				</div>
 			</div>
