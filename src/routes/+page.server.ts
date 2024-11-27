@@ -1,136 +1,155 @@
-//@ts-nocheck
 import { getHours, getRating, prisma } from '$lib/db';
+import type { Stats } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 
+const months = ['month_three', 'month_two', 'month_two'];
+
 export const load: PageServerLoad = async ({ cookies, locals }) => {
-  let pageData = {
-    stats: {},
-    newController: {},
-    events: {},
-    bookings: {},
-    notams: {},
-    online: {},
-    totalHours: 0
-  };
-  console.log(locals.session)
-  {
-    const data = await prisma.stats.findMany({
-      take: 3,
-      orderBy: {
-        month_one: 'desc',
-      },
-      select: {
-        month_one: true,
-        cid: true
-      }
-    });
-    for (let i = 0; i < data.length; i++) {
-      data[i].cid = parseInt(data[i].cid.toString())
-      const user = await prisma.roster.findFirst({
-        where: {
-          cid: data[i].cid,
-        },
-        select: {
-          first_name: true,
-          last_name: true
-        }
-      });
-      data[i].first_name = user.first_name;
-      data[i].last_name = user.last_name;
-      data[i].month_one = getHours(data[i].month_one);
-    }
-    pageData.stats = data;
-  }
-  {
-    const data = await prisma.roster.findMany({
-      take: 3,
-      orderBy: {
-        created_at: 'desc',
+  //Setup page data
+  let pageData = new PageData();
+
+  //Fetch top 3 controllers for the month
+  let targetMonth = months[(new Date().getUTCMonth() + 1) % 3]; //Current month + 1 is a numerical representation of the month, Modulo 3 returns where it is within the quarter
+  const statsData = await prisma.$queryRaw<Stats[]>`SELECT * FROM stats ORDER BY ${targetMonth} DESC LIMIT 3;`;
+  
+  //Get the top 3 controllers' names
+  for (let i = 0; i < statsData.length; i++) {
+    const user = await prisma.roster.findFirst({
+      where: {
+        cid: statsData[i].cid,
       },
       select: {
         first_name: true,
-        last_name: true,
-        rating: true,
-        created_at: true
+        last_name: true
       }
     });
-    for (let i = 0; i < data.length; i++) {
-      data[i].rating = getRating(parseInt(data[i].rating.toString()));
+
+    //Setup member object and push it
+    let memberStats: MtdStats = {
+      hours: getHours(statsData[i][targetMonth]),
+      firstName: user.first_name,
+      lastName: user.last_name
     }
-    pageData.newController = data;
+    pageData.stats.push(memberStats);
   }
-  {
-    const data = await prisma.events.findMany({
-      take: 2,
-      orderBy: {
-        event_start: 'asc',
+
+  //Fetch last 3 controllers to join the roster
+  const rosterData = await prisma.roster.findMany({
+    take: 3,
+    orderBy: {
+      created_at: 'desc',
+    },
+    select: {
+      first_name: true,
+      last_name: true,
+      rating: true,
+      created_at: true
+    }
+  });
+
+  // Sanitize and push data
+  for (let i = 0; i < rosterData.length; i++) {
+    let member: NewController = {
+      firstName: rosterData[i].first_name,
+      lastName: rosterData[i].last_name,
+      rating: getRating(rosterData[i].rating),
+      joined: rosterData[i].created_at
+    }
+
+    pageData.newControllers.push(member);
+  }
+  //Fetch next 2 events
+  const eventsData = await prisma.events.findMany({
+    take: 3,
+    orderBy: {
+      event_start: 'asc',
+    }
+  });
+
+  // Sanitize and push data
+  for (let i = 0; i < eventsData.length; i++) {
+    let event: Event = {
+      name: eventsData[i].name,
+      start: eventsData[i].event_start,
+      id: eventsData[i].id,
+      banner: eventsData[i].banner,
+      host: eventsData[i].host
+    }
+
+    pageData.events.push(event);
+  }
+
+  //Fetch all online controllers
+  const onlineData = await prisma.onlineControllers.findMany({
+    orderBy: {
+      logon_time: 'desc'
+    }
+  })
+
+  // Sanitize and push data
+  for (let i = 0; i < onlineData.length; i++) {
+    const member = await prisma.roster.findFirst({
+      where: {
+        cid: onlineData[i].cid
+      },
+      select: {
+        first_name: true,
+        last_name: true
       }
     });
-    pageData.events = data;
-  }
-  {
-    const data = await prisma.bookings.findMany({
-      take: 3,
-      orderBy: {
-        booking_start: 'asc'
-      }
-    })
-    for (let i = 0; i < data.length; i++) {
-      const user = await prisma.roster.findFirst({
-        where: {
-          cid: data[i].cid,
-        },
-        select: {
-          first_name: true,
-          last_name: true
-        }
-      });
-      data[i].first_name = user.first_name;
-      data[i].last_name = user.last_name;
+    let controller: OnlineController = {
+      firstName: member.first_name,
+      lastName: member.last_name,
+      callsign: onlineData[i].callsign,
+      logon: onlineData[i].logon_time
     }
-    pageData.bookings = data;
+
+    pageData.online.push(controller);
   }
-  {
-    const data = await prisma.notams.findMany({
-      take: 3,
-      orderBy: {
-        created_at: 'desc'
-      }
-    })
-    pageData.notams = data;
+
+
+  return {pageData: { ...pageData }};
+}
+
+class PageData {
+  stats: MtdStats[];
+  totalHours: string;
+  newControllers: NewController[];
+  events: Event[];
+  online: OnlineController[];
+  constructor() {
+    this.stats = [];
+    this.newControllers = [];
+    this.events = [];
+    this.online = [];
+    this.totalHours = getHours(0);
   }
-  {
-    const data = await prisma.OnlineControllers.findMany({
-      take: 3,
-      orderBy: {
-        logon_time: 'desc'
-      }
-    })
-    if (data == null) {
-      throw new Error('No data found');
-    }
-    pageData.online = data;
-    for (let i = 0; i < pageData.online.length; i++) {
-      const user = await prisma.roster.findFirst({
-        where: {
-          cid: pageData.online[i].cid,
-        },
-        select: {
-          first_name: true,
-          last_name: true
-        }
-      })
-      pageData.online[i].first_name = user.first_name;
-      pageData.online[i].last_name = user.last_name;
-    }
-  }
-  {
-    const data = await prisma.stats.aggregate({
-      _sum: {
-        month_one: true
-      }
-    })
-    pageData.totalHours = getHours(data._sum.month_one);
-  }
-  return pageData;
+};
+
+type MtdStats = {
+  hours: string;
+  firstName: string;
+  lastName: string;
+}
+
+type NewController = {
+  firstName: string;
+  lastName: string;
+  rating: string;
+  joined: Date;
+}
+
+type Event = {
+  name: string;
+  start: Date;
+  id: number;
+  banner: string;
+  host: string;
+}
+
+type OnlineController = {
+  firstName: string;
+  lastName: string;
+  callsign: string;
+  logon: Date;
 }

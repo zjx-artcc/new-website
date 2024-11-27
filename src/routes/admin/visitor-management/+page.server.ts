@@ -6,11 +6,15 @@ export const load = async ({ params, cookies, locals }) => {
     let pageData = {
         controllers: []
     }
-    const userData = await prisma.roster.findMany({
+    const userData = await prisma.visitRequests.findMany({
         select: {
             cid: true,
-            visitRequests: {
-                reason: true
+            User: {
+                select: {
+                    "firstName": true,
+                    "lastName": true,
+                    "rating": true
+                },
             }
         },
         
