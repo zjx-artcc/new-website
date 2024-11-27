@@ -85,7 +85,7 @@
 
 <div class="my-5">
     <div class="flex justify-center">
-        <h1 class="text-xl text-sky-500 font-bold">Activity Monitor</h1>
+        <h1 class="text-xl text-sky-500 font-bold">Visitor Management</h1>
     </div>
 
     <div class="flex justify-center my-5">
