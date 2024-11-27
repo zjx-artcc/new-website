@@ -3,7 +3,7 @@ import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHo
 import type { roster, ControllerSessions } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const quarters_by_month = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
+const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
 const months = ['month_three', 'month_two', 'month_one'];
 
 /** @type {import('./$types').PageLoad} */
@@ -96,11 +96,28 @@ export async function load({ params, cookies, locals }) {
     }
   }
 
-  //Fetch hours data for user
-  for(let i = -1; i < 2; i++) {
-    let month = new Date().getUTCMonth() - i;
-    let quarter = (Math.floor(month / 3) + 1);
-    return quarter;
+  let displayQuarters = quartersByMonth[Math.floor(new Date().getUTCMonth() / 3)]
+  console.log(displayQuarters);
+
+  for(let i = 0; i < 4; i++) {
+    if (i == 3) {
+      let allTimeHours = await prisma.stats.findFirst({
+        where: {
+          cid: pageData.certs.cid,
+        },
+        select: {
+          all_time: true
+        }
+      })
+      console.log(allTimeHours);
+      let hours: Hours = {
+        month: "All Time",
+        hours: allTimeHours == null ? getHours(0) : getHours(allTimeHours.all_time),
+      }
+      pageData.hours.push(hours);
+    } else {
+      console.log(displayQuarters[i]);
+    }
   }
 
   return {pageData: {...pageData}};
@@ -148,6 +165,7 @@ class PageData {
     };
     this.sessions = [];
     this.staffRoles = [];
+    this.hours = [];
   }
 }
 

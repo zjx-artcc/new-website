@@ -85,8 +85,8 @@
 						<p class="text-sm text-slate-600">None</p>
 					</div>
 					<div>
-						<h4 class="text-base">{months[new Date().getUTCMonth() - 2]} Hours:</h4>
-						<p class="text-sm text-slate-600">00:00</p>
+						<h4 class="text-base">{pageData.hours[0].month} Hours:</h4>
+						<p class="text-sm text-slate-600">{pageData.hours[0].hours}</p>
 					</div>
 					<div>
 						<h4 class="text-base">{months[new Date().getUTCMonth() - 1]} Hours:</h4>
