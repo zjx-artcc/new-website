@@ -1,6 +1,10 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { roster, ControllingSessions } from '@prisma/client';
+import type { roster, ControllerSessions, Stats } from '@prisma/client';
+
+const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
+const months = ['month_one', 'month_two', 'month_three'];
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies, locals }) {
@@ -13,7 +17,7 @@ export async function load({ params, cookies, locals }) {
   let pageData: PageData = new PageData();
 
   //Check for user permissions from database
-  pageData.canEdit = await getStaffRoles(locals.session.userId, "roster"); 
+  pageData.canEdit = await getStaffRoles(locals.session.userId, "roster");
   
   //Fetch roster data for user
   let rosterData: roster = await prisma.roster.findUnique({
@@ -22,6 +26,7 @@ export async function load({ params, cookies, locals }) {
     },
   });
 
+  //If user exists, process the data 
   if (rosterData != null) {
     pageData.onRoster = true;
     pageData.certs.cid = Number(rosterData.cid);
@@ -38,14 +43,15 @@ export async function load({ params, cookies, locals }) {
     pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
     pageData.certs.rating = getRating(Number(rosterData.rating));
   } else {
+    //Or fill with auth data
     pageData.certs.cid = locals.user.id;
-    pageData.certs.first_name = locals.user.firstName;
-    pageData.certs.last_name = locals.user.lastName;
+    pageData.certs.first_name = locals.user.first_name;
+    pageData.certs.last_name = locals.user.last_name;
     pageData.certs.rating = getRating(locals.user.rating);
   }
 
   //Fetch sessions data for user
-  let sessionsData: ControllingSessions[] = await prisma.controllingSessions.findMany({
+  let sessionsData: ControllerSessions[] = await prisma.controllerSessions.findMany({
     where: {
       cid: parseInt(params.cid)
     },
@@ -89,6 +95,33 @@ export async function load({ params, cookies, locals }) {
       default: break;
     }
   }
+
+  let displayQuarters = quartersByMonth[Math.floor(new Date().getUTCMonth() / 3)]
+  console.log(displayQuarters);
+
+  let hoursData = await prisma.stats.findFirst({
+    where: {
+      cid: pageData.certs.cid,
+    },
+  })
+  console.log(hoursData);
+
+  for(let i = 0; i < 4; i++) {
+    if (i == 3) {
+      let hours: Hours = {
+        month: "All Time",
+        hours: hoursData == null ? getHours(0) : getHours(hoursData.all_time),
+      }
+      pageData.hours.push(hours);
+    } else {
+      let hours: Hours = {
+        month: displayQuarters[i],
+        hours: hoursData == null ? getHours(0) : getHours(hoursData[months[i]]),
+      }
+      pageData.hours.push(hours);
+    }
+  }
+
   return {pageData: {...pageData}};
 }
 
@@ -110,6 +143,7 @@ class PageData {
     rating_changed: Date;
     facility: string;
   };
+  hours: Hours[];
   sessions: Sessions[];
   staffRoles: StaffRoles[];
 
@@ -133,7 +167,13 @@ class PageData {
     };
     this.sessions = [];
     this.staffRoles = [];
+    this.hours = [];
   }
+}
+
+type Hours = {
+  month: string;
+  hours: string;
 }
 
 type StaffRoles = {
