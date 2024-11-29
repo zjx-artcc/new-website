@@ -6,7 +6,7 @@
 	export let icon: string;
 </script>
 
-<div class="m-4 p-8 bg-white">
+<div class="m-4 p-8 bg-white border-4">
 	<a href={to} class="bg-white">
 		<div class="flex-grow flex flex-col justify-between mx-1" >
 			<h1 class="mt-1 text-base font-light uppercase" >{title}</h1>

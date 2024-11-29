@@ -21,7 +21,7 @@
     
 </script>
 
-<div class="my-5">
+<div class="my-5 h-100">
     <div class="flex justify-center">
         <h1 class="text-xl text-sky-500 font-bold mb-5">Visitor Management</h1>
     </div>
@@ -42,12 +42,12 @@
                             <tr>
                                 <td class="px-2 text-center">
                                     <div class="flex-wrap justify-center px-1">
-                                        <span class="flex justify-center font-bold">{user.User.firstName} {user.User.lastName}</span>
+                                        <span class="flex text-lg justify-center font-bold">{user.User.firstName} {user.User.lastName}</span>
                                         <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.User.rating))}</span>
                                     </div>
                                 </td>
-                                <td class="text-center text-xl px-2">{user.User.facility}</td>
-                                <td class="text-center text-xl px-2">{user.reason}</td>
+                                <td class="text-center px-2 text-2xl">{user.User.facility}</td>
+                                <td class="text-left text-lg p-2 w-96">{user.reason}</td>
                                 <td class="px-5 py-4"><input class="accent-sky-500 h-5 w-5 px-2" type="checkbox" bind:checked={user.selected} on:change={checkUsersSelected}/></td>
                             </tr>
                     {/each}
@@ -55,6 +55,7 @@
             </table>
         </div>
         
+        {#if selectedCount > 0}
         <div class={"flex flex-col px-5 py-5 items-center flex-wrap border-r-4"}>
             <div class="flex font-bold">
                 <p2>Selection Summary</p2>
@@ -77,14 +78,14 @@
                                             <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.User.rating))}</span>
                                         </div>
                                     </td>
-                                    <td class="text-center text-xl px-2"><input class="w-100 h-100 bg-gray-300"></td>
+                                    <td class="text-center text-md"><input class="w-96 h-12 bg-gray-300"></td>
                                 </tr>
                             {/if}
                         {/each}
                     </tbody>
                 </table>
             </div>
-            <div class="flex">
+            <div class="flex my-5">
                 <button class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md">
                     Reject
                 </button>
@@ -95,5 +96,7 @@
             </div>
 
         </div>
+        {/if}
+        
     </div>
 </div>
