@@ -3,11 +3,12 @@
     export let data;
     import "$lib/app.css"
     import { formatDate, getRating } from "$lib/db.js";
-	import { P } from "flowbite-svelte";
+	import StatusCard from "$lib/components/StatusCard.svelte";
+
     let selectedCount = 0;
     let confirmationScreenClass = "hidden" // pls dont touch. hides confirmation screen
     let actionString: string = ""
-    
+    let responseData = []
 
     const checkUsersSelected = () => {
         selectedCount = 0
@@ -50,10 +51,22 @@
                     },
                     body: JSON.stringify({cid: user.cid, actionMessage: user.actionMessage})
                 });
-                if (req.status != 200) {
+                if (req.status == 200) {
+                    
+                    responseData.push({
+                        bgColor: "bg-green-500",
+                        headerText: "Success",
+                        bodyText: "User " + user.User.firstName + " " + user.User.lastName + " (" + user.cid + ") has been added to the visiting roster."
+                    })
 
+                    setTimeout(() => {
+                        responseData.pop()
+                        console.log("popped " + user.cid)
+                    }, 5000)
                 }
-                res = await req.json()
+                let res = await req.json(req.body)
+                console.log(res.cid)
+                console.log(responseData)
             }
         }
         
@@ -172,10 +185,8 @@
     </div>
     
     <div id="response-box" class="z-50 top-0 absolute w-full h-10 flex justify-center items-start mt-20 transition ease-in-out">
-        <div class="bg-green-500 opacity-90 py-2 px-4 rounded-md w-96">
-            <h2 class="text-2xl font-bold">Status</h2>
-
-            <p class="text-lg">Your mom</p>
-        </div>
+            {#each responseData as cardData}
+                <StatusCard bgColor={cardData.bgColor} headerText={cardData.headerText} bodyText={cardData.bodyText}/>
+            {/each}
     </div>
 </div>

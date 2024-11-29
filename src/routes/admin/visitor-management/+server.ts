@@ -2,11 +2,11 @@
 export const POST = async ({request}): Promise<Response> => {
     // do stuff
     const {cid, actionMessage} = await request.json()
-    console.log(cid)
+    
     return new Response(
-        JSON.stringify(cid),
+        JSON.stringify({"cid": cid}),
         {
-            status: 403
+            status: 200
         }
     )
 }
