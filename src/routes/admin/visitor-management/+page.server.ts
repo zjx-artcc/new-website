@@ -19,6 +19,7 @@ export const load = async ({ params, cookies, locals }) => {
         
     });
 
+    console.log(userData)
     return {
         userData
     }

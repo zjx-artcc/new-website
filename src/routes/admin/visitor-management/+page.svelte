@@ -3,13 +3,11 @@
     export let data;
     import "$lib/app.css"
     import { formatDate, getRating } from "$lib/db.js";
+	import { P } from "flowbite-svelte";
     let selectedCount = 0;
     let confirmationScreenClass = "hidden" // pls dont touch. hides confirmation screen
     let actionString: string = ""
-    // Initialize selected tag
-    for(let i = 0; i < data.userData.length; i++) {
-        data.userData[i].selected = false
-    }
+    
 
     const checkUsersSelected = () => {
         selectedCount = 0
@@ -20,12 +18,56 @@
         }
     }
     
+    const uncheckUsers = () => {
+        for(let i = 0; i < data.userData.length; i++) {
+            data.userData[i].selected = false
+            data.userData[i].actionMessage = ""
+        }
+    }
+
+    const hideConfirmationScreen = () => {
+        actionString = ""
+        confirmationScreenClass = "hidden"
+    }
+
     const showConfirmationScreen = (actionType: string) => {
         if (selectedCount != 0) {
             actionString = actionType
             confirmationScreenClass = ""
         }
     }
+
+    const approveUsers = async() => {
+        hideConfirmationScreen()
+        
+        for(let i = 0; i < data.userData.length; i++) {
+            if(data.userData[i].selected) {
+                const user = data.userData[i]
+                const req = await fetch(`/admin/visitor-management`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({cid: user.cid, actionMessage: user.actionMessage})
+                });
+                if (req.status != 200) {
+
+                }
+                res = await req.json()
+            }
+        }
+        
+    }
+    
+    const rejectUsers = () => {
+        
+    }
+
+    const displayFeedbackBox = () => {
+
+    }
+    // Initialize selected tag
+    uncheckUsers()
 </script>
 
 <div class="my-5 h-100">
@@ -85,7 +127,7 @@
                                             <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.User.rating))}</span>
                                         </div>
                                     </td>
-                                    <td class="text-center text-md"><input class="p-2 w-96 h-12 bg-gray-300"></td>
+                                    <td class="text-center text-md"><input class="p-2 w-96 h-12 bg-gray-300" bind:value={user.actionMessage}></td>
                                 </tr>
                             {/if}
                         {/each}
@@ -116,19 +158,24 @@
             </div>
 
             <div class="flex my-5">
-                <button class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md" on:click={() => {confirmationScreenClass = "hidden"}}>
+                <button class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md" on:click={hideConfirmationScreen}>
                     Cancel
                 </button>
 
-                <button class="bg-green-500 p-3 w-24 font-semibold rounded-md ml-5" on:click={() => {console.log("meow")}}>
+                <button class="bg-green-500 p-3 w-24 font-semibold rounded-md ml-5" on:click={approveUsers}>
                     Confirm
                 </button>
             </div>
         </div>
 
-        
-
         <div class="z-10 absolute w-full h-full opacity-50 bg-gray-800"></div>
     </div>
     
+    <div id="response-box" class="z-50 top-0 absolute w-full h-10 flex justify-center items-start mt-20 transition ease-in-out">
+        <div class="bg-green-500 opacity-90 py-2 px-4 rounded-md w-96">
+            <h2 class="text-2xl font-bold">Status</h2>
+
+            <p class="text-lg">Your mom</p>
+        </div>
+    </div>
 </div>
