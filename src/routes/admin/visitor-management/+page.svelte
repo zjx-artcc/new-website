@@ -4,7 +4,8 @@
     import "$lib/app.css"
     import { formatDate, getRating } from "$lib/db.js";
     let selectedCount = 0;
-
+    let confirmationScreenClass = "hidden" // pls dont touch. hides confirmation screen
+    let actionString: string = ""
     // Initialize selected tag
     for(let i = 0; i < data.userData.length; i++) {
         data.userData[i].selected = false
@@ -19,6 +20,12 @@
         }
     }
     
+    const showConfirmationScreen = (actionType: string) => {
+        if (selectedCount != 0) {
+            actionString = actionType
+            confirmationScreenClass = ""
+        }
+    }
 </script>
 
 <div class="my-5 h-100">
@@ -78,7 +85,7 @@
                                             <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.User.rating))}</span>
                                         </div>
                                     </td>
-                                    <td class="text-center text-md"><input class="w-96 h-12 bg-gray-300"></td>
+                                    <td class="text-center text-md"><input class="p-2 w-96 h-12 bg-gray-300"></td>
                                 </tr>
                             {/if}
                         {/each}
@@ -86,17 +93,42 @@
                 </table>
             </div>
             <div class="flex my-5">
-                <button class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md">
+                <button class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md" on:click={() => showConfirmationScreen("reject")}>
                     Reject
                 </button>
     
-                <button class="bg-green-500 p-3 w-24 font-semibold rounded-md">
+                <button class="bg-green-500 p-3 w-24 font-semibold rounded-md" on:click={() => showConfirmationScreen("approve")}>
                     Approve
                 </button>
             </div>
 
+            
         </div>
         {/if}
         
     </div>
+    <div id="confirmation-screen" class={"z-50 top-0 absolute w-full h-full flex justify-center items-center " + confirmationScreenClass}>
+        <div class="z-50 flex flex-col items-center place-items-center bg-gray-200 w-96">
+            <h2 class="text-sky-500 font-bold text-2xl top-5 my-5">Confirm Actions</h2>
+
+            <div>
+                <p class="text-xl px-5">This will {actionString} {selectedCount} user{selectedCount > 1 ? "s" : ""} for visiting. This action cannot be undone.</p>
+            </div>
+
+            <div class="flex my-5">
+                <button class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md" on:click={() => {confirmationScreenClass = "hidden"}}>
+                    Cancel
+                </button>
+
+                <button class="bg-green-500 p-3 w-24 font-semibold rounded-md ml-5" on:click={() => {console.log("meow")}}>
+                    Confirm
+                </button>
+            </div>
+        </div>
+
+        
+
+        <div class="z-10 absolute w-full h-full opacity-50 bg-gray-800"></div>
+    </div>
+    
 </div>
