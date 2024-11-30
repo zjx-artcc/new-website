@@ -54,7 +54,7 @@
 		<table class="table px-2 text-nowrap">
 			<tbody>
 				<VisitRow col1="CID:" col2={`${userData.id}`}/>
-				<VisitRow col1="Name:" col2={`${userData.first_name} ${userData.last_name}`}/>
+				<VisitRow col1="Name:" col2={`${userData.firstName} ${userData.lastName}`}/>
 				<VisitRow col1="Email:" col2={`${userData.email}`}/>
 				<VisitRow col1="Rating:" col2={`${getRating(userData.rating)}`}/>
 				<VisitRow col1="Home Division:" col2={`${userData.division}`}/>

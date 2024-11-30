@@ -16,9 +16,8 @@ export const POST = async ({request, cookies}): Promise<Response> => {
     const{session, user} = await validateSessionToken(auth_session)
     
     if(user.facility != "ZJX" && user.rating >= 4) {
-        let dbRequest = await prisma.visit_requests.create({
+        let dbRequest = await prisma.visitRequest.create({
            data: {
-            id: 3,
             cid: user.id,
             reason: userReason,
            },
