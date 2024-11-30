@@ -1,6 +1,6 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { roster } from '@prisma/client';
+import type { roster, ControllerSession } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
@@ -45,13 +45,13 @@ export async function load({ params, cookies, locals }) {
   } else {
     //Or fill with auth data
     pageData.certs.cid = locals.user.id;
-    pageData.certs.first_name = locals.user.first_name;
-    pageData.certs.last_name = locals.user.last_name;
+    pageData.certs.first_name = locals.user.firstName;
+    pageData.certs.last_name = locals.user.lastName;
     pageData.certs.rating = getRating(locals.user.rating);
   }
 
   //Fetch sessions data for user
-  let sessionsData: ControllerSession[] = await prisma.controllerSessions.findMany({
+  let sessionsData: ControllerSession[] = await prisma.controllerSession.findMany({
     where: {
       cid: parseInt(params.cid)
     },
@@ -72,7 +72,7 @@ export async function load({ params, cookies, locals }) {
         start: sessionsData[i].start,
         end: sessionsData[i].end,
         active: sessionsData[i].active,
-        duration: msToHours(sessionsData[i].end - sessionsData[i].start.getTime())
+        duration: msToHours(sessionsData[i].end.getTime() - sessionsData[i].start.getTime())
       }
       pageData.sessions.push(session);
     }
@@ -189,20 +189,9 @@ type ControllerSessions = {
   callsign: string
   frequency: string
   start: Date,
-  end: number,
+  end: Date,
   active: boolean,
   duration: string
-}
-
-// use this for database pulls
-type ControllerSession = {
-  id: number,
-  cid: number,
-  callsign: string
-  frequency: string
-  start: Date,
-  end: number,
-  active: boolean
 }
 
 type Certs = {

@@ -1,4 +1,4 @@
-import type { User, Session } from "@prisma/client";
+import type { User, WebSession } from "@prisma/client";
 
 import { prisma } from "./db";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
@@ -12,20 +12,20 @@ export function generateSessionToken(): string {
   return token;
 }
 
-export async function createSession(token: string, userId: number): Promise<Session> {
+export async function createSession(token: string, userId: number): Promise<WebSession> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  const session: Session = {
+  const session: WebSession = {
     id: sessionId,
     userId,
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
   };
-  await prisma.session.create({ data: session });
+  await prisma.webSession.create({ data: session });
   return session;
 }
 
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  const result = await prisma.session.findUnique({
+  const result = await prisma.webSession.findUnique({
     where: {
       id: sessionId
     },
@@ -38,14 +38,14 @@ export async function validateSessionToken(token: string): Promise<SessionValida
   }
   const { user, ...session } = result;
   if (Date.now() >= session.expiresAt.getTime()) {
-    await prisma.session.delete({ where: { id: sessionId } });
+    await prisma.webSession.delete({ where: { id: sessionId } });
     return { session: null, user: null };
   }
 
   //Check if session will expire in 15 days
   if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
     session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30); // 30 days
-    await prisma.session.update({
+    await prisma.webSession.update({
       where: { id: sessionId },
       data: { expiresAt: session.expiresAt }
     });
@@ -54,14 +54,14 @@ export async function validateSessionToken(token: string): Promise<SessionValida
 }
 
 export async function invalidateSession(sessionId: string): Promise<void> {
-  await prisma.session.delete({ 
+  await prisma.webSession.delete({ 
     where: { 
       id: sessionId 
     } 
   });
 }
 
-export type SessionValidationResult = | {session: Session; user: User } | { session: null; user: null };
+export type SessionValidationResult = | {session: WebSession; user: User } | { session: null; user: null };
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date): void {
   event.cookies.set("auth_session", token, {
