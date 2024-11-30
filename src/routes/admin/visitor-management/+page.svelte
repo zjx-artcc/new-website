@@ -147,14 +147,14 @@
 							<td class="px-2 text-center border-r-2">
 								<div class="flex-wrap justify-center px-1">
 									<span class="flex text-lg justify-center font-bold"
-										>{user.User.firstName} {user.User.lastName}</span
+										>{user.users.firstName} {user.users.lastName}</span
 									>
 									<span class="flex justify-center italic"
-										>{user.cid} - {getRating(parseInt(user.User.rating))}</span
+										>{user.cid} - {getRating(parseInt(user.users.rating))}</span
 									>
 								</div>
 							</td>
-							<td class="text-center px-2 text-2xl">{user.User.facility}</td>
+							<td class="text-center px-2 text-2xl border-r-2">{user.users.facility == "" ? "None" : user.users.facility}</td>
 							<td class="text-left text-lg p-2 w-96">{user.reason}</td>
 							<td class="px-5 py-4"
 								><input
@@ -190,10 +190,10 @@
 										<td class="px-2 text-center">
 											<div class="flex-wrap justify-center px-1">
 												<span class="flex justify-center font-bold"
-													>{user.User.firstName} {user.User.lastName}</span
+													>{user.users.firstName} {user.users.lastName}</span
 												>
 												<span class="flex justify-center italic"
-													>{user.cid} - {getRating(parseInt(user.User.rating))}</span
+													>{user.cid} - {getRating(parseInt(user.users.rating))}</span
 												>
 											</div>
 										</td>
