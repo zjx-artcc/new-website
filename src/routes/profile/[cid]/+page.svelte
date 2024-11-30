@@ -6,7 +6,6 @@
 	import ATCCard from '$lib/components/ATCCard.svelte';
 	import { page } from '$app/stores';
 	import { redirect } from '@sveltejs/kit';
-	import _ from 'lodash';
 
 	let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 

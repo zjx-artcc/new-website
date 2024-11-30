@@ -1,6 +1,6 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { roster, ControllerSessions, Stats } from '@prisma/client';
+import type { roster, ControllerSession } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
@@ -45,33 +45,34 @@ export async function load({ params, cookies, locals }) {
   } else {
     //Or fill with auth data
     pageData.certs.cid = locals.user.id;
-    pageData.certs.first_name = locals.user.first_name;
-    pageData.certs.last_name = locals.user.last_name;
+    pageData.certs.first_name = locals.user.firstName;
+    pageData.certs.last_name = locals.user.lastName;
     pageData.certs.rating = getRating(locals.user.rating);
   }
 
   //Fetch sessions data for user
-  let sessionsData: ControllerSessions[] = await prisma.controllerSessions.findMany({
+  let sessionsData: ControllerSession[] = await prisma.controllerSession.findMany({
     where: {
       cid: parseInt(params.cid)
     },
     take: 10,
     orderBy: {
-      logon_time: 'desc'
+      start: 'desc'
     }
-  });
+  })
 
   //Process existing data
   if (sessionsData != null) {
     for (let i = 0; i < sessionsData.length; i++) {
-      let session: Sessions = {
+      let session: ControllerSessions = {
         id: Number(sessionsData[i].id),
         cid: Number(sessionsData[i].cid),
         callsign: sessionsData[i].callsign,
         frequency: sessionsData[i].frequency,
-        logon_time: sessionsData[i].logon_time,
-        last_update: sessionsData[i].last_update,
-        duration: msToHours(sessionsData[i].duration)
+        start: sessionsData[i].start,
+        end: sessionsData[i].end,
+        active: sessionsData[i].active,
+        duration: msToHours(sessionsData[i].end.getTime() - sessionsData[i].start.getTime())
       }
       pageData.sessions.push(session);
     }
@@ -110,7 +111,7 @@ export async function load({ params, cookies, locals }) {
     if (i == 3) {
       let hours: Hours = {
         month: "All Time",
-        hours: hoursData == null ? getHours(0) : getHours(hoursData.all_time),
+        hours: hoursData == null ? getHours(0) : "1:00" //getHours(hoursData.all_time),
       }
       pageData.hours.push(hours);
     } else {
@@ -144,7 +145,7 @@ class PageData {
     facility: string;
   };
   hours: Hours[];
-  sessions: Sessions[];
+  sessions: ControllerSessions[];
   staffRoles: StaffRoles[];
 
   constructor() {
@@ -181,14 +182,16 @@ type StaffRoles = {
   color: string
 }
 
-type Sessions = {
+// use this for mapping the recent sessions
+type ControllerSessions = {
   id: number,
   cid: number,
   callsign: string
   frequency: string
-  logon_time: Date,
-  last_update: Date,
-  duration: string,
+  start: Date,
+  end: Date,
+  active: boolean,
+  duration: string
 }
 
 type Certs = {

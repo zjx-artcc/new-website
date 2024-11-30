@@ -145,7 +145,7 @@
                             <td class="px-2 text-center text-xl">{user.controllingTimeFormat}</td>
                             <td class="px-2 text-center text-xl text-red-500">NOT IMPLEMENTED</td>
                             <td class={user.totalMsecondsQuarter < 10800000 ? "px-2 text-center text-xl bg-red-100" : "px-2 text-center text-xl bg-green-100"}>{user.totalTimeFormat}</td>
-                            <td class="px-5 py-4"><input class="accent-sky-500 h-5 w-5" type="checkbox" bind:value={user.selected}/></td>
+                            <td class="px-5 py-4"><input class="accent-sky-500 h-5 w-5" type="checkbox" bind:checked={user.selected}/></td>
                         </tr>
                     {/if}
                 {/each}

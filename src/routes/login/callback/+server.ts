@@ -13,13 +13,14 @@ export async function GET(event: RequestEvent): Promise<Response> {
   let token = await getToken(code);
   let user = await getUser(token);
   let rostered = await prisma.roster.findUnique({where: {cid: user.id}, select: {cid: true}}) != null;
+  console.log(user)
   await prisma.user.upsert({
     where: {
       id: user.id
     },
     update: {
-      first_name: user.first_name,
-      last_name: user.last_name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       rating: user.rating,
       email: user.email,
       division: user.division,
@@ -28,8 +29,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
     },
     create: {
       id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       rating: user.rating,
       email: user.email,
       division: user.division,
@@ -60,10 +61,12 @@ async function getUser(token: string): Promise<User> {
     }
   });
   const res = (await req.json());
+  console.log(res.data)
+  console.log(token)
   let user: User = {
     id: parseInt(res.data.cid),
-    first_name: res.data.personal.name_first,
-    last_name: res.data.personal.name_last,
+    firstName: res.data.personal.name_first,
+    lastName: res.data.personal.name_last,
     rating: res.data.vatsim.rating.id,
     email: res.data.personal.email,
     division: res.data.vatsim.division.id,

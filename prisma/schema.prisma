@@ -7,21 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ControllerSessions {
-  id          Int    @id
-  cid         Int
-  callsign    String?   @db.VarChar(255)
-  frequency   String?   @db.VarChar(255)
-  logon_time  DateTime? @db.Timestamptz(6)
-  last_update DateTime? @db.Timestamptz(6)
-  duration    Int?
-  roster      roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+model ArtccStats {
+  id        Int      @id
+  timestamp DateTime
+  mtd       Float?
+  ytd       Float?
+  all_time  Float?
+
+  @@map("artcc_stats")
+}
+
+model ControllerSession {
+  id        Int       @id
+  cid       Int
+  callsign  String?   @db.VarChar(255)
+  frequency String?   @db.VarChar(255)
+  start     DateTime? @db.Timestamptz(6)
+  end       DateTime? @db.Timestamptz(6)
+  active    Boolean?
+  roster    roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("controller_sessions")
 }
 
 model events {
-  id                Int                @id @default(autoincrement())
+  id                Int                 @id @default(autoincrement())
   last_modified     DateTime            @default(now()) @db.Timestamptz(6)
   created_by        Int
   name              String
@@ -59,28 +69,28 @@ model position_requests {
 }
 
 model roster {
-  cid                 Int                   @id
-  email               String
-  home_facility       String
-  created_at          DateTime              @default(now()) @db.Timestamptz(6)
-  rating              Int
-  del_certs           Float
-  gnd_certs           Float
-  twr_certs           Float
-  app_certs           Float
-  ctr_cert            Int
-  initials            String
-  first_name          String
-  last_name           String
-  staff_roles         String
-  mentor_level        BigInt?               @default(0)
-  rating_changed      DateTime?             @default(now()) @db.Timestamptz(6)
-  sop_course          Boolean               @default(false)
-  controllerSessions  ControllerSessions[]
-  events              events[]
-  onlineControllers   OnlineControllers[]
-  position_requests   position_requests[]
-  stats               Stats?
+  cid                Int                 @id
+  email              String
+  home_facility      String
+  created_at         DateTime            @default(now()) @db.Timestamptz(6)
+  rating             Int
+  del_certs          Float
+  gnd_certs          Float
+  twr_certs          Float
+  app_certs          Float
+  ctr_cert           Int
+  initials           String
+  first_name         String
+  last_name          String
+  staff_roles        String
+  mentor_level       BigInt?             @default(0)
+  rating_changed     DateTime?           @default(now()) @db.Timestamptz(6)
+  sop_course         Boolean             @default(false)
+  controllerSessions ControllerSession[]
+  events             events[]
+  onlineControllers  OnlineControllers[]
+  position_requests  position_requests[]
+  stats              Stats?
 }
 
 model Stats {
@@ -99,36 +109,34 @@ model Stats {
   tower         Float?
   tracon        Float?
   enroute       Float?
-  mco_delivery  Float?
-  mco_ground    Float?
-  mco_tower     Float?
-  mco_tracon    Float?
   roster        roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("stats")
 }
 
 model User {
-  id             Int              @id
-  first_name     String
-  last_name      String
-  email          String           @unique
-  division       String
-  facility       String?
-  rating         Int
-  roles          String
-  rostered       Boolean?
-  visit_requests visit_requests[]
-  sessions       WebSession[]
+  id            Int            @id
+  firstName     String         @map("first_name")
+  lastName      String         @map("last_name")
+  email         String         @unique
+  division      String
+  facility      String?
+  rating        Int
+  roles         String
+  rostered      Boolean?
+  visitRequests VisitRequest[]
+  sessions      WebSession[]
 
   @@map("users")
 }
 
-model visit_requests {
-  id     Int @id
+model VisitRequest {
+  id     Int    @id
   cid    Int
   reason String
   users  User   @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+
+  @@map("visit_requests")
 }
 
 model WebSession {
