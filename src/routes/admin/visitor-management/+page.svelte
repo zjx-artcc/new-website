@@ -4,6 +4,7 @@
     import "$lib/app.css"
     import { formatDate, getRating } from "$lib/db.js";
 	import StatusCard from "$lib/components/StatusCard.svelte";
+	import { UserRemoveOutline } from "flowbite-svelte-icons";
 
     let selectedCount = 0;
     let confirmationScreenClass = "hidden" // pls dont touch. hides confirmation screen
@@ -47,37 +48,58 @@
                 const req = await fetch(`/admin/visitor-management`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        //'Authorization': 'Bearer ' TODO: add authorization for users.
                     },
-                    body: JSON.stringify({cid: user.cid, actionMessage: user.actionMessage})
+                    body: JSON.stringify({userCid: user.cid, actionMessage: user.actionMessage})
                 });
-                if (req.status == 200) {
-                    
-                    responseData.push({
-                        bgColor: "bg-green-500",
-                        headerText: "Success",
-                        bodyText: "User " + user.User.firstName + " " + user.User.lastName + " (" + user.cid + ") has been added to the visiting roster."
-                    })
 
-                    setTimeout(() => {
-                        responseData.pop()
-                        console.log("popped " + user.cid)
-                    }, 5000)
+                console.log(req.statusText)
+                if (req.status == 200) {
+                    displayFeedbackBox("bg-green-500", "Success", "User " + user.User.firstName + " " + user.User.lastName + " (" + user.cid + ") has been added to the visiting roster.")
+                } else {
+                    displayFeedbackBox("bg-red-500", "Success", "Failed - " + await req.statusText)
                 }
-                let res = await req.json(req.body)
-                console.log(res.cid)
-                console.log(responseData)
             }
         }
-        
     }
     
-    const rejectUsers = () => {
+    const rejectUsers = async() => {
+        hideConfirmationScreen()
         
+        for(let i = 0; i < data.userData.length; i++) {
+            if(data.userData[i].selected) {
+                const user = data.userData[i]
+                const req = await fetch(`/admin/visitor-management`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        //'Authorization': 'Bearer ' TODO: add authorization for users.
+                    },
+                    body: JSON.stringify({userCid: user.cid, actionMessage: user.actionMessage})
+                });
+
+                console.log(req.statusText)
+                if (req.status == 200) {
+                    displayFeedbackBox("bg-green-500", "Success", "User " + user.User.firstName + " " + user.User.lastName + " (" + user.cid + ") has been added to the visiting roster.")
+                } else {
+                    displayFeedbackBox("bg-red-500", "Success", "Failed - " + await req.statusText)
+                }
+            }
+        }
     }
 
-    const displayFeedbackBox = () => {
+    const displayFeedbackBox = async(color, header, body) => {
+        responseData.push({
+            bgColor: "bg-green-500",
+            headerText: "Success",
+            bodyText: body
+        })
 
+        setTimeout(() => {
+            responseData.pop()
+            console.log("popped ")
+        }, 5000)
     }
     // Initialize selected tag
     uncheckUsers()
@@ -186,6 +208,7 @@
     
     <div id="response-box" class="z-50 top-0 absolute w-full h-10 flex justify-center items-start mt-20 transition ease-in-out">
             {#each responseData as cardData}
+                e
                 <StatusCard bgColor={cardData.bgColor} headerText={cardData.headerText} bodyText={cardData.bodyText}/>
             {/each}
     </div>
