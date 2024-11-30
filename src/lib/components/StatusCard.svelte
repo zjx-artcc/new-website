@@ -1,7 +1,7 @@
 <script lang="ts">
-    export let bgColor
-    export let headerText
-    export let bodyText
+    export let bgColor: String
+    export let headerText: String
+    export let bodyText: String
 </script>
 
 <div class={bgColor + " opacity-90 py-2 px-4 rounded-md w-96"}>
