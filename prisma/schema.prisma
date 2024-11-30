@@ -23,8 +23,8 @@ model ControllerSession {
   callsign  String?   @db.VarChar(255)
   frequency String?   @db.VarChar(255)
   start     DateTime? @db.Timestamptz(6)
-  end       DateTime? @db.Timestamptz(6)
-  active    Boolean?
+  end       Int?
+  active    Boolean
   roster    roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("controller_sessions")
@@ -63,9 +63,9 @@ model position_requests {
   cid        Int
   event_id   Int
   position   String
-  request_id Int     @id(map: "request_id") @default(autoincrement())
-  roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
-  events     events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
+  request_id Int    @id(map: "request_id") @default(autoincrement())
+  roster     roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
+  events     events @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
 }
 
 model roster {
@@ -82,7 +82,7 @@ model roster {
   initials           String
   first_name         String
   last_name          String
-  staff_roles        String
+  staff_roles        String?
   mentor_level       BigInt?             @default(0)
   rating_changed     DateTime?           @default(now()) @db.Timestamptz(6)
   sop_course         Boolean             @default(false)
@@ -94,22 +94,18 @@ model roster {
 }
 
 model Stats {
-  cid           Int    @id
-  month_one     Float  @default(0.0)
-  month_two     Float  @default(0.0)
-  month_three   Float  @default(0.0)
-  quarter_one   Float?
-  quarter_two   Float?
-  quarter_three Float?
-  quarter_four  Float?
-  ytd           Float?
-  all_time      Float?
-  delivery      Float?
-  ground        Float?
-  tower         Float?
-  tracon        Float?
-  enroute       Float?
-  roster        roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+  cid         Int    @id
+  month_one   Float  @default(0.0)
+  month_two   Float  @default(0.0)
+  month_three Float  @default(0.0)
+  ytd         Float?
+  all_time    Float?
+  delivery    Float?
+  ground      Float?
+  tower       Float?
+  tracon      Float?
+  enroute     Float?
+  roster      roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("stats")
 }
@@ -131,10 +127,12 @@ model User {
 }
 
 model VisitRequest {
-  id     Int    @id
-  cid    Int
-  reason String
-  users  User   @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+  id             Int       @id @default(autoincrement())
+  cid            Int
+  reason         String
+  date_requested DateTime? @db.Date
+  reviewed       Boolean?  @default(false)
+  users          User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
 
   @@map("visit_requests")
 }
