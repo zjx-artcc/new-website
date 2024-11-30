@@ -114,7 +114,7 @@
         <div class="flex justify-center">
             <table class="table px-2">
                 <thead>
-                    <tr class="bg-white">
+                    <tr class="bg-white border-2">
                         <th class="px-2">Controller</th>
                         <th class="px-2">Home Facility</th>
                         <th class="px-2">Reason</th>
@@ -123,8 +123,8 @@
                 </thead>
                 <tbody>
                     {#each data.userData as user}
-                            <tr>
-                                <td class="px-2 text-center">
+                            <tr class="border-2">
+                                <td class="px-2 text-center border-r-2">
                                     <div class="flex-wrap justify-center px-1">
                                         <span class="flex text-lg justify-center font-bold">{user.User.firstName} {user.User.lastName}</span>
                                         <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.User.rating))}</span>
