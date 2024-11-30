@@ -7,15 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model ArtccStats {
+  id        Int      @id
+  timestamp DateTime
+  mtd       Float?
+  ytd       Float?
+  all_time  Float?
+
+  @@map("artcc_stats")
+}
+
 model ControllerSessions {
-  id        Int       @id
-  cid       Int
-  callsign  String?   @db.VarChar(255)
-  frequency String?   @db.VarChar(255)
-  start     DateTime? @db.Timestamptz(6)
-  end       Int?
-  active    Boolean
-  roster    roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+  id          Int       @id
+  cid         Int
+  callsign    String?   @db.VarChar(255)
+  frequency   String?   @db.VarChar(255)
+  logon_time  DateTime? @db.Timestamptz(6)
+  last_update DateTime? @db.Timestamptz(6)
+  duration    Int?
+  roster      roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("controller_sessions")
 }
@@ -53,9 +63,9 @@ model position_requests {
   cid        Int
   event_id   Int
   position   String
-  request_id Int    @id(map: "request_id") @default(autoincrement())
-  roster     roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
-  events     events @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
+  request_id Int     @id(map: "request_id") @default(autoincrement())
+  roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
+  events     events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
 }
 
 model roster {
@@ -72,7 +82,7 @@ model roster {
   initials           String
   first_name         String
   last_name          String
-  staff_roles        String?
+  staff_roles        String
   mentor_level       BigInt?              @default(0)
   rating_changed     DateTime?            @default(now()) @db.Timestamptz(6)
   sop_course         Boolean              @default(false)
@@ -84,18 +94,22 @@ model roster {
 }
 
 model Stats {
-  cid         Int    @id
-  month_one   Float  @default(0.0)
-  month_two   Float  @default(0.0)
-  month_three Float  @default(0.0)
-  ytd         Float?
-  all_time    Float?
-  delivery    Float?
-  ground      Float?
-  tower       Float?
-  tracon      Float?
-  enroute     Float?
-  roster      roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+  cid           Int    @id
+  month_one     Float  @default(0.0)
+  month_two     Float  @default(0.0)
+  month_three   Float  @default(0.0)
+  quarter_one   Float?
+  quarter_two   Float?
+  quarter_three Float?
+  quarter_four  Float?
+  ytd           Float?
+  all_time      Float?
+  delivery      Float?
+  ground        Float?
+  tower         Float?
+  tracon        Float?
+  enroute       Float?
+  roster        roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("stats")
 }
@@ -130,12 +144,4 @@ model WebSession {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("web_sessions")
-}
-
-model artcc_stats {
-  id        Int      @id
-  timestamp DateTime
-  mtd       Float?
-  ytd       Float?
-  all_time  Float?
 }
