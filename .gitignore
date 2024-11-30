@@ -11,8 +11,6 @@ vite.config.ts.timestamp-*
 .gitmessagebest
 .idea
 .idea*
-.vscode
-.vscode*
 .env*
 .flaskenv*
 !.env.project
