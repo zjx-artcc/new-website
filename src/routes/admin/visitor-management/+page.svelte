@@ -126,11 +126,11 @@
                             <tr class="border-2">
                                 <td class="px-2 text-center border-r-2">
                                     <div class="flex-wrap justify-center px-1">
-                                        <span class="flex text-lg justify-center font-bold">{user.User.firstName} {user.User.lastName}</span>
-                                        <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.User.rating))}</span>
+                                        <span class="flex text-lg justify-center font-bold">{user.users.first_name} {user.users.last_name}</span>
+                                        <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.users.rating))}</span>
                                     </div>
                                 </td>
-                                <td class="text-center px-2 text-2xl">{user.User.facility}</td>
+                                <td class="text-center px-2 text-2xl">{user.users.facility}</td>
                                 <td class="text-left text-lg p-2 w-96">{user.reason}</td>
                                 <td class="px-5 py-4"><input class="accent-sky-500 h-5 w-5 px-2" type="checkbox" bind:checked={user.selected} on:change={checkUsersSelected}/></td>
                             </tr>
@@ -158,8 +158,8 @@
                                 <tr>
                                     <td class="px-2 text-center">
                                         <div class="flex-wrap justify-center px-1">
-                                            <span class="flex justify-center font-bold">{user.User.firstName} {user.User.lastName}</span>
-                                            <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.User.rating))}</span>
+                                            <span class="flex justify-center font-bold">{user.users.first_name} {user.users.last_name}</span>
+                                            <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.users.rating))}</span>
                                         </div>
                                     </td>
                                     <td class="text-center text-md"><input class="p-2 w-96 h-12 bg-gray-300" bind:value={user.actionMessage}></td>

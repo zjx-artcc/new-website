@@ -14,14 +14,14 @@ export const load = async ({ params, cookies, locals }) => {
         }
     }
 
-    const userData = await prisma.visitRequests.findMany({
+    const userData = await prisma.visit_requests.findMany({
         select: {
             cid: true,
             reason: true,
-            User: {
+            users: {
                 select: {
-                    "firstName": true,
-                    "lastName": true,
+                    "first_name": true,
+                    "last_name": true,
                     "rating": true,
                     "facility": true
                 },

@@ -36,6 +36,9 @@
 			<a href="/roster"><span>Roster</span></a>
 		</DropdownItem>
 		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
+			<a href="/visit"><span>Become a visitor</span></a>
+		</DropdownItem>
+		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
 			<a href="/admin"><span>Admin</span></a>
 		</DropdownItem>
 	</Dropdown>

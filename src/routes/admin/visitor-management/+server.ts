@@ -4,8 +4,6 @@ import { prisma } from "$lib/db";
 
 export const POST = async ({request}): Promise<Response> => {
     // Verify user is approved
-    
-      
     const {userCid, actionMessage} = await request.json()
 
     const vatusaReq = await fetch(`https://api.vatusa.net/facility/zjx/roster/manageVisitor/${userCid}`, {
