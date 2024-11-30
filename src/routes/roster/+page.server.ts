@@ -1,110 +1,67 @@
-//@ts-nocheck
-import { prisma, getCerts, getCtrCerts, getRating } from '$lib/db';
+import { prisma, getCertsColor, getCtrCertColor, getRating } from '$lib/db';
+import type { roster } from '@prisma/client';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
-  let pageData = {
-    loggedIn: false,
-    home: [],
-    visiting: [],
-  }
-  const data = await prisma.roster.findMany({
+  //Setup page data
+  let pageData = new PageData()
+
+  //Fetch all users in roster
+  const data: roster[] = await prisma.roster.findMany({
     orderBy: {
       last_name: 'asc'
     }
   })
+
+  //Main processing loop
   for(let i = 0; i < data.length; i++) {
-    let flagged = false;
-    if (data[i].del_certs == undefined) {
-      console.log(data[i]);
-      flagged = true;
-    }
-    data[i].del_certs = getCertsColor(data[i].del_certs)
-    data[i].gnd_certs = getCertsColor(data[i].gnd_certs)
-    data[i].twr_certs = getCertsColor(data[i].twr_certs)
-    data[i].app_certs = getCertsColor(data[i].app_certs)
-    data[i].ctr_cert = getCtrCertColor(parseInt(data[i].ctr_cert))
-    data[i].rating = getRating(parseInt(data[i].rating))
-
-    console.log(data[i]);
-
-    if (flagged) {
-      console.log(data[i])
+    //Create roster member object
+    let member: RosterData = {
+      name: `${data[i].first_name} ${data[i].last_name}`,
+      cid: Number(data[i].cid),
+      initials: data[i].initials,
+      home_facility: data[i].home_facility,
+      rating: getRating(Number(data[i].rating)),
+      delCerts: getCertsColor(data[i].del_certs),
+      gndCerts: getCertsColor(data[i].gnd_certs),
+      twrCerts: getCertsColor(data[i].twr_certs),
+      appCerts: getCertsColor(data[i].app_certs),
+      ctrCert: getCtrCertColor(Number(data[i].ctr_cert))
     }
 
+    console.log(member);
+
+    //Sort into different arrays
     if (data[i].home_facility == "ZJX") {
-      pageData.home.push(data[i])
+      pageData.home.push(member)
     } else {
-      pageData.visiting.push(data[i])
+      pageData.visiting.push(member)
     }
   }
-  return {
-    pageData
+  return { pageData: {...pageData} }
+}
+
+
+class PageData {
+  home: RosterData[];
+  visiting: RosterData[];
+
+  constructor() {
+    this.home = [],
+    this.visiting = []
   }
 }
 
-function getCertsColor(input: number): {cert: number, color: string} {
-  console.log(input);
-  switch(input) {
-    case 0: {
-      return {
-        cert: getCerts(input),
-        color: "#868E96"
-      }
-    }
-    case 1: {
-      return {
-        cert: getCerts(input),
-        color: "#9ccc65"
-      }
-    }
-    case 1.5: {
-      return {
-        cert: getCerts(input),
-        color: "#ffca28"
-      }
-    }
-    case 2: {
-      return {
-        cert: getCerts(input),
-        color: "#42a5f5"
-      }
-    }
-    case 2.5: {
-      return {
-        cert: getCerts(input),
-        color: "#ffca28"
-      }
-    }
-    case 3: {
-      return {
-        cert: getCerts(input),
-        color: "#ffc800"
-      }
-    }
-  }
-}
-
-function getCtrCertColor(input: number): {cert: number, color: string} {
-  switch(input) {
-    case 1: {
-      return {
-        cert: getCtrCerts(input),
-        color: "#9ccc65"
-      }
-    }
-    case 0: {
-      return {
-        cert: getCtrCerts(input),
-        color: "#868E96"
-      }
-    }
-    case 1.5: {
-      return {
-        cert: getCtrCerts(input),
-        color: "#ffca28"
-      }
-    }
-  }
+type RosterData = {
+  name: string;
+  cid: number;
+  rating: string;
+  initials: string;
+  home_facility: string;
+  delCerts: { cert: string; color: string };
+  gndCerts: { cert: string; color: string };
+  twrCerts: { cert: string; color: string };
+  appCerts: { cert: string; color: string };
+  ctrCert: { cert: string; color: string };
 }

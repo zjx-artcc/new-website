@@ -1,13 +1,26 @@
-// @ts-nocheck
+//@ts-nocheck
 import { PrismaClient } from "@prisma/client";
-import type { roster } from '@prisma/client';
-import { redirect } from "@sveltejs/kit";
 
-export const prisma = new PrismaClient();
+let prisma: PrismaClient;
 
-//* Begin utility functions
-//TODO: Add JSDoc comments
+if (process.env.NODE_ENV === "production") {
+  prisma = new PrismaClient();
+} else {
+  if (!global.prisma) {
+    global.prisma = new PrismaClient();
+  }
 
+  prisma = global.prisma;
+}
+
+export { prisma };
+
+
+/**
+ * 
+ * @param ratingInt - Integer Form of Rating
+ * @returns {string} Human Readable Rating
+ */
 export function getRating(ratingInt: number): string {
   switch(ratingInt) {
     case 1:
@@ -33,13 +46,36 @@ export function getRating(ratingInt: number): string {
   }
 }
 
-export function getHours(input) {
+/**
+ * 
+ * @param input - Hours in Decimal Form
+ * @returns {string} Hours in HH:MM Format
+ */
+export function getHours(input: number):string {
+  if (input == 0) {
+    return "00:00";
+  }
   let hours = Math.floor(input);
   let minutes = Math.round((input - hours) * 60).toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
+  return `${hours.toString().padStart(2,"0")}:${minutes}`;
 }
 
-export async function getStaffRoles(cid: number, type: string): boolean {
+/**
+ * 
+ * @param input - Duration in Milliseconds
+ * @returns {string} Duration in HH:MM Format
+ */
+export function msToHours(input: number): string {
+  return getHours(input/(3.6e+6));
+}
+
+/**
+ * 
+ * @param cid - User CID
+ * @param type - Type of page
+ * @returns {boolean} True if user has permission to access page
+ */
+export async function getStaffRoles(cid: number, type: string): Promise<boolean> {
   let data = await prisma.user.findFirst({
     where: {
       id: cid
@@ -49,7 +85,7 @@ export async function getStaffRoles(cid: number, type: string): boolean {
     }
   })
   if (data == null) {
-	  return ""
+	  return false
   }
   data = data.roles.toString();
   switch(type) {
@@ -78,8 +114,12 @@ export async function getStaffRoles(cid: number, type: string): boolean {
   }
 }
 
-//* Format to UTC Date
-export function formatDate(input) {
+/**
+ * 
+ * @param input - Date String
+ * @returns {string} Date in UTC Format
+ */
+export function formatDate(input): string {
   let dateTime = new Date(input);
   let year = dateTime.getFullYear();
   let month = (dateTime.getMonth() + 1).toString().padStart(2, "0");
@@ -91,40 +131,80 @@ export function formatDate(input) {
 }
 
 /**
- * Converts certifcation integer to string
- * @param certInt An integer representing the certification level
- * @returns {String} The certification level as a string
+ * @typedef {Object} Certs
+ * @property {string} cert - Certification
+ * @property {string} color - Color for the page
  */
-export function getCerts(certInt: number): string {
-  switch(certInt) {
+/**
+ * 
+ * @param input - Certification in Integer Form
+ * @returns {Certs} Certification and Color
+ */
+export function getCertsColor(input: number): {cert: string, color: string} {
+  switch(input) {
+    case 0: {
+      return {
+        cert: "Not Certified",
+        color: "slate-500"
+      }
+    }
     case 1: {
-      return "Tier 1 Certified";
+      return {
+        cert: "Tier 1",
+        color: "green-600"
+      }
     }
     case 1.5: {
-      return "Tier 1 Solo"
+      return {
+        cert: "Tier 1 Solo",
+        color: "amber-700"
+      }
     }
     case 2: {
-      return "Tier 2 Certified";
+      return {
+        cert: "Tier 2",
+        color: "sky-700"
+      }
     }
     case 2.5: {
-      return "Tier 2 Solo"
+      return {
+        cert: "Tier 2 Solo",
+        color: "amber-700"
+      }
     }
     case 3: {
-      return "Unrestricted Certified";
-    }
-    default: {
-      return "Not Certified";
+      return {
+        cert: "Unrestricted",
+        color: "indigo-700"
+      }
     }
   }
 }
 
-//* Same thing but for center certs which are trinary
-export function getCtrCerts(certInt) {
-  if (certInt == 1) {
-    return "Center Certified"
-  } else if (certInt == 1.5) {
-    return "Center Solo"
-  } else {
-    return "Not Certified"
+/**
+ * 
+ * @param input - Certification in Integer Form
+ * @returns {Certs} Certification and Color
+ */
+export function getCtrCertColor(input: number): {cert: string, color: string} {
+  switch(input) {
+    case 1: {
+      return {
+        cert: "Certified",
+        color: "green-600"
+      }
+    }
+    case 0: {
+      return {
+        cert: "Not Certified",
+        color: "slate-500"
+      }
+    }
+    case 1.5: {
+      return {
+        cert: "Solo Certified",
+        color: "yellow-500"
+      }
+    }
   }
 }

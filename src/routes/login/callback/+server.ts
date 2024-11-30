@@ -18,8 +18,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
       id: user.id
     },
     update: {
-      firstName: user.firstName,
-      lastName: user.lastName,
+      first_name: user.first_name,
+      last_name: user.last_name,
       rating: user.rating,
       email: user.email,
       division: user.division,
@@ -28,8 +28,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
     },
     create: {
       id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      first_name: user.first_name,
+      last_name: user.last_name,
       rating: user.rating,
       email: user.email,
       division: user.division,
@@ -62,13 +62,14 @@ async function getUser(token: string): Promise<User> {
   const res = (await req.json());
   let user: User = {
     id: parseInt(res.data.cid),
-    firstName: res.data.personal.name_first,
-    lastName: res.data.personal.name_last,
+    first_name: res.data.personal.name_first,
+    last_name: res.data.personal.name_last,
     rating: res.data.vatsim.rating.id,
     email: res.data.personal.email,
     division: res.data.vatsim.division.id,
     facility: "",
-    roles: ""
+    roles: "",
+    rostered: false
   }
 
   if (user.division == "USA") {
