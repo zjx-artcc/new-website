@@ -116,8 +116,8 @@ model Stats {
 
 model User {
   id             Int              @id
-  first_name     String
-  last_name      String
+  firstName      String           @map("first_name")
+  lastName       String           @map("last_name")
   email          String           @unique
   division       String
   facility       String?
