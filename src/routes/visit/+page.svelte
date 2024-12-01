@@ -56,7 +56,7 @@
 
 <header class="bg-gray-700" id="myTopnav">
 	<div class="h-52 flex justify-center items-center">
-			<h1 class="ml-5 text-6xl text-white font-bold pt-3">Visit Jacksonville</h1>
+			<h1 class="ml-5 text-6xl text-white font-bold pt-3">Visit the Virtual Jacksonville ARTCC</h1>
 	</div>
 </header>
 
