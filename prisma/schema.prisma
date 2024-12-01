@@ -111,28 +111,33 @@ model Stats {
 }
 
 model User {
-  id            Int            @id
-  firstName     String         @map("first_name")
-  lastName      String         @map("last_name")
-  email         String         @unique
-  division      String
-  facility      String?
-  rating        Int
-  roles         String
-  rostered      Boolean?
-  visitRequests VisitRequest[]
-  sessions      WebSession[]
+  id                                              Int            @id
+  firstName                                       String         @map("first_name")
+  lastName                                        String         @map("last_name")
+  email                                           String         @unique
+  division                                        String
+  facility                                        String?
+  rating                                          Int
+  roles                                           String
+  rostered                                        Boolean?
+  visitRequests                                   VisitRequest[]
+  visit_requests_visit_requests_action_cidTousers VisitRequest[] @relation("visit_requests_action_cidTousers")
+  sessions                                        WebSession[]
 
   @@map("users")
 }
 
 model VisitRequest {
-  id             Int       @id @default(autoincrement())
-  cid            Int
-  reason         String
-  date_requested DateTime? @db.Date
-  reviewed       Boolean?  @default(false)
-  users          User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+  id                                     Int       @id @default(autoincrement())
+  cid                                    Int
+  reason                                 String
+  date_requested                         DateTime? @db.Date
+  reviewed                               Boolean?  @default(false)
+  action_message                         String?   @db.VarChar(150)
+  action_cid                             Int?
+  action_date                            DateTime? @db.Date
+  users                                  User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+  users_visit_requests_action_cidTousers User?     @relation("visit_requests_action_cidTousers", fields: [action_cid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
 
   @@map("visit_requests")
 }

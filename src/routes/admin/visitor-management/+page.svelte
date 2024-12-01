@@ -5,11 +5,18 @@
 	import { formatDate, getRating } from '$lib/db.js';
 	import StatusCard from '$lib/components/StatusCard.svelte';
 	import { UserRemoveOutline } from 'flowbite-svelte-icons';
-
+	import ResponseBox from '$lib/components/ResponseBox.svelte';
 	let selectedCount = 0;
 	let confirmationScreenClass = 'hidden'; // pls dont touch. hides confirmation screen
 	let actionString: string = '';
 	let responseData = [];
+
+	let responseBox: ResponseBox = {
+		bgColor: "",
+		header: "",
+		text: "",
+		hidden: true
+	}
 
 	const checkUsersSelected = () => {
 		selectedCount = 0;
@@ -49,26 +56,15 @@
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
-						//'Authorization': 'Bearer ' TODO: add authorization for users.
 					},
-					body: JSON.stringify({ userCid: user.cid, actionMessage: user.actionMessage })
+					body: JSON.stringify({ requestId: user.id, actionMessage: user.actionMessage }) // user.id is request ID
 				});
 
 				console.log(req.statusText);
 				if (req.status == 200) {
-					displayFeedbackBox(
-						'bg-green-500',
-						'Success',
-						'User ' +
-							user.User.firstName +
-							' ' +
-							user.User.lastName +
-							' (' +
-							user.cid +
-							') has been added to the visiting roster.'
-					);
+					displayFeedbackBox('bg-green-500', 'Success', 'User added to visitng roster!')
 				} else {
-					displayFeedbackBox('bg-red-500', 'Success', 'Failed - ' + (await req.statusText));
+					displayFeedbackBox('bg-red-500', 'Failed', req.text().then((text) => {return text}));
 				}
 			}
 		}
@@ -91,17 +87,7 @@
 
 				console.log(req.statusText);
 				if (req.status == 200) {
-					displayFeedbackBox(
-						'bg-green-500',
-						'Success',
-						'User ' +
-							user.User.firstName +
-							' ' +
-							user.User.lastName +
-							' (' +
-							user.cid +
-							') has been added to the visiting roster.'
-					);
+					
 				} else {
 					displayFeedbackBox('bg-red-500', 'Success', 'Failed - ' + (await req.statusText));
 				}
@@ -109,21 +95,25 @@
 		}
 	};
 
-	const displayFeedbackBox = async (color, header, body) => {
-		responseData.push({
-			bgColor: 'bg-green-500',
-			headerText: 'Success',
-			bodyText: body
-		});
-
-		setTimeout(() => {
-			responseData.pop();
-			console.log('popped ');
-		}, 5000);
+	const displayFeedbackBox = async (color, headerText, bodyText) => {
+		responseBox.bgColor = color
+		responseBox.header = headerText
+		responseBox.text = bodyText
+		responseBox.hidden = false
 	};
+
 	// Initialize selected tag
 	uncheckUsers();
+
+	type ResponseBox = {
+		bgColor: string;
+		header: string;
+		text: string;
+		hidden: boolean;
+	}
 </script>
+
+<ResponseBox header={responseBox.header} text={responseBox.text} hidden={responseBox.hidden} bgColor={responseBox.bgColor}/>
 
 <div class="my-5 h-100">
 	<div class="flex justify-center">
@@ -137,6 +127,7 @@
 					<tr class="bg-white border-2">
 						<th class="px-2">Controller</th>
 						<th class="px-2">Home Facility</th>
+						<th class="px-2">Date Requested</th>
 						<th class="px-2">Reason</th>
 						<th class="px-2">Select</th>
 					</tr>
@@ -155,6 +146,7 @@
 								</div>
 							</td>
 							<td class="text-center px-2 text-2xl border-r-2">{user.users.facility == "" ? "None" : user.users.facility}</td>
+							<td class="text-center px-2 text-2xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth()}-${user.date_requested.getUTCDay()}`}</td>
 							<td class="text-left text-lg p-2 w-96">{user.reason}</td>
 							<td class="px-5 py-4"
 								><input
@@ -176,9 +168,9 @@
 					<p2>Selection Summary</p2>
 				</div>
 				<div>
-					<table class="table px-2">
+					<table class="table px-2 border-2">
 						<thead>
-							<tr class="bg-white">
+							<tr class="bg-white border-b-2">
 								<th class="px-2">Controller</th>
 								<th class="px-2">Action Message</th>
 							</tr>
@@ -187,7 +179,7 @@
 							{#each data.userData as user}
 								{#if user.selected == true}
 									<tr>
-										<td class="px-2 text-center">
+										<td class="px-2 text-center border-r-2 border-gray-300">
 											<div class="flex-wrap justify-center px-1">
 												<span class="flex justify-center font-bold"
 													>{user.users.firstName} {user.users.lastName}</span

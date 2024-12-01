@@ -16,8 +16,10 @@ export const load = async ({ params, cookies, locals }) => {
 
     const userData = await prisma.visitRequest.findMany({
         select: {
+            id: true,
             cid: true,
             reason: true,
+            date_requested: true,
             users: {
                 select: {
                     "firstName": true,
@@ -27,6 +29,9 @@ export const load = async ({ params, cookies, locals }) => {
                 },
             }
         },
+        where: {
+            reviewed: false
+        }
         
     });
 
