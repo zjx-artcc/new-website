@@ -4,8 +4,9 @@
 	import '$lib/app.css';
 	import { formatDate, getRating } from '$lib/db.js';
 	import StatusCard from '$lib/components/StatusCard.svelte';
-	import { UserRemoveOutline } from 'flowbite-svelte-icons';
+	import { ChevronDownSolid, UserRemoveOutline } from 'flowbite-svelte-icons';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
+	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	let selectedCount = 0;
 	let confirmationScreenClass = 'hidden'; // pls dont touch. hides confirmation screen
 	let actionString: string = '';
@@ -120,7 +121,7 @@
 		<h1 class="text-xl text-sky-500 font-bold mb-5">Visitor Management</h1>
 	</div>
 
-	<div class="flex flex-col flex-wrap bg-grey">
+	<div class="flex flex-col flex-wrap bg-grey border-b-4 pb-4">
 		<div class="flex justify-center">
 			<table class="table px-2">
 				<thead>
@@ -249,19 +250,5 @@
 		</div>
 
 		<div class="z-10 absolute w-full h-full opacity-50 bg-gray-800" />
-	</div>
-
-	<div
-		id="response-box"
-		class="z-50 top-0 absolute w-full h-10 flex justify-center items-start mt-20 transition ease-in-out"
-	>
-		{#each responseData as cardData}
-			e
-			<StatusCard
-				bgColor={cardData.bgColor}
-				headerText={cardData.headerText}
-				bodyText={cardData.bodyText}
-			/>
-		{/each}
 	</div>
 </div>
