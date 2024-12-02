@@ -57,18 +57,20 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 		);
 
 		if (vatusaReq.status == 200) {
-				updateVisitRequest(requestId, user.id, actionMessage)
-				notifyUser(requestId, actionMessage);
+				if (await updateVisitRequest(requestId, user.id, actionMessage).ok){
+					notifyUser(requestId, actionMessage);
 
-				return new Response(`User ${visitRequest.cid} added to roster`, {
-					status: 200,
-					statusText: vatusaReq.statusText
-				})
+					return new Response(`User ${visitRequest.cid} added to roster`, {
+						status: 200,
+						statusText: vatusaReq.statusText
+					})
+				}	
 		} else if (vatusaReq.status == 400) {
-			updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster");
-			return new Response("User already on visiting roster", {
-				status: 400,
-			});
+			if(await updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster").ok) {
+				return new Response("User already on visiting roster", {
+					status: 400,
+				});
+			}
 		} else {
 			return new Response("Please send this to the developers.",
 				{
@@ -77,11 +79,11 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 			)
 		}
  	} catch(error) {
-		console.log(error)
+		console.error(error)
 		return new Response(
 			error,
 			{
-				status: error.status
+				status: 500
 			}
 		)
 	}
@@ -98,7 +100,10 @@ export const DELETE = async ({ request, cookies }): Promise<Response> => {
 		)
 		const { requestId, actionMessage, operatingInitials } = await request.json();
 		const{session, user} = await validateSessionToken(auth_session)
-		updateVisitRequest(requestId, user.id, actionMessage)
+		
+		if(updateVisitRequest(requestId, user.id, actionMessage).ok) {
+
+		}
 	} catch (error) {
 		console.error(error)
 		return new Response(

@@ -1,7 +1,6 @@
 //@ts-nocheck
 
 import { PrismaClient } from "@prisma/client";
-import { email } from "svelte-use-form";
 
 let prisma: PrismaClient;
 
