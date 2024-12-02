@@ -16,36 +16,36 @@ import { validateSessionToken } from '$lib/oauth.js';
 
 export const POST = async ({ request, cookies }): Promise<Response> => {
 	// Verify user is approved
-	const auth_session = cookies.get("auth_session")
-    const sessionreq = await prisma.webSession.findUnique({
-        where: {
-            id: auth_session
-        }}
-    )
-		const { requestId, actionMessage, operatingInitials } = await request.json();
-    const{session, user} = await validateSessionToken(auth_session)
-
-		// If user is not ATM or DATM in production do not let them use request
-	if(process.env.NODE_ENV != "development" && (user.roles == "ATM" || user.roles == "DATM")) {
-		return new Response(
-			"Invalid user roles",
-			{
-				status: 401
-			}
-		)
-	}
-
-	// Get visit request data from DB
-	const visitRequest = await prisma.visitRequest.findFirst({
-		select: {
-			cid: true
-		},
-		where: {
-			id: requestId
-		}
-	})
-
 	try {
+		const auth_session = cookies.get("auth_session")
+		const sessionreq = await prisma.webSession.findUnique({
+				where: {
+						id: auth_session
+				}}
+		)
+		const { requestId, actionMessage, operatingInitials } = await request.json();
+		const{session, user} = await validateSessionToken(auth_session)
+
+			// If user is not ATM or DATM in production do not let them use request
+		if(process.env.NODE_ENV != "development" && (user.roles == "ATM" || user.roles == "DATM")) {
+			return new Response(
+				"Invalid user roles",
+				{
+					status: 401
+				}
+			)
+		}
+
+		// Get visit request data from DB
+		const visitRequest = await prisma.visitRequest.findFirst({
+			select: {
+				cid: true
+			},
+			where: {
+				id: requestId
+			}
+		})
+
 		// VATUSA API call to add visitor to roster
 		const vatusaReq = await fetch(
 			`https://api.vatusa.net/facility/zjx/roster/manageVisitor/${visitRequest.cid}`,
@@ -59,35 +59,54 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 		);
 
 		if (vatusaReq.status == 200) {
-			const dbQuery = await addUserToRoster(visitRequest.cid, operatingInitials)
-
-			if (dbQuery.status == 200) {
-				const visitUpdateReq = await updateVisitRequest(requestId, user.id, actionMessage)
-				if(await visitUpdateReq.ok){
+				if ((await updateVisitRequest(requestId, user.id, actionMessage)).status == 200){
 					notifyUser(requestId, actionMessage);
 
 					return new Response(`User ${visitRequest.cid} added to roster`, {
 						status: 200,
 						statusText: vatusaReq.statusText
-					});
-				} else {
-					return new Response(null, {
-						status: 500,
-					});
-				}
-			} else {
-				return new Response(null, {
-					status: 500,
+					})
+				}	
+		} else if (vatusaReq.status == 400) {
+			if((await updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster")).status== 200) {
+				return new Response("User already on visiting roster", {
+					status: 400,
 				});
 			}
-		} else if (vatusaReq.status == 400) {
-			updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster");
-			return new Response("User already on visiting roster", {
-				status: 400,
-			});
 		}
+		return new Response("Please send this to the developers.",
+			{
+				status: 500
+			}
+		)
  	} catch(error) {
-		console.log(error)
+		console.error(error)
+		return new Response(
+			error,
+			{
+				status: 500
+			}
+		)
+	}
+};
+
+export const DELETE = async ({ request, cookies }): Promise<Response> => {
+	try {
+		// Verify user is approved
+		const auth_session = cookies.get("auth_session")
+		const sessionreq = await prisma.webSession.findUnique({
+				where: {
+						id: auth_session
+				}}
+		)
+		const { requestId, actionMessage, operatingInitials } = await request.json();
+		const{session, user} = await validateSessionToken(auth_session)
+		
+		if((await updateVisitRequest(requestId, user.id, actionMessage)).status == 200) {
+
+		}
+	} catch (error) {
+		console.error(error)
 		return new Response(
 			error,
 			{
@@ -95,17 +114,6 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 			}
 		)
 	}
-
-	return new Response(
-		null,
-		{
-			status: 500
-		}
-	)
-};
-
-export const DELETE = async ({ request }): Promise<Response> => {
-	// TODO
 
 	return new Response(
 		null,
