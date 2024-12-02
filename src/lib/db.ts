@@ -210,7 +210,7 @@ export function getCtrCertColor(input: number): {cert: string, color: string} {
   }
 }
 
-export const updateVisitRequest = async(requestId, actionCid, actionMessage): Response => {
+export const updateVisitRequest = async(requestId, actionCid, actionMessage): Promise<Response> => {
   try {
     await prisma.visitRequest.update({
       where: {
