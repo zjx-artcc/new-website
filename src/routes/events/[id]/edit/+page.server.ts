@@ -2,7 +2,7 @@ import { error, redirect } from '@sveltejs/kit'
 import { formatDate, getStaffRoles, prisma } from '$lib/db'
 import { getPositionType } from '$lib/events.js';
 
-import type { PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import type { PositionRequest, Event } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
@@ -35,8 +35,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   return {pageData: { ...pageData }};
 }
 
-/** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
   default: async({ request, locals }) => {
     const formData = await request.formData();
     let event: Event = {
