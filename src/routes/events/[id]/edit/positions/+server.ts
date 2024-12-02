@@ -1,10 +1,11 @@
 import { prisma } from "$lib/db.js";
 import { json } from '@sveltejs/kit'
 
-/** @type {import('./$types').RequestHandler} */
-export async function POST({request}) {
+import type { RequestHandler } from "./$types";
+
+export const POST: RequestHandler = async ({request, params}) => {
   const req = await request.json();
-  const event: number = parseInt(req.event);
+  const event: number = parseInt(params.id);
   const positions: Position[] = req.positions;
   const cid: number = req.cid;
 
@@ -14,9 +15,9 @@ export async function POST({request}) {
     }
   }
   
-  let eventData = await prisma.events.findUnique({
+  let eventData = await prisma.event.findUnique({
     where: {
-      id: BigInt(event)
+      id: event
     }
   })
   if (eventData == null) {
@@ -28,9 +29,9 @@ export async function POST({request}) {
   for (let i = 0; i < positions.length; i++) {
     delete positions[i].requests;
     if (positions[i].controller != "") {
-      await prisma.position_requests.deleteMany({
+      await prisma.positionRequest.deleteMany({
         where: {
-          event_id: event,
+          eventId: event,
           position: positions[i].position.toString()
         }
       })
@@ -40,12 +41,12 @@ export async function POST({request}) {
 
   
   eventData.positions = JSON.stringify(positions);
-  eventData.last_modified = new Date();
+  eventData.lastModified = new Date();
 
   //Update events table
-  await prisma.events.update({
+  await prisma.event.update({
     where: {
-      id: BigInt(event)
+      id: event
     },
     data: eventData
   })

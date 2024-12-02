@@ -1,20 +1,32 @@
-//@ts-nocheck
 import { prisma, getStaffRoles } from '$lib/db';
+import type { Event } from '@prisma/client';
+
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
-  let pageData = {
-    canEdit: false,
-    events: []
-  };
-  if (locals.session != null) {
-    pageData.canEdit = await getStaffRoles(locals.session.userId, "events");
-  }
-  const data = await prisma.events.findMany({
+  //Setup page data
+  let pageData = new PageData();
+
+  //Check if user is signed in
+  pageData.canEdit = locals.session != null ? await getStaffRoles(locals.session.userId, "events") : false;
+
+  //Fetch events
+  const data: Event[] = await prisma.event.findMany({
     orderBy: {
-      event_start: 'asc'
+      start: 'asc'
     }
   });
+
   pageData.events = data;
-  return pageData;
+  return { pageData: {...pageData} };
+}
+
+class PageData {
+  canEdit: boolean;
+  events: Event[];
+
+  constructor() {
+    this.canEdit = false;
+    this.events = [];
+  }
 }
