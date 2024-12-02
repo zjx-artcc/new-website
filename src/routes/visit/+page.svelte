@@ -1,154 +1,91 @@
-<script>
-	// @ts-nocheck
+<script lang="ts">
 	import '$lib/app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
-	import Card from '$lib/components/Card.svelte';
-	import EventCard from '$lib/components/EventCard.svelte';
-	import NewsCard from '$lib/components/NewsCard.svelte';
-	import ATCCard from '$lib/components/ATCCard.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import VisitRow from '$lib/components/VisitRow.svelte';
 	import { useForm, required, validators, number } from 'svelte-use-form';
 	import { page } from '$app/stores';
-
+	import { getRating, prisma } from '$lib/db';
+	import ResponseBox from '$lib/components/ResponseBox.svelte';
+	import { text } from '@sveltejs/kit';
+	//import { getRating } from '$lib/db.js';
 	export let data;
-	let controller = data;
+	let visitReason: string = ""
+	let responseBox: ResponseBox = {
+		bgColor: "",
+		header: "",
+		text: "",
+		hidden: true
+	}
+	const userData = data.session.user
 
-	const form = useForm();
+	const submitVisitRequest = async() => {
+		// Create POST request
+		const visitRequest = await fetch(`/visit`,
+		{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				userReason: visitReason
+			})
+		})
+
+
+		console.log(visitRequest.status)
+		if (visitRequest.status == 200) {
+			responseBox.bgColor = "bg-green-500"
+			responseBox.header = "Submitted!"
+			responseBox.text = "We look forward to seeing you in the ARTCC. Please allow a few days for your request to be reviewed."
+		} else {
+			responseBox.bgColor = "bg-red-500"
+			responseBox.header = `Error ${visitRequest.status} ${visitRequest.statusText}`
+			responseBox.text = await visitRequest.text().then((text) => {return text})
+		}
+		responseBox.hidden = false
+	}
+
+	type ResponseBox = {
+		bgColor: string;
+		header: string;
+		text: string;
+		hidden: boolean;
+	}
 </script>
 
-<header class="bg-gray-700 block border-b-4" id="myTopnav">
-	<div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 560px; ">
-		<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
-			<img src="/ZJX-Light-Logo.png" height="200" width="200" alt="" srcset="" />
-			<h1 class="text-6xl text-white font-bold pt-3">Visit Jacksonville</h1>
-			<h3 class="text-3xl text-white pt-3 outline outline-black outline-1">
-				Please fill out the form below.
-			</h3>
-		</div>
+<header class="bg-gray-700" id="myTopnav">
+	<div class="h-52 flex justify-center items-center">
+			<h1 class="ml-5 text-6xl text-white font-bold pt-3">Visit the Virtual Jacksonville ARTCC</h1>
 	</div>
 </header>
 
-<form use:form method="POST">
-	<div class="flex flex-wrap justify-center align-middle mx-5 mr-5">
-		<div class="text-center flex-1 w-1/2 px-5 py-2.5 outline outline-slate-200 rounded-sm">
-			<table class="columns-2 text-center w-full">
-				<tr>
-					<th class="text-xl"><h1>Controller Information</h1></th>
-					<th><h1>Eligibility Checks</h1></th>
-				</tr>
-				<tr>
-					<td class="italic text-lg">
-						<p>Please verify that the information below is correct.</p>
-						<p>If anything is incorrect please open a ticket in our discord</p>
-					</td>
-					<td class="italic text-lg">
-						<p>If any items are red you are unable to request</p>
-						<p>Due to VATUSA or Jacksonville ARTCC Policy</p>
-					</td>
-				</tr><tr>
-					<td class="px-2 justify-center">
-						<label class="pb-1" for="cid">VATSIM CID:</label>
-						<input
-							class="mx-2 w-2/12 px-2 bg-slate-200"
-							type="text"
-							name="cid"
-							id="cid"
-							value={controller.cid}
-							use:validators={[number, required]}
-							readonly
-						/>
-						<br />
-						<label class="pb-1" for="firstName">First Name:</label>
-						<input
-							class="mx-2 w-2/12 px-2 bg-slate-200"
-							type="text"
-							name="firstName"
-							id="firstName"
-							value={controller.firstName}
-							use:validators={[required]}
-							readonly
-						/>
-						<br />
-						<label class="pb-1" for="lastName">Last Name:</label>
-						<input
-							class="mx-2 w-2/12 px-2 bg-slate-200"
-							type="text"
-							name="lastName"
-							id="lastName"
-							value={data.lastName}
-							use:validators={[required]}
-							readonly
-						/>
-						<br />
-						<label class="pb-1" for="email">Email:</label>
-						<input
-							class="mx-2 w-fit px-2 bg-slate-200"
-							type="email"
-							name="email"
-							id="email"
-							value={data.email}
-							use:validators={[required]}
-							readonly
-						/>
-						<br />
-						<label class="pb-1" for="rating">Rating:</label>
-						<input
-							class="mx-2 w-2/12 px-2 bg-slate-200"
-							type="text"
-							name="rating"
-							id="rating"
-							value={data.rating}
-							use:validators={[required]}
-							readonly
-						/>
-						<br />
-						<label class="pb-1" for="facility">Facility:</label>
-						<input
-							class="mx-2 w-2/12 px-2 bg-slate-200"
-							name="facility"
-							id="facility"
-							value={data.homeFacility}
-							use:validators={[required]}
-							readonly
-						/>
-					</td>
-					<td>
-						{#if data.numRating >= 4}
-							<p>✅ Controller has earned S3 rating or higher</p>
-						{:else}
-							<p>❌ Controller has earned S3 rating or higher</p>
-						{/if}
-						{#if data.sopCourse}
-							<p>✅ ZJX SOP Course has been completed</p>
-						{:else}
-							<p>❌ ZJX SOP Course has been completed</p>
-						{/if}
-						{#if data.ratingNinetyDays}
-							<p>✅ Has held current rating for at least 90 days</p>
-						{:else}
-							<p>❌ Has held current rating for at least 90 days</p>
-						{/if}
-						{#if data.rosterNinetyDays}
-							<p>✅ Has been a member of their home facility for at least 90 days</p>
-						{:else}
-							<p>❌ Has been a member of their home facility for at least 90 days</p>
-						{/if}
-					</td>
-				</tr>
-			</table>
-			<label for="reason">Why would you like to visit?</label><br>
-			<textarea id="reason" name="reason" cols="30" use:validators={[required]}></textarea>
+<ResponseBox header={responseBox.header} text={responseBox.text} hidden={responseBox.hidden} bgColor={responseBox.bgColor}/>
+<div class="flex justify-center items-start flex-col md:flex-row p-5">
+	<div class="bg-gray-200 m-5 p-2 w-96 h-72">
+		<h2 class="text-xl text-center font-semibold mb-4 border-b-2 border-gray-400">Controller Info</h2>
+		<table class="table px-2 text-nowrap">
+			<tbody>
+				<VisitRow col1="CID:" col2={`${userData.id}`}/>
+				<VisitRow col1="Name:" col2={`${userData.firstName} ${userData.lastName}`}/>
+				<VisitRow col1="Email:" col2={`${userData.email}`}/>
+				<VisitRow col1="Rating:" col2={`${getRating(userData.rating)}`}/>
+				<VisitRow col1="Home Division:" col2={`${userData.division}`}/>
+				<VisitRow col1="Home Facility:" col2={`${userData.facility == "" ? "None" : userData.facility}`}/>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="bg-gray-200 m-5 p-2 w-96 h-72">
+		<h2 class="text-xl text-center font-semibold mb-4 border-b-2 border-gray-400">Submit Request</h2>
+		<div class="flex flex-col place-items-center">
+			<textarea class="self-center bg-gray-300 px-2 placeholder-gray-500 w-80 h-40 resize-none my-2" placeholder="Why do you want to visit ZJX?" required={true} bind:value={visitReason}/>
+
+			<button class="bg-green-500 p-3 w-24 font-semibold rounded-md" on:click={submitVisitRequest}>
+				Submit
+			</button>
 		</div>
 	</div>
-	<div class="text-center flex-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">
-		{#if data.canVisit}
-			<i class="text-blue-500">If all of the information appears correct, please click submit.</i><br>
-			<button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-0.5 rounded-md text-xl">Submit</button>
-		{:else}
-			<i class="text-red-500">You are not eligible to visit Jacksonville ARTCC at this time.</i>
-		{/if}
-	</div>
-</form>
+</div>
 
-<Footer />
+

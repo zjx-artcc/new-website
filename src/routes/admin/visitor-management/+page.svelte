@@ -4,12 +4,20 @@
 	import '$lib/app.css';
 	import { formatDate, getRating } from '$lib/db.js';
 	import StatusCard from '$lib/components/StatusCard.svelte';
-	import { UserRemoveOutline } from 'flowbite-svelte-icons';
-
+	import { ChevronDownSolid, UserRemoveOutline } from 'flowbite-svelte-icons';
+	import ResponseBox from '$lib/components/ResponseBox.svelte';
+	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	let selectedCount = 0;
 	let confirmationScreenClass = 'hidden'; // pls dont touch. hides confirmation screen
 	let actionString: string = '';
 	let responseData = [];
+
+	let responseBox: ResponseBox = {
+		bgColor: "",
+		header: "",
+		text: "",
+		hidden: true
+	}
 
 	const checkUsersSelected = () => {
 		selectedCount = 0;
@@ -44,32 +52,26 @@
 
 		for (let i = 0; i < data.userData.length; i++) {
 			if (data.userData[i].selected) {
-				const user = data.userData[i];
-				const req = await fetch(`/admin/visitor-management`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-						//'Authorization': 'Bearer ' TODO: add authorization for users.
-					},
-					body: JSON.stringify({ userCid: user.cid, actionMessage: user.actionMessage })
-				});
+				if (initialsValid(data.userData[i].operatingInitials)) {
+					const user = data.userData[i];
+					const req = await fetch(`/admin/visitor-management`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ requestId: user.requestId, actionMessage: user.actionMessage, operatingInitials: user.operatingInitials }) // user.id is request ID
+					});
 
-				console.log(req.statusText);
-				if (req.status == 200) {
-					displayFeedbackBox(
-						'bg-green-500',
-						'Success',
-						'User ' +
-							user.User.firstName +
-							' ' +
-							user.User.lastName +
-							' (' +
-							user.cid +
-							') has been added to the visiting roster.'
-					);
+					console.log(req.statusText);
+					if (req.status == 200) {
+						displayFeedbackBox('bg-green-500', 'Success', 'User added to visitng roster!')
+					} else {
+						displayFeedbackBox('bg-red-500', 'Failed', req.text().then((text) => {return text}));
+					}
 				} else {
-					displayFeedbackBox('bg-red-500', 'Success', 'Failed - ' + (await req.statusText));
+					displayFeedbackBox('bg-red-500', 'Invalid Input', "Operating initials must be 2 characters long.");
 				}
+				
 			}
 		}
 	};
@@ -86,57 +88,64 @@
 						'Content-Type': 'application/json'
 						//'Authorization': 'Bearer ' TODO: add authorization for users.
 					},
-					body: JSON.stringify({ userCid: user.cid, actionMessage: user.actionMessage })
+					body: JSON.stringify({ requestCid: user.requestId, actionMessage: user.actionMessage, operatingInitials: user.operatingInitials })
 				});
 
 				console.log(req.statusText);
-				if (req.status == 200) {
-					displayFeedbackBox(
-						'bg-green-500',
-						'Success',
-						'User ' +
-							user.User.firstName +
-							' ' +
-							user.User.lastName +
-							' (' +
-							user.cid +
-							') has been added to the visiting roster.'
-					);
+				if (await req.status == 200) {
+					displayFeedbackBox('bg-green-500', 'Success', 'User added to roster!')
 				} else {
-					displayFeedbackBox('bg-red-500', 'Success', 'Failed - ' + (await req.statusText));
+					displayFeedbackBox('bg-red-500', 'Error', 'Failed - ' + (await req.statusText));
 				}
 			}
 		}
 	};
 
-	const displayFeedbackBox = async (color, header, body) => {
-		responseData.push({
-			bgColor: 'bg-green-500',
-			headerText: 'Success',
-			bodyText: body
-		});
+	const initialsValid = (initials: string): boolean => {
+		if(initials.length == 2) {
+			for(let i = 0; i < data.usedOIs.length; i++) {
+				if (initials == data.usedOIs[i]) {
+					return false
+				}
+			}
+		}
 
-		setTimeout(() => {
-			responseData.pop();
-			console.log('popped ');
-		}, 5000);
+		return true
+	}
+
+	const displayFeedbackBox = async (color, headerText, bodyText) => {
+		responseBox.bgColor = color
+		responseBox.header = headerText
+		responseBox.text = bodyText
+		responseBox.hidden = false
 	};
+
 	// Initialize selected tag
 	uncheckUsers();
+
+	type ResponseBox = {
+		bgColor: string;
+		header: string;
+		text: string;
+		hidden: boolean;
+	}
 </script>
+
+<ResponseBox bgColor={responseBox.bgColor} header={responseBox.header} text={responseBox.text} hidden={responseBox.hidden}/>
 
 <div class="my-5 h-100">
 	<div class="flex justify-center">
 		<h1 class="text-xl text-sky-500 font-bold mb-5">Visitor Management</h1>
 	</div>
 
-	<div class="flex flex-col flex-wrap bg-grey">
+	<div class="flex flex-col flex-wrap bg-grey border-b-4 pb-4">
 		<div class="flex justify-center">
 			<table class="table px-2">
 				<thead>
 					<tr class="bg-white border-2">
 						<th class="px-2">Controller</th>
 						<th class="px-2">Home Facility</th>
+						<th class="px-2">Date Requested</th>
 						<th class="px-2">Reason</th>
 						<th class="px-2">Select</th>
 					</tr>
@@ -147,14 +156,15 @@
 							<td class="px-2 text-center border-r-2">
 								<div class="flex-wrap justify-center px-1">
 									<span class="flex text-lg justify-center font-bold"
-										>{user.User.firstName} {user.User.lastName}</span
+										>{user.first_name} {user.last_name}</span
 									>
 									<span class="flex justify-center italic"
-										>{user.cid} - {getRating(parseInt(user.User.rating))}</span
+										>{user.cid} - {getRating(parseInt(user.rating))}</span
 									>
 								</div>
 							</td>
-							<td class="text-center px-2 text-2xl">{user.User.facility}</td>
+							<td class="text-center px-2 text-2xl border-r-2">{user.home_facility == "" ? "None" : user.home_facility}</td>
+							<td class="text-center px-2 text-2xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth()}-${user.date_requested.getUTCDay()}`}</td>
 							<td class="text-left text-lg p-2 w-96">{user.reason}</td>
 							<td class="px-5 py-4"
 								><input
@@ -176,33 +186,30 @@
 					<p2>Selection Summary</p2>
 				</div>
 				<div>
-					<table class="table px-2">
+					<table class="table px-2 border-2">
 						<thead>
-							<tr class="bg-white">
+							<tr class="bg-white border-b-2">
 								<th class="px-2">Controller</th>
 								<th class="px-2">Action Message</th>
+								<th class="px-2">Operating Initials</th>
 							</tr>
 						</thead>
 						<tbody>
 							{#each data.userData as user}
 								{#if user.selected == true}
 									<tr>
-										<td class="px-2 text-center">
+										<td class="px-2 text-center border-r-2 border-gray-300">
 											<div class="flex-wrap justify-center px-1">
 												<span class="flex justify-center font-bold"
-													>{user.User.firstName} {user.User.lastName}</span
+													>{user.first_name} {user.last_name}</span
 												>
 												<span class="flex justify-center italic"
-													>{user.cid} - {getRating(parseInt(user.User.rating))}</span
+													>{user.cid} - {getRating(parseInt(user.rating))}</span
 												>
 											</div>
 										</td>
-										<td class="text-center text-md"
-											><input
-												class="p-2 w-96 h-12 bg-gray-300"
-												bind:value={user.actionMessage}
-											/></td
-										>
+										<td class="text-center text-md border-r-2 mr-2"><input class="p-2 w-96 h-12 bg-gray-300" bind:value={user.actionMessage}/></td>
+										<td class=""><input class={"w-full h-12 bg-gray-300 text-center text-md font-bold "} placeholder="Required" bind:value={user.operatingInitials} maxlength="2" minlength="2"/></td>
 									</tr>
 								{/if}
 							{/each}
@@ -210,17 +217,11 @@
 					</table>
 				</div>
 				<div class="flex my-5">
-					<button
-						class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md"
-						on:click={() => showConfirmationScreen('reject')}
-					>
+					<button class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md" on:click={() => showConfirmationScreen('reject')}>
 						Reject
 					</button>
 
-					<button
-						class="bg-green-500 p-3 w-24 font-semibold rounded-md"
-						on:click={() => showConfirmationScreen('approve')}
-					>
+					<button class="bg-green-500 p-3 w-24 font-semibold rounded-md" on:click={() => showConfirmationScreen('approve')}>
 						Approve
 					</button>
 				</div>
@@ -257,19 +258,5 @@
 		</div>
 
 		<div class="z-10 absolute w-full h-full opacity-50 bg-gray-800" />
-	</div>
-
-	<div
-		id="response-box"
-		class="z-50 top-0 absolute w-full h-10 flex justify-center items-start mt-20 transition ease-in-out"
-	>
-		{#each responseData as cardData}
-			e
-			<StatusCard
-				bgColor={cardData.bgColor}
-				headerText={cardData.headerText}
-				bodyText={cardData.bodyText}
-			/>
-		{/each}
 	</div>
 </div>

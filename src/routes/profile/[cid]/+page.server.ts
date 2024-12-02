@@ -1,6 +1,6 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { roster, ControllerSession } from '@prisma/client';
+import type { Roster, ControllerSession } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
@@ -17,10 +17,15 @@ export async function load({ params, cookies, locals }) {
   let pageData: PageData = new PageData();
 
   //Check for user permissions from database
-  pageData.canEdit = await getStaffRoles(locals.session.userId, "roster");
+  try {
+    pageData.canEdit = await getStaffRoles(locals.session.userId, "roster")
+  } catch (error) {
+    console.error(error)
+    pageData.canEdit = false
+  }
   
   //Fetch roster data for user
-  let rosterData: roster = await prisma.roster.findUnique({
+  let rosterData: Roster = await prisma.roster.findUnique({
     where: {
       cid: parseInt(params.cid)
     },
@@ -33,7 +38,6 @@ export async function load({ params, cookies, locals }) {
     pageData.certs.first_name = rosterData.first_name;
     pageData.certs.last_name = rosterData.last_name;
     pageData.certs.initials = rosterData.initials;
-    pageData.certs.staff_roles = rosterData.staff_roles;
     pageData.certs.rating_changed = rosterData.rating_changed;
     pageData.certs.facility = rosterData.home_facility;
     pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
@@ -72,7 +76,7 @@ export async function load({ params, cookies, locals }) {
         start: sessionsData[i].start,
         end: sessionsData[i].end,
         active: sessionsData[i].active,
-        duration: msToHours(sessionsData[i].end.getTime() - sessionsData[i].start.getTime())
+        duration: msToHours(sessionsData[i].end - sessionsData[i].start.getTime())
       }
       pageData.sessions.push(session);
     }
@@ -84,6 +88,7 @@ export async function load({ params, cookies, locals }) {
   }
 
   //Get staff roles to display on user page
+  /* REDO 
   let roles = pageData.certs.staff_roles.split(',');
 
   //Process them
@@ -95,7 +100,7 @@ export async function load({ params, cookies, locals }) {
       case "WT": pageData.staffRoles.push({name: "Web Team", color: "bg-red-500"}); break;
       default: break;
     }
-  }
+  }*/
 
   let displayQuarters = quartersByMonth[Math.floor(new Date().getUTCMonth() / 3)]
   console.log(displayQuarters);
@@ -189,7 +194,7 @@ type ControllerSessions = {
   callsign: string
   frequency: string
   start: Date,
-  end: Date,
+  end: number,
   active: boolean,
   duration: string
 }
