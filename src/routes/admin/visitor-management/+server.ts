@@ -57,7 +57,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 		);
 
 		if (vatusaReq.status == 200) {
-				updateVisitRequest(requestId, user.id, actionMessage).ok
+				updateVisitRequest(requestId, user.id, actionMessage)
 				notifyUser(requestId, actionMessage);
 
 				return new Response(`User ${visitRequest.cid} added to roster`, {
@@ -88,7 +88,17 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 };
 
 export const DELETE = async ({ request }): Promise<Response> => {
-	// TODO
+	try {
+		
+	} catch (error) {
+		console.error(error)
+		return new Response(
+			error,
+			{
+				status: error.status
+			}
+		)
+	}
 
 	return new Response(
 		null,
