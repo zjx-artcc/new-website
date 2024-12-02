@@ -20,7 +20,11 @@ export const load = async ({ params, cookies, locals }) => {
 			id: true,
 			cid: true,
 			reason: true,
+			reviewed: true,
 			date_requested: true,
+			action_message: true,
+			action_date: true,
+			action_cid: true,
 			users: {
 				select: {
 					firstName: true,
@@ -30,9 +34,9 @@ export const load = async ({ params, cookies, locals }) => {
 				}
 			}
 		},
-		where: {
-			reviewed: false
-		}
+		orderBy: {
+			reviewed: 'asc'
+		},
 	});
 
 	const userData: UserData[] = [];
@@ -43,10 +47,13 @@ export const load = async ({ params, cookies, locals }) => {
 			reason: request[i].reason,
 			date_requested: request[i].date_requested,
 			rating: request[i].users.rating,
-			operatingInitials: null,
+			action_date: request[i].action_date,
+			action_message: request[i].action_message,
+			action_cid: request[i].action_cid,
 			first_name: request[i].users.firstName,
 			last_name: request[i].users.lastName,
 			home_facility: request[i].users.facility,
+			reviewed: request[i].reviewed,
 			selected: false
 		});
 	}
@@ -56,9 +63,20 @@ export const load = async ({ params, cookies, locals }) => {
 			initials: true
 		}
 	});
+
+	let usersReviewed: number = 0
+
+	for(let i = 0; i < userData.length; i++){
+		let count = 0
+		if (userData[i].reviewed){
+			usersReviewed++
+		}
+	}
+
 	return {
 		userData,
-		usedOIs
+		usedOIs,
+		usersReviewed
 	};
 };
 
@@ -66,7 +84,8 @@ type UserData = {
 	requestId: number;
 	cid: number;
 	rating: number;
-	operatingInitials: string;
+	reviewed: boolean;
+	action_date: Date;
 	reason: string;
 	date_requested: Date;
 	first_name: string;
