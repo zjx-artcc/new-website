@@ -1,5 +1,6 @@
 //@ts-nocheck
 import { PrismaClient } from "@prisma/client";
+import { email } from "svelte-use-form";
 
 let prisma: PrismaClient;
 
@@ -207,4 +208,132 @@ export function getCtrCertColor(input: number): {cert: string, color: string} {
       }
     }
   }
+}
+
+export const addUserToRoster = async(cid: number, operatingInitials: string): Response => {
+  try {
+    const rosterQuery = await prisma.roster.findFirst({
+      where: {
+        cid: cid
+      }
+    })
+
+    if(rosterQuery == null) {
+      console.log("updated")
+      const user = await prisma.user.findFirst({
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true,
+          rating: true,
+          division: true,
+          rostered: true,
+        },
+        where: {
+          id: cid
+        }
+      })
+
+      const defaultRatings = getDefaultRatings(user.rating)
+
+      await prisma.roster.create({
+        data: {
+          cid: cid,
+          rating: user.rating,
+          email: user.email,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          home_facility: user.division,
+          created_at: new Date(),
+          del_certs: defaultRatings.del,
+          gnd_certs: defaultRatings.gnd,
+          twr_certs: defaultRatings.twr,
+          app_certs: defaultRatings.app,
+          ctr_cert: defaultRatings.ctr,
+          sop_course: true,
+          initials: operatingInitials,
+          mentor_level: 0
+        }
+      })
+
+      return new Response(
+        "User added to roster", {
+          status: 200
+        }
+      )
+    } else {
+      return new Response(
+        "User already exists", {
+          status: 401
+        }
+      )
+    }  
+  } catch (error) {
+    console.log(error)
+    return new Response(
+      error, {
+        status: 500
+      }
+    )
+  }
+}
+
+export const updateVisitRequest = async(requestId, actionCid, actionMessage): Response => {
+  try {
+    await prisma.visitRequest.update({
+      where: {
+        id: requestId
+      },
+      data: {
+        reviewed: true,
+        action_cid: actionCid,
+        action_message: actionMessage,
+        action_date: new Date()
+      }
+    })
+
+    return new Response("Update Success", {
+      status: 200
+    })
+  } catch(error) {
+    console.error(error)
+    return new Response(error, {
+      status: 500
+    })
+  }
+  
+}
+
+const getDefaultRatings = (rating: number): DefaultRatings => {
+  // 0 = None; 1 = Tier 1; 2 = Tier 2; 3 = Unrestricted;
+  let defaultRatingTable: DefaultRatings = {
+    del: 0,
+    gnd: 0,
+    twr: 0,
+    app: 0,
+    ctr: 0
+  }
+
+  if (rating >= 2) {
+    defaultRatingTable.del = 3
+    defaultRatingTable.gnd = 3
+  }
+
+  if (rating >= 3) {
+    defaultRatingTable.twr = 3
+  }
+
+  if (rating >= 4) {
+    defaultRatingTable.app = 3
+  }
+
+  return defaultRatingTable
+}
+
+type DefaultRatings = {
+  del: number,
+  gnd: number,
+  twr: number,
+  app: number,
+  ctr: number
 }

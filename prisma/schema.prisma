@@ -36,8 +36,8 @@ model events {
   created_by        Int
   name              String
   description       String
-  event_start       DateTime            @db.Timestamptz(6)
-  event_end         DateTime            @db.Timestamptz(6)
+  start             DateTime            @db.Timestamptz(6)
+  end               DateTime            @db.Timestamptz(6)
   host              String
   hidden            Boolean             @default(true)
   banner            String
@@ -74,15 +74,14 @@ model roster {
   home_facility      String
   created_at         DateTime            @default(now()) @db.Timestamptz(6)
   rating             Int
-  del_certs          Float
-  gnd_certs          Float
-  twr_certs          Float
-  app_certs          Float
+  del_certs          Int?
+  gnd_certs          Int
+  twr_certs          Int
+  app_certs          Int
   ctr_cert           Int
   initials           String
   first_name         String
   last_name          String
-  staff_roles        String?
   mentor_level       BigInt?             @default(0)
   rating_changed     DateTime?           @default(now()) @db.Timestamptz(6)
   sop_course         Boolean             @default(false)
@@ -90,6 +89,7 @@ model roster {
   events             events[]
   onlineControllers  OnlineControllers[]
   position_requests  position_requests[]
+  staff_roles        staff_roles[]
   stats              Stats?
 }
 
@@ -149,4 +149,12 @@ model WebSession {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("web_sessions")
+}
+
+model staff_roles {
+  cid    Int
+  role   String @db.VarChar(10)
+  roster roster @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "staff_roles_roster_cid_fk")
+
+  @@id([cid, role], map: "staff_roles_pk")
 }

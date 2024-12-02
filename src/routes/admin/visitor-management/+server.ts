@@ -1,4 +1,9 @@
-import { prisma } from '$lib/db';
+/* IMPORTANT ERROR CODES AND DESCRIPTIONS:
+200 - OK
+403 - Forbidden (API key invalid; vatusa)
+401 - user already exists (serverside; db.ts)
+*/
+import { prisma, addUserToRoster, updateVisitRequest } from '$lib/db';
 import { validateSessionToken } from '$lib/oauth.js';
 /** @type {import('./$types').RequestHandler} */
 
@@ -21,7 +26,8 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 		)
 	}
 
-	const { requestId, actionMessage } = await request.json();
+	const { requestId, actionMessage, operatingInitials } = await request.json();
+
 	const visitRequest = await prisma.visitRequest.findFirst({
 		select: {
 			cid: true
@@ -43,27 +49,36 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 			}
 		);
 
-		console.log(vatusaReq);
 		if (vatusaReq.status == 200) {
-			await prisma.visitRequest.update({
-				where: {
-					id: requestId
-				},
-				data: {
-					reviewed: true,
-					action_cid: user.id,
-					action_message: actionMessage,
-					action_date: new Date()
-				}
-			});
+			const dbQuery = await addUserToRoster(visitRequest.cid, operatingInitials)
 
-			notifyUser(requestId, actionMessage);
-			return new Response(null, {
-				status: vatusaReq.status,
-				statusText: vatusaReq.statusText
+			if (dbQuery.status == 200) { // adds to roster, checks value
+				const visitUpdateReq = await updateVisitRequest(requestId, user.id, actionMessage)
+				if(await visitUpdateReq.ok){
+					notifyUser(requestId, actionMessage);
+
+					return new Response(`User ${visitRequest.cid} added to roster`, {
+						status: 200,
+						statusText: vatusaReq.statusText
+					});
+				} else {
+					return new Response(null, {
+						status: 500,
+					});
+				}
+			} else {
+				return new Response(null, {
+					status: 500,
+				});
+			}
+		} else if (vatusaReq.status == 400) {
+			updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster");
+			return new Response("User already on visiting roster", {
+				status: 400,
 			});
 		}
  	} catch(error) {
+		console.log(error)
 		return new Response(
 			error,
 			{
@@ -71,6 +86,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 			}
 		)
 	}
+
 	return new Response(
 		null,
 		{
