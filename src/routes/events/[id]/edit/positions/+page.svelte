@@ -22,7 +22,7 @@
 
   async function submitPositions() {
     let cid = data.cid;
-    let event = parseInt(data.eventId)
+    let event = parseInt(pageData.event.id)
     const req = await fetch(`/events/${event}/edit/positions`, {
       method: 'POST',
       headers: {
@@ -58,7 +58,7 @@
     <div class="relative -z-3">
       <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-        <h1 class="text-6xl text-white font-bold pt-3">Update {pageData.eventName} positions</h1>
+        <h1 class="text-6xl text-white font-bold pt-3">Position Editor</h1>
       </div>
     </div>
   </div>
@@ -70,9 +70,9 @@
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
       <a href="/events" class="text-sky-500">Events</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/events/{pageData.eventId}" class="text-sky-500">{pageData.eventName}</a>
+      <a href="/events/{pageData.event.id}" class="text-sky-500">{pageData.event.name}</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/events/{pageData.eventId}/edit/positions" class="text-sky-500">Positions</a>
+      <a href="/events/{pageData.event.id}/edit/positions" class="text-sky-500">Positions</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
     </nav>
   </div>
