@@ -1,38 +1,52 @@
-//@ts-nocheck
-import { getStaffRoles, prisma } from "$lib/db";
+import { getStaffRoles, prisma } from '$lib/db';
+import { redirect, error } from '@sveltejs/kit';
 
-export async function load({ params, locals }) {
-    let pageData = {
-        event: {},
-        cid: 0
-    }
-    let user = (await locals.auth()).user;
-    let canEdit = false;
+import type { PageServerLoad } from './$types';
+import type { Event } from '@prisma/client';
 
-    if (user) {
-        pageData.cid = user.cid;
-        canEdit = await getStaffRoles(user.cid, "events");
-    }
+export const load: PageServerLoad = async ({ params, locals }) => {
+	//Setup pagedata
+	let pageData = new PageData();
 
-    if (!canEdit) {
-        return error(403, 'Forbidden');
-    }
-    
-    let eventId = params.slug;
-    if (eventId == "undefined") {
-        return error(404, 'Not Found');
-    }
+	//Check if user is signed in and get CID
+	pageData.cid = locals.session == null ? 0 : locals.session.userId;
 
-    let data = await prisma.events.findFirst({
-        where: {
-            id: eventId
-        }
-    });
-    
+	//Check if user is able to delete
+	let canEdit = await getStaffRoles(pageData.cid, 'events');
+	if (!canEdit) {
+		error(403, "Forbidden");
+	}
+	
+	//Load event
+  if (params.id == "undefined") {
+    error(404, 'Not Found');
+  } else {
+    const data: Event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(params.id)
+      }
+    })
+
     if (data == null) {
-        throw redirect(302, '/404');
+      redirect(302, '/404');
     } else {
-        pageData.event = data;
-        return pageData;
+      pageData.event = data;
     }
+		if (data == null) {
+			throw redirect(302, '/404');
+		} else {
+			pageData.event = data;
+			return { pageData: { ...pageData }};
+		}
+	};
+}
+
+class PageData {
+	event: Event;
+	cid: number;
+	
+	constructor() {
+		this.event = null;
+		this.cid = 0;
+	}
 }

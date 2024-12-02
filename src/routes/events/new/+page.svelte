@@ -5,7 +5,6 @@
   import Footer from "$lib/components/Footer.svelte"
   import Icon from '@iconify/svelte';
   import { required, useForm, validators } from 'svelte-use-form'
-  export let data;
   let rows = 0;
   const form = useForm();
   let event = {
@@ -53,7 +52,6 @@
   </div>
 </div>
 <form use:form method="POST">
-  <input type="hidden" name="created_by" value={data.cid}>
   <div class="flex flex-wrap justify-center align-middle mx-5 mr-5">
     <div class="text-center flex-1 w-1/2 px-5 py-2.5 outline outline-slate-200 rounded-sm">
       <table class="columns-2 text-center w-full">

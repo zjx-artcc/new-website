@@ -11,12 +11,12 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   //Setup page data
   let pageData = new PageData();
 
-  //Get CID
+  //Check if user is signed in and get CID
   pageData.cid = locals.session == null ? 0 : locals.session.userId;
 
   //Load event
   if (params.id == "undefined") {
-    error(404, 'Not Found');
+    redirect(404, 'Not Found');
   } else {
     const data: Event = await prisma.event.findUnique({
       where: {
