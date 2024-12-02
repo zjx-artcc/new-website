@@ -32,12 +32,20 @@
 	<a href="/controllers" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ri:radar-fill" class="pt-1.5 navbarIcon" /> Controllers</a>
 	<Button class="text-lg text-stone-200 inline-flex align-middle"><Icon icon="ic:baseline-people" class="w-7 h-7 pr-1.5" />Membership<ChevronDownSolid class="w-6 h-6 pt-1 pl-3"/></Button>
 	<Dropdown>
+		
 		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
 			<a href="/roster"><span>Roster</span></a>
 		</DropdownItem>
 		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
+			<a href="/staff"><span>ARTCC Staff</span></a>
+		</DropdownItem>
+		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
+			<a href="/visit"><span>Become a Visitor</span></a>
+		</DropdownItem>
+		<DropdownItem class="bg-gray-700 text-stone-200 text-lg p-3 flex">
 			<a href="/admin"><span>Admin</span></a>
 		</DropdownItem>
+		
 	</Dropdown>
 	<a href="/events" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ion:calendar" class="pt-1.5 navbarIcon" /> Events</a>
 	{#if $page.data.session != null}
