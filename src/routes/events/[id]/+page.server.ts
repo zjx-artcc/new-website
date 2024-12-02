@@ -1,6 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
 import { getStaffRoles, prisma } from '$lib/db';
-import { Prisma } from "@prisma/client";
 
 import type { PageServerLoad } from './$types';
 import type { Event, PositionRequest, Roster } from '@prisma/client';
