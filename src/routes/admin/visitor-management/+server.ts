@@ -10,7 +10,7 @@ DELETE: removes visitor from roster
 */
 
 //@ts-nocheck
-import { prisma, addUserToRoster, updateVisitRequest } from '$lib/db';
+import { prisma, addUserToRoster } from '$lib/db';
 import { validateSessionToken } from '$lib/oauth.js';
 /** @type {import('./$types').RequestHandler} */
 
