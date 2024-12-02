@@ -1,74 +1,62 @@
-//@ts-nocheck
 import { error, redirect } from '@sveltejs/kit'
 import { formatDate, getStaffRoles, prisma } from '$lib/db'
 import { getPositionType } from '$lib/events.js';
-/** @type {import('$types').PageServerLoad}*/
-// eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies, locals }) {
-  let pageData = {
-    canEdit: false,
-    cid: 0,
-    event: {},
-    positionRequests: []
-  }
-  if (locals.session != null) {
-    pageData.cid = locals.session.userId;
-  }
-  const eventId = params.slug;
-  if (eventId == "undefined") { 
-    console.log("Undefined")
+
+import type { PageServerLoad } from './$types';
+import type { PositionRequest, Event } from '@prisma/client';
+
+export const load: PageServerLoad = async ({ params, cookies, locals }) => {
+  //Setup page data
+  let pageData = new PageData();
+
+  //Get CID
+  pageData.cid = locals.session == null ? 0 : locals.session.userId;
+
+  //Load event
+  if (params.id == "undefined") {
     error(404, 'Not Found');
   } else {
-    const data = await prisma.events.findUnique({
+    const data: Event = await prisma.event.findUnique({
       where: {
-        id: eventId
+        id: parseInt(params.id)
       }
     })
+
     if (data == null) {
       redirect(302, '/404');
     } else {
       pageData.event = data;
     }
   }
-  pageData.canEdit = await getStaffRoles(pageData.cid, "events");
-  if (!pageData.canEdit) {
-    error(403, 'Forbidden');
-  }
-  pageData.event.start = formatDate(pageData.event.event_start);
-  pageData.event.end = formatDate(pageData.event.event_end);
 
-  {
-    let data = await prisma.position_requests.findMany({
-      where: {
-        event_id: pageData.event.id
-      }
-    })
-  }
+  pageData.event.start = formatDate(pageData.event.start);
+  pageData.event.end = formatDate(pageData.event.end);
 
-  return pageData;
+  return {pageData: { ...pageData }};
 }
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  default: async({ request }) => {
+  default: async({ request, locals }) => {
     const formData = await request.formData();
-    let event = {
-      id: formData.get("id"),
-      last_modified: new Date().toISOString(),
-      created_by: formData.get("created_by"),
-      name: formData.get("name"),
-      description: formData.get("description"),
-      event_start: new Date(formData.get("start")).toISOString(),
-      event_end: new Date(formData.get("end")).toISOString(),
-      host: formData.get("host"),
+    let event: Event = {
+      id: parseInt(formData.get("id").toString()),
+      lastModified: new Date(),
+      createdBy: locals.session.userId,
+      name: formData.get("name").toString(),
+      description: formData.get("description").toString(),
+      start: new Date(formData.get("start").toString()),
+      end: new Date(formData.get("end").toString()),
+      host: formData.get("host").toString(),
       hidden: formData.get("hidden") == "on" ? true : false,
-      banner: formData.get("banner")
+      banner: formData.get("banner").toString(),
+      positions: JSON.stringify([])
     }
     
 
-    let data = await prisma.events.update({
+    let data = await prisma.event.update({
       where: {
-        id: BigInt(event.id)
+        id: event.id
       },
       data: event
     })
@@ -83,4 +71,25 @@ export const actions = {
       redirect(302, `/events/${data.id}`)
     }
   }
+}
+
+class PageData {
+  canEdit: boolean;
+  cid: number;
+  event: Omit<Event, 'start' | 'end'> & { start: Date | string, end: Date | string };
+  positionRequests: PositionRequest[];
+
+  constructor() {
+    this.canEdit = false;
+    this.cid = 0;
+    this.event = null;
+    this.positionRequests = [];
+  }
+}
+
+let pageData = {
+  canEdit: false,
+  cid: 0,
+  event: {},
+  positionRequests: []
 }

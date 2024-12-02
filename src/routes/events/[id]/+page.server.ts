@@ -33,11 +33,15 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 
   //Setup positions
   //TODO: Refactor positions to be a table instead of a JSON value
-  let positions = pageData.event.positions;
+  let positions = JSON.parse(pageData.event.positions.toString());
+  console.log(positions.length);
   //@ts-ignore
-  positions.sort((a, b) => {
-    return a.type - b.type;
-  });
+  if (positions.length > 0) {
+    //@ts-ignore
+    positions.sort((a, b) => {
+      return a.type - b.type;
+    });
+  }
   pageData.event.positions = positions;
 
   //Check if user is signed in

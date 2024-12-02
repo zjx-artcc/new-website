@@ -6,9 +6,10 @@
   import { required, useForm, validators } from 'svelte-use-form'
 
   export let data;
+  let pageData = data.pageData;
   
   const form = useForm();
-  let event = data.event;
+  let event = pageData.event;
   let positions = event.positions;
   let columns = ['Position', 'Controller']
 
@@ -26,7 +27,7 @@
     <div class="relative -z-3">
       <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-        <h1 class="text-6xl text-white font-bold pt-3">Update {data.event.name}</h1>
+        <h1 class="text-6xl text-white font-bold pt-3">Update {pageData.event.name}</h1>
       </div>
     </div>
   </div>
@@ -38,7 +39,7 @@
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
       <a href="/events" class="text-sky-500">Events</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/events/{data.event.id}" class="text-sky-500">{data.event.name}</a>
+      <a href="/events/{pageData.event.id}" class="text-sky-500">{pageData.event.name}</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
     </nav>
   </div>
@@ -104,8 +105,8 @@
     </div>
   </div>
   <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">
-    <a href='/events/{data.event.id}' class="bg-red-500 text-white px-2 py-1 rounded-md text-xl">Cancel</a>
-    <a href='/events/{data.event.id}/edit/positions' class="bg-blue-500 text-white px-2 py-1 rounded-md text-xl">Edit Positions</a>
+    <a href='/events/{pageData.event.id}' class="bg-red-500 text-white px-2 py-1 rounded-md text-xl">Cancel</a>
+    <a href='/events/{pageData.event.id}/edit/positions' class="bg-blue-500 text-white px-2 py-1 rounded-md text-xl">Edit Positions</a>
     <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
   </div>
 </form>
