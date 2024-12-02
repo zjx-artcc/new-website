@@ -2,15 +2,26 @@
 import { error, redirect } from '@sveltejs/kit';
 import { getStaffRoles, prisma } from '$lib/db';
 import { Prisma } from "@prisma/client";
+import type { Events } from '@prisma/client';
 /** @type {import('$types').PageServerLoad}*/
 // eslint-disable-next-line no-unused-vars
 export async function load({ params, cookies, locals }) {
-  let pageData = {
-    positionRequested: {callsign: '', done: false},
-    cid: 0,
-    event: {},
-    canRequest: true
-  }
+  //Setup page data
+  let pageData = new PageData();
+
+  //Get CID
+  pageData.cid = locals.session.userId == null ? 0 : locals.session.userId;
+
+  //Load event
+  if (params.id)
+  //Load Requested positions
+
+
+  //Check if user is signed in
+  pageData.canRequest = locals.session.userId != null ? null : false;
+
+  //Check if they have requested a position
+
   if (locals.session == null) {
     pageData.canRequest = false;
   } else {
@@ -85,4 +96,17 @@ export async function load({ params, cookies, locals }) {
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
 
   return pageData;
+}
+
+class PageData {
+  canRequest: boolean;
+  cid: number;
+  event: Event
+  positionRequested: {
+    callsign: string;
+    done: boolean;
+  }
+  constructor() {
+
+  }
 }

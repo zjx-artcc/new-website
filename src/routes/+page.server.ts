@@ -59,10 +59,10 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     pageData.newControllers.push(member);
   }
   //Fetch next 2 events
-  const eventsData = await prisma.events.findMany({
+  const eventsData = await prisma.event.findMany({
     take: 2,
     orderBy: {
-      event_start: 'asc',
+      start: 'asc',
     }
   });
 
@@ -70,7 +70,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   for (let i = 0; i < eventsData.length; i++) {
     let event: Event = {
       name: eventsData[i].name,
-      start: eventsData[i].event_start,
+      start: eventsData[i].start,
       id: eventsData[i].id,
       banner: eventsData[i].banner,
       host: eventsData[i].host

@@ -6,6 +6,7 @@
   import Footer from "../../lib/components/Footer.svelte"
   import Icon from '@iconify/svelte';
   export let data;
+  let pageData = data.pageData;
 </script>
 
 <div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; ">
@@ -13,7 +14,7 @@
     <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
     <h1 class="text-6xl text-white font-bold pt-3">Events Center</h1>
     <h3 class="text-3xl text-white pt-3">Jacksonville ARTCC</h3>
-    {#if data.canEdit}
+    {#if pageData.canEdit}
       <div class="pt-4">
         <a href="/events/new" class="bg-blue-500 text-white px-2 py-1 rounded-md text-xl">+ Add Event</a>
       </div>
@@ -31,12 +32,12 @@
   </div>
 </div>
 <div id="content" class="flex flex-wrap justify-center">
-  {#each data.events as event}
+  {#each pageData.events as event}
     <Card img="{event.banner}" href="/events/{event.id}" horizontal class="w-full align-middle justify-center justify-items-center m-5 px-5" imgClass="">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{event.name}</h5>
       <p class="mb-3 font-normal text-gray-500 leading-tight">Hosted By: {event.host}</p>
-      <p class="mb-3 font-normal text-gray-700 leading-tight">{new Date(event.event_start).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
-      <p class="mb-3 font-normal text-gray-700 leading-tight"> {new Date(event.event_end).toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
+      <p class="mb-3 font-normal text-gray-700 leading-tight">{event.start.toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
+      <p class="mb-3 font-normal text-gray-700 leading-tight"> {event.end.toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
     </Card>
   {/each}
 </div>
