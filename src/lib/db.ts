@@ -209,3 +209,28 @@ export function getCtrCertColor(input: number): {cert: string, color: string} {
     }
   }
 }
+
+export const updateVisitRequest = async(requestId, actionCid, actionMessage): Promise<Response> => {
+  try {
+    await prisma.visitRequest.update({
+      where: {
+        id: requestId
+      },
+      data: {
+        reviewed: true,
+        action_cid: actionCid,
+        action_message: actionMessage,
+        action_date: new Date()
+      }
+    })
+
+    return new Response("Update Success", {
+      status: 200
+    })
+  } catch(error) {
+    console.error(error)
+    return new Response(error, {
+      status: 500
+    })
+  }
+}
