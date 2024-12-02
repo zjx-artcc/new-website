@@ -7,7 +7,8 @@
 </script>
 <div class="pl-4 inline-block align-middle">
 	<a class="link-effect font-bold" href="/">
-		<img src="/ZJX-Light-Logo.png" height="55" width="55" alt="" srcset="" />
+		<span class="text-xl text-stone-50">Jacksonville</span>
+		<span class="text-xl text-sky-500"> ARTCC</span>
 	</a>
 </div>
 <div class="space-x-16 pl-10 z-10">
