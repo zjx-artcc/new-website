@@ -57,7 +57,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 		);
 
 		if (vatusaReq.status == 200) {
-				if (await updateVisitRequest(requestId, user.id, actionMessage).ok){
+				if (await updateVisitRequest(requestId, user.id, actionMessage).status == 200){
 					notifyUser(requestId, actionMessage);
 
 					return new Response(`User ${visitRequest.cid} added to roster`, {
@@ -66,7 +66,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 					})
 				}	
 		} else if (vatusaReq.status == 400) {
-			if(await updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster").ok) {
+			if(await updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster") .status== 200) {
 				return new Response("User already on visiting roster", {
 					status: 400,
 				});
