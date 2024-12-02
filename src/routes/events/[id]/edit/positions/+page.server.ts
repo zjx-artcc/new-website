@@ -5,6 +5,8 @@ import { getPositionType } from '$lib/events.js';
 import type { PageServerLoad } from './$types';
 import type { Event, PositionRequest } from '@prisma/client';
 
+const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR'];
+
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	//Setup page data
 	let pageData = new PageData();
@@ -28,6 +30,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 			pageData.event = data;
 		}
 
+		//TODO: Refactor positions to be a table instead of a JSON value
 		let positions: Position[] = JSON.parse(data.positions.toString());
 
 		let positionRequests: PositionRequest[] = await prisma.positionRequest.findMany({
@@ -56,21 +59,24 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 				};
 				if (position.requests == undefined) {
 					position.requests = [];
+					//@ts-ignore
 					position.requests.push(posReq);
 				}
 			});
+			//@ts-ignore
       pageData.positionRequests = positionRequests;
 		}
+		positions.sort((a, b) => {
+		//@ts-ignore
+			return a.type - b.type;
+		});
+
+		//@ts-ignore
+		pageData.positions = positions;
 	}
+	
 
-	const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR'];
-	positions.sort((a, b) => {
-		return a.type - b.type;
-	});
-
-	pageData.positions = positions;
-
-	return pageData;
+	return {pageData: { ...pageData }};
 };
 
 function sortPositions(a, b) {

@@ -3,7 +3,6 @@
 	import '$lib/app.css';
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
-	import _ from 'lodash';
 
 	export let data;
 	let pageData = data.pageData;

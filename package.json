@@ -32,7 +32,7 @@
 		"@iconify/svelte": "^3.1.6",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
-		"@prisma/client": "^5.22.0",
+		"@prisma/client": "^6.0.1",
 		"@sentry/sveltekit": "^8.40.0",
 		"@supabase/supabase-js": "^2.46.1",
 		"@sveltejs/adapter-node": "^5.2.9",
@@ -42,7 +42,7 @@
 		"flowbite-svelte": "^0.44.24",
 		"flowbite-svelte-icons": "^0.4.5",
 		"postcss": "^8.4.49",
-		"prisma": "^5.22.0",
+		"prisma": "^6.0.1",
 		"svelte-fontawesome": "^0.0.3",
 		"svelte-use-form": "^2.10.0",
 		"tailwindcss": "^3.4.15"
