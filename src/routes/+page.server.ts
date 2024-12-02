@@ -80,9 +80,12 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   }
 
   //Fetch all online controllers
-  const onlineData = await prisma.onlineControllers.findMany({
+  const onlineData = await prisma.controllerSession.findMany({
     orderBy: {
-      logon_time: 'desc'
+      start: 'desc'
+    },
+    where: {
+      active: true
     }
   })
 
