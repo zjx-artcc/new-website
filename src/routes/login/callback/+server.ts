@@ -13,7 +13,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
   let token = await getToken(code);
   let user = await getUser(token);
   let rostered = await prisma.roster.findUnique({where: {cid: user.id}, select: {cid: true}}) != null;
-  console.log(user)
+
   await prisma.user.upsert({
     where: {
       id: user.id
