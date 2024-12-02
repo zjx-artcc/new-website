@@ -12,7 +12,6 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 
   //Check if user is signed in and get CID
   pageData.cid = locals.session == null ? 0 : locals.session.userId;
-
   //Load event
   if (params.id == "undefined") {
     redirect(404, 'Not Found');
@@ -22,7 +21,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
         id: parseInt(params.id)
       }
     })
-
+    console.log(data)
     if (data == null) {
       redirect(302, '/404');
     } else {

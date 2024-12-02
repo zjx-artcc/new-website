@@ -23,8 +23,8 @@ model ControllerSession {
   callsign  String?   @db.VarChar(255)
   frequency String?   @db.VarChar(255)
   start     DateTime? @db.Timestamptz(6)
-  end       DateTime? @db.Timestamptz(6)
-  active    Boolean?
+  end       Int?
+  active    Boolean
   roster    Roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("controller_sessions")
@@ -62,12 +62,12 @@ model OnlineControllers {
 }
 
 model PositionRequest {
-  cid        Int
-  eventId    Int    @map("event_id")
-  position   String
-  requestId  Int    @map("request_id") @id(map: "request_id") @default(autoincrement())
-  roster     Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
-  event      Event? @relation(fields: [eventId], references: [id], onDelete: Cascade, map: "event_id")
+  cid       Int
+  eventId   Int    @map("event_id")
+  position  String
+  requestId Int    @id(map: "request_id") @default(autoincrement()) @map("request_id")
+  roster    Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
+  event     Event  @relation(fields: [eventId], references: [id], onDelete: Cascade, map: "event_id")
 
   @@map("position_requests")
 }
@@ -78,10 +78,10 @@ model Roster {
   home_facility      String
   created_at         DateTime            @default(now()) @db.Timestamptz(6)
   rating             Int
-  del_certs          Float
-  gnd_certs          Float
-  twr_certs          Float
-  app_certs          Float
+  del_certs          Int?
+  gnd_certs          Int
+  twr_certs          Int
+  app_certs          Int
   ctr_cert           Int
   initials           String
   first_name         String
@@ -100,56 +100,59 @@ model Roster {
 }
 
 model StaffRole {
-  cid  Int    @id
-  role String
+  cid    Int
+  role   String @db.VarChar(10)
+  roster Roster @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "staff_roles_roster_cid_fk")
 
-  roster Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
-
+  @@id([cid, role], map: "staff_roles_pk")
   @@map("staff_roles")
 }
 
 model Stats {
-  cid           Int    @id
-  month_one     Float  @default(0.0)
-  month_two     Float  @default(0.0)
-  month_three   Float  @default(0.0)
-  quarter_one   Float?
-  quarter_two   Float?
-  quarter_three Float?
-  quarter_four  Float?
-  ytd           Float?
-  all_time      Float?
-  delivery      Float?
-  ground        Float?
-  tower         Float?
-  tracon        Float?
-  enroute       Float?
-  roster        Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+  cid         Int    @id
+  month_one   Float  @default(0.0)
+  month_two   Float  @default(0.0)
+  month_three Float  @default(0.0)
+  ytd         Float?
+  all_time    Float?
+  delivery    Float?
+  ground      Float?
+  tower       Float?
+  tracon      Float?
+  enroute     Float?
+  roster      Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("stats")
 }
 
 model User {
-  id            Int            @id
-  firstName     String         @map("first_name")
-  lastName      String         @map("last_name")
-  email         String         @unique
-  division      String
-  facility      String?
-  rating        Int
-  roles         String
-  rostered      Boolean?
-  visitRequests VisitRequest[]
-  sessions      WebSession[]
+  id                                              Int            @id
+  firstName                                       String         @map("first_name")
+  lastName                                        String         @map("last_name")
+  email                                           String         @unique
+  division                                        String
+  facility                                        String?
+  rating                                          Int
+  roles                                           String
+  rostered                                        Boolean?
+  visitRequests                                   VisitRequest[]
+  visit_requests_visit_requests_action_cidTousers VisitRequest[] @relation("visit_requests_action_cidTousers")
+  sessions                                        WebSession[]
 
   @@map("users")
 }
 
 model VisitRequest {
-  id     Int    @id
-  cid    Int
-  reason String
-  users  User   @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+  id                                     Int       @id @default(autoincrement())
+  cid                                    Int
+  reason                                 String
+  date_requested                         DateTime? @db.Date
+  reviewed                               Boolean?  @default(false)
+  action_message                         String?   @db.VarChar(150)
+  action_cid                             Int?
+  action_date                            DateTime? @db.Date
+  users                                  User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+  users_visit_requests_action_cidTousers User?     @relation("visit_requests_action_cidTousers", fields: [action_cid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
 
   @@map("visit_requests")
 }
