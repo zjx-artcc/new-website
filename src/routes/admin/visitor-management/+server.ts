@@ -104,6 +104,11 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 
 export const DELETE = async ({ request }): Promise<Response> => {
 	// TODO
+
+	return new Response(
+		null,
+		{status: 501}
+	)
 };
 
 const notifyUser = (cid, actionMessage) => {
