@@ -30,7 +30,7 @@ model ControllerSession {
   @@map("controller_sessions")
 }
 
-model events {
+model Events {
   id                Int                 @id @default(autoincrement())
   last_modified     DateTime            @default(now()) @db.Timestamptz(6)
   created_by        Int
@@ -44,6 +44,8 @@ model events {
   positions         Json?
   roster            roster              @relation(fields: [created_by], references: [cid], onDelete: NoAction, onUpdate: NoAction)
   position_requests position_requests[]
+
+  @@map("events")
 }
 
 model OnlineControllers {
@@ -65,7 +67,7 @@ model position_requests {
   position   String
   request_id Int     @id(map: "request_id") @default(autoincrement())
   roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
-  events     events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
+  events     Events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
 }
 
 model roster {

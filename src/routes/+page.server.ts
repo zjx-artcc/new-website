@@ -60,7 +60,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   }
   //Fetch next 2 events
   const eventsData = await prisma.events.findMany({
-    take: 3,
+    take: 2,
     orderBy: {
       event_start: 'asc',
     }
@@ -104,7 +104,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       firstName: member.first_name,
       lastName: member.last_name,
       callsign: onlineData[i].callsign,
-      logon: onlineData[i].logon_time
+      logon: onlineData[i].start
     }
 
     pageData.online.push(controller);
