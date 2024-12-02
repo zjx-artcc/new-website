@@ -1,4 +1,5 @@
 import { getHours, getRating, prisma } from '$lib/db';
+
 import type { Stats } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 
@@ -59,10 +60,10 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     pageData.newControllers.push(member);
   }
   //Fetch next 2 events
-  const eventsData = await prisma.events.findMany({
-    take: 3,
+  const eventsData = await prisma.event.findMany({
+    take: 2,
     orderBy: {
-      event_start: 'asc',
+      start: 'asc',
     }
   });
 
@@ -70,7 +71,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   for (let i = 0; i < eventsData.length; i++) {
     let event: Event = {
       name: eventsData[i].name,
-      start: eventsData[i].event_start,
+      start: eventsData[i].start,
       id: eventsData[i].id,
       banner: eventsData[i].banner,
       host: eventsData[i].host
@@ -80,9 +81,12 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   }
 
   //Fetch all online controllers
-  const onlineData = await prisma.onlineControllers.findMany({
+  const onlineData = await prisma.controllerSession.findMany({
     orderBy: {
-      logon_time: 'desc'
+      start: 'desc'
+    },
+    where: {
+      active: true
     }
   })
 
@@ -101,7 +105,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       firstName: member.first_name,
       lastName: member.last_name,
       callsign: onlineData[i].callsign,
-      logon: onlineData[i].logon_time
+      logon: onlineData[i].start
     }
 
     pageData.online.push(controller);

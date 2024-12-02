@@ -1,4 +1,5 @@
 //@ts-nocheck
+
 import { PrismaClient } from "@prisma/client";
 
 let prisma: PrismaClient;
@@ -76,21 +77,20 @@ export function msToHours(input: number): string {
  * @returns {boolean} True if user has permission to access page
  */
 export async function getStaffRoles(cid: number, type: string): Promise<boolean> {
-  let data = await prisma.user.findFirst({
+  let data = await prisma.staffRole.findMany({
     where: {
-      id: cid
+      cid: cid
     },
-    select: {
-      roles: true
-    }
   })
   if (data == null) {
 	  return false
   }
-  data = data.roles.toString();
+  data = data.map((role) => role.role);
+  let roleString = data.join(",");
+  console.log(roleString);
   switch(type) {
     case "events": {
-      if (data.includes("ATM") || data.includes("WT")) {
+      if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("EC") || roleString.includes("AEC")) {
         return true;
       } else {
         return false;
@@ -98,13 +98,13 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
       break;
     }
     case "roster": {
-      if (data.includes("ATM") || data.includes("WT")) {
+      if (data.includes("ATM") || data.includes("DATM") || data.includes("WT") || data.includes("TA")) {
         return true;
       }
       break;
     }
     case "admin": {
-      if (data.includes("ATM") || data.includes("WT")) {
+      if (data.includes("ATM") || data.includes("DATM") || data.includes("WT")) {
         return true;
       }
     }
@@ -119,6 +119,7 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
  * @param input - Date String
  * @returns {string} Date in UTC Format
  */
+
 export function formatDate(input): string {
   let dateTime = new Date(input);
   let year = dateTime.getFullYear();

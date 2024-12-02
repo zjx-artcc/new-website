@@ -25,25 +25,27 @@ model ControllerSession {
   start     DateTime? @db.Timestamptz(6)
   end       DateTime? @db.Timestamptz(6)
   active    Boolean?
-  roster    roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+  roster    Roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("controller_sessions")
 }
 
-model events {
-  id                Int                 @id @default(autoincrement())
-  last_modified     DateTime            @default(now()) @db.Timestamptz(6)
-  created_by        Int
-  name              String
-  description       String
-  event_start       DateTime            @db.Timestamptz(6)
-  event_end         DateTime            @db.Timestamptz(6)
-  host              String
-  hidden            Boolean             @default(true)
-  banner            String
-  positions         Json?
-  roster            roster              @relation(fields: [created_by], references: [cid], onDelete: NoAction, onUpdate: NoAction)
-  position_requests position_requests[]
+model Event {
+  id               Int               @id @default(autoincrement())
+  lastModified     DateTime          @default(now()) @map("last_modified") @db.Timestamptz(6)
+  createdBy        Int               @map("created_by")
+  name             String
+  description      String
+  start            DateTime          @db.Timestamptz(6)
+  end              DateTime          @db.Timestamptz(6)
+  host             String
+  hidden           Boolean           @default(true)
+  banner           String
+  positions        Json?
+  roster           Roster            @relation(fields: [createdBy], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+  positionRequests PositionRequest[]
+
+  @@map("events")
 }
 
 model OnlineControllers {
@@ -54,21 +56,23 @@ model OnlineControllers {
   logon_time  DateTime? @db.Timestamptz(6)
   last_update DateTime? @db.Timestamptz(6)
   duration    Int?
-  roster      roster?   @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
+  roster      Roster?   @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
 
   @@map("online_controllers")
 }
 
-model position_requests {
+model PositionRequest {
   cid        Int
-  event_id   Int
+  eventId    Int    @map("event_id")
   position   String
-  request_id Int     @id(map: "request_id") @default(autoincrement())
-  roster     roster  @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
-  events     events? @relation(fields: [event_id], references: [id], onDelete: Cascade, map: "event_id")
+  requestId  Int    @map("request_id") @id(map: "request_id") @default(autoincrement())
+  roster     Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
+  event      Event? @relation(fields: [eventId], references: [id], onDelete: Cascade, map: "event_id")
+
+  @@map("position_requests")
 }
 
-model roster {
+model Roster {
   cid                Int                 @id
   email              String
   home_facility      String
@@ -82,15 +86,26 @@ model roster {
   initials           String
   first_name         String
   last_name          String
-  staff_roles        String
   mentor_level       BigInt?             @default(0)
   rating_changed     DateTime?           @default(now()) @db.Timestamptz(6)
   sop_course         Boolean             @default(false)
   controllerSessions ControllerSession[]
-  events             events[]
+  events             Event[]
   onlineControllers  OnlineControllers[]
-  position_requests  position_requests[]
+  positionRequests   PositionRequest[]
+  StaffRoles         StaffRole[]
   stats              Stats?
+
+  @@map("roster")
+}
+
+model StaffRole {
+  cid  Int    @id
+  role String
+
+  roster Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("staff_roles")
 }
 
 model Stats {
@@ -109,7 +124,7 @@ model Stats {
   tower         Float?
   tracon        Float?
   enroute       Float?
-  roster        roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+  roster        Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("stats")
 }
