@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   let pageData = new PageData();
 
   //Get CID
-  pageData.cid = locals.session.userId == null ? 0 : locals.session.userId;
+  pageData.cid = locals.session == null ? 0 : locals.session.userId;
 
   //Load event
   if (params.id == "undefined") {
@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   pageData.event.positions = positions;
 
   //Check if user is signed in
-  pageData.canRequest = locals.session.userId != null ? null : false;
+  pageData.canRequest = locals.session != null ? true : false;
 
   //Check if they have requested a position
   let request: PositionRequest = await prisma.positionRequest.findFirst({
