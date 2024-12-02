@@ -2,6 +2,11 @@
 200 - OK
 403 - Forbidden (API key invalid; vatusa)
 401 - user already exists (serverside; db.ts)
+
+REQUESTS:
+POST: adds users to roster
+PUT: declines visitor application
+DELETE: removes visitor from roster
 */
 import { prisma, addUserToRoster, updateVisitRequest } from '$lib/db';
 import { validateSessionToken } from '$lib/oauth.js';
@@ -15,8 +20,10 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
             id: auth_session
         }}
     )
+		const { requestId, actionMessage, operatingInitials } = await request.json();
     const{session, user} = await validateSessionToken(auth_session)
 
+		// If user is not ATM or DATM in production do not let them use request
 	if(process.env.NODE_ENV != "development" && (user.roles == "ATM" || user.roles == "DATM")) {
 		return new Response(
 			"Invalid user roles",
@@ -26,8 +33,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 		)
 	}
 
-	const { requestId, actionMessage, operatingInitials } = await request.json();
-
+	// Get visit request data from DB
 	const visitRequest = await prisma.visitRequest.findFirst({
 		select: {
 			cid: true
@@ -38,6 +44,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 	})
 
 	try {
+		// VATUSA API call to add visitor to roster
 		const vatusaReq = await fetch(
 			`https://api.vatusa.net/facility/zjx/roster/manageVisitor/${visitRequest.cid}`,
 			{
@@ -52,7 +59,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 		if (vatusaReq.status == 200) {
 			const dbQuery = await addUserToRoster(visitRequest.cid, operatingInitials)
 
-			if (dbQuery.status == 200) { // adds to roster, checks value
+			if (dbQuery.status == 200) {
 				const visitUpdateReq = await updateVisitRequest(requestId, user.id, actionMessage)
 				if(await visitUpdateReq.ok){
 					notifyUser(requestId, actionMessage);
@@ -96,30 +103,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 };
 
 export const DELETE = async ({ request }): Promise<Response> => {
-	// Verify user is approved
-	// TODO ???
-	//if(process.env.NODE_ENV === "production" && request.)
-	const { userCid, actionMessage } = await request.json();
-
-	try {
-		prisma.visitRequest.deleteMany({
-			where: {
-				cid: userCid
-			}
-		});
-		console.log('ran');
-		notifyUser(userCid, actionMessage);
-	} catch (error) {
-		console.log(error);
-		return new Response(null, {
-			status: 400,
-			statusText: error
-		});
-	}
-
-	return new Response(null, {
-		status: 200
-	});
+	// TODO
 };
 
 const notifyUser = (cid, actionMessage) => {
