@@ -1,4 +1,5 @@
 import { getHours, getRating, prisma } from '$lib/db';
+
 import type { Stats } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 
