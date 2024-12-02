@@ -8,7 +8,7 @@ POST: adds users to roster
 PUT: declines visitor application
 DELETE: removes visitor from roster
 */
-import { prisma, addUserToRoster, updateVisitRequest } from '$lib/db';
+import { prisma, updateVisitRequest } from '$lib/db';
 import { validateSessionToken } from '$lib/oauth.js';
 /** @type {import('./$types').RequestHandler} */
 
@@ -57,32 +57,24 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 		);
 
 		if (vatusaReq.status == 200) {
-			const dbQuery = await addUserToRoster(visitRequest.cid, operatingInitials)
+				updateVisitRequest(requestId, user.id, actionMessage).ok
+				notifyUser(requestId, actionMessage);
 
-			if (dbQuery.status == 200) {
-				const visitUpdateReq = await updateVisitRequest(requestId, user.id, actionMessage)
-				if(await visitUpdateReq.ok){
-					notifyUser(requestId, actionMessage);
-
-					return new Response(`User ${visitRequest.cid} added to roster`, {
-						status: 200,
-						statusText: vatusaReq.statusText
-					});
-				} else {
-					return new Response(null, {
-						status: 500,
-					});
-				}
-			} else {
-				return new Response(null, {
-					status: 500,
-				});
-			}
+				return new Response(`User ${visitRequest.cid} added to roster`, {
+					status: 200,
+					statusText: vatusaReq.statusText
+				})
 		} else if (vatusaReq.status == 400) {
 			updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster");
 			return new Response("User already on visiting roster", {
 				status: 400,
 			});
+		} else {
+			return new Response("Please send this to the developers.",
+				{
+					status: 500
+				}
+			)
 		}
  	} catch(error) {
 		console.log(error)
@@ -93,13 +85,6 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 			}
 		)
 	}
-
-	return new Response(
-		null,
-		{
-			status: 500
-		}
-	)
 };
 
 export const DELETE = async ({ request }): Promise<Response> => {
