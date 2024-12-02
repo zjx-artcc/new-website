@@ -1,6 +1,6 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { roster, ControllerSessions } from '@prisma/client';
+import type { Roster, ControllerSession } from '@prisma/client';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, cookies, locals }) {
@@ -17,7 +17,7 @@ export async function load({ params, cookies, locals }) {
   pageData.canEdit = await getStaffRoles(locals.session.userId, "roster"); 
   
   //Fetch roster data for user
-  let rosterData: roster = await prisma.roster.findUnique({
+  let rosterData: Roster = await prisma.roster.findUnique({
     where: {
       cid: parseInt(params.cid)
     },
@@ -45,7 +45,7 @@ export async function load({ params, cookies, locals }) {
   //Return data to page data
 
   //Get staff roles to display on user page
-  let roles = pageData.certs.staff_roles.split(',');
+  let roles = [];
 
   //Process them
   for (let i = 0; i < roles.length; i++) {
