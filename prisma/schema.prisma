@@ -166,11 +166,3 @@ model WebSession {
 
   @@map("web_sessions")
 }
-
-model staff_roles {
-  cid    Int
-  role   String @db.VarChar(10)
-  roster roster @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "staff_roles_roster_cid_fk")
-
-  @@id([cid, role], map: "staff_roles_pk")
-}

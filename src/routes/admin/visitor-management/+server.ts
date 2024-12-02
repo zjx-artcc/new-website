@@ -8,7 +8,9 @@ POST: adds users to roster
 PUT: declines visitor application
 DELETE: removes visitor from roster
 */
-import { prisma, updateVisitRequest } from '$lib/db';
+
+//@ts-nocheck
+import { prisma, addUserToRoster, updateVisitRequest } from '$lib/db';
 import { validateSessionToken } from '$lib/oauth.js';
 /** @type {import('./$types').RequestHandler} */
 
