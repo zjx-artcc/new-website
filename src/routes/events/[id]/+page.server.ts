@@ -1,6 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
 import { getStaffRoles, prisma } from '$lib/db';
-import { Prisma } from "@prisma/client";
 
 import type { PageServerLoad } from './$types';
 import type { Event, PositionRequest, Roster } from '@prisma/client';
@@ -13,7 +12,6 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 
   //Check if user is signed in and get CID
   pageData.cid = locals.session == null ? 0 : locals.session.userId;
-
   //Load event
   if (params.id == "undefined") {
     redirect(404, 'Not Found');
@@ -23,7 +21,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
         id: parseInt(params.id)
       }
     })
-
+    console.log(data)
     if (data == null) {
       redirect(302, '/404');
     } else {
