@@ -65,7 +65,7 @@ model PositionRequest {
   cid        Int
   eventId    Int    @map("event_id")
   position   String
-  request_id Int    @id(map: "request_id") @default(autoincrement())
+  requestId  Int    @map("request_id") @id(map: "request_id") @default(autoincrement())
   roster     Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
   event      Event? @relation(fields: [eventId], references: [id], onDelete: Cascade, map: "event_id")
 

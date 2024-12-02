@@ -1,117 +1,118 @@
-//@ts-nocheck
-import { error, redirect } from '@sveltejs/kit'
-import { formatDate, getStaffRoles, prisma } from '$lib/db'
+import { error, redirect } from '@sveltejs/kit';
+import { prisma } from '$lib/db';
 import { getPositionType } from '$lib/events.js';
-/** @type {import('$types').PageServerLoad}*/
-// eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies, locals }) {
-  let pageData = {
-    canEdit: false,
-    cid: 0,
-    positionRequests: [],
-    eventId: 0,
-  }
-  if (locals.session != null) {
-    pageData.cid = locals.session.userId;
-  }
-  const eventId = params.slug;
-  if (eventId == "undefined") { 
-    console.log("Undefined")
-    throw redirect(302, '/404');
-  } 
-  pageData.canEdit = await getStaffRoles(pageData.cid, "events");
-  if (!pageData.canEdit) {
-    error(403, 'Forbidden');
-  }
 
-  const data = await prisma.events.findUnique({
-    where: {
-      id: eventId
-    }
-  })
-  if (data == null) {
-    throw redirect(302, '/404');
-  }
-  pageData.eventName = data.name;
-  pageData.eventBanner = data.banner;
-  pageData.eventId = eventId;
+import type { PageServerLoad } from './$types';
+import type { Event, PositionRequest } from '@prisma/client';
 
-  let positions: Position[] = JSON.parse(data.positions);
-  
-  let positionRequests: RawPositionRequest[] = await prisma.position_requests.findMany({
-    where: {
-      event_id: eventId
-    }
-  });
+export const load: PageServerLoad = async ({ params, cookies, locals }) => {
+	//Setup page data
+	let pageData = new PageData();
 
-  console.log(positionRequests);
-  
-  if (positionRequests.length > 0) {
-    positionRequests.forEach(async (request) => {
-      if (request.event_id != eventId) {
-        return;
-      }
-      let position = positions.find((position) => position.position == request.position);
-      let cont = await prisma.roster.findFirst({
-        where: { cid: request.cid },
-        select: { first_name: true, last_name: true }
-      })
-      if (cont == null) {
-        return;
-      }
-      let posReq: PositionRequest = { controller: `${cont.first_name} ${cont.last_name}`, position: request.position, request_id: request.request_id };
-      if (position.requests == undefined) {
-        position.requests = [];
-        position.requests.push(posReq);
-      }
-    });
-  }
+	//Get CID
+	pageData.cid = locals.session == null ? 0 : locals.session.userId;
 
-  const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR']
-  positions.sort((a, b) => {
-    return a.type - b.type;
-  });
+	//Load event
+	if (params.id == 'undefined') {
+		error(404, 'Not Found');
+	} else {
+		const data: Event = await prisma.event.findUnique({
+			where: {
+				id: parseInt(params.id)
+			}
+		});
 
-  pageData.positions = positions;
+		if (data == null) {
+			redirect(302, '/404');
+		} else {
+			pageData.event = data;
+		}
 
-  return pageData;
-}
+		let positions: Position[] = JSON.parse(data.positions.toString());
+
+		let positionRequests: PositionRequest[] = await prisma.positionRequest.findMany({
+			where: {
+				eventId: data.id
+			}
+		});
+
+		if (positionRequests.length > 0) {
+			positionRequests.forEach(async (request) => {
+				if (request.eventId != data.id) {
+					return;
+				}
+				let position = positions.find((position) => position.position == request.position);
+				let cont = await prisma.roster.findFirst({
+					where: { cid: request.cid },
+					select: { first_name: true, last_name: true }
+				});
+				if (cont == null) {
+					return;
+				}
+				let posReq: Omit<PositionRequest, 'cid' | 'eventId'> & {name: string} = {
+					name: `${cont.first_name} ${cont.last_name}`,
+					position: request.position,
+					requestId: request.requestId
+				};
+				if (position.requests == undefined) {
+					position.requests = [];
+					position.requests.push(posReq);
+				}
+			});
+      pageData.positionRequests = positionRequests;
+		}
+	}
+
+	const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR'];
+	positions.sort((a, b) => {
+		return a.type - b.type;
+	});
+
+	pageData.positions = positions;
+
+	return pageData;
+};
 
 function sortPositions(a, b) {
-  //Get airport and type
-  const airportA = a.split('_')[0];
-  const airportB = b.split('_')[0];
-  const positionTypeA = a.split('_')[1];
-  const positionTypeB = b.split('_')[1];
+	//Get airport and type
+	const airportA = a.split('_')[0];
+	const airportB = b.split('_')[0];
+	const positionTypeA = a.split('_')[1];
+	const positionTypeB = b.split('_')[1];
 
-  //Sort by airport then type
-  if (airportA < airportB) {
-    return -1;
-  } else if (airportA > airportB) {
-    return 1;
-  } else if (positionTypeA < positionTypeB) {
-    return -1;
-  } else if (positionTypeA > positionTypeB) {
-    return 1;
-  } else {
-    return 0;
-  }
+	//Sort by airport then type
+	if (airportA < airportB) {
+		return -1;
+	} else if (airportA > airportB) {
+		return 1;
+	} else if (positionTypeA < positionTypeB) {
+		return -1;
+	} else if (positionTypeA > positionTypeB) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+class PageData {
+	canEdit: Boolean;
+	cid: Number;
+	event: Event;
+	eventId: Number;
+	positionRequests: Omit<PositionRequest, 'cid' | 'eventId'>[] & {name: string}[];
+
+	constructor() {
+		this.canEdit = false;
+		this.cid = 0;
+		this.eventId = 0;
+		this.event = null;
+		this.positionRequests = [];
+	}
 }
 
 class Position {
-  type: Number;
-  position: String;
-  Controller: String;
-  requests: PositionRequest[];
-}
-
-class PositionRequest {
-  position: String;
-  request_id: Number;
-  controller: String;
-}
-
-class RawPositionRequest extends PositionRequest {
-  cid: Number
-  event_id: Number;
+	type: Number;
+	position: String;
+	Controller: String;
+	requests: PositionRequest[];
 }
