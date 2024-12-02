@@ -55,7 +55,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 				body: JSON.stringify({ apikey: process.env.VATUSA_KEY })
 			}
 		);
-
+		console.log(vatusaReq.status)
 		if (vatusaReq.status == 200) {
 				if ((await updateVisitRequest(requestId, user.id, actionMessage)).status == 200){
 					notifyUser(requestId, actionMessage);
@@ -67,10 +67,10 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 				}	
 		} else if (vatusaReq.status == 400) {
 			if((await updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster")).status== 200) {
-				return new Response("User already on visiting roster", {
-					status: 400,
-				});
+				return new Response("User already on visiting roster", {status: 400,});
 			}
+		} else if (vatusaReq.status == 404) {
+			return new Response("User not found.",{status: 500})
 		}
 		return new Response("Please send this to the developers.",
 			{
@@ -101,7 +101,8 @@ export const DELETE = async ({ request, cookies }): Promise<Response> => {
 		const{session, user} = await validateSessionToken(auth_session)
 		
 		if((await updateVisitRequest(requestId, user.id, actionMessage)).status == 200) {
-
+			notifyUser(requestId, actionMessage)
+			return new Response("User rejected successfully", {status: 200})
 		}
 	} catch (error) {
 		console.error(error)

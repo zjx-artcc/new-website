@@ -233,5 +233,4 @@ export const updateVisitRequest = async(requestId, actionCid, actionMessage): Pr
       status: 500
     })
   }
-  
 }
