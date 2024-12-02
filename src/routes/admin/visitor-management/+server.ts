@@ -14,36 +14,36 @@ import { validateSessionToken } from '$lib/oauth.js';
 
 export const POST = async ({ request, cookies }): Promise<Response> => {
 	// Verify user is approved
-	const auth_session = cookies.get("auth_session")
-    const sessionreq = await prisma.webSession.findUnique({
-        where: {
-            id: auth_session
-        }}
-    )
-		const { requestId, actionMessage, operatingInitials } = await request.json();
-    const{session, user} = await validateSessionToken(auth_session)
-
-		// If user is not ATM or DATM in production do not let them use request
-	if(process.env.NODE_ENV != "development" && (user.roles == "ATM" || user.roles == "DATM")) {
-		return new Response(
-			"Invalid user roles",
-			{
-				status: 401
-			}
-		)
-	}
-
-	// Get visit request data from DB
-	const visitRequest = await prisma.visitRequest.findFirst({
-		select: {
-			cid: true
-		},
-		where: {
-			id: requestId
-		}
-	})
-
 	try {
+		const auth_session = cookies.get("auth_session")
+		const sessionreq = await prisma.webSession.findUnique({
+				where: {
+						id: auth_session
+				}}
+		)
+		const { requestId, actionMessage, operatingInitials } = await request.json();
+		const{session, user} = await validateSessionToken(auth_session)
+
+			// If user is not ATM or DATM in production do not let them use request
+		if(process.env.NODE_ENV != "development" && (user.roles == "ATM" || user.roles == "DATM")) {
+			return new Response(
+				"Invalid user roles",
+				{
+					status: 401
+				}
+			)
+		}
+
+		// Get visit request data from DB
+		const visitRequest = await prisma.visitRequest.findFirst({
+			select: {
+				cid: true
+			},
+			where: {
+				id: requestId
+			}
+		})
+
 		// VATUSA API call to add visitor to roster
 		const vatusaReq = await fetch(
 			`https://api.vatusa.net/facility/zjx/roster/manageVisitor/${visitRequest.cid}`,
@@ -87,9 +87,18 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 	}
 };
 
-export const DELETE = async ({ request }): Promise<Response> => {
+export const DELETE = async ({ request, cookies }): Promise<Response> => {
 	try {
-		
+		// Verify user is approved
+		const auth_session = cookies.get("auth_session")
+		const sessionreq = await prisma.webSession.findUnique({
+				where: {
+						id: auth_session
+				}}
+		)
+		const { requestId, actionMessage, operatingInitials } = await request.json();
+		const{session, user} = await validateSessionToken(auth_session)
+		updateVisitRequest(requestId, user.id, actionMessage)
 	} catch (error) {
 		console.error(error)
 		return new Response(
