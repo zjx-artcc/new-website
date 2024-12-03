@@ -166,7 +166,7 @@
 										</div>
 									</td>
 									<td class="text-center px-2 text-2xl border-r-2">{user.home_facility == "" ? "None" : user.home_facility}</td>
-									<td class="text-center px-2 text-2xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth()}-${user.date_requested.getUTCDay()}`}</td>
+									<td class="text-center px-2 text-2xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth() + 1}-${user.date_requested.getUTCDate()}`}</td>
 									<td class="text-left text-lg p-2 w-96">{user.reason}</td>
 									<td class="px-5 py-4"
 										><input
@@ -296,8 +296,8 @@
 										</div>
 									</td>
 									<td class="text-left px-2 text-xl border-r-2">{user.home_facility == "" ? "None" : user.home_facility}</td>
-									<td class="text-left px-2 text-xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth()}-${user.date_requested.getUTCDay()}`}</td>
-									<td class="text-left px-2 text-xl border-r-2">{`${user.action_date.getUTCFullYear()}-${user.action_date.getUTCMonth()}-${user.action_date.getUTCDay()}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth() +1}-${user.date_requested.getUTCDate()}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.action_date.getUTCFullYear()}-${user.action_date.getUTCMonth() +1}-${user.action_date.getUTCDate()}`}</td>
 									<td class="text-left px-2 text-xl border-r-2">{`${user.action_cid}`}</td>
 									<td class="text-left px-2 text-xl border-r-2">{user.reason}</td>
 									<td class="text-left px-2 text-xl border-r-2">{`${user.action_message}`}</td>

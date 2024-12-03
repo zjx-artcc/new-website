@@ -3,11 +3,8 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
 	import VisitRow from '$lib/components/VisitRow.svelte';
-	import { useForm, required, validators, number } from 'svelte-use-form';
-	import { page } from '$app/stores';
 	import { getRating, prisma } from '$lib/db';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
-	import { text } from '@sveltejs/kit';
 	//import { getRating } from '$lib/db.js';
 	export let data;
 	let visitReason: string = ""
@@ -17,7 +14,6 @@
 		text: "",
 		hidden: true
 	}
-	const userData = data.session.user
 
 	const submitVisitRequest = async() => {
 		// Create POST request
@@ -66,26 +62,57 @@
 		<h2 class="text-xl text-center font-semibold mb-4 border-b-2 border-gray-400">Controller Info</h2>
 		<table class="table px-2 text-nowrap">
 			<tbody>
-				<VisitRow col1="CID:" col2={`${userData.id}`}/>
-				<VisitRow col1="Name:" col2={`${userData.firstName} ${userData.lastName}`}/>
-				<VisitRow col1="Email:" col2={`${userData.email}`}/>
-				<VisitRow col1="Rating:" col2={`${getRating(userData.rating)}`}/>
-				<VisitRow col1="Home Division:" col2={`${userData.division}`}/>
-				<VisitRow col1="Home Facility:" col2={`${userData.facility == "" ? "None" : userData.facility}`}/>
+				<VisitRow col1="CID:" col2={`${data.cid}`}/>
+				<VisitRow col1="Name:" col2={`${data.firstName} ${data.lastName}`}/>
+				<VisitRow col1="Email:" col2={`${data.email}`}/>
+				<VisitRow col1="Rating:" col2={`${data.rating}`}/>
+				<VisitRow col1="Home Division:" col2={`${data.division}`}/>
+				<VisitRow col1="Home Facility:" col2={`${data.facility == "" ? "None" : data.facility}`}/>
 			</tbody>
 		</table>
 	</div>
+	{#if data.activeVisitRequests = 0}
+		<div class="bg-gray-200 m-5 p-2 w-96 h-72">
+			<h2 class="text-xl text-center font-semibold mb-4 border-b-2 border-gray-400">Submit Request</h2>
+			<div class="flex flex-col place-items-center">
+				<textarea class="self-center bg-gray-300 px-2 placeholder-gray-500 w-80 h-40 resize-none my-2" placeholder="Why do you want to visit ZJX?" required={true} bind:value={visitReason}/>
 
-	<div class="bg-gray-200 m-5 p-2 w-96 h-72">
-		<h2 class="text-xl text-center font-semibold mb-4 border-b-2 border-gray-400">Submit Request</h2>
-		<div class="flex flex-col place-items-center">
-			<textarea class="self-center bg-gray-300 px-2 placeholder-gray-500 w-80 h-40 resize-none my-2" placeholder="Why do you want to visit ZJX?" required={true} bind:value={visitReason}/>
-
-			<button class="bg-green-500 p-3 w-24 font-semibold rounded-md" on:click={submitVisitRequest}>
-				Submit
-			</button>
+				<button class="bg-green-500 p-3 w-24 font-semibold rounded-md" on:click={submitVisitRequest}>
+					Submit
+				</button>
+			</div>
 		</div>
-	</div>
+	{:else}
+		<div class="bg-gray-200 m-5 p-2 h-72">
+			<h2 class="text-xl text-center font-semibold mb-4 border-b-2 border-gray-400">Already Submitted</h2>
+			<div class="flex flex-col place-items-center">
+				<h2>Your visiting request is currently being processed:</h2>
+			</div>
+
+			<div class="my-2 p-2">
+				<h2 class="text-center font-bold text-sky-500">Visit Request History</h2>
+
+				<table class="table px-2">
+					<thead>
+						<tr class="bg-white border-2">
+							<th class="px-2">Date Requested</th>
+							<th class="px-2">Review Date</th>
+							<th class="px-2">Action Message</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each data.previousVisitRequests as request}
+								<tr class="border-b-2 border-gray-300">
+									<td class="text-center px-2 text-lg border-r-2">{`${request.date_requested.getUTCMonth() + 1}-${request.date_requested.getUTCDate()}-${request.date_requested.getUTCFullYear()}`}</td>
+									<td class="text-center px-2 text-lg border-r-2">{request.action_date !== null ? `${request.action_date.getUTCMonth() + 1}-${request.action_date.getUTCDate()}-${request.action_date.getUTCFullYear()}` : "Pending"}</td>
+									<td class="text-center px-2 text-lg border-r-2">{request.action_message !== null ? request.action_message : "N/A"}</td>
+								</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{/if}
 </div>
 
 
