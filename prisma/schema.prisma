@@ -61,7 +61,6 @@ model OnlineControllers {
   @@map("online_controllers")
 }
 
-
 model PositionRequest {
   cid       Int
   eventId   Int    @map("event_id")
@@ -74,28 +73,30 @@ model PositionRequest {
 }
 
 model Roster {
-  cid                Int                 @id
-  email              String
-  home_facility      String
-  created_at         DateTime            @default(now()) @db.Timestamptz(6)
-  rating             Int
-  del_certs          Int?
-  gnd_certs          Int
-  twr_certs          Int
-  app_certs          Int
-  ctr_cert           Int
-  initials           String
-  first_name         String
-  last_name          String
-  mentor_level       BigInt?             @default(0)
-  rating_changed     DateTime?           @default(now()) @db.Timestamptz(6)
-  sop_course         Boolean             @default(false)
-  controllerSessions ControllerSession[]
-  events             Event[]
-  onlineControllers  OnlineControllers[]
-  positionRequests   PositionRequest[]
-  StaffRoles         StaffRole[]
-  stats              Stats?
+  cid                                                        Int                 @id
+  email                                                      String
+  home_facility                                              String
+  created_at                                                 DateTime            @default(now()) @db.Timestamptz(6)
+  rating                                                     Int
+  del_certs                                                  Int?
+  gnd_certs                                                  Int
+  twr_certs                                                  Int
+  app_certs                                                  Int
+  ctr_cert                                                   Int
+  initials                                                   String
+  first_name                                                 String
+  last_name                                                  String
+  mentor_level                                               BigInt?             @default(0)
+  rating_changed                                             DateTime?           @default(now()) @db.Timestamptz(6)
+  sop_course                                                 Boolean             @default(false)
+  controllerSessions                                         ControllerSession[]
+  events                                                     Event[]
+  onlineControllers                                          OnlineControllers[]
+  positionRequests                                           PositionRequest[]
+  StaffRoles                                                 StaffRole[]
+  stats                                                      Stats?
+  training_sessions_training_sessions_controller_cidToroster training_sessions[] @relation("training_sessions_controller_cidToroster")
+  training_sessions_training_sessions_instructor_cidToroster training_sessions[] @relation("training_sessions_instructor_cidToroster")
 
   @@map("roster")
 }
@@ -152,6 +153,7 @@ model VisitRequest {
   action_message                         String?   @db.VarChar(150)
   action_cid                             Int?
   action_date                            DateTime? @db.Date
+  accepted                               Boolean?
   users                                  User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
   users_visit_requests_action_cidTousers User?     @relation("visit_requests_action_cidTousers", fields: [action_cid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
 
@@ -165,4 +167,19 @@ model WebSession {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("web_sessions")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model training_sessions {
+  session_id                                      Int     @id(map: "training_sessions_pk")
+  controller_cid                                  Int
+  instructor_cid                                  Int
+  duration                                        Int
+  number_of_movements                             Int?    @default(0)
+  comments                                        String? @db.VarChar(750)
+  progress_rating                                 Int?
+  position                                        String? @db.VarChar(20)
+  session_type                                    String  @db.VarChar(20)
+  roster_training_sessions_controller_cidToroster Roster  @relation("training_sessions_controller_cidToroster", fields: [controller_cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "training_sessions___fk_controller")
+  roster_training_sessions_instructor_cidToroster Roster  @relation("training_sessions_instructor_cidToroster", fields: [instructor_cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "training_sessions___fk_instructor")
 }

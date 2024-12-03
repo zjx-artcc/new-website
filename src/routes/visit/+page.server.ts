@@ -43,7 +43,6 @@ export const load: PageServerLoad = async ({locals}) => {
 
   let date: Date = new Date();
   let joinDate: Date = data.created_at;
-  console.log(data);
 
   user.firstName = data.firstName;
   user.lastName = data.lastName;
