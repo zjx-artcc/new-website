@@ -1,6 +1,6 @@
 import { getHours, getRating, prisma } from '$lib/db';
 
-import type { Stats } from '@prisma/client';
+import type { Stats, User } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 
 const months = ['month_three', 'month_two', 'month_two'];
@@ -8,6 +8,11 @@ const months = ['month_three', 'month_two', 'month_two'];
 export const load: PageServerLoad = async ({ cookies, locals }) => {
   //Setup page data
   let pageData = new PageData();
+
+  // Get current user's first name
+  if (locals.user) {
+    pageData.user = locals.user
+  }
 
   //Fetch top 3 controllers for the month
   let targetMonth = months[(new Date().getUTCMonth() + 1) % 3]; //Current month + 1 is a numerical representation of the month, Modulo 3 returns where it is within the quarter
@@ -98,14 +103,16 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       },
       select: {
         first_name: true,
-        last_name: true
+        last_name: true,
+        rating: true
       }
     });
     let controller: OnlineController = {
       firstName: member.first_name,
       lastName: member.last_name,
       callsign: onlineData[i].callsign,
-      logon: onlineData[i].start
+      logon: onlineData[i].start,
+      rating: getRating(member.rating)
     }
 
     pageData.online.push(controller);
@@ -121,6 +128,7 @@ class PageData {
   newControllers: NewController[];
   events: Event[];
   online: OnlineController[];
+  user: User;
   constructor() {
     this.stats = [];
     this.newControllers = [];
@@ -156,4 +164,5 @@ type OnlineController = {
   lastName: string;
   callsign: string;
   logon: Date;
+  rating: string;
 }
