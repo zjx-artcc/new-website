@@ -6,6 +6,7 @@ import type { RequestHandler } from "./$types";
 export const POST: RequestHandler = async ({request, params}) => {
   const req = await request.json();
   const event: number = parseInt(params.id);
+  console.log(req);
   const positions: Position[] = req.positions;
   const cid: number = req.cid;
 

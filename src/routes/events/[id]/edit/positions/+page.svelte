@@ -33,7 +33,7 @@
     let res = await req.json();
     if (res.success) {
       console.log("Redirecting");
-      goto(`/events/${event}/edit`);
+      goto(`/events/${event}`);
     }
   }
 
