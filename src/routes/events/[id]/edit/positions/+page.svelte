@@ -33,7 +33,7 @@
     let res = await req.json();
     if (res.success) {
       console.log("Redirecting");
-      goto(`/events/${event}/edit`);
+      goto(`/events/${event}`);
     }
   }
 
@@ -122,6 +122,5 @@
   </div>
 </div>
 <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm">
-  <p class="-mb-4 italic">Clicking this button finalizes assigned positions and emails the affected controllers</p><br>
   <button type="button" on:click={submitPositions} class="bg-green-500 text-white px-2 py-1 rounded-md text-xl">Save</button>
 </div>
