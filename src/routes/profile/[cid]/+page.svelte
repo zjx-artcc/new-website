@@ -11,15 +11,16 @@
 
 	export let data;
 	let pageData = data.pageData;
+	console.log(pageData.certs.ctr_cert);
 </script>
 
 <svelte:head>
-	<title>{pageData.certs.first_name} {pageData.certs.last_name} - Jacksonville ARTCC</title>
+	<title>{pageData.user.firstName} {pageData.user.lastName} - Jacksonville ARTCC</title>
 </svelte:head>
 
 <div class="h-48">
 	<div class="block w-full place-content-center z-0 bg-[url('/KJAXNIGHT.png')] h-48">
-		<h1 class="text-4xl text-white font-bold text-center pt-10">Welcome back, {pageData.certs.first_name} {pageData.certs.last_name}!</h1>
+		<h1 class="text-4xl text-white font-bold text-center pt-10">Welcome back, {pageData.user.firstName} {pageData.user.lastName}!</h1>
 		<h3 class="text-xl text-white text-center pt-4">
 			{#each pageData.staffRoles as role}
 				<p class='inline rounded mx-2 px-2 py-0.5 {role.color}'>{role.name}</p>
@@ -35,7 +36,7 @@
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
       <a href="/roster" class="text-sky-500">Roster</a>
 			<Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/profile/{pageData.certs.cid}" class="text-sky-500">{pageData.certs.cid}</a>
+      <a href="/profile/{pageData.user.cid}" class="text-sky-500">{pageData.user.cid}</a>
     </nav>
   </div>
 </div>
@@ -51,13 +52,13 @@
 				<div class="grid grid-cols-2">
 					<div>
 						<h4 class="text-base">VATSIM CID:</h4>
-						<p class="text-sm text-slate-600">{pageData.certs.cid}</p>
+						<p class="text-sm text-slate-600">{pageData.user.cid}</p>
 					</div>
 					<div>
 						<h4 class="text-base">ARTCC Status:</h4>
-						{#if pageData.certs.facility == "ZJX"}
+						{#if pageData.user.homeFacility == "ZJX"}
 							<p class="text-sm text-green-600">Home Controller</p>
-						{:else if pageData.certs.facility != null && pageData.onRoster}
+						{:else if pageData.user.homeFacility != null && pageData.onRoster}
 							<p class="text-sm text-green-600">Visiting Controller</p>
 						{:else}
 							<p class="text-sm text-red-600">Not Affiliated</p>
@@ -69,15 +70,15 @@
 					</div>
 					<div>
 						<h4 class="text-base">Last Promotion:</h4>
-						{#if pageData.certs.rating_changed != null}
-							<p class="text-sm text-slate-600">{pageData.certs.rating_changed.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
+						{#if pageData.user.ratingChanged != null}
+							<p class="text-sm text-slate-600">{pageData.user.ratingChanged.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
 						{:else}
 							<p class="text-sm text-slate-600">Not Available</p>
 						{/if}
 					</div>
 					<div>
 						<h4 class="text-base">Operating Initials:</h4>
-						<p class="text-sm text-slate-600">{pageData.certs.initials}</p>
+						<p class="text-sm text-slate-600">{pageData.user.initials}</p>
 					</div>
 					<div>
 						<h4 class="text-base">Reward Tier:</h4>
@@ -103,32 +104,34 @@
 			</div>
 		</div>
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Certifications
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<div>
-					<h4 class="text-base">Enroute:</h4>
-					<p class="text-sm text-{pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
+			{#if pageData.onRoster}
+				<div class="flex flex-col space-y-1.5 p-6">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						Certifications
+					</h3>
+					<hr class="px-1 border-slate-300">
+					<div>
+						<h4 class="text-base">Enroute:</h4>
+						<p class="text-sm text-{pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Approach:</h4>
+						<p class="text-sm text-{pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Tower:</h4>
+						<p class="text-sm text-{pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Ground:</h4>
+						<p class="text-sm text-{pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Delivery:</h4>
+						<p class="text-sm text-{pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
+					</div>
 				</div>
-				<div>
-					<h4 class="text-base">Approach:</h4>
-					<p class="text-sm text-{pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Tower:</h4>
-					<p class="text-sm text-{pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Ground:</h4>
-					<p class="text-sm text-{pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Delivery:</h4>
-					<p class="text-sm text-{pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
-				</div>
-			</div>
+			{/if}
 			<div class="p-6 flex items-center justify-center">
 			</div>
 		</div>
@@ -229,7 +232,7 @@
 					{#if pageData.canEdit}
 						<p><a href="/profile/{pageData.certs.cid}/manage" class="text-blue-500">Edit User</a></p>
 					{/if}
-					{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.certs.cid.toString()}
+					{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.user.cid.toString()}
 						<p class="text-red-500"><a href="/logout">Log Out</a></p>
 					{/if}
 				</div>

@@ -1,5 +1,6 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
+
 import type { Roster, ControllerSession } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -34,23 +35,18 @@ export async function load({ params, cookies, locals }) {
   //If user exists, process the data 
   if (rosterData != null) {
     pageData.onRoster = true;
-    pageData.certs.cid = Number(rosterData.cid);
-    pageData.certs.first_name = rosterData.first_name;
-    pageData.certs.last_name = rosterData.last_name;
-    pageData.certs.initials = rosterData.initials;
-    pageData.certs.rating_changed = rosterData.rating_changed;
-    pageData.certs.facility = rosterData.home_facility;
-    pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
-    pageData.certs.gnd_certs = getCertsColor(rosterData.gnd_certs);
-    pageData.certs.twr_certs = getCertsColor(rosterData.twr_certs);
-    pageData.certs.app_certs = getCertsColor(rosterData.app_certs);
-    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
+    pageData.user = rosterData;
+    pageData.certs.del_certs = getCertsColor(rosterData.delCerts);
+    pageData.certs.gnd_certs = getCertsColor(rosterData.gndCerts);
+    pageData.certs.twr_certs = getCertsColor(rosterData.twrCerts);
+    pageData.certs.app_certs = getCertsColor(rosterData.appCerts);
+    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctrCert));
     pageData.certs.rating = getRating(Number(rosterData.rating));
   } else {
     //Or fill with auth data
-    pageData.certs.cid = locals.user.id;
-    pageData.certs.first_name = locals.user.firstName;
-    pageData.certs.last_name = locals.user.lastName;
+    pageData.user.cid = locals.user.id;
+    pageData.user.firstName = locals.user.firstName;
+    pageData.user.lastName = locals.user.lastName;
     pageData.certs.rating = getRating(locals.user.rating);
   }
 
@@ -88,7 +84,7 @@ export async function load({ params, cookies, locals }) {
   }
 
   //Get staff roles to display on user page
-  /* REDO 
+  /* TODO: Fix this with new table
   let roles = pageData.certs.staff_roles.split(',');
 
   //Process them
@@ -103,14 +99,12 @@ export async function load({ params, cookies, locals }) {
   }*/
 
   let displayQuarters = quartersByMonth[Math.floor(new Date().getUTCMonth() / 3)]
-  console.log(displayQuarters);
 
   let hoursData = await prisma.stats.findFirst({
     where: {
-      cid: pageData.certs.cid,
+      cid: pageData.user.cid,
     },
   })
-  console.log(hoursData);
 
   for(let i = 0; i < 4; i++) {
     if (i == 3) {
@@ -134,20 +128,14 @@ export async function load({ params, cookies, locals }) {
 class PageData {
   onRoster: boolean;
   canEdit: boolean;
+  user: Roster;
   certs: {
-    cid: number;
-    first_name: string;
-    last_name: string;
-    initials: string;
+    rating: string;
     del_certs: Certs;
     gnd_certs: Certs;
     twr_certs: Certs;
     app_certs: Certs;
     ctr_cert: Certs;
-    rating: string;
-    staff_roles: string;
-    rating_changed: Date;
-    facility: string;
   };
   hours: Hours[];
   sessions: ControllerSessions[];
@@ -156,20 +144,14 @@ class PageData {
   constructor() {
     this.onRoster = false;
     this.canEdit = false;
+    this.user = null;
     this.certs = {
-      cid: 0,
-      del_certs: {cert: "None", color: ""},
-      gnd_certs: {cert: "None", color: ""},
-      twr_certs: {cert: "None", color: ""},
-      app_certs: {cert: "None", color: ""},
-      ctr_cert: {cert: "None", color: ""},
-      rating: "",
-      staff_roles: "",
-      first_name: "",
-      last_name: "",
-      initials: "None",
-      facility: "",
-      rating_changed: null
+      del_certs: {cert: "Not Certified", color: "slate-500"},
+      gnd_certs: {cert: "Not Certified", color: "slate-500"},
+      twr_certs: {cert: "Not Certified", color: "slate-500"},
+      app_certs: {cert: "Not Certified", color: "slate-500"},
+      ctr_cert: {cert: "Not Certified", color: "slate-500"},
+      rating: ""
     };
     this.sessions = [];
     this.staffRoles = [];
