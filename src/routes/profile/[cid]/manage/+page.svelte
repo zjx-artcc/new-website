@@ -137,6 +137,13 @@
 							<option value={"Not Certified"}>Not Certified</option>
 						</select>
 					</div>
+					<div>
+						<label for="zjxsopcourse" class="text-base">ZJX SOP Course:</label>
+						<select id="sopcourse" name="sopcrouse" class="pl-1" bind:value={pageData.sopcourse}>
+							<option value={"Completed"}>Completed</option>
+							<option value={"Not Copmleted"}>Not Copmleted</option>
+						</select>
+					</div>
 				</div>
 				<div class="p-6 flex items-center justify-center">
 				</div>
