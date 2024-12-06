@@ -85,6 +85,7 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
   if (data == null) {
 	  return false
   }
+
   data = data.map((role) => role.role);
   let roleString = data.join(",");
   console.log(roleString);
@@ -210,7 +211,7 @@ export function getCtrCertColor(input: number): {cert: string, color: string} {
   }
 }
 
-export const updateVisitRequest = async(requestId, actionCid, actionMessage): Promise<Response> => {
+export const updateVisitRequest = async(requestId, actionCid, actionMessage, wasAccepted: boolean): Promise<Response> => {
   try {
     await prisma.visitRequest.update({
       where: {
@@ -220,7 +221,8 @@ export const updateVisitRequest = async(requestId, actionCid, actionMessage): Pr
         reviewed: true,
         action_cid: actionCid,
         action_message: actionMessage,
-        action_date: new Date()
+        action_date: new Date(),
+        accepted: wasAccepted
       }
     })
 

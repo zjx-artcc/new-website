@@ -42,43 +42,56 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 				cid: true
 			},
 			where: {
-				id: requestId
+				id: requestId,
+				reviewed: false
 			}
 		})
 
-		// VATUSA API call to add visitor to roster
-		const vatusaReq = await fetch(
-			`https://api.vatusa.net/facility/zjx/roster/manageVisitor/${visitRequest.cid}`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ apikey: process.env.VATUSA_KEY })
+		if (visitRequest) {
+			// VATUSA API call to add visitor to roster
+			const vatusaReq = await fetch(
+				`https://api.vatusa.net/v2/facility/zjx/roster/manageVisitor/${visitRequest.cid}`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						
+					},
+					body: JSON.stringify({'apikey': process.env.VATUSA_KEY})
+				}
+			);
+	
+			if (vatusaReq.status == 200) {
+					const req = await updateVisitRequest(requestId, user.id, actionMessage, true)
+					if (req.status) {
+						return new Response(`User ${visitRequest.cid} added to roster`, {
+							status: 200,
+							statusText: vatusaReq.statusText
+						})
+					}	
+			} else if (vatusaReq.status == 400) {
+				if(await updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster", false).status== 200) {
+					return new Response("User already on visiting roster", {status: 400,});
+				}
+			} else if (vatusaReq.status == 401) {
+				return new Response("Unauthorized", {status: 401});
+			} else if (vatusaReq.status == 404) {
+				await updateVisitRequest(requestId, user.id, "User not found on VATUSA roster", false)
+				return new Response("User not found.",{status: 404})
 			}
-		);
-
-		if (vatusaReq.status == 200) {
-				const req = await updateVisitRequest(requestId, user.id, actionMessage)
-				if (req.status) {
-					return new Response(`User ${visitRequest.cid} added to roster`, {
-						status: 200,
-						statusText: vatusaReq.statusText
-					})
-				}	
-		} else if (vatusaReq.status == 400) {
-			if(await updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster").status== 200) {
-				return new Response("User already on visiting roster", {status: 400,});
-			}
-		} else if (vatusaReq.status == 404) {
-			await updateVisitRequest(requestId, user.id, "User not found on roster")
-			return new Response("User not found.",{status: 404})
+			return new Response("Please send this to the developers.",
+				{
+					status: 500
+				}
+			)
+		} else {
+			return new Response("Visit request already reviewed.",
+				{
+					status: 500
+				}
+			)
 		}
-		return new Response("Please send this to the developers.",
-			{
-				status: 500
-			}
-		)
+		
  	} catch(error) {
 		console.error(error)
 		return new Response(
@@ -102,7 +115,7 @@ export const DELETE = async ({ request, cookies }): Promise<Response> => {
 		const { requestId, actionMessage} = await request.json();
 		const{session, user} = await validateSessionToken(auth_session)
 
-		if((await updateVisitRequest(requestId, user.id, actionMessage)).status == 200) {
+		if((await updateVisitRequest(requestId, user.id, actionMessage, false)).status == 200) {
 			notifyUser(requestId, actionMessage)
 			return new Response(null, {status: 200})
 		}

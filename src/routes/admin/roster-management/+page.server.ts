@@ -1,6 +1,6 @@
-import { prisma, getCertsColor, getCtrCertColor, getRating } from '$lib/db';
+import { prisma, getCertsColor, getCtrCertColor, getRating, getStaffRoles } from '$lib/db';
 
-export const load = async() => {
+export const load = async({locals}) => {
   const visitingMemberTable = await prisma.roster.findMany({
     orderBy: {
       last_name: 'asc'
@@ -8,7 +8,9 @@ export const load = async() => {
   })    
   
   let roster: RosterData[] = []
+  let isAdmin: boolean
   for(let i = 0; i < visitingMemberTable.length; i++) {
+
   //Create roster member object
   let member: RosterData = {
     name: `${visitingMemberTable[i].first_name} ${visitingMemberTable[i].last_name}`,
@@ -26,8 +28,9 @@ export const load = async() => {
   roster.push(member)
   }
   
+  isAdmin = await getStaffRoles(locals.user.id, "admin")
   return {
-    roster
+    roster, isAdmin
   };
 }
 

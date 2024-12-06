@@ -57,8 +57,8 @@
 		
 	</div>
 
-	<div class="gap-x-5 justify-center items-start my-20 gap-y-10 flex flex-row flex-wrap">
-		<HomepageCard bgColor="bg-sky-300">
+	<div class="gap-x-5 justify-center items-start my-10 lg:my-20 gap-y-2 flex flex-row flex-wrap">
+		<HomepageCard bgColor="bg-sky-100">
 			{#if data.pageData.online.length == 0}
 			{data.pageData.online.length}
 			<div class="p-4">
@@ -79,7 +79,7 @@
 			{/if}
 		</HomepageCard>
 
-		<HomepageCard bgColor="bg-sky-300">
+		<HomepageCard bgColor="bg-sky-100">
 			<div class="px-4 py-2 border-b-2 border-black mb-1">
 				<h1 class="font-semibold text-xl">Feedback</h1>
 			</div>
@@ -90,7 +90,7 @@
 			</div>
 		</HomepageCard>
 
-		<HomepageCard bgColor="bg-sky-300">
+		<HomepageCard bgColor="bg-sky-100">
 			<div class="px-4 py-2 border-b-2 border-black">
 				<h1 class="font-semibold text-xl">Events</h1>
 			</div>
@@ -108,7 +108,7 @@
 		<h2 class="text-gray-800 text-2xl text-center">Our events team would love to see you fly or control!</h2>
 	</div>
 
-	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5">
+	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
 		{#each data.pageData.events as event}
 		<EventCard title={event.name} hostedBy={event.host} imageUrl={event.banner} start={event.start} end={event.end}/>
 		{/each}

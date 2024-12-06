@@ -55,7 +55,6 @@
 
 		for (let i = 0; i < data.userData.length; i++) {
 			if (data.userData[i].selected) {
-				if (initialsValid(data.userData[i].operatingInitials)) {
 					const user = data.userData[i];
 					const req = await fetch(`/admin/visitor-management`, {
 						method: 'POST',
@@ -71,12 +70,8 @@
 					} else {
 						displayFeedbackBox('bg-red-500', 'Failed', (await req.text().then((text) => {return text})));
 					}
-				} else {
-					displayFeedbackBox('bg-red-500', 'Invalid Input', "Operating initials must be 2 characters long.");
-				}
-				
+				}		
 			}
-		}
 		setTimeout(() => {
 			refreshPage()
 		}, 5000)

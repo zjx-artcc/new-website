@@ -45,15 +45,15 @@
       Feedback
     </Button>
 
-    <!-- FEEDBACK PAGE -->
-    <Button class="text-xl" href="/events">
-      <Icon icon="mdi:comment-quote" class="w-7 h-7 pr-1.5"/>
-      Feedback
-    </Button>
-
     {#if $page.data.session != null}
-		<a href="/profile/{$page.data.session.userId}" class="text-lg text-white inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" />Profile</a>
+      <Button class="text-xl" href="/profile/{$page.data.session.userId}">
+        <Icon icon="ic:baseline-person" class="w-7 h-7 pr-1.5"/>
+        Profile
+      </Button>
     {:else}
-      <a href="/login" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</a>
+      <Button class="text-xl" href="/login">
+        <Icon icon="ic:baseline-log-in" class="w-7 h-7 pr-1.5"/>
+        Profile
+      </Button>
     {/if}
 </div>
