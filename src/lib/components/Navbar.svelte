@@ -7,11 +7,11 @@
 	import NavbarListItem from './NavbarListItem.svelte';
 </script>
 
-<div class="w-screen h-20 bg-sky-800 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
+<div class="w-screen h-20 bg-sky-400 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
 
     <a href="/" class="flex flex-row justify-center items-center gap-x-4">
       <h2 class="font-semibold text-xl text-white w-24 text-center">Jacksonville</h2>
-      <h2 class="text-sky-500 font-bold text-xl">ARTCC</h2>
+      <h2 class="text-sky-800 font-bold text-xl">ARTCC</h2>
     </a>
 
     <!-- PILOTS PAGE -->

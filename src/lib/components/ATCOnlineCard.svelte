@@ -1,11 +1,57 @@
 <script lang="ts">
-  export let position;
-  export let rating;
-  export let name;
+	import HomepageCard from "./HomepageCard.svelte";
+
+  export let position: string;
+  export let rating: string;
+  export let name: string;
+  export let start: Date;
+  export let homeController: boolean;
+  let visibility: string = 'hidden'
+  const showDialog = () => {
+    visibility = ""
+  }
+
+  const hideDialog = () => {
+    visibility = "hidden"
+  }
+
+  const getTimeString = (date: Date) => {
+    const duration = new Date(Date.now() - date.getTime())
+
+    return `${duration.toTimeString().substring(0,5)}`
+  }
 </script>
 
 
-<a href="/profile/1697197" class="px-3 py-2 flex flex-row justify-between transition hover:bg-gray-300">
-  <h4 class="font-bold text-sm text-sky-800">{position}</h4>
-  <h4 class="text-sm justify-self-end">{name} ({rating})</h4>
+<a href="/profile/1697197" on:mouseenter={showDialog} on:mouseleave={hideDialog}>
+  <div class="px-3 py-2 flex flex-row justify-between transition hover:bg-sky-300">
+    <h4 class="font-bold text-sm text-gray-700">{position}</h4>
+    <h4 class="text-sm justify-self-end">{name} ({rating})</h4>
+  
+    <div class={`absolute translate-x-24 transition ease-linear w-80 bg-sky-200 rounded-md ${visibility}`}>
+      <div class="border-b-2 p-3 border-black">
+        <div class="flex gap-x-2">
+          <h4 class="font-bold text-md text-gray-700">{name}</h4>
+          <h4>{rating}</h4>
+        </div>
+        <h4 class="italic text-blue-800 font-normal">{homeController ? "Home Controller" : "Visiting Controller"}</h4>
+
+        {#if homeController}
+          <img src='/ZJX-Dark-Logo.png' alt="ZJX logo" class="w-14 h-14 absolute right-2 top-2"/>
+        {/if}
+      </div>
+
+      <div class="p-3">
+        <h4 class="font-bold">{position}</h4>
+        <h4>Online for {getTimeString(start)}</h4>
+
+        <div class="mt-4 flex justify-evenly">
+          <a href="/feedback" class="bg-green-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-green-400">Submit Feedback</a>
+          <a href="/" class="bg-amber-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-amber-400">View Profile</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
 </a>

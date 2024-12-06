@@ -87,6 +87,18 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
 
   //Fetch all online controllers
   const onlineData = await prisma.controllerSession.findMany({
+    select: {
+      callsign: true,
+      start: true,
+      roster: {
+        select: {
+          first_name: true,
+          last_name: true,
+          rating: true,
+          home_facility: true,
+        }
+      }
+    },
     orderBy: {
       start: 'desc'
     },
@@ -97,27 +109,17 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
 
   // Sanitize and push data
   for (let i = 0; i < onlineData.length; i++) {
-    const member = await prisma.roster.findFirst({
-      where: {
-        cid: onlineData[i].cid
-      },
-      select: {
-        first_name: true,
-        last_name: true,
-        rating: true
-      }
-    });
     let controller: OnlineController = {
-      firstName: member.first_name,
-      lastName: member.last_name,
+      firstName: onlineData[i].roster.first_name,
+      lastName: onlineData[i].roster.last_name,
       callsign: onlineData[i].callsign,
-      logon: onlineData[i].start,
-      rating: getRating(member.rating)
+      homeController: onlineData[i].roster.home_facility == "ZJX" ? true : false,
+      start: onlineData[i].start,
+      rating: getRating(onlineData[i].roster.rating)
     }
 
     pageData.online.push(controller);
   }
-
 
   return {pageData: { ...pageData }};
 }
@@ -163,6 +165,7 @@ type OnlineController = {
   firstName: string;
   lastName: string;
   callsign: string;
-  logon: Date;
+  start: Date;
   rating: string;
+  homeController: boolean;
 }

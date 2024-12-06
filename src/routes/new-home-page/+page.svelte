@@ -9,6 +9,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import AtcOnlineCard from '$lib/components/ATCOnlineCard.svelte';
 	import HomepageCard from '$lib/components/HomepageCard.svelte';
+	import LinkButton from '$lib/components/LinkButton.svelte';
 
 	const today = new Date();
 	export let data;
@@ -56,21 +57,37 @@
 		
 	</div>
 
-	<div class="gap-x-5 justify-center items-center my-20 gap-y-10 flex flex-row">
-		<HomepageCard>
+	<div class="gap-x-5 justify-center items-start my-20 gap-y-10 flex flex-row">
+		<HomepageCard bgColor="bg-sky-300">
 			{#if data.pageData.online.length == 0}
+			{data.pageData.online.length}
 			<div class="p-4">
 				<h1 class="font-semibold text-2xl">No controllers online</h1>
 				<h2>There are currently no controllers online right now. Check back soon!</h2>
 			</div>
 			{:else}
-				<h2 class="text-black font-semibold text-lg border-b-2 pt-1  border-gray-500 w-full text-center">Online Controllers</h2>
-				<AtcOnlineCard position="JAX_TWR" name="Chris Mangan" rating="S2"/>
+			<div class="px-4 py-2 border-b-2 border-black mb-1">
+				<h1 class="font-semibold text-2xl">Online Controllers</h1>
+			</div>
+
+			<div>
+				{#each data.pageData.online as controller}
+					<AtcOnlineCard position={controller.callsign} name={`${controller.firstName} ${controller.lastName}`} rating={controller.rating} homeController={controller.homeController} start={controller.start}/>
+				{/each}
+			</div>
+				
 			{/if}
 		</HomepageCard>
 
-		<HomepageCard>
-			
+		<HomepageCard bgColor="bg-sky-300">
+			<div class="px-4 py-2 border-b-2 border-black mb-1">
+				<h1 class="font-semibold text-2xl">Feedback</h1>
+			</div>
+
+			<div class="p-4 flex flex-col">
+				<h2>We are always happy to hear from pilots about our controllers!</h2>
+				<LinkButton to="/feedback" bgColor="bg-gray-600" textColor="text-white"></LinkButton>
+			</div>
 		</HomepageCard>
 	</div>
 </div>
