@@ -13,7 +13,6 @@ export async function load({ params, cookies, locals }) {
   let pageData: PageData = new PageData();
 
   //Check for user permissions from database
-  console.log(locals.session);
   pageData.canEdit = await getStaffRoles(locals.session.userId, "roster"); 
   
   //Fetch roster data for user
@@ -25,18 +24,12 @@ export async function load({ params, cookies, locals }) {
 
   if (rosterData != null) {
     pageData.onRoster = true;
-    pageData.certs.cid = Number(rosterData.cid);
-    pageData.certs.first_name = rosterData.first_name;
-    pageData.certs.last_name = rosterData.last_name;
-    pageData.certs.initials = rosterData.initials;
-    pageData.certs.staff_roles = rosterData.staff_roles;
-    pageData.certs.rating_changed = rosterData.rating_changed;
-    pageData.certs.facility = rosterData.home_facility;
-    pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
-    pageData.certs.gnd_certs = getCertsColor(rosterData.gnd_certs);
-    pageData.certs.twr_certs = getCertsColor(rosterData.twr_certs);
-    pageData.certs.app_certs = getCertsColor(rosterData.app_certs);
-    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
+    pageData.user = rosterData;
+    pageData.certs.del_certs = getCertsColor(rosterData.delCerts);
+    pageData.certs.gnd_certs = getCertsColor(rosterData.gndCerts);
+    pageData.certs.twr_certs = getCertsColor(rosterData.twrCerts);
+    pageData.certs.app_certs = getCertsColor(rosterData.appCerts);
+    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctrCert));
     pageData.certs.rating = getRating(Number(rosterData.rating));
   } else {
     redirect(302, '/404');
@@ -45,11 +38,18 @@ export async function load({ params, cookies, locals }) {
   //Return data to page data
 
   //Get staff roles to display on user page
-  let roles = [];
+  let roles = await prisma.staffRole.findMany({
+    where: {
+      cid: pageData.user.cid
+    },
+    select: {
+      role: true
+    }
+  })
 
   //Process them
   for (let i = 0; i < roles.length; i++) {
-    switch(roles[i]) {
+    switch(roles[i].role) {
       case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "bg-sky-500"}); break;
       case "WM": pageData.staffRoles.push({name: "Web Master", color: "bg-sky-500"} ); break;
       case "FE": pageData.staffRoles.push({name: "Facility Engineer", color: "bg-sky-500"}); break;
@@ -64,7 +64,7 @@ export async function load({ params, cookies, locals }) {
 export const actions = {
   default: async({cookies, request, params}) => {
     const formData = await request.formData();
-    let user: roster = await prisma.roster.findUnique({
+    let user: Roster = await prisma.roster.findUnique({
       where: {
         cid: parseInt(params.cid)
       }
@@ -82,16 +82,16 @@ export const actions = {
       // Example: The number stored is 5, it returns 5n
       user.cid = user.cid;
       user.rating = user.rating;
-      user.mentor_level = BigInt(user.mentor_level);
+      user.mentorLevel = BigInt(user.mentorLevel);
 
       // Update certifications based on the form data
-      user.del_certs = getCertInt(formData.get('delivery').toString());
-      user.gnd_certs = getCertInt(formData.get('ground').toString());
-      user.twr_certs = getCertInt(formData.get('tower').toString());
-      user.app_certs = getCertInt(formData.get('tracon').toString());
-      user.ctr_cert = getCtrCertInt(formData.get('enroute').toString());
+      user.delCerts = getCertInt(formData.get('delivery').toString());
+      user.gndCerts = getCertInt(formData.get('ground').toString());
+      user.twrCerts = getCertInt(formData.get('tower').toString());
+      user.appCerts = getCertInt(formData.get('tracon').toString());
+      user.ctrCert = getCtrCertInt(formData.get('enroute').toString());
 
-      user.staff_roles = formData.getAll('roles').join(',');
+      let staffRoles = formData.getAll('roles');
 
       let update = await prisma.roster.update({
         where: {
@@ -143,20 +143,14 @@ function getCtrCertInt(cert: string): number {
 class PageData {
   onRoster: boolean;
   canEdit: boolean;
+  user: Roster;
   certs: {
-    cid: number;
-    first_name: string;
-    last_name: string;
-    initials: string;
     del_certs: Certs;
     gnd_certs: Certs;
     twr_certs: Certs;
     app_certs: Certs;
     ctr_cert: Certs;
     rating: string;
-    staff_roles: string;
-    rating_changed: Date;
-    facility: string;
   };
   sessions: Sessions[];
   staffRoles: StaffRoles[];
@@ -165,19 +159,12 @@ class PageData {
     this.onRoster = false;
     this.canEdit = false;
     this.certs = {
-      cid: 0,
       del_certs: {cert: "None", color: ""},
       gnd_certs: {cert: "None", color: ""},
       twr_certs: {cert: "None", color: ""},
       app_certs: {cert: "None", color: ""},
       ctr_cert: {cert: "None", color: ""},
-      rating: "",
-      staff_roles: "",
-      first_name: "",
-      last_name: "",
-      initials: "None",
-      facility: "",
-      rating_changed: null
+      rating: ""
     };
     this.sessions = [];
     this.staffRoles = [];

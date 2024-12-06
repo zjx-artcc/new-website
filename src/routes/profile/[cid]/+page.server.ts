@@ -63,19 +63,7 @@ export async function load({ params, cookies, locals }) {
 
   //Process existing data
   if (sessionsData != null) {
-    for (let i = 0; i < sessionsData.length; i++) {
-      let session: ControllerSessions = {
-        id: Number(sessionsData[i].id),
-        cid: Number(sessionsData[i].cid),
-        callsign: sessionsData[i].callsign,
-        frequency: sessionsData[i].frequency,
-        start: sessionsData[i].start,
-        end: sessionsData[i].end,
-        active: sessionsData[i].active,
-        duration: msToHours(sessionsData[i].end - sessionsData[i].start.getTime())
-      }
-      pageData.sessions.push(session);
-    }
+    pageData.sessions = sessionsData;
   }
 
   //Make sure there are at least 5 rows so the table is complete
@@ -83,21 +71,26 @@ export async function load({ params, cookies, locals }) {
     pageData.sessions.push(null);
   }
 
-  //Get staff roles to display on user page
-  /* TODO: Fix this with new table
-  let roles = pageData.certs.staff_roles.split(',');
+  let roles = await prisma.staffRole.findMany({
+    where: {
+      cid: pageData.user.cid
+    },
+    select: {
+      role: true
+    }
+  })
 
   //Process them
   for (let i = 0; i < roles.length; i++) {
-    switch(roles[i]) {
+    switch(roles[i].role) {
       case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "bg-sky-500"}); break;
       case "WM": pageData.staffRoles.push({name: "Web Master", color: "bg-sky-500"} ); break;
       case "FE": pageData.staffRoles.push({name: "Facility Engineer", color: "bg-sky-500"}); break;
       case "WT": pageData.staffRoles.push({name: "Web Team", color: "bg-red-500"}); break;
       default: break;
     }
-  }*/
-
+    pageData.staffRoleSelection.push(roles[i].role);
+  }
   let displayQuarters = quartersByMonth[Math.floor(new Date().getUTCMonth() / 3)]
 
   let hoursData = await prisma.stats.findFirst({
@@ -138,8 +131,9 @@ class PageData {
     ctr_cert: Certs;
   };
   hours: Hours[];
-  sessions: ControllerSessions[];
+  sessions: ControllerSession[];
   staffRoles: StaffRoles[];
+  staffRoleSelection: string[];
 
   constructor() {
     this.onRoster = false;
@@ -176,7 +170,7 @@ type ControllerSessions = {
   callsign: string
   frequency: string
   start: Date,
-  end: number,
+  end: Date,
   active: boolean,
   duration: string
 }

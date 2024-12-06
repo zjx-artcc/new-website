@@ -1,17 +1,10 @@
 <script>
-	import { Card, Button, Toggle } from 'flowbite-svelte';
 	import '$lib/app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
-	import ATCCard from '$lib/components/ATCCard.svelte';
 	import { page } from '$app/stores';
-	import { redirect } from '@sveltejs/kit';
-
-	let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 	export let data;
 	let pageData = data.pageData;
-	console.log(pageData.certs.ctr_cert);
 </script>
 
 <svelte:head>
@@ -155,9 +148,9 @@
 						{#each pageData.sessions as session}
 							{#if session != null}
 								<tr>
-									<td class="text-sm text-slate-600">{session.logon_time.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
-									<td class="text-sm text-slate-600">{session.logon_time.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.last_update.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+									<td class="text-sm text-slate-600">{session.start.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
+									<td class="text-sm text-slate-600">{session.start.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+									<td class="text-sm text-slate-600">{session.end.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
 									<td class="text-sm text-slate-600">{session.callsign}</td>
 									<td class="text-sm text-slate-600">{session.duration}</td>
 								</tr>

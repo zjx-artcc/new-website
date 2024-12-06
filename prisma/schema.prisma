@@ -18,12 +18,12 @@ model ArtccStats {
 }
 
 model ControllerSession {
-  id        String    @id
+  id        String    @id @default(uuid())
   cid       Int
   callsign  String?   @db.VarChar(255)
   frequency String?   @db.VarChar(255)
   start     DateTime? @db.Timestamptz(6)
-  end       Int?
+  end       DateTime? @db.Timestamptz(6)
   active    Boolean
   roster    Roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
 
@@ -44,8 +44,20 @@ model Event {
   positions        Json?
   roster           Roster            @relation(fields: [createdBy], references: [cid], onDelete: NoAction, onUpdate: NoAction)
   positionRequests PositionRequest[]
+  EventPosition    EventPosition[]
 
   @@map("events")
+}
+
+model EventPosition {
+  cid      Int
+  eventId  Int
+  position String
+  roster   Roster @relation(fields: [cid], references: [cid], onDelete: Cascade)
+  event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@id([cid, eventId], map: "event_positions_pk")
+  @@map("event_positions")
 }
 
 model PositionRequest {
@@ -60,29 +72,31 @@ model PositionRequest {
 }
 
 model Roster {
-  cid                                                        Int                 @id
-  email                                                      String
-  homeFacility                                               String              @map("home_facility")
-  createdAt                                                  DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  rating                                                     Int
-  delCerts                                                   Int                 @map("del_certs")
-  gndCerts                                                   Int                 @map("gnd_certs")
-  twrCerts                                                   Int                 @map("twr_certs")
-  appCerts                                                   Int                 @map("app_certs")
-  ctrCert                                                    Int                 @map("ctr_cert")
-  initials                                                   String
-  firstName                                                  String              @map("first_name")
-  lastName                                                   String              @map("last_name")
-  mentorLevel                                                BigInt?             @default(0) @map("mentor_level")
-  ratingChanged                                              DateTime?           @default(now()) @map("rating_changed") @db.Timestamptz(6)
-  sopCourse                                                  Boolean             @default(false) @map("sop_course")
-  controllerSessions                                         ControllerSession[]
-  events                                                     Event[]
-  positionRequests                                           PositionRequest[]
-  StaffRoles                                                 StaffRole[]
-  stats                                                      Stats?
-  training_sessions_training_sessions_controller_cidToroster TrainingSession[]   @relation("training_sessions_controller_cidToroster")
-  training_sessions_training_sessions_instructor_cidToroster TrainingSession[]   @relation("training_sessions_instructor_cidToroster")
+  cid                Int                 @id
+  email              String
+  homeFacility       String              @map("home_facility")
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  rating             Int
+  delCerts           Int                 @map("del_certs")
+  gndCerts           Int                 @map("gnd_certs")
+  twrCerts           Int                 @map("twr_certs")
+  appCerts           Int                 @map("app_certs")
+  ctrCert            Int                 @map("ctr_cert")
+  initials           String
+  firstName          String              @map("first_name")
+  lastName           String              @map("last_name")
+  mentorLevel        BigInt?             @default(0) @map("mentor_level")
+  ratingChanged      DateTime?           @default(now()) @map("rating_changed") @db.Timestamptz(6)
+  sopCourse          Boolean             @default(false) @map("sop_course")
+  controllerSessions ControllerSession[]
+  events             Event[]
+  positionRequests   PositionRequest[]
+  StaffRoles         StaffRole[]
+  stats              Stats?
+
+  training_sessions_training_sessions_controller_cidToroster TrainingSession[] @relation("training_sessions_controller_cidToroster")
+  training_sessions_training_sessions_instructor_cidToroster TrainingSession[] @relation("training_sessions_instructor_cidToroster")
+  EventPosition                                              EventPosition[]
 
   @@map("roster")
 }

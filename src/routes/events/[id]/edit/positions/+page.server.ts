@@ -47,13 +47,13 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 				let position = positions.find((position) => position.position == request.position);
 				let cont = await prisma.roster.findFirst({
 					where: { cid: request.cid },
-					select: { first_name: true, last_name: true }
+					select: { firstName: true, lastName: true }
 				});
 				if (cont == null) {
 					return;
 				}
 				let posReq: Omit<PositionRequest, 'cid' | 'eventId'> & {name: string} = {
-					name: `${cont.first_name} ${cont.last_name}`,
+					name: `${cont.firstName} ${cont.lastName}`,
 					position: request.position,
 					requestId: request.requestId
 				};

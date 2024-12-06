@@ -9,12 +9,12 @@ PUT: declines visitor application
 DELETE: removes visitor from roster
 */
 
-//@ts-nocheck
 import { prisma, updateVisitRequest } from '$lib/db';
 import { validateSessionToken } from '$lib/oauth.js';
-/** @type {import('./$types').RequestHandler} */
 
-export const POST = async ({ request, cookies }): Promise<Response> => {
+import type { RequestHandler } from './$types.js';
+
+export const POST: RequestHandler = async ({ request, cookies }): Promise<Response> => {
 	// Verify user is approved
 	try {
 		const auth_session = cookies.get("auth_session")
@@ -60,7 +60,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 
 		if (vatusaReq.status == 200) {
 				if ((await updateVisitRequest(requestId, user.id, actionMessage)).status == 200){
-					notifyUser(requestId, actionMessage);
+					//notifyUser(requestId, actionMessage);
 
 					return new Response(`User ${visitRequest.cid} added to roster`, {
 						status: 200,
@@ -90,7 +90,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 	}
 };
 
-export const DELETE = async ({ request, cookies }): Promise<Response> => {
+export const DELETE: RequestHandler = async ({ request, cookies }): Promise<Response> => {
 	try {
 		// Verify user is approved
 		const auth_session = cookies.get("auth_session")
@@ -119,8 +119,4 @@ export const DELETE = async ({ request, cookies }): Promise<Response> => {
 		null,
 		{status: 501}
 	)
-};
-
-const notifyUser = (cid, actionMessage) => {
-	// TODO
 };
