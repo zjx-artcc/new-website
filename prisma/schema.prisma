@@ -18,7 +18,7 @@ model ArtccStats {
 }
 
 model ControllerSession {
-  id        Int       @id
+  id        String    @id
   cid       Int
   callsign  String?   @db.VarChar(255)
   frequency String?   @db.VarChar(255)
@@ -46,19 +46,6 @@ model Event {
   positionRequests PositionRequest[]
 
   @@map("events")
-}
-
-model OnlineControllers {
-  id          BigInt    @id
-  cid         Int?
-  callsign    String?   @db.VarChar(255)
-  frequency   String?   @db.VarChar(255)
-  logon_time  DateTime? @db.Timestamptz(6)
-  last_update DateTime? @db.Timestamptz(6)
-  duration    Int?
-  roster      Roster?   @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
-
-  @@map("online_controllers")
 }
 
 model PositionRequest {
@@ -91,7 +78,6 @@ model Roster {
   sop_course                                                 Boolean             @default(false)
   controllerSessions                                         ControllerSession[]
   events                                                     Event[]
-  onlineControllers                                          OnlineControllers[]
   positionRequests                                           PositionRequest[]
   StaffRoles                                                 StaffRole[]
   stats                                                      Stats?

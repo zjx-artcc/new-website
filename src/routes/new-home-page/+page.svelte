@@ -57,7 +57,7 @@
 		
 	</div>
 
-	<div class="gap-x-5 justify-center items-start my-20 gap-y-10 flex flex-row">
+	<div class="gap-x-5 justify-center items-start my-20 gap-y-10 flex flex-row flex-wrap">
 		<HomepageCard bgColor="bg-sky-300">
 			{#if data.pageData.online.length == 0}
 			{data.pageData.online.length}
@@ -67,7 +67,7 @@
 			</div>
 			{:else}
 			<div class="px-4 py-2 border-b-2 border-black mb-1">
-				<h1 class="font-semibold text-2xl">Online Controllers</h1>
+				<h1 class="font-semibold text-xl">Who's Online?</h1>
 			</div>
 
 			<div>
@@ -81,18 +81,37 @@
 
 		<HomepageCard bgColor="bg-sky-300">
 			<div class="px-4 py-2 border-b-2 border-black mb-1">
-				<h1 class="font-semibold text-2xl">Feedback</h1>
+				<h1 class="font-semibold text-xl">Feedback</h1>
 			</div>
 
-			<div class="p-4 flex flex-col">
+			<div class="px-4 py-2 flex flex-col">
 				<h2>We are always happy to hear from pilots about our controllers!</h2>
-				<LinkButton to="/feedback" bgColor="bg-gray-600" textColor="text-white"></LinkButton>
+				<LinkButton to="/feedback" bgColor="bg-amber-500" textColor="text-black font-semibold" text="Submit Feedback Here"></LinkButton>
+			</div>
+		</HomepageCard>
+
+		<HomepageCard bgColor="bg-sky-300">
+			<div class="px-4 py-2 border-b-2 border-black">
+				<h1 class="font-semibold text-xl">Events</h1>
+			</div>
+
+			<div class="px-4 py-3 flex flex-col">
+				<h2>Did someone say events? vZJX always has events which are fun for controllers and pilots alike! Scroll down to check out our upcoming events.</h2>
 			</div>
 		</HomepageCard>
 	</div>
 </div>
 
-<div class="p-5">
-	hi
+<div class="flex flex-col justify-center items-center w-screen">
+	<div class="flex justify-center flex-col border-b-2 pb-2">
+		<h1 class="font-bold text-gray-800 text-4xl text-center">Upcoming Events</h1>
+		<h2 class="text-gray-800 text-2xl text-center">Our events team would love to see you fly or control!</h2>
+	</div>
+
+	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5">
+		{#each data.pageData.events as event}
+		<EventCard title={event.name} hostedBy={event.host} imageUrl={event.banner} start={event.start} end={event.end}/>
+		{/each}
+	</div>
 </div>
 

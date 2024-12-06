@@ -28,24 +28,24 @@
     <h4 class="font-bold text-sm text-gray-700">{position}</h4>
     <h4 class="text-sm justify-self-end">{name} ({rating})</h4>
   
-    <div class={`absolute translate-x-24 transition ease-linear w-80 bg-sky-200 rounded-md ${visibility}`}>
-      <div class="border-b-2 p-3 border-black">
+    <div class={`absolute translate-x-24 transition ease-linear w-72 bg-sky-200 rounded-md ${visibility}`}>
+      <div class="border-b-2 p-2 border-black">
         <div class="flex gap-x-2">
           <h4 class="font-bold text-md text-gray-700">{name}</h4>
           <h4>{rating}</h4>
         </div>
-        <h4 class="italic text-blue-800 font-normal">{homeController ? "Home Controller" : "Visiting Controller"}</h4>
+        <h4 class={`italic ${homeController ? "text-blue-800" : "text-red-800"} font-normal`}>{homeController ? "Home Controller" : `Visiting Controller`}</h4>
 
         {#if homeController}
-          <img src='/ZJX-Dark-Logo.png' alt="ZJX logo" class="w-14 h-14 absolute right-2 top-2"/>
+          <img src='/ZJX-Dark-Logo.png' alt="ZJX logo" class="w-14 h-14 absolute right-2 top-1"/>
         {/if}
       </div>
 
-      <div class="p-3">
+      <div class="p-2">
         <h4 class="font-bold">{position}</h4>
         <h4>Online for {getTimeString(start)}</h4>
 
-        <div class="mt-4 flex justify-evenly">
+        <div class="mt-2 flex justify-evenly gap-x-2">
           <a href="/feedback" class="bg-green-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-green-400">Submit Feedback</a>
           <a href="/" class="bg-amber-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-amber-400">View Profile</a>
         </div>

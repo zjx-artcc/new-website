@@ -7,7 +7,7 @@
 	import NavbarListItem from './NavbarListItem.svelte';
 </script>
 
-<div class="w-screen h-20 bg-sky-400 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
+<div class="w-screen h-20 bg-sky-500 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
 
     <a href="/" class="flex flex-row justify-center items-center gap-x-4">
       <h2 class="font-semibold text-xl text-white w-24 text-center">Jacksonville</h2>
@@ -39,11 +39,21 @@
       <NavbarListItem label="SOPs & Downloads" href="/downloads" icon="mdi:download"/>
     </Dropdown>
 
-    <!-- DISCORD PAGE -->
+    <!-- FEEDBACK PAGE -->
     <Button class="text-xl" href="/feedback">
       <Icon icon="mdi:comment-quote" class="w-7 h-7 pr-1.5"/>
       Feedback
     </Button>
 
+    <!-- FEEDBACK PAGE -->
+    <Button class="text-xl" href="/events">
+      <Icon icon="mdi:comment-quote" class="w-7 h-7 pr-1.5"/>
+      Feedback
+    </Button>
 
+    {#if $page.data.session != null}
+		<a href="/profile/{$page.data.session.userId}" class="text-lg text-white inline-flex align-middle" id="index"><Icon icon="ic:baseline-person" class="pt-1.5 navbarIcon" />Profile</a>
+    {:else}
+      <a href="/login" class="text-lg text-stone-200 inline-flex align-middle" id="index"><Icon icon="ic:baseline-log-in" class="pt-1.5 navbarIcon" /> Login</a>
+    {/if}
 </div>

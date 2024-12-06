@@ -66,7 +66,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   }
   //Fetch next 2 events
   const eventsData = await prisma.event.findMany({
-    take: 2,
+    take: 6,
     orderBy: {
       start: 'asc',
     }
@@ -77,6 +77,8 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     let event: Event = {
       name: eventsData[i].name,
       start: eventsData[i].start,
+      end: eventsData[i].end,
+      description: eventsData[i].description,
       id: eventsData[i].id,
       banner: eventsData[i].banner,
       host: eventsData[i].host
@@ -155,7 +157,9 @@ type NewController = {
 
 type Event = {
   name: string;
+  description: string;
   start: Date;
+  end: Date;
   id: number;
   banner: string;
   host: string;
