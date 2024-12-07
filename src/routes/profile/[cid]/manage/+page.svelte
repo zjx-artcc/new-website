@@ -87,7 +87,7 @@
 					<hr class="px-1 border-slate-300">
 					<div>
 						<label for="enroute" class="text-base">Enroute:</label>
-						<select id="enroute" name="enroute" class="pl-1" bind:value={pageData.certs.ctr_cert.cert}>
+						<select id="enroute" name="enroute" class="pl-1" bind:value={pageData.certs.ctrCert.cert}>
 							<option value={"Certified"}>Certified</option>
 							<option value={"Solo Certified"}>Solo Certified</option>
 							<option value={"Not Certified"}>Not Certified</option>
@@ -95,7 +95,7 @@
 					</div>
 					<div>
 						<label for="tracon" class="text-base">Approach:</label>
-						<select id="tracon" name="tracon" class="pl-1" bind:value={pageData.certs.app_certs.cert}>
+						<select id="tracon" name="tracon" class="pl-1" bind:value={pageData.certs.appCerts.cert}>
 							<option value={"Tier 1"}>Tier 1 Certified</option>
 							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
 							<option value={"Tier 2"}>Tier 2 Certified</option>
@@ -106,7 +106,7 @@
 					</div>
 					<div>
 						<label for="tower" class="text-base">Tower:</label>
-						<select id="tower" name="tower" class="pl-1" bind:value={pageData.certs.twr_certs.cert}>
+						<select id="tower" name="tower" class="pl-1" bind:value={pageData.certs.twrCerts.cert}>
 							<option value={"Tier 1"}>Tier 1 Certified</option>
 							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
 							<option value={"Tier 2"}>Tier 2 Certified</option>
@@ -117,7 +117,7 @@
 					</div>
 					<div>
 						<label for="ground" class="text-base">Ground:</label>
-						<select id="ground" name="ground" class="pl-1" bind:value={pageData.certs.gnd_certs.cert}>
+						<select id="ground" name="ground" class="pl-1" bind:value={pageData.certs.gndCerts.cert}>
 							<option value={"Tier 1"}>Tier 1 Certified</option>
 							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
 							<option value={"Tier 2"}>Tier 2 Certified</option>
@@ -128,7 +128,7 @@
 					</div>
 					<div>
 						<label for="delivery" class="text-base">Delivery:</label>
-						<select id="delivery" name="delivery" class="pl-1" bind:value={pageData.certs.del_certs.cert}>
+						<select id="delivery" name="delivery" class="pl-1" bind:value={pageData.certs.delCerts.cert}>
 							<option value={"Tier 1"}>Tier 1 Certified</option>
 							<option value={"Tier 1 Solo"}>Tier 1 Solo</option>
 							<option value={"Tier 2"}>Tier 2 Certified</option>
@@ -181,7 +181,7 @@
 					<hr class="px-1 border-slate-300">
 					<div>
 						<button type="submit" class="text-blue-500">Save Changes</button>
-						<p class="text-red-500">Discard Changes</p>
+						<a href="/profile/{pageData.user.cid}" class="text-red-500">Discard Changes</a>
 					</div>
 				</div>
 			</div>

@@ -1,7 +1,7 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor } from '$lib/db';
 
-import type { Roster,  } from '@prisma/client';
+import type { Roster } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
@@ -14,6 +14,10 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   let pageData: PageData = new PageData();
 
   //Check for user permissions from database
+  if (locals.session == null) {
+    redirect(302, '/login');
+  }
+
   pageData.canEdit = await getStaffRoles(locals.session.userId, "roster"); 
   
   //Fetch roster data for user
@@ -26,11 +30,11 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   if (rosterData != null) {
     pageData.onRoster = true;
     pageData.user = rosterData;
-    pageData.certs.del_certs = getCertsColor(rosterData.delCerts);
-    pageData.certs.gnd_certs = getCertsColor(rosterData.gndCerts);
-    pageData.certs.twr_certs = getCertsColor(rosterData.twrCerts);
-    pageData.certs.app_certs = getCertsColor(rosterData.appCerts);
-    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctrCert));
+    pageData.certs.delCerts = getCertsColor(rosterData.delCerts);
+    pageData.certs.gndCerts = getCertsColor(rosterData.gndCerts);
+    pageData.certs.twrCerts = getCertsColor(rosterData.twrCerts);
+    pageData.certs.appCerts = getCertsColor(rosterData.appCerts);
+    pageData.certs.ctrCert = getCtrCertColor(Number(rosterData.ctrCert));
     pageData.certs.rating = getRating(Number(rosterData.rating));
   } else {
     redirect(302, '/404');
@@ -67,6 +71,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
     }
     pageData.staffRoleSelection.push(roles[i].role);
   }
+  console.log(pageData.staffRoleSelection);
   return {pageData: {...pageData}};
 }
 
@@ -168,11 +173,11 @@ class PageData {
   canEdit: boolean;
   user: Roster;
   certs: {
-    del_certs: Certs;
-    gnd_certs: Certs;
-    twr_certs: Certs;
-    app_certs: Certs;
-    ctr_cert: Certs;
+    delCerts: Certs;
+    gndCerts: Certs;
+    twrCerts: Certs;
+    appCerts: Certs;
+    ctrCert: Certs;
     rating: string;
   };
   sessions: Sessions[];
@@ -183,11 +188,11 @@ class PageData {
     this.onRoster = false;
     this.canEdit = false;
     this.certs = {
-      del_certs: {cert: "None", color: ""},
-      gnd_certs: {cert: "None", color: ""},
-      twr_certs: {cert: "None", color: ""},
-      app_certs: {cert: "None", color: ""},
-      ctr_cert: {cert: "None", color: ""},
+      delCerts: {cert: "None", color: ""},
+      gndCerts: {cert: "None", color: ""},
+      twrCerts: {cert: "None", color: ""},
+      appCerts: {cert: "None", color: ""},
+      ctrCert: {cert: "None", color: ""},
       rating: ""
     };
     this.sessions = [];
