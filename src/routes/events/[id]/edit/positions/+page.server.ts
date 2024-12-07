@@ -3,7 +3,7 @@ import { prisma } from '$lib/db';
 import { getPositionType } from '$lib/events.js';
 
 import type { PageServerLoad } from './$types';
-import type { Event, PositionRequest } from '@prisma/client';
+import type { Event, PositionRequest, EventPosition } from '@prisma/client';
 
 const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR'];
 
@@ -29,50 +29,51 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 		} else {
 			pageData.event = data;
 		}
-
-		//TODO: Refactor positions to be a table instead of a JSON value
-		let positions: Position[] = JSON.parse(data.positions.toString());
-
-		let positionRequests: PositionRequest[] = await prisma.positionRequest.findMany({
+		
+		//@ts-ignore
+		pageData.positions = await prisma.eventPosition.findMany({
 			where: {
-				eventId: data.id
+				eventId: pageData.event.id
 			}
 		});
-
-		if (positionRequests.length > 0) {
-			positionRequests.forEach(async (request) => {
-				if (request.eventId != data.id) {
-					return;
-				}
-				let position = positions.find((position) => position.position == request.position);
-				let cont = await prisma.roster.findFirst({
-					where: { cid: request.cid },
-					select: { first_name: true, last_name: true }
-				});
-				if (cont == null) {
-					return;
-				}
-				let posReq: Omit<PositionRequest, 'cid' | 'eventId'> & {name: string} = {
-					name: `${cont.first_name} ${cont.last_name}`,
-					position: request.position,
-					requestId: request.requestId
-				};
-				if (position.requests == undefined) {
-					position.requests = [];
-					//@ts-ignore
-					position.requests.push(posReq);
+	
+		let requests: PositionRequest[] = await prisma.positionRequest.findMany({
+			where: {
+				eventId: pageData.event.id
+			}
+		});
+	
+		for (let i = 0; i < requests.length; i++) {
+			let user = await prisma.roster.findFirst({
+				where: {
+					cid: requests[i].cid
+				},
+				select: {
+					firstName: true,
+					lastName: true
 				}
 			});
-			//@ts-ignore
-      pageData.positionRequests = positionRequests;
+			let position: Position = pageData.positions.find((pos) => pos.id == requests[i].position);
+			if (user != null && position != null) {
+				position.requests = [];
+				position.requests.push({name: `${user.firstName} ${user.lastName}`, ...requests[i]});
+			}
 		}
-		positions.sort((a, b) => {
-		//@ts-ignore
-			return a.type - b.type;
-		});
+	}
 
-		//@ts-ignore
-		pageData.positions = positions;
+	for (let i = 0; i < pageData.positions.length; i++) {
+		if (pageData.positions[i].controller != null) {
+			let name = await prisma.roster.findFirst({
+				where: {
+					cid: parseInt(pageData.positions[i].controller)
+				},
+				select: {
+					firstName: true,
+					lastName: true
+				}
+			})
+			pageData.positions[i].controller = `${name.firstName} ${name.lastName}`;
+		}
 	}
 	
 
@@ -105,20 +106,22 @@ class PageData {
 	cid: Number;
 	event: Event;
 	eventId: Number;
-	positionRequests: Omit<PositionRequest, 'cid' | 'eventId'>[] & {name: string}[];
+	positions: Position[] & { requests: PositionRequest[] & { name: string }[] }[];
 
 	constructor() {
 		this.canEdit = false;
 		this.cid = 0;
 		this.eventId = 0;
 		this.event = null;
-		this.positionRequests = [];
+		this.positions = [];
 	}
 }
 
-class Position {
-	type: Number;
-	position: String;
-	Controller: String;
-	requests: PositionRequest[];
+type Position = {
+  id: string;
+  position: string;
+  controller: string;
+  type: number;
+  canRequest: boolean;
+  requests: PositionRequest[] & {name: string}[];
 }

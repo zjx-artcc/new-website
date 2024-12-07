@@ -20,16 +20,16 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
         cid: statsData[i].cid,
       },
       select: {
-        first_name: true,
-        last_name: true
+        firstName: true,
+        lastName: true
       }
     });
 
     //Setup member object and push it
     let memberStats: MtdStats = {
       hours: getHours(statsData[i][targetMonth]),
-      firstName: user.first_name,
-      lastName: user.last_name
+      firstName: user.firstName,
+      lastName: user.lastName
     }
     pageData.stats.push(memberStats);
   }
@@ -38,23 +38,23 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   const rosterData = await prisma.roster.findMany({
     take: 3,
     orderBy: {
-      created_at: 'desc',
+      createdAt: 'desc',
     },
     select: {
-      first_name: true,
-      last_name: true,
+      firstName: true,
+      lastName: true,
       rating: true,
-      created_at: true
+      createdAt: true
     }
   });
 
   // Sanitize and push data
   for (let i = 0; i < rosterData.length; i++) {
     let member: NewController = {
-      firstName: rosterData[i].first_name,
-      lastName: rosterData[i].last_name,
+      firstName: rosterData[i].firstName,
+      lastName: rosterData[i].lastName,
       rating: getRating(rosterData[i].rating),
-      joined: rosterData[i].created_at
+      joined: rosterData[i].createdAt
     }
 
     pageData.newControllers.push(member);
@@ -97,13 +97,13 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
         cid: onlineData[i].cid
       },
       select: {
-        first_name: true,
-        last_name: true
+        firstName: true,
+        lastName: true
       }
     });
     let controller: OnlineController = {
-      firstName: member.first_name,
-      lastName: member.last_name,
+      firstName: member.firstName,
+      lastName: member.lastName,
       callsign: onlineData[i].callsign,
       logon: onlineData[i].start
     }

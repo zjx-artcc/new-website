@@ -15,7 +15,7 @@
   let newPosition = '';
 
   function addRow() {
-    positions.push({position: newPosition, controller: ''});
+    positions.push({position: newPosition, controller: null});
     positions = positions;
     newPosition = '';
   }
@@ -51,6 +51,10 @@
   }
 
 </script>
+
+<svelte:head>
+  <title>Editing {pageData.event.name} Positions - Jacksonville ARTCC</title>
+</svelte:head>
 
 <header class="bg-gray-700 block" id="myTopnav">
   <div class="relative -z-1">
@@ -94,12 +98,12 @@
             <td>
               {#if row.requests != undefined}
                 <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center">
-                  <option value=''></option>
+                  <option value=''>None</option>
                   {#each row.requests as request}
-                    <option value={request.controller}>{request.controller}</option>
+                    <option value={request.name}>{request.name}</option>
                   {/each}
                 </select>
-              {:else if row.controller != ''}
+              {:else if row.controller != null}
                 <select value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center" disabled >
                   <option>{row.controller}</option>
                 </select>

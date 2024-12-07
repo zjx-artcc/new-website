@@ -1,9 +1,9 @@
 import { prisma, getStaffRoles } from '$lib/db';
-import type { Event } from '@prisma/client';
 
-/** @type {import('./$types').PageLoad} */
-// eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies, locals }) {
+import type { Event } from '@prisma/client';
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ locals }) => {
   //Setup page data
   let pageData = new PageData();
 

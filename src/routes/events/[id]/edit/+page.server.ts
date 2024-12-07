@@ -1,11 +1,10 @@
 import { error, redirect } from '@sveltejs/kit'
-import { formatDate, getStaffRoles, prisma } from '$lib/db'
-import { getPositionType } from '$lib/events.js';
+import { formatDate, prisma } from '$lib/db'
 
 import type { Actions, PageServerLoad } from './$types';
 import type { PositionRequest, Event } from '@prisma/client';
 
-export const load: PageServerLoad = async ({ params, cookies, locals }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
   //Setup page data
   let pageData = new PageData();
 
@@ -31,6 +30,35 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 
   pageData.event.start = formatDate(pageData.event.start);
   pageData.event.end = formatDate(pageData.event.end);
+  //@ts-ignore
+  pageData.positions = await prisma.eventPosition.findMany({
+    where: {
+      eventId: pageData.event.id
+    }
+  });
+
+  let requests: PositionRequest[] = await prisma.positionRequest.findMany({
+    where: {
+      eventId: pageData.event.id
+    }
+  });
+
+  for (let i = 0; i < requests.length; i++) {
+    let user = await prisma.roster.findFirst({
+      where: {
+        cid: requests[i].cid
+      },
+      select: {
+        firstName: true,
+        lastName: true
+      }
+    });
+    let position: Position = pageData.positions.find((pos) => pos.id == requests[i].position);
+    if (user != null && position != null) {
+      position.requests = [];
+      position.requests.push({name: `${user.firstName} ${user.lastName}`, ...requests[i]});
+    }
+  }
 
   return {pageData: { ...pageData }};
 }
@@ -76,19 +104,21 @@ class PageData {
   canEdit: boolean;
   cid: number;
   event: Omit<Event, 'start' | 'end'> & { start: Date | string, end: Date | string };
-  positionRequests: PositionRequest[];
+  positions: Position[] & { requests: PositionRequest[] & {name: string}[] }[];
 
   constructor() {
     this.canEdit = false;
+    this.positions = [];
     this.cid = 0;
     this.event = null;
-    this.positionRequests = [];
   }
 }
 
-let pageData = {
-  canEdit: false,
-  cid: 0,
-  event: {},
-  positionRequests: []
+type Position = {
+  id: string;
+  position: string;
+  controller: string;
+  type: number;
+  canRequest: boolean;
+  requests: PositionRequest[] & {name: string}[];
 }

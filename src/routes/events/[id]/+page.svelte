@@ -1,17 +1,13 @@
 <script lang="ts">
-  //@ts-nocheck
 	import { invalidateAll } from '$app/navigation';
-  import Navbar from '$lib/components/Navbar.svelte';
-  import Footer from '$lib/components/Footer.svelte';
   import Icon from '@iconify/svelte';
-	import { redirect } from '@sveltejs/kit';
   export let data;
 
   let pageData = data.pageData;
 
   async function requestPosition(position: string) {
-    let cid = data.cid;
-    let event = parseInt(data.event.id);
+    let cid = data.session.userId;
+    let event = data.pageData.event.id;
     const req = await fetch(`/events/${event}`, {
       method: 'POST',
       headers: {
@@ -25,6 +21,10 @@
     }
   }
 </script>
+
+<svelte:head>
+  <title>{pageData.event.name} - Jacksonville ARTCC</title>
+</svelte:head>
 
 <header class="bg-gray-700 block" id="myTopnav">
   <div class="relative">
@@ -64,22 +64,22 @@
     </div>
     <div class="text-center flex-1 m-2 h-fit mt-20 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
       <h1 class="font-bold">Position Assignments:</h1>
-      {#if pageData.event.positions.length == 0}
+      {#if pageData.positions.length == 0}
         <div id="positions" class="pt-5">No positions available</div>
       {:else}
         <div id="positions" class="pt-5 grid grid-cols-1 align-middle ">
-          {#each pageData.event.positions as position}
-            {#if position.controller != ''}
+          {#each pageData.positions as position}
+            {#if position.controller != null}
             <div id="positions" class="p-2 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
               <p class="text-right">{position.controller}</p>
             </div>
-            {:else if pageData.positionRequested.callsign == position.position}
-            <div id="positions" class="p-2 inline-flex">
+            {:else if pageData.positionRequested == position.id}
+            <div id="positions" class="px-2.5 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
               <p class="text-right text-green-700">Position Request Recieved</p>
             </div>
-            {:else if !pageData.canRequest}
+            {:else if pageData.positionRequested != position.id}
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
                 <p class="text-right text-yellow-600">You are not allowed to request another position</p> 
@@ -87,7 +87,7 @@
             {:else if position.canRequest}
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
-                <button on:click={() => requestPosition(position.position)} class="text-right text-blue-500">Request Position</button>
+                <button on:click={() => requestPosition(position.id)} class="text-right text-blue-500">Request Position</button>
               </div>
               <br>
             {:else if !position.canRequest}
@@ -101,4 +101,3 @@
       {/if}
     </div>
 </div>
-<Footer />
