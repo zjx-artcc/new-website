@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { getStaffRoles, prisma } from '$lib/db';
 
 import type { PageServerLoad } from './$types';
@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   pageData.cid = locals.session == null ? 0 : locals.session.userId;
   //Load event
   if (params.id == "undefined") {
-    redirect(404, 'Not Found');
+    error(404, 'Not Found');
   } else {
     const data: Event = await prisma.event.findUnique({
       where: {
@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
     })
     console.log(data)
     if (data == null) {
-      redirect(302, '/404');
+      error(404, 'Not Found');
     } else {
       pageData.event = data;
     }
@@ -33,9 +33,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   //TODO: Refactor positions to be a table instead of a JSON value
   let positions = JSON.parse(pageData.event.positions.toString());
   console.log(positions.length);
-  //@ts-ignore
   if (positions.length > 0) {
-    //@ts-ignore
     positions.sort((a, b) => {
       return a.type - b.type;
     });
@@ -68,7 +66,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
     if (user != null && pageData.event.positions != null) {
       //@ts-ignore
       positions.forEach((position: { type: number, position: string, controller: string, canRequest: boolean}) => {
-        if (position.controller == `${user.first_name} ${user.last_name}`) {
+        if (position.controller == `${user.firstName} ${user.lastName}`) {
           pageData.canRequest = false; return;
         }
         if (position.controller != '') {
@@ -76,19 +74,19 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
           position.canRequest = false; return;
         }
         switch(position.type) {
-          case 1.1: if (user.del_certs == 1) position.canRequest = true; break;
-          case 1.2: if (user.del_certs > 0 && user.del_certs <= 2) position.canRequest = true; break;
-          case 1.3: if (user.del_certs > 0 && user.del_certs <= 3) position.canRequest = true; break;
-          case 2.1: if (user.gnd_certs == 1) position.canRequest = true; break;
-          case 2.2: if (user.gnd_certs > 0 && user.gnd_certs <= 2) position.canRequest = true; break;
-          case 2.3: if (user.gnd_certs > 0 && user.gnd_certs <= 3) position.canRequest = true; break;
-          case 3.1: if (user.twr_certs == 1) position.canRequest = true; break;
-          case 3.2: if (user.twr_certs > 0 && user.twr_certs <= 2) position.canRequest = true; break;
-          case 3.3: if (user.twr_certs > 0 && user.twr_certs <= 3) position.canRequest = true; break;
-          case 4.1: if (user.app_certs == 1) position.canRequest = true; break;
-          case 4.2: if (user.app_certs > 0 && user.app_certs <= 2) position.canRequest = true; break;
-          case 4.3: if (user.app_certs > 0 && user.app_certs <= 3) position.canRequest = true; break;
-          case 5: if (user.ctr_cert == 1) position.canRequest = true; break;
+          case 1.1: if (user.delCerts == 1) position.canRequest = true; break;
+          case 1.2: if (user.delCerts > 0 && user.delCerts <= 2) position.canRequest = true; break;
+          case 1.3: if (user.delCerts > 0 && user.delCerts <= 3) position.canRequest = true; break;
+          case 2.1: if (user.gndCerts == 1) position.canRequest = true; break;
+          case 2.2: if (user.gndCerts > 0 && user.gndCerts <= 2) position.canRequest = true; break;
+          case 2.3: if (user.gndCerts > 0 && user.gndCerts <= 3) position.canRequest = true; break;
+          case 3.1: if (user.twrCerts == 1) position.canRequest = true; break;
+          case 3.2: if (user.twrCerts > 0 && user.twrCerts <= 2) position.canRequest = true; break;
+          case 3.3: if (user.twrCerts > 0 && user.twrCerts <= 3) position.canRequest = true; break;
+          case 4.1: if (user.appCerts == 1) position.canRequest = true; break;
+          case 4.2: if (user.appCerts > 0 && user.appCerts <= 2) position.canRequest = true; break;
+          case 4.3: if (user.appCerts > 0 && user.appCerts <= 3) position.canRequest = true; break;
+          case 5: if (user.ctrCert == 1) position.canRequest = true; break;
           default: position.canRequest = false; break;
         }
       })

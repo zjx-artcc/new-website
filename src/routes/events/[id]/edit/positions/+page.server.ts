@@ -3,7 +3,7 @@ import { prisma } from '$lib/db';
 import { getPositionType } from '$lib/events.js';
 
 import type { PageServerLoad } from './$types';
-import type { Event, PositionRequest } from '@prisma/client';
+import type { Event, PositionRequest, EventPosition } from '@prisma/client';
 
 const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR'];
 
@@ -31,7 +31,11 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 		}
 
 		//TODO: Refactor positions to be a table instead of a JSON value
-		let positions: Position[] = JSON.parse(data.positions.toString());
+		let positions: EventPosition[] = await prisma.eventPosition.findMany({
+			where: {
+				eventId: data.id
+			}
+		});
 
 		let positionRequests: PositionRequest[] = await prisma.positionRequest.findMany({
 			where: {
@@ -44,7 +48,8 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 				if (request.eventId != data.id) {
 					return;
 				}
-				let position = positions.find((position) => position.position == request.position);
+				//@ts-ignore
+				let position: EventPosition & { requests: Omit<PositionRequest, 'cid' | 'eventId' | 'requestId'>[] } = positions.find((position) => position.position == request.position);
 				let cont = await prisma.roster.findFirst({
 					where: { cid: request.cid },
 					select: { firstName: true, lastName: true }
@@ -59,7 +64,6 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 				};
 				if (position.requests == undefined) {
 					position.requests = [];
-					//@ts-ignore
 					position.requests.push(posReq);
 				}
 			});
@@ -114,11 +118,4 @@ class PageData {
 		this.event = null;
 		this.positionRequests = [];
 	}
-}
-
-class Position {
-	type: Number;
-	position: String;
-	Controller: String;
-	requests: PositionRequest[];
 }
