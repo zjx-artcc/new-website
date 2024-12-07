@@ -54,6 +54,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
       case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "bg-red-500"}); break;
       case "DATM": pageData.staffRoles.push({name: "Deputy Air Traffic Manager", color: "bg-red-500"}); break;
       case "TA": pageData.staffRoles.push({name: "Training Administrator", color: "bg-sky-500"}); break;
+      case "ATA": pageData.staffRoles.push({name: "Assistant Training Administrator", color: "bg-sky-500"}); break;
       case "INS": pageData.staffRoles.push({name: "Instructor", color: "bg-sky-500"}); break;
       case "MTR": pageData.staffRoles.push({name: "Mentor", color: "bg-sky-500"}); break;
       case "WM": pageData.staffRoles.push({name: "Web Master", color: "bg-pink-500"} ); break;

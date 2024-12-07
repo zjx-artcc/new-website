@@ -14,7 +14,7 @@
 
 <div class="h-48">
 	<div class="block w-full place-content-center z-0 bg-[url('/KJAXNIGHT.png')] h-48">
-		<h1 class="text-4xl text-white font-bold text-center pt-10">Welcome back, {pageData.user.firstName} {pageData.user.lastName}!</h1>
+		<h1 class="text-4xl text-white font-bold text-center pt-10">Editing: {pageData.user.firstName} {pageData.user.lastName}</h1>
 		<h3 class="text-xl text-white text-center pt-4">
 			{#each pageData.staffRoles as role}
 				<p class='inline rounded mx-2 px-2 py-0.5 {role.color}'>{role.name}</p>
@@ -148,7 +148,7 @@
 					</h3>
 					<hr class="px-1 border-slate-300">
 					<div>
-						<select class="h-72" id="roles" name="roles" multiple bind:value={pageData.staffRoleSelection}>
+						<select class="h-[20.5rem]" id="roles" name="roles" multiple bind:value={pageData.staffRoleSelection}>
 							<option value={"ATM"}>Air Traffic Manager</option>
 							<option value={"DATM"}>Deputy Air Traffic Manager</option>
 							<option value={"TA"}>Training Administrator</option>
@@ -159,6 +159,8 @@
 							<option value={"AWM"}>Assistant Web Master</option>
 							<option value={"EC"}>Events Coordinator</option>
 							<option value={"AEC"}>Assistant Events Coordinator</option>
+							<option value={"INS"}>Instructor</option>
+							<option value={"MTR"}>Mentor</option>
 							<option value={""}>None</option>
 						</select>
 					</div>
