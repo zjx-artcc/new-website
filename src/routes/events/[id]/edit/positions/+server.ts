@@ -6,65 +6,70 @@ import type { RequestHandler } from "./$types";
 export const POST: RequestHandler = async ({request, params}) => {
   const req = await request.json();
   const event: number = parseInt(params.id);
-  console.log(req);
   const positions: Position[] = req.positions;
-  const cid: number = req.cid;
 
   for (let i = 0; i < positions.length; i++) {
     if (positions[i].type == undefined) {
       positions[i].type = getPositionType(positions[i].position);
     }
   }
-  
-  let eventData = await prisma.event.findUnique({
-    where: {
-      id: event
-    }
-  })
-  if (eventData == null) {
-    return json({success: false, message: "unable to find event"})
-  }
- 
 
   //Strip requests property from each position and remove requests for position
   for (let i = 0; i < positions.length; i++) {
     delete positions[i].requests;
-    if (positions[i].controller != "") {
-      await prisma.positionRequest.deleteMany({
+    console.log(positions[i]);
+
+    if (positions[i].eventId == undefined) {
+      //New position
+      positions[i].controller = null;
+      positions[i].eventId = event;
+
+      await prisma.eventPosition.create({
+        data: {
+          eventId: positions[i].eventId,
+          position: positions[i].position,
+          controller: null,
+          type: positions[i].type
+        }
+      })
+    }
+
+    if (positions[i].controller != null) {
+      let fname = positions[i].controller.split(" ")[0];
+      let lname = positions[i].controller.split(" ")[1];
+      let cid = await prisma.roster.findFirst({
         where: {
-          eventId: event,
-          position: positions[i].position.toString()
+          firstName: fname,
+          lastName: lname
+        }
+      })
+      positions[i].controller = cid.cid.toString();
+      
+      
+      await prisma.eventPosition.update({
+        where: {
+          id: positions[i].id
+        },
+        data: {
+          controller: parseInt(positions[i].controller),
         }
       })
     }
   }
-  console.log(eventData.positions);
-
-  
-  eventData.positions = JSON.stringify(positions);
-  eventData.lastModified = new Date();
-
-  //Update events table
-  await prisma.event.update({
-    where: {
-      id: event
-    },
-    data: eventData
-  })
-
- 
 
   return json({success: true})
 }
 
 class Position {
-  type: Number;
-  position: String;
-  controller: String;
+  type: number;
+  position: string;
+  controller: string;
   requests: any[];
+  eventId: number;
+  id: string;
 }
 
-function getPositionType(position: String): Number {
+function getPositionType(position: String): number {
   switch(position.split("_")[0]) {
     case ("MCO"): {
       switch (position.split("_").at(-1)) {

@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 import { getStaffRoles, prisma } from '$lib/db';
 
 import type { PageServerLoad } from './$types';
-import type { Event, PositionRequest, Roster } from '@prisma/client';
+import type { Event, PositionRequest, Roster, EventPosition } from '@prisma/client';
 
 const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR']
 
@@ -21,7 +21,6 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
         id: parseInt(params.id)
       }
     })
-    console.log(data)
     if (data == null) {
       error(404, 'Not Found');
     } else {
@@ -30,15 +29,17 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   }
 
   //Setup positions
-  //TODO: Refactor positions to be a table instead of a JSON value
-  let positions = JSON.parse(pageData.event.positions.toString());
-  console.log(positions.length);
+  let positions: EventPosition[] = await prisma.eventPosition.findMany({
+    where: {
+      eventId: pageData.event.id
+    }
+  })
+
   if (positions.length > 0) {
     positions.sort((a, b) => {
       return a.type - b.type;
     });
   }
-  pageData.event.positions = positions;
 
   //Check if user is signed in
   pageData.canRequest = locals.session != null ? true : false;
@@ -53,8 +54,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 
   if (request != null) {
     // User has requested a position
-    pageData.positionRequested.done = true;
-    pageData.positionRequested.callsign = request.position;
+    pageData.positionRequested = request.position;
   } else {
     //No requests, so check if they can request
     let user: Roster = await prisma.roster.findFirst({
@@ -65,12 +65,11 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
     //Certification check
     if (user != null && pageData.event.positions != null) {
       //@ts-ignore
-      positions.forEach((position: { type: number, position: string, controller: string, canRequest: boolean}) => {
+      positions.forEach((position: Position) => {
         if (position.controller == `${user.firstName} ${user.lastName}`) {
           pageData.canRequest = false; return;
         }
-        if (position.controller != '') {
-          //@ts-ignore
+        if (position.controller != null) {
           position.canRequest = false; return;
         }
         switch(position.type) {
@@ -92,6 +91,24 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
       })
     }
   }
+  
+  //@ts-ignore
+  pageData.positions = positions;
+
+  for (let i = 0; i < pageData.positions.length; i++) {
+		if (pageData.positions[i].controller != null) {
+			let name = await prisma.roster.findFirst({
+				where: {
+					cid: parseInt(pageData.positions[i].controller)
+				},
+				select: {
+					firstName: true,
+					lastName: true
+				}
+			})
+			pageData.positions[i].controller = `${name.firstName} ${name.lastName}`;
+		}
+	}
 
   //See if the user can edit the event
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
@@ -99,23 +116,27 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   return {pageData: { ...pageData }};
 }
 
+type Position = {
+  id: string;
+  position: string;
+  controller: string;
+  type: number;
+  canRequest: boolean;
+}
+
 class PageData {
   canEdit: boolean;
   canRequest: boolean;
   cid: number;
   event: Event
-  positionRequested: {
-    callsign: string;
-    done: boolean;
-  }
+  positions: Position[];
+  positionRequested: string
   constructor() {
     this.canEdit = false;
     this.canRequest = true;
     this.cid = 0;
     this.event = null;
-    this.positionRequested = {
-      callsign: '',
-      done: false
-    }
+    this.positions = [];
+    this.positionRequested = ''
   }
 }

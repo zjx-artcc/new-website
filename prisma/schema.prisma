@@ -25,7 +25,7 @@ model ControllerSession {
   start     DateTime? @db.Timestamptz(6)
   active    Boolean
   end       DateTime? @db.Timestamptz(6)
-  roster    Roster    @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction)
+  roster    Roster    @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("controller_sessions")
 }
@@ -50,24 +50,25 @@ model Event {
 }
 
 model EventPosition {
-  controller      Int
-  eventId  Int
-  position String
-  type     Float
-  id       String @id @default(uuid())
-  roster   Roster @relation(fields: [controller], references: [cid], onDelete: Cascade)
-  event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  controller      Int?
+  eventId         Int
+  position        String
+  type            Float
+  id              String            @id @default(uuid())
+  event           Event             @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  PositionRequest PositionRequest[]
 
   @@map("event_positions")
 }
 
 model PositionRequest {
-  cid       Int
-  eventId   Int    @map("event_id")
-  position  String
-  requestId Int    @id(map: "request_id") @default(autoincrement()) @map("request_id")
-  roster    Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
-  event     Event  @relation(fields: [eventId], references: [id], onDelete: Cascade, map: "event_id")
+  cid           Int
+  eventId       Int           @map("event_id")
+  position      String
+  requestId     Int           @id(map: "request_id") @default(autoincrement()) @map("request_id")
+  roster        Roster        @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "cid")
+  event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade, map: "event_id")
+  eventPosition EventPosition @relation(fields: [position], references: [id], onDelete: Cascade, map: "position")
 
   @@map("position_requests")
 }
@@ -79,9 +80,9 @@ model Roster {
   createdAt                                                  DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
   rating                                                     Int
   delCerts                                                   Float               @map("del_certs")
-  gndCerts                                                   Float                 @map("gnd_certs")
-  twrCerts                                                   Float                 @map("twr_certs")
-  appCerts                                                   Float                 @map("app_certs")
+  gndCerts                                                   Float               @map("gnd_certs")
+  twrCerts                                                   Float               @map("twr_certs")
+  appCerts                                                   Float               @map("app_certs")
   ctrCert                                                    Int                 @map("ctr_cert")
   initials                                                   String
   firstName                                                  String              @map("first_name")
@@ -90,7 +91,6 @@ model Roster {
   ratingChanged                                              DateTime?           @default(now()) @map("rating_changed") @db.Timestamptz(6)
   sopCourse                                                  Boolean             @default(false) @map("sop_course")
   controllerSessions                                         ControllerSession[]
-  event_positions                                            EventPosition[]
   events                                                     Event[]
   positionRequests                                           PositionRequest[]
   StaffRoles                                                 StaffRole[]
