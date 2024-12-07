@@ -1,13 +1,13 @@
 <script>
-  //@ts-nocheck
-  import { Card, Button, Toggle } from 'flowbite-svelte';
   import '$lib/app.css';
-  import Navbar from '../../lib/components/Navbar.svelte';
-  import Footer from "../../lib/components/Footer.svelte"
   import Icon from '@iconify/svelte';
   export let data;
   let pageData = data.pageData;
 </script>
+
+<svelte:head>
+  <title>Events - Jacksonville ARTCC</title>
+</svelte:head>
 
 <div style="background-position: 0% 50%; background-size: cover; background-image: url('/KJAXNIGHT.png'); left: 0; top: 0; height: 400px; ">
   <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
@@ -31,14 +31,18 @@
     </nav>
   </div>
 </div>
-<div id="content" class="flex flex-wrap justify-center">
+
+<div id="content" class="flex justify-center mt-3 mb-6">
   {#each pageData.events as event}
-    <Card img="{event.banner}" href="/events/{event.id}" horizontal class="w-full align-middle justify-center justify-items-center m-5 px-5" imgClass="">
-      <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{event.name}</h5>
-      <p class="mb-3 font-normal text-gray-500 leading-tight">Hosted By: {event.host}</p>
-      <p class="mb-3 font-normal text-gray-700 leading-tight">{event.start.toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
-      <p class="mb-3 font-normal text-gray-700 leading-tight"> {event.end.toLocaleString(undefined, {month: 'short',day: 'numeric',year: 'numeric',hour: 'numeric',minute: 'numeric',timeZoneName: 'short'})}</p>
-    </Card>
+    <div class="mx-1 bg-slate-100 rounded-sm">
+      <a href="/events/{event.id}">
+        <img src={event.banner} alt="{event.name} Banner" class="max-w-96" loading="lazy" /> <br>
+        <h3 class="text-xl">{event.name}</h3>
+        <p>Starts {event.start.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+        {#if pageData.canEdit && event.hidden}
+          <p class="text-red-500">Hidden</p>
+        {/if}
+      </a>
+    </div>
   {/each}
 </div>
-<Footer />

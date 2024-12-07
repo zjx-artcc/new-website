@@ -1,5 +1,5 @@
 import { prisma, getCertsColor, getCtrCertColor, getRating } from '$lib/db';
-import type { roster } from '@prisma/client';
+import type { Roster } from '@prisma/client';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
@@ -8,9 +8,9 @@ export async function load({ params, cookies, locals }) {
   let pageData = new PageData()
 
   //Fetch all users in roster
-  const data: roster[] = await prisma.roster.findMany({
+  const data: Roster[] = await prisma.roster.findMany({
     orderBy: {
-      last_name: 'asc'
+      lastName: 'asc'
     }
   })
 
@@ -18,22 +18,22 @@ export async function load({ params, cookies, locals }) {
   for(let i = 0; i < data.length; i++) {
     //Create roster member object
     let member: RosterData = {
-      name: `${data[i].first_name} ${data[i].last_name}`,
+      name: `${data[i].firstName} ${data[i].lastName}`,
       cid: Number(data[i].cid),
       initials: data[i].initials,
-      home_facility: data[i].home_facility,
+      homeFacility: data[i].homeFacility,
       rating: getRating(Number(data[i].rating)),
-      delCerts: getCertsColor(data[i].del_certs),
-      gndCerts: getCertsColor(data[i].gnd_certs),
-      twrCerts: getCertsColor(data[i].twr_certs),
-      appCerts: getCertsColor(data[i].app_certs),
-      ctrCert: getCtrCertColor(Number(data[i].ctr_cert))
+      delCerts: getCertsColor(data[i].delCerts),
+      gndCerts: getCertsColor(data[i].gndCerts),
+      twrCerts: getCertsColor(data[i].twrCerts),
+      appCerts: getCertsColor(data[i].appCerts),
+      ctrCert: getCtrCertColor(Number(data[i].ctrCert))
     }
 
     console.log(member);
 
     //Sort into different arrays
-    if (data[i].home_facility == "ZJX") {
+    if (data[i].homeFacility == "ZJX") {
       pageData.home.push(member)
     } else {
       pageData.visiting.push(member)
@@ -58,7 +58,7 @@ type RosterData = {
   cid: number;
   rating: string;
   initials: string;
-  home_facility: string;
+  homeFacility: string;
   delCerts: { cert: string; color: string };
   gndCerts: { cert: string; color: string };
   twrCerts: { cert: string; color: string };

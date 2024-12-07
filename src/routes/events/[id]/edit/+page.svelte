@@ -3,6 +3,7 @@
   import '$lib/app.css';
   import Navbar from '$lib/components/Navbar.svelte';
   import Icon from '@iconify/svelte';
+  import { goto } from '$app/navigation';
   import { required, useForm, validators } from 'svelte-use-form'
 
   export let data;
@@ -10,16 +11,21 @@
   
   const form = useForm();
   let event = pageData.event;
-  let positions = event.positions;
-  let columns = ['Position', 'Controller']
+  let positions = pageData.positions;
+  let columns = ['Position', 'Controller', 'Remove']
+  let newPosition = '';
 
   function addRow() {
-    positions.push({position: '', controller: ''});
+    positions.push({position: newPosition, controller: ''});
     positions = positions;
-    console.log(positions);
+    newPosition = '';
   }
 
 </script>
+
+<svelte:head>
+  <title>Editing {event.name} - Jacksonville ARTCC</title>
+</svelte:head>
 
 <header class="bg-gray-700 block" id="myTopnav">
   <div class="relative -z-1">
@@ -27,7 +33,7 @@
     <div class="relative -z-3">
       <div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
         <img src="/ZJX-Light-Logo.png" height="100" width="100" alt="" srcset="" />
-        <h1 class="text-6xl text-white font-bold pt-3">Update {pageData.event.name}</h1>
+        <h1 class="text-6xl text-white pt-3">Editing <b>{pageData.event.name}</b></h1>
       </div>
     </div>
   </div>
@@ -90,7 +96,7 @@
                 <td>
                   <label for="hidden" class="pb-1">Hide Event:</label>
                   <br>
-                  <input name="hidden" id="hidden" type="checkbox" checked bind:value={event.hidden}/>
+                  <input name="hidden" id="hidden" type="checkbox" bind:checked={event.hidden}/>
                 </td>
               </tr>
             </table>
