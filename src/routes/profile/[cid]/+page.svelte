@@ -29,7 +29,7 @@
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
       <a href="/roster" class="text-sky-500">Roster</a>
 			<Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/profile/{pageData.user.cid}" class="text-sky-500">{pageData.user.cid}</a>
+      <a href="/profile/{pageData.user.cid}" class="text-sky-500">{pageData.user.firstName} {pageData.user.lastName}</a>
     </nav>
   </div>
 </div>
@@ -223,7 +223,7 @@
 						<p class="text-blue-500">Submit Feedback</p>
 					{/if}
 					{#if pageData.canEdit}
-						<p><a href="/profile/{pageData.certs.cid}/manage" class="text-blue-500">Edit User</a></p>
+						<p><a href="/profile/{pageData.user.cid}/manage" class="text-blue-500">Edit User</a></p>
 					{/if}
 					{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.user.cid.toString()}
 						<p class="text-red-500"><a href="/logout">Log Out</a></p>

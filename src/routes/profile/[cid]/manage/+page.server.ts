@@ -1,9 +1,10 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
-import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
-import type { Roster, ControllerSession } from '@prisma/client';
+import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor } from '$lib/db';
 
-/** @type {import('./$types').PageLoad} */
-export async function load({ params, cookies, locals }) {
+import type { Roster,  } from '@prisma/client';
+import type { Actions, PageServerLoad } from './$types.js';
+
+export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   // Make sure valid parameter is passed
   if (params.cid == undefined) {
     svelteError(404, 'User not found');
@@ -50,25 +51,34 @@ export async function load({ params, cookies, locals }) {
   //Process them
   for (let i = 0; i < roles.length; i++) {
     switch(roles[i].role) {
-      case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "bg-sky-500"}); break;
-      case "WM": pageData.staffRoles.push({name: "Web Master", color: "bg-sky-500"} ); break;
-      case "FE": pageData.staffRoles.push({name: "Facility Engineer", color: "bg-sky-500"}); break;
-      case "WT": pageData.staffRoles.push({name: "Web Team", color: "bg-red-500"}); break;
+      case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "bg-red-500"}); break;
+      case "DATM": pageData.staffRoles.push({name: "Deputy Air Traffic Manager", color: "bg-red-500"}); break;
+      case "TA": pageData.staffRoles.push({name: "Training Administrator", color: "bg-sky-500"}); break;
+      case "INS": pageData.staffRoles.push({name: "Instructor", color: "bg-sky-500"}); break;
+      case "MTR": pageData.staffRoles.push({name: "Mentor", color: "bg-sky-500"}); break;
+      case "WM": pageData.staffRoles.push({name: "Web Master", color: "bg-pink-500"} ); break;
+      case "AWM": pageData.staffRoles.push({name: "Assistant Web Master", color: "bg-pink-500"} ); break;
+      case "FE": pageData.staffRoles.push({name: "Facility Engineer", color: "bg-yellow-600"}); break;
+      case "AFE": pageData.staffRoles.push({name: "Assistant Facility Engineer", color: "bg-yellow-600"}); break;
+      case "EC": pageData.staffRoles.push({name: "Events Coordinator", color: "bg-purple-500"}); break;
+      case "AEC": pageData.staffRoles.push({name: "Assistant Events Coordinator", color: "bg-purple-500"}); break;
       default: break;
     }
+    pageData.staffRoleSelection.push(roles[i].role);
   }
   return {pageData: {...pageData}};
 }
 
-/** @type {import('./types').Actions} */
-export const actions = {
-  default: async({cookies, request, params}) => {
+export const actions: Actions = {
+  default: async({request, params}) => {
     const formData = await request.formData();
+
     let user: Roster = await prisma.roster.findUnique({
       where: {
         cid: parseInt(params.cid)
       }
     });
+
     if (user == null) {
       return {
         status: 404,
@@ -77,11 +87,6 @@ export const actions = {
         }
       }
     } else {
-      // Sanitize data from database
-      // For some reason bigints are turned with n
-      // Example: The number stored is 5, it returns 5n
-      user.cid = user.cid;
-      user.rating = user.rating;
       user.mentorLevel = BigInt(user.mentorLevel);
 
       // Update certifications based on the form data
@@ -92,6 +97,23 @@ export const actions = {
       user.ctrCert = getCtrCertInt(formData.get('enroute').toString());
 
       let staffRoles = formData.getAll('roles');
+      console.log(staffRoles);
+      
+      for(let i = 0; i < staffRoles.length; i++) {
+        let role = await prisma.staffRole.upsert({
+          where: {
+            cid_role: {
+              cid: user.cid,
+              role: staffRoles[i].toString()
+            }
+          },
+          create: {
+            cid: user.cid,
+            role: staffRoles[i].toString()
+          },
+          update: {}
+        })
+      }
 
       let update = await prisma.roster.update({
         where: {
@@ -154,6 +176,7 @@ class PageData {
   };
   sessions: Sessions[];
   staffRoles: StaffRoles[];
+  staffRoleSelection: string[];
 
   constructor() {
     this.onRoster = false;
@@ -168,6 +191,7 @@ class PageData {
     };
     this.sessions = [];
     this.staffRoles = [];
+    this.staffRoleSelection = [];
   }
 }
 
