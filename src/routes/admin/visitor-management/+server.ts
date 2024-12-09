@@ -1,97 +1,42 @@
-/* IMPORTANT ERROR CODES AND DESCRIPTIONS:
-200 - OK
-403 - Forbidden (API key invalid; vatusa)
-401 - user already exists (serverside; db.ts)
-
-REQUESTS:
-POST: adds users to roster
-PUT: declines visitor application
-DELETE: removes visitor from roster
-*/
-
-//@ts-nocheck
-import { prisma, addUserToRoster, updateVisitRequest } from '$lib/db';
-import { validateSessionToken } from '$lib/oauth.js';
+import { prisma, updateVisitRequest } from '$lib/db.ts'
+import { addVisitorToVatusa } from '$lib/vatusaApi.js';
 /** @type {import('./$types').RequestHandler} */
 
-export const POST = async ({ request, cookies }): Promise<Response> => {
+export const POST = async ({ request, cookies, locals }): Promise<Response> => {
 	// Verify user is approved
 	try {
-		const auth_session = cookies.get("auth_session")
-		const sessionreq = await prisma.webSession.findUnique({
-				where: {
-						id: auth_session
-				}}
-		)
-		const { requestId, actionMessage, operatingInitials } = await request.json();
-		const{session, user} = await validateSessionToken(auth_session)
-
-			// If user is not ATM or DATM in production do not let them use request
-		if(process.env.NODE_ENV != "development" && (user.roles == "ATM" || user.roles == "DATM")) {
-			return new Response(
-				"Invalid user roles",
-				{
-					status: 401
-				}
-			)
-		}
-
-		// Get visit request data from DB
-		const visitRequest = await prisma.visitRequest.findFirst({
-			select: {
-				cid: true
-			},
-			where: {
-				id: requestId,
-				reviewed: false
-			}
-		})
-
-		if (visitRequest) {
-			// VATUSA API call to add visitor to roster
-			const vatusaReq = await fetch(
-				`https://api.vatusa.net/v2/facility/zjx/roster/manageVisitor/${visitRequest.cid}`,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						
-					},
-					body: JSON.stringify({'apikey': process.env.VATUSA_KEY})
-				}
-			);
-	
-			if (vatusaReq.status == 200) {
-					const req = await updateVisitRequest(requestId, user.id, actionMessage, true)
-					if (req.status) {
-						return new Response(`User ${visitRequest.cid} added to roster`, {
-							status: 200,
-							statusText: vatusaReq.statusText
-						})
-					}	
-			} else if (vatusaReq.status == 400) {
-				if(await updateVisitRequest(requestId, user.id, "AUTOADMIN - User already on visiting roster", false).status== 200) {
-					return new Response("User already on visiting roster", {status: 400,});
-				}
-			} else if (vatusaReq.status == 401) {
-				return new Response("Unauthorized", {status: 401});
-			} else if (vatusaReq.status == 404) {
-				await updateVisitRequest(requestId, user.id, "User not found on VATUSA roster", false)
-				return new Response("User not found.",{status: 404})
-			}
-			return new Response("Please send this to the developers.",
-				{
-					status: 500
-				}
-			)
-		} else {
-			return new Response("Visit request already reviewed.",
-				{
-					status: 500
-				}
-			)
-		}
+		const { requestId, actionMessage } = await request.json();
 		
+		const vatusaResponse = await addVisitorToVatusa(requestId, locals.user.id)
+		let statusText: string
+		console.log(vatusaResponse)
+		
+		// NOTE: updateVisitRequest arg #2 uses the cid of the submitting user, NOT the CID of the visit request.
+		switch(vatusaResponse.status) {
+			case 200:
+				const req = await updateVisitRequest(requestId, locals.user.id, actionMessage, true)
+				statusText = `Visitor approved!`
+				break
+			case 401:
+			case 403:
+				statusText = `Unauthorized - VATUSA`
+				break
+			case 404:
+				statusText = "User not found on VATUSA roster."
+				await updateVisitRequest(requestId, locals.user.id, statusText, false)
+				break
+			case 405:
+				statusText = "User not authorized. Must be ATM, DATM, or WM."
+			case 422:
+				statusText = "User already on visiting roster."
+				await updateVisitRequest(requestId, locals.user.id, statusText, false)
+				break
+			default:
+				statusText = "Unknown error occured"
+				break
+		}
+
+		return new Response(statusText, {status: vatusaResponse.status})
  	} catch(error) {
 		console.error(error)
 		return new Response(
@@ -103,7 +48,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 	}
 };
 
-export const DELETE = async ({ request, cookies }): Promise<Response> => {
+export const DELETE = async ({ request, cookies, locals }): Promise<Response> => {
 	try {
 		// Verify user is approved
 		const auth_session = cookies.get("auth_session")
@@ -113,9 +58,8 @@ export const DELETE = async ({ request, cookies }): Promise<Response> => {
 				}}
 		)
 		const { requestId, actionMessage} = await request.json();
-		const{session, user} = await validateSessionToken(auth_session)
 
-		if((await updateVisitRequest(requestId, user.id, actionMessage, false)).status == 200) {
+		if((await updateVisitRequest(requestId, locals.user.id, actionMessage, false)).status == 200) {
 			notifyUser(requestId, actionMessage)
 			return new Response(null, {status: 200})
 		}
