@@ -2,39 +2,43 @@
   import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
   import { ChevronDownSolid } from 'flowbite-svelte-icons';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
+	import type { Roster } from '@prisma/client';
 
   export let data
-  let confirmationScreenClass: string = "hidden"
-
+  let popupClass: string = "hidden"
+  let activeScreen: string = ""
+  let confirmationScreenAction: string = ""
 	let responseBox: ResponseBox = {
 		bgColor: "",
 		header: "",
 		text: "",
 		hidden: true
 	}
-  const removeUserInfo: RosterData = {
+  const removeUserInfo = {
     name: "",
     cid: 0,
-    home_facility: ""
+    home_facility: "",
+    reason: ""
   }
 
-  const hideConfirmationScreen = () => {
-		confirmationScreenClass = 'hidden';
+  const hidePopup = () => {
+		popupClass = 'hidden';
     document.body.style.overflow = 'scroll'
 	};
 
-	const showConfirmationScreen = (cid: number) => {
-			for(let i = 0; i < data.roster.length; i++){
-        if (data.roster[i].cid == cid) {
-          confirmationScreenClass = '';
-          removeUserInfo.name = data.roster[i].name
-          removeUserInfo.cid = data.roster[i].cid
-          removeUserInfo.home_facility = data.roster[i].home_facility
+  const showPopup = (screen: string) => {
+    popupClass = ''
+    activeScreen = screen
+  }
+
+	const showConfirmationScreen = (controller: RosterData, action) => {
+          confirmationScreenAction = action
+          showPopup('removeUser')
+          removeUserInfo.name = controller.name
+          removeUserInfo.cid = controller.cid
+          removeUserInfo.home_facility = controller.home_facility
           window.scrollTo({top:0})
           document.body.style.overflow = 'hidden'
-        }
-      }
-			
 	};
 
   const sendDeleteUserRequest = async() => {
@@ -46,7 +50,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ cid: removeUserInfo.cid })
+          body: JSON.stringify({ cid: removeUserInfo.cid, reason: removeUserInfo.reason })
         }
       );
 
@@ -64,7 +68,15 @@
   type RosterData = {
     name: string;
     cid: number;
+    rating: string;
+    initials: string;
     home_facility: string;
+    delCerts: { cert: string; color: string };
+    gndCerts: { cert: string; color: string };
+    twrCerts: { cert: string; color: string };
+    appCerts: { cert: string; color: string };
+    ctrCert: { cert: string; color: string };
+    dropdownOpen: boolean
   }
 
   type ResponseBox = {
@@ -108,14 +120,14 @@
           <td class="text-center align-center border-2 border-solid px-2 bg-{controller.ctrCert.color}"><p class="px-1 py-1 rounded-md text-white">{controller.ctrCert.cert}</p></td>
           <td class="text-center align-center border-2 border-solid px-2 ">
             <Button><ChevronDownSolid class="text-black w-3 h-3 flex justify-center"/></Button>
-            <Dropdown class="p-2 flex flex-col z-0">
+            <Dropdown class="p-2 flex flex-col z-0" bind:open={controller.dropdownOpen}>
               <DropdownItem class="rounded-md font-bold text-md hover:transition-colors hover:bg-gray-200 border-b-4"><p class="">{`${controller.name} (${controller.rating})`}</p></DropdownItem>
               <DropdownItem class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}`}>View Profile</DropdownItem>
               <DropdownItem class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}`}>View Activity Summary</DropdownItem>
               <DropdownItem class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}`}>View Training Summary</DropdownItem>
               <DropdownItem class={`rounded-md text-left hover:transition-colors hover:bg-gray-200 ${`border-b-2`}`}>View VATUSA Action Summary</DropdownItem>
               {#if data.isAdmin}
-                <DropdownItem class="rounded-md text-left text-red-500 font-bold hover:transition-colors hover:bg-gray-200" on:click={() => {showConfirmationScreen(controller.cid)}}>Remove User</DropdownItem>
+                <DropdownItem class="rounded-md text-left text-red-500 font-bold hover:transition-colors hover:bg-gray-200" on:click={() => {controller.dropdownOpen = false; showConfirmationScreen(controller, "Remove User")}}>Remove User</DropdownItem>
               {/if}
             </Dropdown>
           </td>
@@ -124,31 +136,38 @@
     </tbody>
   </table>
 
-  <div id="confirmation-screen" class={`${confirmationScreenClass} z-20 top-0 absolute w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50`}>
-		<div class="z-50 flex flex-col items-center place-items-center bg-gray-200 w-96">
-			<h2 class="text-sky-500 font-bold text-2xl top-5 mt-5">Confirm Actions</h2>
+  <div id="confirmation-screen" class={`${popupClass} z-20 left-0 top-0 absolute w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50`}>
+		{#if activeScreen == "removeUser"}
+      <div class="z-50 flex flex-col items-center place-items-center bg-gray-200 w-96">
+        <h2 class="text-sky-500 font-bold text-2xl mt-2 mb-5">Confirm Sudo Action</h2>
 
-			<div>
-				<p class="text-xl px-5 mb-2">Remove User from Roster:</p>
-        <div class="flex-col flex gap-y-1 bg-gray-500 p-2">
-          <h4 class="text-white">Name: {removeUserInfo.name}</h4>
-          <h4 class="text-white">CID: {removeUserInfo.cid}</h4>
-          <h4 class="text-white">Home Facility: {removeUserInfo.home_facility}</h4>
+        <div>
+          <div class="flex-col flex gap-y-1 bg-sky-800 p-2">
+            <h4 class="text-white font-bold">Action: {confirmationScreenAction}</h4>
+            <h4 class="text-white">Name: {removeUserInfo.name}</h4>
+            <h4 class="text-white">CID: {removeUserInfo.cid}</h4>
+            <h4 class="text-white">Home Facility: {removeUserInfo.home_facility}</h4>
+
+            <div>
+              <h4 class="text-amber-500 font-semibold">Enter removal reason:</h4>
+              <input type="text" bind:value={removeUserInfo.reason}/>
+            </div>
+          </div>
+          <h4 class="text-red-500 font-bold text-lg">This action cannot be undone.</h4>
         </div>
-        <h4 class="text-red-500 font-bold text-lg">This action cannot be undone.</h4>
-			</div>
 
-			<div class="flex my-5">
-				<button
-					class="bg-red-500 p-3 mx-2 w-24 font-semibold rounded-md"
-          on:click={() => hideConfirmationScreen()}>
-					Cancel
-				</button>
+        <div class="flex my-5">
+          <button
+            class="bg-red-500 p-2 mx-2 w-24 font-semibold rounded-md"
+            on:click={() => hidePopup()}>
+            Cancel
+          </button>
 
-				<button class="bg-green-500 p-3 w-24 font-semibold rounded-md ml-5" on:click={() => {hideConfirmationScreen(); sendDeleteUserRequest()}}>
-					Confirm
-				</button>
-			</div>
-		</div>
+          <button class="bg-green-500 p-2 w-24 font-semibold rounded-md ml-5" on:click={() => {hidePopup(); sendDeleteUserRequest()}}>
+            Confirm
+          </button>
+        </div>
+      </div>
+    {/if}
 	</div>
 </div>

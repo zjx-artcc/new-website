@@ -22,7 +22,8 @@ export const load = async({locals}) => {
     gndCerts: getCertsColor(visitingMemberTable[i].gnd_certs),
     twrCerts: getCertsColor(visitingMemberTable[i].twr_certs),
     appCerts: getCertsColor(visitingMemberTable[i].app_certs),
-    ctrCert: getCtrCertColor(Number(visitingMemberTable[i].ctr_cert))
+    ctrCert: getCtrCertColor(Number(visitingMemberTable[i].ctr_cert)),
+    dropdownOpen: false
   }
   
   roster.push(member)
@@ -36,14 +37,15 @@ export const load = async({locals}) => {
 
 
 type RosterData = {
-name: string;
-cid: number;
-rating: string;
-initials: string;
-home_facility: string;
-delCerts: { cert: string; color: string };
-gndCerts: { cert: string; color: string };
-twrCerts: { cert: string; color: string };
-appCerts: { cert: string; color: string };
-ctrCert: { cert: string; color: string };
+  name: string;
+  cid: number;
+  rating: string;
+  initials: string;
+  home_facility: string;
+  delCerts: { cert: string; color: string };
+  gndCerts: { cert: string; color: string };
+  twrCerts: { cert: string; color: string };
+  appCerts: { cert: string; color: string };
+  ctrCert: { cert: string; color: string };
+  dropdownOpen: boolean
 }

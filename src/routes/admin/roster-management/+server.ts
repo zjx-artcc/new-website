@@ -10,11 +10,12 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 	let status: number
 	let statusText: string
 	let response: Promise<Response>
+
 	try {
 		// Verify user is approved
 		if (await getStaffRoles(locals.user.id, "admin")) {
-			const {cid} = await request.json()
-			
+			const {cid, reason} = await request.json()
+			console.log(reason)
 			const user = await prisma.roster.findFirst({
 				select: {
 					home_facility: true
@@ -25,19 +26,18 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 			})
 
 			const isHomeController: boolean = user.home_facility == "ZJX" ? true : false
-
 			// NOTE: both of these functions take the user submitting the request as the second argument.
 			if (isHomeController) {
-				response = await deleteHomeUser(cid, locals.user.cid)
+				response = await deleteHomeUser(cid, locals.user.id, reason)
 				status = response.status
 			} else {
-				response = await deleteVisitingUser(cid, locals.user.cid)
+				response = await deleteVisitingUser(cid, locals.user.id, reason)
 				status = response.status
 			}
-			console.log(response.status)
+
 			switch(response.status) {
 				case 200:
-					statusText = `Visitor approved!`
+					statusText = `User removed.`
 					break
 				case 401:
 				case 403:
@@ -50,6 +50,9 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 					statusText = "User not authorized. Must be ATM, DATM, or WM."
 				case 422:
 					statusText = "User already on visiting roster."
+					break
+				case 400:
+					statusText = "Bad Request"
 					break
 				default:
 					statusText = "Unknown error occured"

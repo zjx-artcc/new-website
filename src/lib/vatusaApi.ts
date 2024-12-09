@@ -6,18 +6,18 @@ export const deleteHomeUser = async(cid: number, actionCid: number, reason: stri
     if(await getStaffRoles(actionCid, "admin")) {
         // VATUSA API call to add visitor to roster
         const vatusaReq = await fetch(
-          `https://api.vatusa.net/v2/facility/zjx/roster/${cid}`,
+          `https://api.vatusa.net/v2/facility/zjx/roster/${cid}?apikey=${process.env.VATUSA_KEY}`,
           {
             method: 'DELETE',
             headers: {
-              'accept': '*/*',
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'X-API-KEY': process.env.VATUSA_KEY
+              'Content-Type': 'application/json'
             },
-            //: JSON.stringify({'apikey': process.env.VATUSA_KEY})
+            body: JSON.stringify({'reason': reason, 'by': actionCid})
           }
         );
-        console.log(vatusaReq)
+
+        console.log(`VATUSA API: DELETE ${cid} from roster by user ${actionCid} for ${reason} - STATUS ${vatusaReq.status}`)
+
         return new Response(null, {status: vatusaReq.status})
     } else {
       return new Response("User not authorized", {status: 405})
@@ -28,22 +28,22 @@ export const deleteHomeUser = async(cid: number, actionCid: number, reason: stri
   }
 }
 
-export const deleteVisitingUser = async(cid: number, actionCid: number, reason) => {
+export const deleteVisitingUser = async(cid: number, actionCid: number, reason: string) => {
   console.log(cid)
   try {
     if(await getStaffRoles(actionCid, "admin")) {
         // VATUSA API call to add visitor to roster
         const vatusaReq = await fetch(
-          `https://api.vatusa.net/v2/facility/zjx/roster/manageVisitor/${cid}`,
+          `https://api.vatusa.net/v2/facility/zjx/roster/manageVisitor/${cid}?apikey=${process.env.VATUSA_KEY}`,
           {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
-              'apikey': process.env.VATUSA_KEY
             },
-            body: JSON.stringify({'reason': reason, 'apikey': process.env.VATUSA_KEY} )
+            body: JSON.stringify({'reason': reason} )
           }
         );
+        console.log(`VATUSA API: DELETE visitor ${cid} from roster by user ${actionCid} for ${reason} - STATUS ${vatusaReq.status}`)
 
         return new Response(null, {status: vatusaReq.status})
     } else {
@@ -69,16 +69,12 @@ export const addVisitorToVatusa = async(requestId: number, actionCid) => {
       if (visitRequest) {
         // VATUSA API call to add visitor to roster
         const vatusaReq = await fetch(
-          `https://api.vatusa.net/v2/facility/zjx/roster/manageVisitor/${visitRequest.cid}`,
+          `https://api.vatusa.net/v2/facility/zjx/roster/manageVisitor/${visitRequest.cid}?apikey=${process.env.VATUSA_KEY}`,
           {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({'apikey': process.env.VATUSA_KEY})
           }
         );
-        console.log(vatusaReq)
+        console.log(`VATUSA API: POST visitor ${visitRequest.cid} to roster - STATUS ${vatusaReq.status}`)
 
         return new Response(null, {status: vatusaReq.status})
       } else {
