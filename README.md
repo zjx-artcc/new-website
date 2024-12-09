@@ -1,3 +1,8 @@
+# ZJX Website
+## Useful Links
+https://vatusa-api.ztlartcc.org/
+
+
 ## Developing
 
 Once you've created a project and installed dependencies with `pnpm install`, start a development server:
