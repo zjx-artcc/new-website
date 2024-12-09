@@ -92,6 +92,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     select: {
       callsign: true,
       start: true,
+      frequency: true,
       roster: {
         select: {
           first_name: true,
@@ -117,7 +118,8 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       callsign: onlineData[i].callsign,
       homeController: onlineData[i].roster.home_facility == "ZJX" ? true : false,
       start: onlineData[i].start,
-      rating: getRating(onlineData[i].roster.rating)
+      rating: getRating(onlineData[i].roster.rating),
+      frequency: onlineData[i].frequency
     }
 
     pageData.online.push(controller);
@@ -172,4 +174,5 @@ type OnlineController = {
   start: Date;
   rating: string;
   homeController: boolean;
+  frequency: string;
 }

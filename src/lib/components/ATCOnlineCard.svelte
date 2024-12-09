@@ -6,6 +6,7 @@
   export let name: string;
   export let start: Date;
   export let homeController: boolean;
+  export let frequency: string;
   let visibility: string = 'hidden'
   const showDialog = () => {
     visibility = ""
@@ -24,10 +25,12 @@
 
 
 <a href="/profile/1697197" on:mouseenter={showDialog} on:mouseleave={hideDialog}>
-  <div class="px-3 py-2 flex flex-row justify-between transition hover:bg-sky-300">
-    <h4 class="font-bold text-sm text-gray-700">{position}</h4>
-    <h4 class="text-sm justify-self-end">{name} ({rating})</h4>
-  
+  <div class="transition hover:bg-sky-300 rounded-lg">
+    <div class="px-3 py-2 flex flex-row justify-between">
+      <h4 class="font-bold text-sm text-gray-700">{position}</h4>
+      <h4 class="text-sm justify-self-end">{name} ({rating})</h4>  
+    </div>
+    
     <div class={`absolute translate-x-24 transition ease-linear w-72 bg-sky-200 rounded-md ${visibility}`}>
       <div class="border-b-2 p-2 border-black">
         <div class="flex gap-x-2">
@@ -42,7 +45,11 @@
       </div>
 
       <div class="p-2">
-        <h4 class="font-bold">{position}</h4>
+        <div class="flex flex-row justify-between">
+          <h4 class="font-bold">{position}</h4>
+          <h4 class="font-light text-lg text-gray-700">{frequency}</h4>
+        </div>
+
         <h4>Online for {getTimeString(start)}</h4>
 
         <div class="mt-2 flex justify-evenly gap-x-2">

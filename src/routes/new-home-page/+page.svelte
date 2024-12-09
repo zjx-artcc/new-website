@@ -60,7 +60,6 @@
 	<div class="gap-x-5 justify-center items-start my-10 lg:my-20 gap-y-2 flex flex-row flex-wrap">
 		<HomepageCard bgColor="bg-sky-100">
 			{#if data.pageData.online.length == 0}
-			{data.pageData.online.length}
 			<div class="p-4">
 				<h1 class="font-semibold text-2xl">No controllers online</h1>
 				<h2>There are currently no controllers online right now. Check back soon!</h2>
@@ -72,7 +71,7 @@
 
 			<div>
 				{#each data.pageData.online as controller}
-					<AtcOnlineCard position={controller.callsign} name={`${controller.firstName} ${controller.lastName}`} rating={controller.rating} homeController={controller.homeController} start={controller.start}/>
+					<AtcOnlineCard position={controller.callsign} name={`${controller.firstName} ${controller.lastName}`} rating={controller.rating} homeController={controller.homeController} start={controller.start} frequency={controller.frequency}/>
 				{/each}
 			</div>
 				
