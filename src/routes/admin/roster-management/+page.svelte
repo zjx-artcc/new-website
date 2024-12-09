@@ -49,8 +49,17 @@
           body: JSON.stringify({ cid: removeUserInfo.cid })
         }
       );
+
+      displayFeedbackBox(request.status == 200 ? 'bg-green-500' : 'bg-red-500', 'Success', await request.text().then((text) => {return text}))
     }
   }
+
+  const displayFeedbackBox = async (color, headerText, bodyText) => {
+		responseBox.bgColor = color
+		responseBox.header = headerText
+		responseBox.text = bodyText
+		responseBox.hidden = false
+	};
 
   type RosterData = {
     name: string;

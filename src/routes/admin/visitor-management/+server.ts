@@ -1,16 +1,14 @@
-import { prisma, updateVisitRequest } from '$lib/db.ts'
+import { getStaffRoles, prisma, updateVisitRequest } from '$lib/db.ts'
 import { addVisitorToVatusa } from '$lib/vatusaApi.js';
 /** @type {import('./$types').RequestHandler} */
 
 export const POST = async ({ request, cookies, locals }): Promise<Response> => {
-	// Verify user is approved
 	try {
 		const { requestId, actionMessage } = await request.json();
 		
 		const vatusaResponse = await addVisitorToVatusa(requestId, locals.user.id)
 		let statusText: string
-		console.log(vatusaResponse)
-		
+
 		// NOTE: updateVisitRequest arg #2 uses the cid of the submitting user, NOT the CID of the visit request.
 		switch(vatusaResponse.status) {
 			case 200:
@@ -51,17 +49,11 @@ export const POST = async ({ request, cookies, locals }): Promise<Response> => {
 export const DELETE = async ({ request, cookies, locals }): Promise<Response> => {
 	try {
 		// Verify user is approved
-		const auth_session = cookies.get("auth_session")
-		const sessionreq = await prisma.webSession.findUnique({
-				where: {
-						id: auth_session
-				}}
-		)
 		const { requestId, actionMessage} = await request.json();
 
 		if((await updateVisitRequest(requestId, locals.user.id, actionMessage, false)).status == 200) {
 			notifyUser(requestId, actionMessage)
-			return new Response(null, {status: 200})
+			return new Response("Rejected!", {status: 200})
 		}
 	} catch (error) {
 		console.error(error)

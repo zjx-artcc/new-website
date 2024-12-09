@@ -213,19 +213,21 @@ export function getCtrCertColor(input: number): {cert: string, color: string} {
 
 export const updateVisitRequest = async(requestId, actionCid, actionMessage, wasAccepted: boolean): Promise<Response> => {
   try {
-    await prisma.visitRequest.update({
-      where: {
-        id: requestId
-      },
-      data: {
-        reviewed: true,
-        action_cid: actionCid,
-        action_message: actionMessage,
-        action_date: new Date(),
-        accepted: wasAccepted
-      }
-    })
-
+    if (getStaffRoles(actionCid, "admin")) {
+      await prisma.visitRequest.update({
+        where: {
+          id: requestId
+        },
+        data: {
+          reviewed: true,
+          action_cid: actionCid,
+          action_message: actionMessage,
+          action_date: new Date(),
+          accepted: wasAccepted
+        }
+      })
+    }
+    
     return new Response("Update Success", {
       status: 200
     })
