@@ -214,8 +214,8 @@
 				</h3>
 				<hr class="px-1 border-slate-300">
 				<div>
-					{#if pageData.certs.cid == $page.data.session.userId && pageData.onRoster}
-						<p class="text-blue-500">Request Training</p>
+					{#if pageData.user.cid == $page.data.session.userId && pageData.onRoster}
+						<a href="/training/requests/new" class="text-blue-500">Request Training</a>
 						<p class="text-blue-500">Request LOA</p>
 					{/if}
 					{#if !pageData.onRoster}
@@ -223,7 +223,7 @@
 						<p class="text-blue-500">Submit Feedback</p>
 					{/if}
 					{#if pageData.canEdit}
-						<p><a href="/profile/{pageData.user.cid}/manage" class="text-blue-500">Edit User</a></p>
+						<p><a href="/profile/{pageData.user.cid}/manage" class="text-amber-500">Edit User</a></p>
 					{/if}
 					{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.user.cid.toString()}
 						<p class="text-red-500"><a href="/logout">Log Out</a></p>
