@@ -1,3 +1,4 @@
+import { getStaffRoles } from '$lib/db';
 import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from '$lib/oauth';
 import type {LayoutServerLoad} from './$types';
 
@@ -12,6 +13,7 @@ export const load: LayoutServerLoad = async (event) => {
     return {}
   }
   setSessionTokenCookie(event, token, session.expiresAt);
-  return { "session": {...session, user} }
+  const canSeeAdmin: boolean = await getStaffRoles(user.id, "event") || await getStaffRoles(user.id, "admin") || await getStaffRoles(user.id, "training") 
+  return { "session": {...session, user}, "canViewAdmin": canSeeAdmin }
 
 }

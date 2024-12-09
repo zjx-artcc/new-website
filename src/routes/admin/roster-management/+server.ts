@@ -1,24 +1,15 @@
 
 
 //@ts-nocheck
-import { prisma, addUserToRoster, updateVisitRequest, getStaffRoles } from '$lib/db';
+import { prisma, addUserToRoster, getStaffRoles } from '$lib/db';
 import { deleteHomeUser, deleteVisitingUser } from '$lib/vatusaApi.js';
 
 /** @type {import('./$types').RequestHandler} */
 
-
-
-export const POST = async ({ request, locals }): Promise<Response> => {
-	// Verify user is approved
-	if (await getStaffRoles(locals.user.id, "admin")) {
-		const vatusaResponse = await addVisitorToVatusa(requestId, locals.user.id)
-		let statusText: string
-	}
-};
-
 export const DELETE = async ({ request, cookies, locals }): Promise<Response> => {
 	let status: number
 	let statusText: string
+	let response: Promise<Response>
 	try {
 		// Verify user is approved
 		if (await getStaffRoles(locals.user.id, "admin")) {
@@ -36,19 +27,17 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 			const isHomeController: boolean = user.home_facility == "ZJX" ? true : false
 
 			// NOTE: both of these functions take the user submitting the request as the second argument.
-
 			if (isHomeController) {
-				const response = await deleteHomeUser(cid, locals.user.cid)
+				response = await deleteHomeUser(cid, locals.user.cid)
 				status = response.status
 			} else {
-				const reponse = await deleteVisitingUser(cid, locals.user.cid)
+				response = await deleteVisitingUser(cid, locals.user.cid)
 				status = response.status
 			}
-
-			switch(status) {
+			console.log(response.status)
+			switch(response.status) {
 				case 200:
-					const req = await updateVisitRequest(requestId, locals.user.id, actionMessage, true)
-					statusText = `User removed!`
+					statusText = `Visitor approved!`
 					break
 				case 401:
 				case 403:
@@ -56,13 +45,11 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 					break
 				case 404:
 					statusText = "User not found on VATUSA roster."
-					await updateVisitRequest(requestId, locals.user.id, statusText, false)
 					break
 				case 405:
 					statusText = "User not authorized. Must be ATM, DATM, or WM."
 				case 422:
 					statusText = "User already on visiting roster."
-					await updateVisitRequest(requestId, locals.user.id, statusText, false)
 					break
 				default:
 					statusText = "Unknown error occured"
@@ -70,7 +57,7 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 			}
     }
 
-		return new Response(statusText, {status: 200})
+		return new Response(statusText, {status: response.status})
 
 	} catch (error) {
 		console.error(error)

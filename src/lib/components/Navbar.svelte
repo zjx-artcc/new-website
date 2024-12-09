@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
 	//@ts-nocheck
 	import Icon from '@iconify/svelte';
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { ChevronDownOutline, ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
 	import { page } from '$app/stores';
 	import NavbarListItem from './NavbarListItem.svelte';
+  export let canViewAdmin: boolean
 </script>
 
 <div class="w-screen h-20 bg-sky-500 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
@@ -45,6 +46,12 @@
       Feedback
     </Button>
 
+    {#if canViewAdmin}
+      <Button class="text-xl" href="/admin">
+        <Icon icon="mdi:security" class="w-7 h-7 pr-1.5"/>
+        Admin
+      </Button>
+    {/if}
     {#if $page.data.session != null}
       <Button class="text-xl" href="/profile/{$page.data.session.userId}">
         <Icon icon="ic:baseline-person" class="w-7 h-7 pr-1.5"/>

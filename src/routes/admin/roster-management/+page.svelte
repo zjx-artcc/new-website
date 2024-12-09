@@ -37,7 +37,7 @@
 			
 	};
 
-  const deleteUserRequest = async() => {
+  const sendDeleteUserRequest = async() => {
     if(removeUserInfo.cid) {
       const request = await fetch(
         `/admin/roster-management`,
@@ -50,7 +50,7 @@
         }
       );
 
-      displayFeedbackBox(request.status == 200 ? 'bg-green-500' : 'bg-red-500', 'Success', await request.text().then((text) => {return text}))
+      displayFeedbackBox(request.status == 200 ? 'bg-green-500' : 'bg-red-500', request.status == 200? 'Success' : 'Error', await request.text().then((text) => {return text}))
     }
   }
 
@@ -84,8 +84,8 @@
       <tr>
         <th class="text-center border-2 border-solid align-top px-2">Name</th>
         <th class="text-center border-2 border-solid align-top px-2">CID</th>
-        <th class="text-center border-2 border-solid align-top px-2">Rating</th>
-        <th class="text-center border-2 border-solid align-top px-2">Home Facility</th>
+        <th class="text-center border-2 border-solid align-top px-2 w-8">Rating</th>
+        <th class="text-center border-2 border-solid align-top px-2 w-8">Home Facility</th>
         <th class="text-center border-2 border-solid align-top px-2">Delivery Certs</th>
         <th class="text-center border-2 border-solid align-top px-2">Ground Certs</th>
         <th class="text-center border-2 border-solid align-top px-2">Tower Certs</th>
@@ -145,7 +145,7 @@
 					Cancel
 				</button>
 
-				<button class="bg-green-500 p-3 w-24 font-semibold rounded-md ml-5" on:click={() => {hideConfirmationScreen(); deleteUserRequest()}}>
+				<button class="bg-green-500 p-3 w-24 font-semibold rounded-md ml-5" on:click={() => {hideConfirmationScreen(); sendDeleteUserRequest()}}>
 					Confirm
 				</button>
 			</div>

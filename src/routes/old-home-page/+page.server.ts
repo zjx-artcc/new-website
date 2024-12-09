@@ -1,6 +1,6 @@
 import { getHours, getRating, prisma } from '$lib/db';
 
-import type { Stats, User } from '@prisma/client';
+import type { Stats } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 
 const months = ['month_three', 'month_two', 'month_two'];
@@ -8,11 +8,6 @@ const months = ['month_three', 'month_two', 'month_two'];
 export const load: PageServerLoad = async ({ cookies, locals }) => {
   //Setup page data
   let pageData = new PageData();
-
-  // Get current user's first name
-  if (locals.user) {
-    pageData.user = locals.user
-  }
 
   //Fetch top 3 controllers for the month
   let targetMonth = months[(new Date().getUTCMonth() + 1) % 3]; //Current month + 1 is a numerical representation of the month, Modulo 3 returns where it is within the quarter
@@ -66,7 +61,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   }
   //Fetch next 2 events
   const eventsData = await prisma.event.findMany({
-    take: 6,
+    take: 2,
     orderBy: {
       start: 'asc',
     }
@@ -77,8 +72,6 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     let event: Event = {
       name: eventsData[i].name,
       start: eventsData[i].start,
-      end: eventsData[i].end,
-      description: eventsData[i].description,
       id: eventsData[i].id,
       banner: eventsData[i].banner,
       host: eventsData[i].host
@@ -89,19 +82,6 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
 
   //Fetch all online controllers
   const onlineData = await prisma.controllerSession.findMany({
-    select: {
-      callsign: true,
-      start: true,
-      frequency: true,
-      roster: {
-        select: {
-          first_name: true,
-          last_name: true,
-          rating: true,
-          home_facility: true,
-        }
-      }
-    },
     orderBy: {
       start: 'desc'
     },
@@ -112,18 +92,25 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
 
   // Sanitize and push data
   for (let i = 0; i < onlineData.length; i++) {
+    const member = await prisma.roster.findFirst({
+      where: {
+        cid: onlineData[i].cid
+      },
+      select: {
+        first_name: true,
+        last_name: true
+      }
+    });
     let controller: OnlineController = {
-      firstName: onlineData[i].roster.first_name,
-      lastName: onlineData[i].roster.last_name,
+      firstName: member.first_name,
+      lastName: member.last_name,
       callsign: onlineData[i].callsign,
-      homeController: onlineData[i].roster.home_facility == "ZJX" ? true : false,
-      start: onlineData[i].start,
-      rating: getRating(onlineData[i].roster.rating),
-      frequency: onlineData[i].frequency
+      logon: onlineData[i].start
     }
 
     pageData.online.push(controller);
   }
+
 
   return {pageData: { ...pageData }};
 }
@@ -134,7 +121,6 @@ class PageData {
   newControllers: NewController[];
   events: Event[];
   online: OnlineController[];
-  user: User;
   constructor() {
     this.stats = [];
     this.newControllers = [];
@@ -159,9 +145,7 @@ type NewController = {
 
 type Event = {
   name: string;
-  description: string;
   start: Date;
-  end: Date;
   id: number;
   banner: string;
   host: string;
@@ -171,8 +155,5 @@ type OnlineController = {
   firstName: string;
   lastName: string;
   callsign: string;
-  start: Date;
-  rating: string;
-  homeController: boolean;
-  frequency: string;
+  logon: Date;
 }

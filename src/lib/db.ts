@@ -88,7 +88,6 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
 
   data = data.map((role) => role.role);
   let roleString = data.join(",");
-  console.log(roleString);
   switch(type) {
     case "events": {
       if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("EC") || roleString.includes("AEC")) {

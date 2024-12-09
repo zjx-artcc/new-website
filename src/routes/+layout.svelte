@@ -3,11 +3,12 @@
 	import '$lib/app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	export let data
 </script>
 
 <body class="bg-transparent">
 	<div class="z-10">
-		<Navbar />
+		<Navbar canViewAdmin={data.canViewAdmin} />
 	</div>
 
 	<slot />

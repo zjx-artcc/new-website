@@ -1,5 +1,5 @@
 import { prisma, getCertsColor, getCtrCertColor, getRating } from '$lib/db';
-import type { roster } from '@prisma/client';
+import type { Roster } from '@prisma/client';
 
 /** @type {import('./$types').PageLoad} */
 // eslint-disable-next-line no-unused-vars
@@ -8,7 +8,7 @@ export async function load({ params, cookies, locals }) {
   let pageData = new PageData()
 
   //Fetch all users in roster
-  const data: roster[] = await prisma.roster.findMany({
+  const data: Roster[] = await prisma.roster.findMany({
     orderBy: {
       last_name: 'asc'
     }
@@ -29,8 +29,6 @@ export async function load({ params, cookies, locals }) {
       appCerts: getCertsColor(data[i].app_certs),
       ctrCert: getCtrCertColor(Number(data[i].ctr_cert))
     }
-
-    console.log(member);
 
     //Sort into different arrays
     if (data[i].home_facility == "ZJX") {
