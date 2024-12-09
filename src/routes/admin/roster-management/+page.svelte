@@ -37,12 +37,13 @@
           removeUserInfo.name = controller.name
           removeUserInfo.cid = controller.cid
           removeUserInfo.home_facility = controller.home_facility
+          removeUserInfo.reason = ""
           window.scrollTo({top:0})
           document.body.style.overflow = 'hidden'
 	};
 
   const sendDeleteUserRequest = async() => {
-    if(removeUserInfo.cid) {
+    if(removeUserInfo.cid && removeUserInfo.reason.length > 0) {
       const request = await fetch(
         `/admin/roster-management`,
         {
@@ -53,8 +54,9 @@
           body: JSON.stringify({ cid: removeUserInfo.cid, reason: removeUserInfo.reason })
         }
       );
-
       displayFeedbackBox(request.status == 200 ? 'bg-green-500' : 'bg-red-500', request.status == 200? 'Success' : 'Error', await request.text().then((text) => {return text}))
+    } else {
+      displayFeedbackBox('bg-red-500', 'Error', 'Reason must be filled in.')
     }
   }
 
