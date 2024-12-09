@@ -1,13 +1,10 @@
 <script lang="ts">
 	import '$lib/app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
-	import Icon from '@iconify/svelte';
 	import VisitRow from '$lib/components/VisitRow.svelte';
-	import { useForm, required, validators, number } from 'svelte-use-form';
-	import { page } from '$app/stores';
-	import { getRating, prisma } from '$lib/db';
+
+	import { getRating } from '$lib/db';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
-	import { text } from '@sveltejs/kit';
+
 	//import { getRating } from '$lib/db.js';
 	export let data;
 	let visitReason: string = ""
@@ -31,9 +28,6 @@
 				userReason: visitReason
 			})
 		})
-
-
-		console.log(visitRequest.status)
 		if (visitRequest.status == 200) {
 			responseBox.bgColor = "bg-green-500"
 			responseBox.header = "Submitted!"
@@ -52,7 +46,12 @@
 		text: string;
 		hidden: boolean;
 	}
+
 </script>
+
+<svelte:head>
+	<title>Submit Visiting Request - Jacksonville ARTCC</title>
+</svelte:head>
 
 <header class="bg-gray-700" id="myTopnav">
 	<div class="h-52 flex justify-center items-center">
