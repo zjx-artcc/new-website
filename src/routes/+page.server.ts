@@ -95,10 +95,10 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       frequency: true,
       roster: {
         select: {
-          first_name: true,
-          last_name: true,
+          firstName: true,
+          lastName: true,
           rating: true,
-          home_facility: true,
+          homeFacility: true,
         }
       }
     },
@@ -112,20 +112,11 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
 
   // Sanitize and push data
   for (let i = 0; i < onlineData.length; i++) {
-    const member = await prisma.roster.findFirst({
-      where: {
-        cid: onlineData[i].cid
-      },
-      select: {
-        firstName: true,
-        lastName: true
-      }
-    });
     let controller: OnlineController = {
-      firstName: member.firstName,
-      lastName: member.lastName,
+      firstName: onlineData[i].roster.firstName,
+      lastName: onlineData[i].roster.lastName,
       callsign: onlineData[i].callsign,
-      homeController: onlineData[i].roster.home_facility == "ZJX" ? true : false,
+      homeController: onlineData[i].roster.homeFacility == "ZJX" ? true : false,
       start: onlineData[i].start,
       rating: getRating(onlineData[i].roster.rating),
       frequency: onlineData[i].frequency
