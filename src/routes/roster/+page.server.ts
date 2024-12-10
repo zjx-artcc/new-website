@@ -1,9 +1,9 @@
 import { prisma, getCertsColor, getCtrCertColor, getRating } from '$lib/db';
-import type { Roster } from '@prisma/client';
 
-/** @type {import('./$types').PageLoad} */
-// eslint-disable-next-line no-unused-vars
-export async function load({ params, cookies, locals }) {
+import type { Roster } from '@prisma/client';
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async () => {
   //Setup page data
   let pageData = new PageData()
 

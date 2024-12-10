@@ -1,13 +1,8 @@
 <script>
-	// @ts-nocheck
 	import '$lib/app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
 	import Icon from '@iconify/svelte';
 	import Card from '$lib/components/Card.svelte';
-	import EventCard from '$lib/components/EventCard.svelte';
-	import NewsCard from '$lib/components/NewsCard.svelte';
 	import ATCCard from '$lib/components/ATCCard.svelte';
-	import Footer from '$lib/components/Footer.svelte';
 
 	const today = new Date();
 	export let data;

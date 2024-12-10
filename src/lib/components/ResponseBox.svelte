@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
-
     
     export let header: string;
     export let text: string;

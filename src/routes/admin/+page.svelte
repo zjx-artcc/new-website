@@ -1,5 +1,4 @@
 <script>
-    //@ts-nocheck
     import "$lib/app.css"
     import LinkCard from "$lib/components/LinkCard.svelte"
 </script>

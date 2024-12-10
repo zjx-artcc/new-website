@@ -1,6 +1,4 @@
 
-
-//@ts-nocheck
 import { prisma, addUserToRoster, getStaffRoles } from '$lib/db';
 import { deleteHomeUser, deleteVisitingUser } from '$lib/vatusaApi.js';
 

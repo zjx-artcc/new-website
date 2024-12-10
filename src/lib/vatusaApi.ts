@@ -1,5 +1,4 @@
-import type { User, VisitRequest } from "@prisma/client";
-import { getStaffRoles, prisma, updateVisitRequest } from "./db";
+import { getStaffRoles, prisma } from "./db";
 
 export const deleteHomeUser = async(cid: number, actionCid: number, reason: string) => {
   try {

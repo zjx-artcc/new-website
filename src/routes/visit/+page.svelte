@@ -1,9 +1,6 @@
 <script lang="ts">
 	import '$lib/app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
-	import Icon from '@iconify/svelte';
 	import VisitRow from '$lib/components/VisitRow.svelte';
-	import { getRating, prisma } from '$lib/db';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
 	//import { getRating } from '$lib/db.js';
 	export let data;

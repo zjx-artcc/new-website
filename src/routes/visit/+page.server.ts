@@ -1,4 +1,3 @@
-//@ts-nocheck
 
 import { prisma, getRating } from '$lib/db';
 import { redirect } from '@sveltejs/kit';
@@ -6,7 +5,7 @@ import type {PageServerLoad} from './$types';
 import type { VisitRequest } from '@prisma/client';
 
 export const load: PageServerLoad = async ({locals}) => {
-  let user: User = {}
+  let user: User = new User();
 
   if (locals.session != null) {
     user.cid = locals.session.userId;
@@ -22,9 +21,9 @@ export const load: PageServerLoad = async ({locals}) => {
     select: {
       id: true,
       reviewed: true,
-      date_requested: true,
-      action_date: true,
-      action_message: true
+      dateRequested: true,
+      actionDate: true,
+      actionMessage: true
     },
     where: {
       cid: user.cid,
@@ -41,24 +40,21 @@ export const load: PageServerLoad = async ({locals}) => {
     throw new Error("User does not exist");
   }
 
-  let date: Date = new Date();
-  let joinDate: Date = data.created_at;
-
   user.firstName = data.firstName;
   user.lastName = data.lastName;
   user.email = data.email;
-  user.rating = getRating(parseInt(data.rating));
+  user.rating = getRating(data.rating);
   user.numRating = data.rating;
   user.division = data.division;
   user.facility = data.facility == '' ? `VAT${data.division}` : data.facility;
-  user.ratingChanged = new Date(data.rating_changed);
+  user.ratingChanged = new Date();
   user.activeVisitRequests = activeVisitRequests
   user.previousVisitRequests = previousVisitRequests
 
   return user;
 }
 
-type User = {
+class User {
   cid: number
   firstName: string;
   lastName: string;
@@ -71,4 +67,19 @@ type User = {
   ratingChanged: Date;
   activeVisitRequests: number
   previousVisitRequests: VisitRequest[]
+
+  constructor() {
+    this.cid = 0;
+    this.firstName = "";
+    this.lastName = "";
+    this.email = "";
+    this.rating = "";
+    this.division = "";
+    this.facility = "";
+    this.numRating = 0;
+    this.homeFacility = "";
+    this.ratingChanged = new Date();
+    this.activeVisitRequests = 0;
+    this.previousVisitRequests = [];
+  }
 }
