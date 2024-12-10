@@ -1,9 +1,8 @@
-import { getCertsColor, getCtrCertColor, getRating, prisma } from '$lib/db';
+import { prisma } from '$lib/db';
 
 import { redirect } from '@sveltejs/kit';
 import { getStaffRoles } from '$lib/db';
 
-import type { lastEventId } from '@sentry/sveltekit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
@@ -22,10 +21,10 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 			cid: true,
 			reason: true,
 			reviewed: true,
-			date_requested: true,
-			action_message: true,
-			action_date: true,
-			action_cid: true,
+			dateRequested: true,
+			actionMessage: true,
+			actionDate: true,
+			actionCid: true,
 			users: {
 				select: {
 					firstName: true,
@@ -46,11 +45,11 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 			requestId: request[i].id,
 			cid: request[i].cid,
 			reason: request[i].reason,
-			dateRequested: request[i].date_requested,
+			dateRequested: request[i].dateRequested,
 			rating: request[i].users.rating,
-			actionDate: request[i].action_date,
-			actionMessage: request[i].action_message,
-			actionCid: request[i].action_cid,
+			actionDate: request[i].actionDate,
+			actionMessage: request[i].actionMessage,
+			actionCid: request[i].actionCid,
 			firstName: request[i].users.firstName,
 			lastName: request[i].users.lastName,
 			homeFacility: request[i].users.facility,
@@ -68,7 +67,6 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	let usersReviewed: number = 0
 
 	for(let i = 0; i < userData.length; i++){
-		let count = 0
 		if (userData[i].reviewed){
 			usersReviewed++
 		}

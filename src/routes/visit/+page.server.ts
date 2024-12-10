@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({locals}) => {
     }
   })
 
-  const previousVisitRequests = await prisma.visitRequest.findMany({
+  const previousVisitRequests: PreviousVisitRequest[] = await prisma.visitRequest.findMany({
     select: {
       id: true,
       reviewed: true,
@@ -66,7 +66,7 @@ class User {
   homeFacility: string;
   ratingChanged: Date;
   activeVisitRequests: number
-  previousVisitRequests: VisitRequest[]
+  previousVisitRequests: PreviousVisitRequest[]
 
   constructor() {
     this.cid = 0;
@@ -82,4 +82,12 @@ class User {
     this.activeVisitRequests = 0;
     this.previousVisitRequests = [];
   }
+}
+
+type PreviousVisitRequest = {
+  id: number;
+  dateRequested: Date;
+  reviewed: boolean;
+  actionMessage: string;
+  actionDate: Date;
 }

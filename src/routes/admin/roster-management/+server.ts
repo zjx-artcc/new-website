@@ -1,5 +1,5 @@
 
-import { prisma, addUserToRoster, getStaffRoles } from '$lib/db';
+import { prisma, getStaffRoles } from '$lib/db';
 import { deleteHomeUser, deleteVisitingUser } from '$lib/vatusaApi.js';
 
 /** @type {import('./$types').RequestHandler} */
@@ -7,7 +7,7 @@ import { deleteHomeUser, deleteVisitingUser } from '$lib/vatusaApi.js';
 export const DELETE = async ({ request, cookies, locals }): Promise<Response> => {
 	let status: number
 	let statusText: string
-	let response: Promise<Response>
+	let response: Response; 
 
 	try {
 		// Verify user is approved
@@ -16,17 +16,17 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 			console.log(reason)
 			const user = await prisma.roster.findFirst({
 				select: {
-					home_facility: true
+					homeFacility: true
 				},
 				where: {
 					cid: cid
 				}
 			})
 
-			const isHomeController: boolean = user.home_facility == "ZJX" ? true : false
+			const isHomeController: boolean = user.homeFacility == "ZJX" ? true : false
 			// NOTE: both of these functions take the user submitting the request as the second argument.
 			if (isHomeController) {
-				response = await deleteHomeUser(cid, locals.user.id, reason)
+			 	response = await deleteHomeUser(cid, locals.user.id, reason)
 				status = response.status
 			} else {
 				response = await deleteVisitingUser(cid, locals.user.id, reason)
@@ -69,11 +69,6 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 			}
 		)
 	}
-
-	return new Response(
-		null,
-		{status: 501}
-	)
 };
 
 const notifyUser = (cid, actionMessage) => {
