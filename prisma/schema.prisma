@@ -98,7 +98,6 @@ model Roster {
   training_sessions_training_sessions_controller_cidToroster TrainingSession[]   @relation("training_sessions_controller_cidToroster")
   training_sessions_training_sessions_instructor_cidToroster TrainingSession[]   @relation("training_sessions_instructor_cidToroster")
 
-
   @@map("roster")
 }
 
@@ -146,18 +145,18 @@ model User {
 }
 
 model VisitRequest {
-  id                                     Int       @id @default(autoincrement())
-  cid                                    Int
-  reason                                 String
-  date_requested                         DateTime? @db.Date
-  reviewed                               Boolean?  @default(false)
-  action_message                         String?   @db.VarChar(150)
-  action_cid                             Int?
-  action_date                            DateTime? @db.Date
-  accepted                               Boolean
-  users                                  User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
-  
-  users_visit_requests_action_cidTousers User?     @relation("visit_requests_action_cidTousers", fields: [action_cid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
+  id            Int       @id @default(autoincrement())
+  cid           Int
+  reason        String
+  dateRequested DateTime? @map("date_requested") @db.Date
+  reviewed      Boolean?  @default(false)
+  actionMessage String?   @map("action_message") @db.VarChar(150)
+  actionCid     Int?      @map("action_cid")
+  actionDate    DateTime? @map("action_date") @db.Date
+  accepted      Boolean
+  users         User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+
+  users_visit_requests_action_cidTousers User? @relation("visit_requests_action_cidTousers", fields: [actionCid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
 
   @@map("visit_requests")
 }
@@ -187,5 +186,4 @@ model TrainingSession {
   roster_training_sessions_instructor_cidToroster Roster  @relation("training_sessions_instructor_cidToroster", fields: [instructor_cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "training_sessions___fk_instructor")
 
   @@map("training_sessions")
-
 }

@@ -9,14 +9,13 @@ PUT: declines visitor application
 DELETE: removes visitor from roster
 */
 
-import { prisma, updateVisitRequest } from '$lib/db';
 import { validateSessionToken } from '$lib/oauth.js';
 import { getStaffRoles, prisma, updateVisitRequest } from '$lib/db.ts'
 import { addVisitorToVatusa } from '$lib/vatusaApi.js';
 
 import type { RequestHandler } from './$types.js';
 
-export const POST: RequestHandler = async ({ request, cookies }): Promise<Response> => {
+export const POST: RequestHandler = async ({ request, cookies, locals }): Promise<Response> => {
 	// Verify user is approved
 	try {
 		const { requestId, actionMessage } = await request.json();
@@ -68,7 +67,7 @@ export const DELETE: RequestHandler = async ({ request, cookies, locals }): Prom
 		const { requestId, actionMessage} = await request.json();
 
 		if((await updateVisitRequest(requestId, locals.user.id, actionMessage, false)).status == 200) {
-			notifyUser(requestId, actionMessage)
+			//notifyUser(requestId, actionMessage)
 			return new Response("Rejected!", {status: 200})
 		}
 	} catch (error) {

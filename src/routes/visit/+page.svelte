@@ -103,9 +103,9 @@
 					<tbody>
 						{#each data.previousVisitRequests as request}
 								<tr class="border-b-2 border-gray-300">
-									<td class="text-center px-2 text-lg border-r-2">{`${request.date_requested.getUTCMonth() + 1}-${request.date_requested.getUTCDate()}-${request.date_requested.getUTCFullYear()}`}</td>
-									<td class="text-center px-2 text-lg border-r-2">{request.action_date !== null ? `${request.action_date.getUTCMonth() + 1}-${request.action_date.getUTCDate()}-${request.action_date.getUTCFullYear()}` : "Pending"}</td>
-									<td class="text-center px-2 text-lg border-r-2">{request.action_message !== null ? request.action_message : "N/A"}</td>
+									<td class="text-center px-2 text-lg border-r-2">{`${request.dateRequested.getUTCMonth() + 1}-${request.dateRequested.getUTCDate()}-${request.dateRequested.getUTCFullYear()}`}</td>
+									<td class="text-center px-2 text-lg border-r-2">{request.actionDate !== null ? `${request.actionDate.getUTCMonth() + 1}-${request.actionDate.getUTCDate()}-${request.actionDate.getUTCFullYear()}` : "Pending"}</td>
+									<td class="text-center px-2 text-lg border-r-2">{request.actionMessage !== null ? request.actionMessage : "N/A"}</td>
 								</tr>
 						{/each}
 					</tbody>

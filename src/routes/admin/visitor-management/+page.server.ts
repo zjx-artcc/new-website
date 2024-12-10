@@ -1,11 +1,12 @@
-//@ts-nocheck
 import { getCertsColor, getCtrCertColor, getRating, prisma } from '$lib/db';
-import { GoTrueAdminApi } from '@supabase/supabase-js';
+
 import { redirect } from '@sveltejs/kit';
 import { getStaffRoles } from '$lib/db';
-import type { lastEventId } from '@sentry/sveltekit';
 
-export const load = async ({ params, cookies, locals }) => {
+import type { lastEventId } from '@sentry/sveltekit';
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	if (process.env.NODE_ENV != 'development') {
 		console.log(locals.session);
 		if (locals.session === null) {
@@ -45,14 +46,14 @@ export const load = async ({ params, cookies, locals }) => {
 			requestId: request[i].id,
 			cid: request[i].cid,
 			reason: request[i].reason,
-			date_requested: request[i].date_requested,
+			dateRequested: request[i].date_requested,
 			rating: request[i].users.rating,
-			action_date: request[i].action_date,
-			action_message: request[i].action_message,
-			action_cid: request[i].action_cid,
-			first_name: request[i].users.firstName,
-			last_name: request[i].users.lastName,
-			home_facility: request[i].users.facility,
+			actionDate: request[i].action_date,
+			actionMessage: request[i].action_message,
+			actionCid: request[i].action_cid,
+			firstName: request[i].users.firstName,
+			lastName: request[i].users.lastName,
+			homeFacility: request[i].users.facility,
 			reviewed: request[i].reviewed,
 			selected: false
 		});
@@ -81,15 +82,17 @@ export const load = async ({ params, cookies, locals }) => {
 };
 
 type UserData = {
+	actionCid: number;
 	requestId: number;
 	cid: number;
 	rating: number;
 	reviewed: boolean;
-	action_date: Date;
+	actionDate: Date;
 	reason: string;
-	date_requested: Date;
-	first_name: string;
-	last_name: string;
-	home_facility: string;
+	dateRequested: Date;
+	actionMessage: string;
+	firstName: string;
+	lastName: string;
+	homeFacility: string;
 	selected: boolean;
 };

@@ -3,7 +3,7 @@ import { prisma, getCertsColor, getCtrCertColor, getRating, getStaffRoles } from
 export const load = async({locals}) => {
   const visitingMemberTable = await prisma.roster.findMany({
     orderBy: {
-      last_name: 'asc'
+      lastName: 'asc'
     },
   })    
   
@@ -13,16 +13,16 @@ export const load = async({locals}) => {
 
   //Create roster member object
   let member: RosterData = {
-    name: `${visitingMemberTable[i].first_name} ${visitingMemberTable[i].last_name}`,
+    name: `${visitingMemberTable[i].firstName} ${visitingMemberTable[i].lastName}`,
     cid: Number(visitingMemberTable[i].cid),
     initials: visitingMemberTable[i].initials,
-    home_facility: visitingMemberTable[i].home_facility,
+    home_facility: visitingMemberTable[i].homeFacility,
     rating: getRating(Number(visitingMemberTable[i].rating)),
-    delCerts: getCertsColor(visitingMemberTable[i].del_certs),
-    gndCerts: getCertsColor(visitingMemberTable[i].gnd_certs),
-    twrCerts: getCertsColor(visitingMemberTable[i].twr_certs),
-    appCerts: getCertsColor(visitingMemberTable[i].app_certs),
-    ctrCert: getCtrCertColor(Number(visitingMemberTable[i].ctr_cert)),
+    delCerts: getCertsColor(visitingMemberTable[i].delCerts),
+    gndCerts: getCertsColor(visitingMemberTable[i].gndCerts),
+    twrCerts: getCertsColor(visitingMemberTable[i].twrCerts),
+    appCerts: getCertsColor(visitingMemberTable[i].appCerts),
+    ctrCert: getCtrCertColor(Number(visitingMemberTable[i].ctrCert)),
     dropdownOpen: false
   }
   
