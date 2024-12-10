@@ -226,7 +226,7 @@ export const updateVisitRequest = async(requestId, actionCid, actionMessage, was
         }
       })
     }
-    
+
     return new Response("Update Success", {
       status: 200
     })

@@ -1,8 +1,23 @@
+/* IMPORTANT ERROR CODES AND DESCRIPTIONS:
+200 - OK
+403 - Forbidden (API key invalid; vatusa)
+401 - user already exists (serverside; db.ts)
+
+REQUESTS:
+POST: adds users to roster
+PUT: declines visitor application
+DELETE: removes visitor from roster
+*/
+
+import { prisma, updateVisitRequest } from '$lib/db';
+import { validateSessionToken } from '$lib/oauth.js';
 import { getStaffRoles, prisma, updateVisitRequest } from '$lib/db.ts'
 import { addVisitorToVatusa } from '$lib/vatusaApi.js';
-/** @type {import('./$types').RequestHandler} */
 
-export const POST = async ({ request, cookies, locals }): Promise<Response> => {
+import type { RequestHandler } from './$types.js';
+
+export const POST: RequestHandler = async ({ request, cookies }): Promise<Response> => {
+	// Verify user is approved
 	try {
 		const { requestId, actionMessage } = await request.json();
 		
@@ -46,7 +61,8 @@ export const POST = async ({ request, cookies, locals }): Promise<Response> => {
 	}
 };
 
-export const DELETE = async ({ request, cookies, locals }): Promise<Response> => {
+export const DELETE: RequestHandler = async ({ request, cookies, locals }): Promise<Response> => {
+
 	try {
 		// Verify user is approved
 		const { requestId, actionMessage} = await request.json();
@@ -69,8 +85,4 @@ export const DELETE = async ({ request, cookies, locals }): Promise<Response> =>
 		null,
 		{status: 501}
 	)
-};
-
-const notifyUser = (cid, actionMessage) => {
-	// TODO
 };

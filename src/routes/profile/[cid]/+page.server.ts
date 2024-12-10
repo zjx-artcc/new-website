@@ -1,5 +1,6 @@
 import { redirect, error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
+
 import type { Roster, ControllerSession } from '@prisma/client';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -34,23 +35,18 @@ export async function load({ params, cookies, locals }) {
   //If user exists, process the data 
   if (rosterData != null) {
     pageData.onRoster = true;
-    pageData.certs.cid = Number(rosterData.cid);
-    pageData.certs.first_name = rosterData.first_name;
-    pageData.certs.last_name = rosterData.last_name;
-    pageData.certs.initials = rosterData.initials;
-    pageData.certs.rating_changed = rosterData.rating_changed;
-    pageData.certs.facility = rosterData.home_facility;
-    pageData.certs.del_certs = getCertsColor(rosterData.del_certs);
-    pageData.certs.gnd_certs = getCertsColor(rosterData.gnd_certs);
-    pageData.certs.twr_certs = getCertsColor(rosterData.twr_certs);
-    pageData.certs.app_certs = getCertsColor(rosterData.app_certs);
-    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctr_cert));
+    pageData.user = rosterData;
+    pageData.certs.del_certs = getCertsColor(rosterData.delCerts);
+    pageData.certs.gnd_certs = getCertsColor(rosterData.gndCerts);
+    pageData.certs.twr_certs = getCertsColor(rosterData.twrCerts);
+    pageData.certs.app_certs = getCertsColor(rosterData.appCerts);
+    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctrCert));
     pageData.certs.rating = getRating(Number(rosterData.rating));
   } else {
     //Or fill with auth data
-    pageData.certs.cid = locals.user.id;
-    pageData.certs.first_name = locals.user.firstName;
-    pageData.certs.last_name = locals.user.lastName;
+    pageData.user.cid = locals.user.id;
+    pageData.user.firstName = locals.user.firstName;
+    pageData.user.lastName = locals.user.lastName;
     pageData.certs.rating = getRating(locals.user.rating);
   }
 
@@ -67,19 +63,7 @@ export async function load({ params, cookies, locals }) {
 
   //Process existing data
   if (sessionsData != null) {
-    for (let i = 0; i < sessionsData.length; i++) {
-      let session: ControllerSessions = {
-        id: Number(sessionsData[i].id),
-        cid: Number(sessionsData[i].cid),
-        callsign: sessionsData[i].callsign,
-        frequency: sessionsData[i].frequency,
-        start: sessionsData[i].start,
-        end: sessionsData[i].end,
-        active: sessionsData[i].active,
-        duration: msToHours(sessionsData[i].end - sessionsData[i].start.getTime())
-      }
-      pageData.sessions.push(session);
-    }
+    pageData.sessions = sessionsData;
   }
 
   //Make sure there are at least 5 rows so the table is complete
@@ -87,30 +71,40 @@ export async function load({ params, cookies, locals }) {
     pageData.sessions.push(null);
   }
 
-  //Get staff roles to display on user page
-  /* REDO 
-  let roles = pageData.certs.staff_roles.split(',');
+  let roles = await prisma.staffRole.findMany({
+    where: {
+      cid: pageData.user.cid
+    },
+    select: {
+      role: true
+    }
+  })
 
   //Process them
   for (let i = 0; i < roles.length; i++) {
-    switch(roles[i]) {
-      case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "bg-sky-500"}); break;
-      case "WM": pageData.staffRoles.push({name: "Web Master", color: "bg-sky-500"} ); break;
-      case "FE": pageData.staffRoles.push({name: "Facility Engineer", color: "bg-sky-500"}); break;
-      case "WT": pageData.staffRoles.push({name: "Web Team", color: "bg-red-500"}); break;
+    switch(roles[i].role) {
+      case "ATM": pageData.staffRoles.push({name: "Air Traffic Manager", color: "bg-red-500"}); break;
+      case "DATM": pageData.staffRoles.push({name: "Deputy Air Traffic Manager", color: "bg-red-500"}); break;
+      case "TA": pageData.staffRoles.push({name: "Training Administrator", color: "bg-sky-500"}); break;
+      case "ATA": pageData.staffRoles.push({name: "Assistant Training Administrator", color: "bg-sky-500"}); break;
+      case "INS": pageData.staffRoles.push({name: "Instructor", color: "bg-sky-500"}); break;
+      case "MTR": pageData.staffRoles.push({name: "Mentor", color: "bg-sky-500"}); break;
+      case "WM": pageData.staffRoles.push({name: "Web Master", color: "bg-pink-500"} ); break;
+      case "AWM": pageData.staffRoles.push({name: "Assistant Web Master", color: "bg-pink-500"} ); break;
+      case "FE": pageData.staffRoles.push({name: "Facility Engineer", color: "bg-yellow-600"}); break;
+      case "AFE": pageData.staffRoles.push({name: "Assistant Facility Engineer", color: "bg-yellow-600"}); break;
+      case "EC": pageData.staffRoles.push({name: "Events Coordinator", color: "bg-purple-500"}); break;
+      case "AEC": pageData.staffRoles.push({name: "Assistant Events Coordinator", color: "bg-purple-500"}); break;
       default: break;
     }
-  }*/
-
+  }
   let displayQuarters = quartersByMonth[Math.floor(new Date().getUTCMonth() / 3)]
-  console.log(displayQuarters);
 
   let hoursData = await prisma.stats.findFirst({
     where: {
-      cid: pageData.certs.cid,
+      cid: pageData.user.cid,
     },
   })
-  console.log(hoursData);
 
   for(let i = 0; i < 4; i++) {
     if (i == 3) {
@@ -134,42 +128,30 @@ export async function load({ params, cookies, locals }) {
 class PageData {
   onRoster: boolean;
   canEdit: boolean;
+  user: Roster;
   certs: {
-    cid: number;
-    first_name: string;
-    last_name: string;
-    initials: string;
+    rating: string;
     del_certs: Certs;
     gnd_certs: Certs;
     twr_certs: Certs;
     app_certs: Certs;
     ctr_cert: Certs;
-    rating: string;
-    staff_roles: string;
-    rating_changed: Date;
-    facility: string;
   };
   hours: Hours[];
-  sessions: ControllerSessions[];
+  sessions: ControllerSession[];
   staffRoles: StaffRoles[];
 
   constructor() {
     this.onRoster = false;
     this.canEdit = false;
+    this.user = null;
     this.certs = {
-      cid: 0,
-      del_certs: {cert: "None", color: ""},
-      gnd_certs: {cert: "None", color: ""},
-      twr_certs: {cert: "None", color: ""},
-      app_certs: {cert: "None", color: ""},
-      ctr_cert: {cert: "None", color: ""},
-      rating: "",
-      staff_roles: "",
-      first_name: "",
-      last_name: "",
-      initials: "None",
-      facility: "",
-      rating_changed: null
+      del_certs: {cert: "Not Certified", color: "slate-500"},
+      gnd_certs: {cert: "Not Certified", color: "slate-500"},
+      twr_certs: {cert: "Not Certified", color: "slate-500"},
+      app_certs: {cert: "Not Certified", color: "slate-500"},
+      ctr_cert: {cert: "Not Certified", color: "slate-500"},
+      rating: ""
     };
     this.sessions = [];
     this.staffRoles = [];
@@ -194,7 +176,7 @@ type ControllerSessions = {
   callsign: string
   frequency: string
   start: Date,
-  end: number,
+  end: Date,
   active: boolean,
   duration: string
 }
