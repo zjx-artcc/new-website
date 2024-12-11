@@ -145,17 +145,18 @@ model User {
 }
 
 model VisitRequest {
-  id                                     Int       @id @default(autoincrement())
-  cid                                    Int
-  reason                                 String
-  date_requested                         DateTime? @db.Date
-  reviewed                               Boolean?  @default(false)
-  action_message                         String?   @db.VarChar(150)
-  action_cid                             Int?
-  action_date                            DateTime? @db.Date
-  accepted                               Boolean
-  users                                  User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
-  users_visit_requests_action_cidTousers User?     @relation("visit_requests_action_cidTousers", fields: [action_cid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
+  id            Int       @id @default(autoincrement())
+  cid           Int
+  reason        String
+  dateRequested DateTime? @map("date_requested") @db.Date
+  reviewed      Boolean?  @default(false)
+  actionMessage String?   @map("action_message") @db.VarChar(150)
+  actionCid     Int?      @map("action_cid")
+  actionDate    DateTime? @map("action_date") @db.Date
+  accepted      Boolean
+  users         User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+
+  users_visit_requests_action_cidTousers User? @relation("visit_requests_action_cidTousers", fields: [actionCid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
 
   @@map("visit_requests")
 }
@@ -170,6 +171,7 @@ model WebSession {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+
 model TrainingSession {
   session_id                                      Int     @id(map: "training_sessions_pk")
   controller_cid                                  Int

@@ -7,6 +7,9 @@
 	import { ChevronDownSolid, UserRemoveOutline } from 'flowbite-svelte-icons';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
+	import { goto } from '$app/navigation';
+	const MAX_HISTORY_LENGTH = 10
+	let historyCount = 0; // pls dont touch either
 	let selectedCount = 0;
 	let confirmationScreenClass = 'hidden'; // pls dont touch. hides confirmation screen
 	let actionString: string = '';
@@ -52,28 +55,26 @@
 
 		for (let i = 0; i < data.userData.length; i++) {
 			if (data.userData[i].selected) {
-				if (initialsValid(data.userData[i].operatingInitials)) {
 					const user = data.userData[i];
 					const req = await fetch(`/admin/visitor-management`, {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json'
 						},
-						body: JSON.stringify({ requestId: user.requestId, actionMessage: user.actionMessage, operatingInitials: user.operatingInitials }) // user.id is request ID
+						body: JSON.stringify({ requestId: user.requestId, actionMessage: user.actionMessage}) // user.id is request ID
 					});
 
 					console.log(req.statusText);
 					if (req.status == 200) {
 						displayFeedbackBox('bg-green-500', 'Success', 'User added to visitng roster!')
 					} else {
-						displayFeedbackBox('bg-red-500', 'Failed', req.text().then((text) => {return text}));
+						displayFeedbackBox('bg-red-500', 'Failed', (await req.text().then((text) => {return text})));
 					}
-				} else {
-					displayFeedbackBox('bg-red-500', 'Invalid Input', "Operating initials must be 2 characters long.");
-				}
-				
+				}		
 			}
-		}
+		setTimeout(() => {
+			refreshPage()
+		}, 5000)
 	};
 
 	const rejectUsers = async () => {
@@ -86,31 +87,25 @@
 					method: 'DELETE',
 					headers: {
 						'Content-Type': 'application/json'
-						//'Authorization': 'Bearer ' TODO: add authorization for users.
 					},
-					body: JSON.stringify({ requestCid: user.requestId, actionMessage: user.actionMessage, operatingInitials: user.operatingInitials })
+					body: JSON.stringify({ requestId: user.requestId, actionMessage: user.actionMessage})
 				});
 
 				console.log(req.statusText);
 				if (await req.status == 200) {
-					displayFeedbackBox('bg-green-500', 'Success', 'User added to roster!')
+					displayFeedbackBox('bg-green-500', 'Success', 'User rejected!')
 				} else {
-					displayFeedbackBox('bg-red-500', 'Error', 'Failed - ' + (await req.statusText));
+					displayFeedbackBox('bg-red-500', 'Failed', (await req.text().then((text) => {return text})));
 				}
 			}
 		}
+		setTimeout(() => {
+			refreshPage()
+		}, 5000)
 	};
 
-	const initialsValid = (initials: string): boolean => {
-		if(initials.length == 2) {
-			for(let i = 0; i < data.usedOIs.length; i++) {
-				if (initials == data.usedOIs[i]) {
-					return false
-				}
-			}
-		}
-
-		return true
+	const refreshPage = () => {
+		goto(window.location.pathname)
 	}
 
 	const displayFeedbackBox = async (color, headerText, bodyText) => {
@@ -135,49 +130,55 @@
 
 <div class="my-5 h-100">
 	<div class="flex justify-center">
-		<h1 class="text-xl text-sky-500 font-bold mb-5">Visitor Management</h1>
+		<h1 class="text-xl text-sky-500 font-bold mb-5">Active Visiting Requests</h1>
 	</div>
 
 	<div class="flex flex-col flex-wrap bg-grey border-b-4 pb-4">
 		<div class="flex justify-center">
-			<table class="table px-2">
-				<thead>
-					<tr class="bg-white border-2">
-						<th class="px-2">Controller</th>
-						<th class="px-2">Home Facility</th>
-						<th class="px-2">Date Requested</th>
-						<th class="px-2">Reason</th>
-						<th class="px-2">Select</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each data.userData as user}
-						<tr class="border-2">
-							<td class="px-2 text-center border-r-2">
-								<div class="flex-wrap justify-center px-1">
-									<span class="flex text-lg justify-center font-bold"
-										>{user.first_name} {user.last_name}</span
-									>
-									<span class="flex justify-center italic"
-										>{user.cid} - {getRating(parseInt(user.rating))}</span
-									>
-								</div>
-							</td>
-							<td class="text-center px-2 text-2xl border-r-2">{user.home_facility == "" ? "None" : user.home_facility}</td>
-							<td class="text-center px-2 text-2xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth()}-${user.date_requested.getUTCDay()}`}</td>
-							<td class="text-left text-lg p-2 w-96">{user.reason}</td>
-							<td class="px-5 py-4"
-								><input
-									class="accent-sky-500 h-5 w-5 px-2"
-									type="checkbox"
-									bind:checked={user.selected}
-									on:change={checkUsersSelected}
-								/></td
-							>
+			{#if (data.userData.length - data.usersReviewed) > 0}
+				<table class="table px-2">
+					<thead>
+						<tr class="bg-white border-2">
+							<th class="px-2">Controller</th>
+							<th class="px-2">Home Facility</th>
+							<th class="px-2">Date Requested</th>
+							<th class="px-2">Reason</th>
+							<th class="px-2">Select</th>
 						</tr>
-					{/each}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{#each data.userData as user}
+							{#if !user.reviewed}
+								<tr class="border-2">
+									<td class="px-2 text-center border-r-2">
+										<div class="flex-wrap justify-center px-1">
+											<span class="flex text-lg justify-center font-bold"
+												>{user.first_name} {user.last_name}</span
+											>
+											<span class="flex justify-center italic"
+												>{user.cid} - {getRating(parseInt(user.rating))}</span
+											>
+										</div>
+									</td>
+									<td class="text-center px-2 text-2xl border-r-2">{user.home_facility == "" ? "None" : user.home_facility}</td>
+									<td class="text-center px-2 text-2xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth() + 1}-${user.date_requested.getUTCDate()}`}</td>
+									<td class="text-left text-lg p-2 w-96">{user.reason}</td>
+									<td class="px-5 py-4"
+										><input
+											class="accent-sky-500 h-5 w-5 px-2"
+											type="checkbox"
+											bind:checked={user.selected}
+											on:change={checkUsersSelected}
+										/></td
+									>
+								</tr>
+							{/if}
+						{/each}
+					</tbody>
+				</table>
+			{:else}
+				<h2>No visit requests</h2>
+			{/if}
 		</div>
 
 		{#if selectedCount > 0}
@@ -191,7 +192,6 @@
 							<tr class="bg-white border-b-2">
 								<th class="px-2">Controller</th>
 								<th class="px-2">Action Message</th>
-								<th class="px-2">Operating Initials</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -209,7 +209,6 @@
 											</div>
 										</td>
 										<td class="text-center text-md border-r-2 mr-2"><input class="p-2 w-96 h-12 bg-gray-300" bind:value={user.actionMessage}/></td>
-										<td class=""><input class={"w-full h-12 bg-gray-300 text-center text-md font-bold "} placeholder="Required" bind:value={user.operatingInitials} maxlength="2" minlength="2"/></td>
 									</tr>
 								{/if}
 							{/each}
@@ -251,7 +250,7 @@
 					Cancel
 				</button>
 
-				<button class="bg-green-500 p-3 w-24 font-semibold rounded-md ml-5" on:click={approveUsers}>
+				<button class="bg-green-500 p-3 w-24 font-semibold rounded-md ml-5" on:click={actionString == "approve" ? approveUsers : rejectUsers}>
 					Confirm
 				</button>
 			</div>
@@ -259,4 +258,51 @@
 
 		<div class="z-10 absolute w-full h-full opacity-50 bg-gray-800" />
 	</div>
+
+	<div class="flex justify-center">
+		<h1 class="text-xl text-sky-500 font-bold my-5">Visit Request History</h1>
+	</div>
+		<div class="flex justify-center">
+			{#if data.usersReviewed > 0}
+				<table class="table px-2">
+					<thead>
+						<tr class="bg-white border-2">
+							<th class="px-2">Controller</th>
+							<th class="px-2">Home Facility</th>
+							<th class="px-2">Date Requested</th>
+							<th class="px-2">Date Reviewed</th>
+							<th class="px-2">Reviewed By</th>
+							<th class="px-2">Reason</th>
+							<th class="px-2">Action Message</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each data.userData as user}
+							{#if user.reviewed && historyCount < MAX_HISTORY_LENGTH}
+								<tr class="border-2">
+									<td class="px-2 text-center border-r-2">
+										<div class="flex-wrap justify-center px-1">
+											<span class="flex text-lg justify-center font-bold"
+												>{user.first_name} {user.last_name}</span
+											>
+											<span class="flex justify-center italic"
+												>{user.cid} - {getRating(parseInt(user.rating))}</span
+											>
+										</div>
+									</td>
+									<td class="text-left px-2 text-xl border-r-2">{user.home_facility == "" ? "None" : user.home_facility}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth() +1}-${user.date_requested.getUTCDate()}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.action_date.getUTCFullYear()}-${user.action_date.getUTCMonth() +1}-${user.action_date.getUTCDate()}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.action_cid}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{user.reason}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.action_message}`}</td>
+								</tr>
+							{/if}
+						{/each}
+					</tbody>
+				</table>
+			{:else}
+				<h2>No history available</h2>
+			{/if}
+		</div>
 </div>
