@@ -6,7 +6,7 @@ export const POST: RequestHandler = async ( {request, locals} ): Promise<Respons
   if (locals.session == null) {
     return new Response('Unauthorized', { status: 401 });
   }
-  const { string: type } = await request.json();
+  const type: string = (await request.json()).type;
   console.log(locals.session.userId);
 
   await prisma.trainingRequest.create({
