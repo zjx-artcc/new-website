@@ -3,11 +3,10 @@
 	import Icon from '@iconify/svelte';
   import ResponseBox from '$lib/components/ResponseBox.svelte';
 	import VisitRow from '$lib/components/VisitRow.svelte';
-  import { useForm } from 'svelte-use-form';
   export let data;
   const pageData = data.pageData;
 
-  let type = "";
+  let type = 0;
   //@ts-ignore
   let responseBox: ResponseBox = {
     bgColor: "",
@@ -16,10 +15,14 @@
     hidden: true
   }
 
-  const form = useForm();
-  console.log(type);
-
   async function submitRequest() {
+    if (type == 0) {
+      responseBox.bgColor = "bg-red-500"
+      responseBox.header = "Error"
+      responseBox.text = "Please select a rating to request"
+      responseBox.hidden = false;
+      return;
+    }
     let cid = data.session.userId;
     let req = await fetch('/training/requests', {
       method: 'POST',
@@ -28,12 +31,16 @@
       },
       body: JSON.stringify({cid, type})
     });
-    let res = await req.json();
-    if (res.success) {
+    if (req.status == 200) {
       responseBox.bgColor = "bg-green-500"
       responseBox.header = "Submitted!"
       responseBox.text = "Expect an email when your request has been accepted" 
+    } else {
+      responseBox.bgColor = "bg-red-500"
+      responseBox.header = `Error ${req.status} ${req.statusText}`
+      responseBox.text = await req.text().then((text) => {return text})
     }
+    responseBox.hidden = false;
   }
 
 </script>
