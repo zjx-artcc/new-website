@@ -1,46 +1,51 @@
-import { prisma, getCertsColor, getCtrCertColor, getRating } from '$lib/db';
+import { prisma, getCertsColor, getCtrCertColor, getRating, getStaffRoles } from '$lib/db';
 
-export const load = async() => {
+export const load = async({locals}) => {
   const visitingMemberTable = await prisma.roster.findMany({
     orderBy: {
-      last_name: 'asc'
+      lastName: 'asc'
     },
   })    
   
   let roster: RosterData[] = []
+  let isAdmin: boolean
   for(let i = 0; i < visitingMemberTable.length; i++) {
+
   //Create roster member object
   let member: RosterData = {
-    name: `${visitingMemberTable[i].first_name} ${visitingMemberTable[i].last_name}`,
+    name: `${visitingMemberTable[i].firstName} ${visitingMemberTable[i].lastName}`,
     cid: Number(visitingMemberTable[i].cid),
     initials: visitingMemberTable[i].initials,
-    home_facility: visitingMemberTable[i].home_facility,
+    home_facility: visitingMemberTable[i].homeFacility,
     rating: getRating(Number(visitingMemberTable[i].rating)),
-    delCerts: getCertsColor(visitingMemberTable[i].del_certs),
-    gndCerts: getCertsColor(visitingMemberTable[i].gnd_certs),
-    twrCerts: getCertsColor(visitingMemberTable[i].twr_certs),
-    appCerts: getCertsColor(visitingMemberTable[i].app_certs),
-    ctrCert: getCtrCertColor(Number(visitingMemberTable[i].ctr_cert))
+    delCerts: getCertsColor(visitingMemberTable[i].delCerts),
+    gndCerts: getCertsColor(visitingMemberTable[i].gndCerts),
+    twrCerts: getCertsColor(visitingMemberTable[i].twrCerts),
+    appCerts: getCertsColor(visitingMemberTable[i].appCerts),
+    ctrCert: getCtrCertColor(Number(visitingMemberTable[i].ctrCert)),
+    dropdownOpen: false
   }
   
   roster.push(member)
   }
   
+  isAdmin = await getStaffRoles(locals.user.id, "admin")
   return {
-    roster
+    roster, isAdmin
   };
 }
 
 
 type RosterData = {
-name: string;
-cid: number;
-rating: string;
-initials: string;
-home_facility: string;
-delCerts: { cert: string; color: string };
-gndCerts: { cert: string; color: string };
-twrCerts: { cert: string; color: string };
-appCerts: { cert: string; color: string };
-ctrCert: { cert: string; color: string };
+  name: string;
+  cid: number;
+  rating: string;
+  initials: string;
+  home_facility: string;
+  delCerts: { cert: string; color: string };
+  gndCerts: { cert: string; color: string };
+  twrCerts: { cert: string; color: string };
+  appCerts: { cert: string; color: string };
+  ctrCert: { cert: string; color: string };
+  dropdownOpen: boolean
 }

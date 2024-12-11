@@ -1,14 +1,14 @@
-import { redirect, error as svelteError } from '@sveltejs/kit'
-import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours, msToHours } from '$lib/db';
+import { error as svelteError } from '@sveltejs/kit'
+import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours } from '$lib/db';
 
 import type { Roster, ControllerSession } from '@prisma/client';
+import type { PageServerLoad } from './$types';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
 const months = ['month_one', 'month_two', 'month_three'];
 
-/** @type {import('./$types').PageLoad} */
-export async function load({ params, cookies, locals }) {
+export const load: PageServerLoad = async ({ params, locals }) => {
   // Make sure valid parameter is passed
   if (params.cid == undefined) {
     svelteError(404, 'User not found');
@@ -36,11 +36,11 @@ export async function load({ params, cookies, locals }) {
   if (rosterData != null) {
     pageData.onRoster = true;
     pageData.user = rosterData;
-    pageData.certs.del_certs = getCertsColor(rosterData.delCerts);
-    pageData.certs.gnd_certs = getCertsColor(rosterData.gndCerts);
-    pageData.certs.twr_certs = getCertsColor(rosterData.twrCerts);
-    pageData.certs.app_certs = getCertsColor(rosterData.appCerts);
-    pageData.certs.ctr_cert = getCtrCertColor(Number(rosterData.ctrCert));
+    pageData.certs.delCerts = getCertsColor(rosterData.delCerts);
+    pageData.certs.gndCerts = getCertsColor(rosterData.gndCerts);
+    pageData.certs.twrCerts = getCertsColor(rosterData.twrCerts);
+    pageData.certs.appCerts = getCertsColor(rosterData.appCerts);
+    pageData.certs.ctrCert = getCtrCertColor(Number(rosterData.ctrCert));
     pageData.certs.rating = getRating(Number(rosterData.rating));
   } else {
     //Or fill with auth data
@@ -53,7 +53,8 @@ export async function load({ params, cookies, locals }) {
   //Fetch sessions data for user
   let sessionsData: ControllerSession[] = await prisma.controllerSession.findMany({
     where: {
-      cid: parseInt(params.cid)
+      cid: parseInt(params.cid),
+      active: false
     },
     take: 10,
     orderBy: {
@@ -131,11 +132,11 @@ class PageData {
   user: Roster;
   certs: {
     rating: string;
-    del_certs: Certs;
-    gnd_certs: Certs;
-    twr_certs: Certs;
-    app_certs: Certs;
-    ctr_cert: Certs;
+    delCerts: Certs;
+    gndCerts: Certs;
+    twrCerts: Certs;
+    appCerts: Certs;
+    ctrCert: Certs;
   };
   hours: Hours[];
   sessions: ControllerSession[];
@@ -146,11 +147,11 @@ class PageData {
     this.canEdit = false;
     this.user = null;
     this.certs = {
-      del_certs: {cert: "Not Certified", color: "slate-500"},
-      gnd_certs: {cert: "Not Certified", color: "slate-500"},
-      twr_certs: {cert: "Not Certified", color: "slate-500"},
-      app_certs: {cert: "Not Certified", color: "slate-500"},
-      ctr_cert: {cert: "Not Certified", color: "slate-500"},
+      delCerts: {cert: "Not Certified", color: "slate-500"},
+      gndCerts: {cert: "Not Certified", color: "slate-500"},
+      twrCerts: {cert: "Not Certified", color: "slate-500"},
+      appCerts: {cert: "Not Certified", color: "slate-500"},
+      ctrCert: {cert: "Not Certified", color: "slate-500"},
       rating: ""
     };
     this.sessions = [];

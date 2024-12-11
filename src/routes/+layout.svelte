@@ -3,14 +3,13 @@
 	import '$lib/app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	export let data
 </script>
 
-<body>
-	<header class="bg-gray-700 block" id="myTopnav">
-		<div class="flex flex-row max-w-6xl h-16 items-center my-0 mx-auto">
-			<Navbar />
-		</div>
-	</header>
+<body class="bg-transparent">
+	<div class="z-10">
+		<Navbar canViewAdmin={data.canViewAdmin} />
+	</div>
 
 	<slot />
 

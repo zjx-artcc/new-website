@@ -1,11 +1,11 @@
-//@ts-nocheck
-import { getCertsColor, getCtrCertColor, getRating, prisma } from '$lib/db';
-import { GoTrueAdminApi } from '@supabase/supabase-js';
+import { prisma } from '$lib/db';
+
 import { redirect } from '@sveltejs/kit';
 import { getStaffRoles } from '$lib/db';
-import type { lastEventId } from '@sentry/sveltekit';
 
-export const load = async ({ params, cookies, locals }) => {
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	if (process.env.NODE_ENV != 'development') {
 		console.log(locals.session);
 		if (locals.session === null) {
@@ -20,7 +20,11 @@ export const load = async ({ params, cookies, locals }) => {
 			id: true,
 			cid: true,
 			reason: true,
-			date_requested: true,
+			reviewed: true,
+			dateRequested: true,
+			actionMessage: true,
+			actionDate: true,
+			actionCid: true,
 			users: {
 				select: {
 					firstName: true,
@@ -30,9 +34,9 @@ export const load = async ({ params, cookies, locals }) => {
 				}
 			}
 		},
-		where: {
-			reviewed: false
-		}
+		orderBy: {
+			reviewed: 'asc'
+		},
 	});
 
 	const userData: UserData[] = [];
@@ -41,12 +45,15 @@ export const load = async ({ params, cookies, locals }) => {
 			requestId: request[i].id,
 			cid: request[i].cid,
 			reason: request[i].reason,
-			date_requested: request[i].date_requested,
+			dateRequested: request[i].dateRequested,
 			rating: request[i].users.rating,
-			operatingInitials: null,
-			first_name: request[i].users.firstName,
-			last_name: request[i].users.lastName,
-			home_facility: request[i].users.facility,
+			actionDate: request[i].actionDate,
+			actionMessage: request[i].actionMessage,
+			actionCid: request[i].actionCid,
+			firstName: request[i].users.firstName,
+			lastName: request[i].users.lastName,
+			homeFacility: request[i].users.facility,
+			reviewed: request[i].reviewed,
 			selected: false
 		});
 	}
@@ -56,21 +63,34 @@ export const load = async ({ params, cookies, locals }) => {
 			initials: true
 		}
 	});
+
+	let usersReviewed: number = 0
+
+	for(let i = 0; i < userData.length; i++){
+		if (userData[i].reviewed){
+			usersReviewed++
+		}
+	}
+
 	return {
 		userData,
-		usedOIs
+		usedOIs,
+		usersReviewed
 	};
 };
 
 type UserData = {
+	actionCid: number;
 	requestId: number;
 	cid: number;
 	rating: number;
-	operatingInitials: string;
+	reviewed: boolean;
+	actionDate: Date;
 	reason: string;
-	date_requested: Date;
-	first_name: string;
-	last_name: string;
-	home_facility: string;
+	dateRequested: Date;
+	actionMessage: string;
+	firstName: string;
+	lastName: string;
+	homeFacility: string;
 	selected: boolean;
 };
