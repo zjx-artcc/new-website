@@ -94,6 +94,7 @@ model Roster {
   events                                                     Event[]
   positionRequests                                           PositionRequest[]
   StaffRoles                                                 StaffRole[]
+  trainingRequests                                           TrainingRequest[]
   stats                                                      Stats?
   training_sessions_training_sessions_controller_cidToroster TrainingSession[]   @relation("training_sessions_controller_cidToroster")
   training_sessions_training_sessions_instructor_cidToroster TrainingSession[]   @relation("training_sessions_instructor_cidToroster")
@@ -122,9 +123,36 @@ model Stats {
   tower       Float?
   tracon      Float?
   enroute     Float?
-  roster      Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+  roster      Roster @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("stats")
+}
+
+model TrainingRequest {
+  id          String   @id @default(uuid())
+  cid         Int
+  type        Float
+  requestDate DateTime @map("request_date") @db.Timestamptz(6)
+  roster      Roster   @relation(fields: [cid], references: [cid], onDelete: Cascade)
+
+  @@map("training_requests")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model TrainingSession {
+  id                                              String  @id @default(uuid())
+  controllerCid                                   Int     @map("controller_cid")
+  instructorCid                                   Int     @map("instructor_cid")
+  duration                                        Int
+  numberOfMovements                               Int?    @default(0) @map("number_of_movements")
+  comments                                        String? @db.VarChar(750)
+  progressRating                                  Int?    @map("progress_rating")
+  position                                        String? @db.VarChar(20)
+  sessionType                                     String  @map("session_type") @db.VarChar(20)
+  roster_training_sessions_controller_cidToroster Roster  @relation("training_sessions_controller_cidToroster", fields: [controllerCid], references: [cid], onDelete: Cascade, onUpdate: Cascade, map: "training_sessions___fk_controller")
+  roster_training_sessions_instructor_cidToroster Roster  @relation("training_sessions_instructor_cidToroster", fields: [instructorCid], references: [cid], onDelete: NoAction, onUpdate: Cascade, map: "training_sessions___fk_instructor")
+
+  @@map("training_sessions")
 }
 
 model User {
@@ -168,22 +196,4 @@ model WebSession {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("web_sessions")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-
-model TrainingSession {
-  session_id                                      Int     @id(map: "training_sessions_pk")
-  controller_cid                                  Int
-  instructor_cid                                  Int
-  duration                                        Int
-  number_of_movements                             Int?    @default(0)
-  comments                                        String? @db.VarChar(750)
-  progress_rating                                 Int?
-  position                                        String? @db.VarChar(20)
-  session_type                                    String  @db.VarChar(20)
-  roster_training_sessions_controller_cidToroster Roster  @relation("training_sessions_controller_cidToroster", fields: [controller_cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "training_sessions___fk_controller")
-  roster_training_sessions_instructor_cidToroster Roster  @relation("training_sessions_instructor_cidToroster", fields: [instructor_cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "training_sessions___fk_instructor")
-
-  @@map("training_sessions")
 }

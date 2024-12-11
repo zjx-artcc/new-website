@@ -1,6 +1,9 @@
 <script lang="ts">
 	import '$lib/app.css';
 	import VisitRow from '$lib/components/VisitRow.svelte';
+
+
+	import { getRating } from '$lib/db';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
 	//import { getRating } from '$lib/db.js';
 	export let data;
@@ -24,9 +27,6 @@
 				userReason: visitReason
 			})
 		})
-
-
-		console.log(visitRequest.status)
 		if (visitRequest.status == 200) {
 			responseBox.bgColor = "bg-green-500"
 			responseBox.header = "Submitted!"
@@ -45,7 +45,12 @@
 		text: string;
 		hidden: boolean;
 	}
+
 </script>
+
+<svelte:head>
+	<title>Submit Visiting Request - Jacksonville ARTCC</title>
+</svelte:head>
 
 <header class="bg-gray-700" id="myTopnav">
 	<div class="h-52 flex justify-center items-center">
