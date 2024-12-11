@@ -84,8 +84,8 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
 	  return false
   }
 
-  data = data.map((role) => role.role);
-  let roleString = data.join(",");
+  let roles = data.map((role) => role.role);
+  let roleString = roles.join(",");
   switch(type) {
     case "events": {
       if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("EC") || roleString.includes("AEC")) {
@@ -93,16 +93,15 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
       } else {
         return false;
       }
-      break;
     }
     case "roster": {
-      if (data.includes("ATM") || data.includes("DATM") || data.includes("WT") || data.includes("TA")) {
+      if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("TA")) {
         return true;
       }
       break;
     }
     case "admin": {
-      if (data.includes("ATM") || data.includes("DATM") || data.includes("WT")) {
+      if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT")) {
         return true;
       }
     }
@@ -217,9 +216,9 @@ export const updateVisitRequest = async(requestId, actionCid, actionMessage, was
         },
         data: {
           reviewed: true,
-          action_cid: actionCid,
-          action_message: actionMessage,
-          action_date: new Date(),
+          actionCid: actionCid,
+          actionMessage: actionMessage,
+          actionDate: new Date(),
           accepted: wasAccepted
         }
       })
