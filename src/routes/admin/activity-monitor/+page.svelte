@@ -34,10 +34,10 @@
             data.userData[i].totalMSecondsQuarter = 0
             let controllingMseconds: number =  0;
 
-            for(let j = 0; j < data.userData[i].sessions.length; j++) {
-                const session = data.userData[i].sessions[j]
-                if (session.logon_time.getTime() >= beginDate && session.logon_time.getTime() <= endDate) {
-                    controllingMseconds += session.duration
+            for(let j = 0; j < data.userData[i].controllerSessions.length; j++) {
+                const session = data.userData[i].controllerSessions[j]
+                if (session.start.getTime() >= beginDate && session.start.getTime() <= endDate) {
+                    controllingMseconds += session.end.getTime() - session.start.getTime();
                 }
             }
 
@@ -121,7 +121,7 @@
 
     <div class="flex flex-wrap justify-center bg-grey">
         <table class="table px-2">
-            <thead>
+            <thead class="border-2">
                 <tr class="bg-white">
                     <th class="px-2">Controller</th>
                     <th class="px-2">Home Facility</th>
@@ -134,16 +134,16 @@
             <tbody>
                 {#each data.userData as user}
                     {#if !(user.totalMsecondsQuarter > 10800000 && displayConflictsOnly)}
-                        <tr class={user.home_facility == "ZJX" ? "bg-sky-100" : "bg-grey-100"}>
-                            <td class="px-2 text-center">
+                        <tr class={`border-2 ${user.home_facility == "ZJX" ? "bg-sky-100" : "bg-grey-100"}`}>
+                            <td class="px-1 text-center border-r-2">
                                 <div class="flex-wrap justify-center px-1">
-                                    <span class="flex justify-center font-bold">{user.first_name} {user.last_name}</span>
+                                    <span class="flex justify-center font-bold">{user.firstName} {user.lastName}</span>
                                     <span class="flex justify-center italic">{user.cid} - {getRating(parseInt(user.rating))}</span>
                                 </div>
                             </td>
-                            <td class="text-center text-xl">{user.home_facility}</td>
-                            <td class="px-2 text-center text-xl">{user.controllingTimeFormat}</td>
-                            <td class="px-2 text-center text-xl text-red-500">NOT IMPLEMENTED</td>
+                            <td class="text-center text-xl border-r-2">{user.homeFacility}</td>
+                            <td class="px-2 text-center text-xl border-r-2">{user.controllingTimeFormat}</td>
+                            <td class="px-2 text-center text-xl text-red-500 border-r-2">NOT IMPLEMENTED</td>
                             <td class={user.totalMsecondsQuarter < 10800000 ? "px-2 text-center text-xl bg-red-100" : "px-2 text-center text-xl bg-green-100"}>{user.totalTimeFormat}</td>
                             <td class="px-5 py-4"><input class="accent-sky-500 h-5 w-5" type="checkbox" bind:checked={user.selected}/></td>
                         </tr>

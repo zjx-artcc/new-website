@@ -8,20 +8,20 @@ export const load = async ({ params, cookies, locals }) => {
     const userData = await prisma.roster.findMany({
         select: {
             cid: true,
-            first_name: true,
-            last_name: true,
+            firstName: true,
+            lastName: true,
             rating: true,
-            home_facility: true,
-            created_at: true,
-            sessions: {
+            homeFacility: true,
+            createdAt: true,
+            controllerSessions: {
                 select: {
-                    "duration": true,
-                    "logon_time": true
+                    start: true,
+                    end: true,
                 },
             }
         },
         orderBy: {
-            first_name: 'asc'
+            firstName: 'asc'
           }
         
     });

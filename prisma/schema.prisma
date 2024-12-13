@@ -25,7 +25,7 @@ model ControllerSession {
   start     DateTime? @db.Timestamptz(6)
   active    Boolean
   end       DateTime? @db.Timestamptz(6)
-  roster    Roster    @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: Cascade)
+  roster    Roster    @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("controller_sessions")
 }
@@ -55,7 +55,7 @@ model EventPosition {
   position        String
   type            Float
   id              String            @id @default(uuid())
-  event           Event             @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  event           Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
   PositionRequest PositionRequest[]
 
   @@map("event_positions")
@@ -95,6 +95,7 @@ model Roster {
   positionRequests                                           PositionRequest[]
   StaffRoles                                                 StaffRole[]
   stats                                                      Stats?
+  training_requests                                          training_requests[]
   training_sessions_training_sessions_controller_cidToroster TrainingSession[]   @relation("training_sessions_controller_cidToroster")
   training_sessions_training_sessions_instructor_cidToroster TrainingSession[]   @relation("training_sessions_instructor_cidToroster")
 
@@ -122,7 +123,7 @@ model Stats {
   tower       Float?
   tracon      Float?
   enroute     Float?
-  roster      Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: NoAction)
+  roster      Roster @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("stats")
 }
@@ -145,18 +146,17 @@ model User {
 }
 
 model VisitRequest {
-  id            Int       @id @default(autoincrement())
-  cid           Int
-  reason        String
-  dateRequested DateTime? @map("date_requested") @db.Date
-  reviewed      Boolean?  @default(false)
-  actionMessage String?   @map("action_message") @db.VarChar(150)
-  actionCid     Int?      @map("action_cid")
-  actionDate    DateTime? @map("action_date") @db.Date
-  accepted      Boolean
-  users         User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
-
-  users_visit_requests_action_cidTousers User? @relation("visit_requests_action_cidTousers", fields: [actionCid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
+  id                                     Int       @id @default(autoincrement())
+  cid                                    Int
+  reason                                 String
+  dateRequested                          DateTime? @map("date_requested") @db.Date
+  reviewed                               Boolean?  @default(false)
+  actionMessage                          String?   @map("action_message") @db.VarChar(150)
+  actionCid                              Int?      @map("action_cid")
+  actionDate                             DateTime? @map("action_date") @db.Date
+  accepted                               Boolean
+  users                                  User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+  users_visit_requests_action_cidTousers User?     @relation("visit_requests_action_cidTousers", fields: [actionCid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
 
   @@map("visit_requests")
 }
@@ -170,10 +170,8 @@ model WebSession {
   @@map("web_sessions")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-
 model TrainingSession {
-  session_id                                      Int     @id(map: "training_sessions_pk")
+  id                                              String  @id
   controller_cid                                  Int
   instructor_cid                                  Int
   duration                                        Int
@@ -182,8 +180,16 @@ model TrainingSession {
   progress_rating                                 Int?
   position                                        String? @db.VarChar(20)
   session_type                                    String  @db.VarChar(20)
-  roster_training_sessions_controller_cidToroster Roster  @relation("training_sessions_controller_cidToroster", fields: [controller_cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "training_sessions___fk_controller")
-  roster_training_sessions_instructor_cidToroster Roster  @relation("training_sessions_instructor_cidToroster", fields: [instructor_cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "training_sessions___fk_instructor")
+  roster_training_sessions_controller_cidToroster Roster  @relation("training_sessions_controller_cidToroster", fields: [controller_cid], references: [cid], onDelete: Cascade, map: "training_sessions___fk_controller")
+  roster_training_sessions_instructor_cidToroster Roster  @relation("training_sessions_instructor_cidToroster", fields: [instructor_cid], references: [cid], onDelete: NoAction, map: "training_sessions___fk_instructor")
 
   @@map("training_sessions")
+}
+
+model training_requests {
+  id           String   @id
+  cid          Int
+  type         Float
+  request_date DateTime @db.Timestamptz(6)
+  roster       Roster   @relation(fields: [cid], references: [cid], onDelete: Cascade)
 }
