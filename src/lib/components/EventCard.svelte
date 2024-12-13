@@ -6,7 +6,8 @@
   export let hostedBy: string;
   export let start: Date;
   export let end: Date
-
+  export let id: number;
+  
   const formatTimeString = (time: Date) => {
     return `${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`
   }
@@ -79,7 +80,7 @@
     </div>
   </div>
   <div class="flex flex-row justify-evenly">
-    <LinkButton to="/events" bgColor="bg-sky-500" textColor="text-white font-semibold" text="View Event"/>
+    <LinkButton to="/events/{id}" bgColor="bg-sky-500" textColor="text-white font-semibold" text="View Event"/>
   </div>
 </div>
 
