@@ -1,4 +1,58 @@
-import { getStaffRoles, prisma } from "./db";
+import { formatDate, getStaffRoles, prisma } from "./db";
+
+const formatTimeString = (time: Date) => {
+  return `${time.getUTCFullYear().toString().padStart(4, "0")}-${time.getUTCMonth().toString().padStart(2, "0")}-${time.getUTCDate().toString().padStart(2, "0")}}`
+}
+
+export const submitSoloCert = async(cid: number, position: string) => {
+  const expDate: Date = new Date(Date.now() + 2592000) // 30 days after issue date
+  const dateString: string = formatTimeString(expDate)
+  try {
+        // VATUSA API call to add solo cert
+        const vatusaReq = await fetch(
+          `https://api.vatusa.net/v2/solo?apikey=${process.env.VATUSA_KEY}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: JSON.stringify({'cid': cid, 'position': position})
+          }
+        );
+
+        console.log(`VATUSA API: POST ${cid} Solo Cert POSITION: ${position} - STATUS ${vatusaReq.status}`)
+
+        return new Response(null, {status: vatusaReq.status})
+  } catch(error) {
+    console.error(error)
+    return new Response(error, {status: 500})
+  }
+}
+
+export const deleteSoloCert = async(cid: number, position: string) => {
+  const expDate: Date = new Date(Date.now() + 2592000) // 30 days after issue date
+  const dateString: string = formatTimeString(expDate)
+  try {
+        // VATUSA API call to remove solo cert
+        const vatusaReq = await fetch(
+          `https://api.vatusa.net/v2/solo?apikey=${process.env.VATUSA_KEY}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: JSON.stringify({'cid': cid, 'position': position})
+          }
+        );
+
+        console.log(`VATUSA API: DELETE ${cid} Solo Cert POSITION: ${position} - STATUS ${vatusaReq.status}`)
+
+        return new Response(null, {status: vatusaReq.status})
+  } catch(error) {
+    console.error(error)
+    return new Response(error, {status: 500})
+  }
+}
 
 export const deleteHomeUser = async(cid: number, actionCid: number, reason: string) => {
   try {
