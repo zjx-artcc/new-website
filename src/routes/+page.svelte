@@ -39,7 +39,7 @@
 	<title>Jacksonville ARTCC</title>
 </svelte:head>
 
-<img src={imageUrl} class="-z-10 absolute top-0 w-full h-full blur-sm"/>
+<img src={imageUrl} alt={imageUrl} class="-z-10 absolute top-0 w-full h-full blur-sm"/>
 <div class="w-screen h-screen z-0 bg-transparent p-5 flex flex-col justify-left items-center">
 	<div class="flex flex-col">
 		{#if data.pageData.user}
