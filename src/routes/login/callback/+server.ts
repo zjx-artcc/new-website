@@ -60,8 +60,6 @@ async function getUser(token: string): Promise<User> {
     }
   });
   const res = (await req.json());
-  console.log(res.data)
-  console.log(token)
   let user: User = {
     id: parseInt(res.data.cid),
     firstName: res.data.personal.name_first,

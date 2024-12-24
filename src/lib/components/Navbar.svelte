@@ -60,7 +60,7 @@
     {:else}
       <Button class="text-xl" href="/login">
         <Icon icon="ic:baseline-log-in" class="w-7 h-7 pr-1.5"/>
-        Profile
+        Login
       </Button>
     {/if}
 </div>

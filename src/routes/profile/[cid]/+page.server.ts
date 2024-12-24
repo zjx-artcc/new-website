@@ -9,6 +9,7 @@ const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), 
 const months = ['month_one', 'month_two', 'month_three'];
 
 export const load: PageServerLoad = async ({ params, locals }) => {
+
   // Make sure valid parameter is passed
   if (params.cid == undefined) {
     svelteError(404, 'User not found');
@@ -17,13 +18,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   //Setup page data 
   let pageData: PageData = new PageData();
 
-  //Check for user permissions from database
-  try {
-    pageData.canEdit = await getStaffRoles(locals.session.userId, "roster")
-  } catch (error) {
-    console.error(error)
-    pageData.canEdit = false
-  }
+  //Check for user permissions from database3
+  console.log(locals.session);
+  pageData.canEdit = locals.session != null ? await getStaffRoles(locals.session.userId, "roster") : false;
   
   //Fetch roster data for user
   let rosterData: Roster = await prisma.roster.findUnique({

@@ -214,7 +214,7 @@
 				</h3>
 				<hr class="px-1 border-slate-300">
 				<div>
-					{#if pageData.user.cid == $page.data.session.userId && pageData.onRoster}
+					{#if $page.data.session != null && pageData.user.cid == $page.data.session.userId && pageData.onRoster}
 						<a href="/training/requests/new" class="text-blue-500">Request Training</a>
 						<p class="text-blue-500">Request LOA</p>
 					{/if}
