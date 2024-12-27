@@ -8,7 +8,7 @@
   export let canViewAdmin: boolean
 </script>
 
-<div class="w-screen h-20 bg-sky-500 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
+<div class="w-screen h-20 bg-sky-600 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
 
     <a href="/" class="flex flex-row justify-center items-center gap-x-4">
       <h2 class="font-semibold text-xl text-white w-24 text-center">Jacksonville</h2>
