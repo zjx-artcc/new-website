@@ -5,14 +5,11 @@ import { getStaffRoles } from '$lib/db';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, cookies, locals }) => {
-	if (process.env.NODE_ENV != 'development') {
-		console.log(locals.session);
-		if (locals.session === null) {
-			redirect(302, '/login');
-		} else if (!(await getStaffRoles(locals.session.userId, 'admin'))) {
-			redirect(302, '/404');
-		}
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.session === null) {
+		redirect(302, '/login');
+	} else if (!(await getStaffRoles(locals.session.userId, 'admin'))) {
+		redirect(302, '/404');
 	}
 
 	const request = await prisma.visitRequest.findMany({

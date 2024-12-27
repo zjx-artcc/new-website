@@ -1,6 +1,17 @@
 import { prisma, getCertsColor, getCtrCertColor, getRating, getStaffRoles } from '$lib/db';
+import { redirect } from '@sveltejs/kit';
 
-export const load = async({locals}) => {
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async({locals}) => {
+  if (!locals.session) {
+    redirect(302, '/login');
+  }
+
+  if (!await getStaffRoles(locals.user.id, "admin")) {
+    redirect(302, '/404');
+  }
+  
   const visitingMemberTable = await prisma.roster.findMany({
     orderBy: {
       lastName: 'asc'
