@@ -36,7 +36,6 @@
 		"@oslojs/encoding": "^1.1.0",
 		"@prisma/client": "^6.1.0",
 		"@sentry/sveltekit": "^8.40.0",
-		"@supabase/supabase-js": "^2.46.1",
 		"@sveltejs/adapter-node": "^5.2.9",
 		"autoprefixer": "^10.4.20",
 		"colorthief": "^2.6.0",
@@ -46,9 +45,8 @@
 		"globals": "^15.13.0",
 		"postcss": "^8.4.49",
 		"prisma": "^6.1.0",
-		"svelte-fontawesome": "^0.0.3",
 		"svelte-use-form": "^2.10.0",
-		"tailwindcss": "^3.4.15"
+		"tailwindcss": "^3.4.17"
 	},
 	"volta": {
 		"node": "21.5.0"
