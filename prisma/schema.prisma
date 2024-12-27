@@ -41,7 +41,6 @@ model Event {
   host             String
   hidden           Boolean           @default(true)
   banner           String
-  positions        Json?
   EventPosition    EventPosition[]
   roster           Roster            @relation(fields: [createdBy], references: [cid], onDelete: NoAction, onUpdate: NoAction)
   positionRequests PositionRequest[]

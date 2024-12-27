@@ -105,23 +105,23 @@
 					<hr class="px-1 border-slate-300">
 					<div>
 						<h4 class="text-base">Enroute:</h4>
-						<p class="text-sm text-{pageData.certs.ctr_cert.color}">{pageData.certs.ctr_cert.cert}</p>
+						<p class="text-sm text-{pageData.certs.ctrCert.color}">{pageData.certs.ctrCert.cert}</p>
 					</div>
 					<div>
 						<h4 class="text-base">Approach:</h4>
-						<p class="text-sm text-{pageData.certs.app_certs.color}">{pageData.certs.app_certs.cert}</p>
+						<p class="text-sm text-{pageData.certs.appCerts.color}">{pageData.certs.appCerts.cert}</p>
 					</div>
 					<div>
 						<h4 class="text-base">Tower:</h4>
-						<p class="text-sm text-{pageData.certs.twr_certs.color}">{pageData.certs.twr_certs.cert}</p>
+						<p class="text-sm text-{pageData.certs.twrCerts.color}">{pageData.certs.twrCerts.cert}</p>
 					</div>
 					<div>
 						<h4 class="text-base">Ground:</h4>
-						<p class="text-sm text-{pageData.certs.gnd_certs.color}">{pageData.certs.gnd_certs.cert}</p>
+						<p class="text-sm text-{pageData.certs.gndCerts.color}">{pageData.certs.gndCerts.cert}</p>
 					</div>
 					<div>
 						<h4 class="text-base">Delivery:</h4>
-						<p class="text-sm text-{pageData.certs.del_certs.color}">{pageData.certs.del_certs.cert}</p>
+						<p class="text-sm text-{pageData.certs.delCerts.color}">{pageData.certs.delCerts.cert}</p>
 					</div>
 				</div>
 			{/if}
@@ -188,9 +188,9 @@
 						{#each pageData.sessions as session}
 							{#if session != null}
 								<tr>
-									<td class="text-sm text-slate-600">{session.logon_time.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
-									<td class="text-sm text-slate-600">{session.logon_time.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.last_update.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+									<td class="text-sm text-slate-600">{session.start.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
+									<td class="text-sm text-slate-600">{session.start.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+									<td class="text-sm text-slate-600">{session.end.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
 									<td class="text-sm text-slate-600">{session.callsign}</td>
 									<td class="text-sm text-slate-600"></td>
 								</tr>
@@ -214,8 +214,8 @@
 				</h3>
 				<hr class="px-1 border-slate-300">
 				<div>
-					{#if pageData.certs.cid == $page.data.session.userId && pageData.onRoster}
-						<p class="text-blue-500">Request Training</p>
+					{#if $page.data.session != null && pageData.user.cid == $page.data.session.userId && pageData.onRoster}
+						<a href="/training/requests/new" class="text-blue-500">Request Training</a>
 						<p class="text-blue-500">Request LOA</p>
 					{/if}
 					{#if !pageData.onRoster}
@@ -223,7 +223,7 @@
 						<p class="text-blue-500">Submit Feedback</p>
 					{/if}
 					{#if pageData.canEdit}
-						<p><a href="/profile/{pageData.user.cid}/manage" class="text-blue-500">Edit User</a></p>
+						<p><a href="/profile/{pageData.user.cid}/manage" class="text-amber-500">Edit User</a></p>
 					{/if}
 					{#if $page.data.session != null && $page.data.session.userId.toString() == pageData.user.cid.toString()}
 						<p class="text-red-500"><a href="/logout">Log Out</a></p>

@@ -75,6 +75,10 @@ export function msToHours(input: number): string {
  * @returns {boolean} True if user has permission to access page
  */
 export async function getStaffRoles(cid: number, type: string): Promise<boolean> {
+  console.log(cid);
+  if (cid == null) {
+    return false;
+  }
   let data = await prisma.staffRole.findMany({
     where: {
       cid: cid
