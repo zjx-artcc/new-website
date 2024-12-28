@@ -11,7 +11,7 @@
 
     <div class="flex flex-wrap justify-center">
         <LinkCard title="Activity Monitor"  to="admin/activity-monitor" icon="mdi:clock"/>
-        <LinkCard title="Training Admin"  to="admin/training-admin" icon="mdi:person"/>
+        <LinkCard title="Training Admin"  to="admin/training-admin" icon="mdi:human-male-board-poll"/>
         <LinkCard title="Visitor Requests"  to="admin/visitor-management" icon="mdi:account-arrow-left"/>
         <LinkCard title="Roster Management"  to="admin/roster-management" icon="mdi:account-arrow-left"/>
     </div>
