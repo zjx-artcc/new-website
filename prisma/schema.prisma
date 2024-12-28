@@ -129,12 +129,12 @@ model Stats {
 }
 
 model TrainingRequest {
-  training_request_id                             Int       @id(map: "training_requests_pk")
+  training_request_id                             Int       @id(map: "training_requests_pk") @default(autoincrement())
   trainee_cid                                     Int
-  instructor_cid                                  Int
+  instructor_cid                                  Int?
   date_requested                                  DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
   date_assigned                                   DateTime? @db.Date
-  roster_training_requests_instructor_cidToroster Roster    @relation("training_requests_instructor_cidToroster", fields: [instructor_cid], references: [cid], onDelete: SetNull, onUpdate: NoAction, map: "training_requests_roster_cid_fk_ins")
+  roster_training_requests_instructor_cidToroster Roster?   @relation("training_requests_instructor_cidToroster", fields: [instructor_cid], references: [cid], onUpdate: NoAction, map: "training_requests_roster_cid_fk_ins")
   roster_training_requests_trainee_cidToroster    Roster    @relation("training_requests_trainee_cidToroster", fields: [trainee_cid], references: [cid], onDelete: Cascade, onUpdate: NoAction, map: "training_requests_roster_cid_fk_trainee")
 
   @@map("training_requests")

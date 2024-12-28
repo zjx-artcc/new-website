@@ -1,7 +1,18 @@
 import { prisma, getCertsColor, getCtrCertColor, getRating, getStaffRoles } from '$lib/db';
 
 export const load = async({locals}) => {
- 
+  // Get Training Requests
+  const trainingRequestDb = await prisma.trainingRequest.findMany({
+    select: {
+      trainee_cid: true,
+
+    },
+  })
+
+  const data = {
+    trainingRequests: trainingRequestDb
+  }
+  return data
 }
 
 
