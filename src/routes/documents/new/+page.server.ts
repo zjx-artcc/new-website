@@ -37,6 +37,7 @@ export const actions: Actions = {
 
     const formData = await request.formData();
     const file: File = formData.get('file') as File;
+    const name = formData.get('name').toString();
     const type = formData.get('type').toString().toLowerCase();
     const description = formData.get('desc').toString();
 
@@ -53,7 +54,7 @@ export const actions: Actions = {
 
     await prisma.file.create({
       data: {
-        name: file.name,
+        name: name,
         updated: new Date(),
         description: description,
         path: `static/documents/${type}/${file.name}`,

@@ -41,10 +41,10 @@ import { Tabs, TabItem } from 'flowbite-svelte';
             <p class="text-center table-cell">{sop.description}</p>
             <p class="text-center table-cell">{sop.updated.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</p>
             <div class="table-cell text-center">
-              <a href="/documents/{sop.id}" class="bg-green-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
+              <a href="/{sop.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
               {#if pageData.canEdit}
-              <a href="/documents/{sop.id}" class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></a>
-              <button class="bg-red-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+                <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                <button class="bg-red-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
               {/if}
             </div>
           </div>
