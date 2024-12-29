@@ -24,7 +24,7 @@
 
 <!--! Table BG color is temporary just for testing -->
 <Tabs class="flex flex-row min-h-fi justify-center items-center">
-  <TabItem open title="Airspace SOPs"> 
+  <TabItem open title="SOPs"> 
     <table class="bg-red-300 w-full">
       <thead>
         <tr>

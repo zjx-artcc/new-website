@@ -63,7 +63,11 @@
         <!--TODO: Convert to a dropdown with enums for types-->
         <label class="pb-1" for="type">Document Type:</label>
         <br>
-        <input name="type" id="type" class="outline outline-1"  use:validators={[required]} bind:value={document.type}>
+        <select id="type" name="type" class="pb-1 pl-1" bind:value={document.type}>
+          <option value="SOP">SOP</option>
+          <option value="LOA">LOA</option>
+          <option value="vATIS">vATIS</option>
+          <option value="misc">Miscellaneous</option>
       </div>
       <div class="px-2">
         <label class="pb-1" for="file">Document:</label>

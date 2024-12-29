@@ -37,7 +37,7 @@ export const actions: Actions = {
 
     const formData = await request.formData();
     const file: File = formData.get('file') as File;
-    const type = formData.get('type').toString().toUpperCase();
+    const type = formData.get('type').toString().toLowerCase();
     const description = formData.get('desc').toString();
 
     if (!file.name || file.name === "undefined") {
@@ -49,15 +49,15 @@ export const actions: Actions = {
 
 
 
-    writeFileSync(`documents/${type.toLowerCase()}/${file.name}`, Buffer.from(await file.arrayBuffer()));
+    writeFileSync(`documents/${type}/${file.name}`, Buffer.from(await file.arrayBuffer()));
 
     await prisma.file.create({
       data: {
         name: file.name,
         updated: new Date(),
         description: description,
-        path: `documents/${type.toLowerCase()}/${file.name}`,
-        type: type
+        path: `documents/${type}/${file.name}`,
+        type: type.toLowerCase()
       }
     })
 
