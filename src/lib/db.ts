@@ -74,6 +74,8 @@ export function msToHours(input: number): string {
  * @param type - Type of page
  * @returns {boolean} True if user has permission to access page
  */
+
+//TODO: Convert the type from string to an enum
 export async function getStaffRoles(cid: number, type: string): Promise<boolean> {
   if (cid == null) {
     return false;
@@ -89,6 +91,7 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
 
   let roles = data.map((role) => role.role);
   let roleString = roles.join(",");
+  //TODO: Switch from individual roles to teams; EX: ATM + DATM + TA are "SS", FE + AFEs are "FE", etc.
   switch(type) {
     case "events": {
       if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("EC") || roleString.includes("AEC")) {
@@ -105,6 +108,11 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
     }
     case "admin": {
       if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT")) {
+        return true;
+      }
+    }
+    case "files": {
+      if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("FE") || roleString.includes("AFE")) {
         return true;
       }
     }

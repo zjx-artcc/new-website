@@ -5,7 +5,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   let pageData = new PageData();
 
   if (locals.session) {
-    pageData.canEdit = await getStaffRoles(locals.session.userId, "admin");
+    pageData.canEdit = await getStaffRoles(locals.session.userId, "files");
   }
 
   return {pageData: {...pageData}};

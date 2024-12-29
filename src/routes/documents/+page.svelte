@@ -16,13 +16,13 @@
     <h3 class="text-3xl text-white pt-3">Jacksonville ARTCC</h3>
     {#if pageData.canEdit}
       <div class="pt-4">
-        <a href="/events/new" class="bg-blue-500 text-white px-2 py-1 rounded-md text-xl">+ Add Item</a>
+        <a href="/documents/new" class="bg-blue-500 text-white px-2 py-1 rounded-md text-xl">+ Add Item</a>
       </div>
     {/if}
   </div>
 </div>
 
-<!-- Table BG color is temporary just for testing -->
+<!--! Table BG color is temporary just for testing -->
 <Tabs class="flex flex-row min-h-fi justify-center items-center">
   <TabItem open title="Airspace SOPs"> 
     <table class="bg-red-300 w-full">
