@@ -17,4 +17,4 @@ vite.config.ts.timestamp-*
 !.env.vault
 !.vscode/settings.json
 
-documents/
+static/documents/

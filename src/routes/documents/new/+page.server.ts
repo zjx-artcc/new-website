@@ -49,14 +49,14 @@ export const actions: Actions = {
 
 
 
-    writeFileSync(`documents/${type}/${file.name}`, Buffer.from(await file.arrayBuffer()));
+    writeFileSync(`static/documents/${type}/${file.name}`, Buffer.from(await file.arrayBuffer()));
 
     await prisma.file.create({
       data: {
         name: file.name,
         updated: new Date(),
         description: description,
-        path: `documents/${type}/${file.name}`,
+        path: `static/documents/${type}/${file.name}`,
         type: type.toLowerCase()
       }
     })

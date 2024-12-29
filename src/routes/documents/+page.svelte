@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { Tabs, TabItem } from 'flowbite-svelte';
+  import Icon from '@iconify/svelte';
+import { Tabs, TabItem } from 'flowbite-svelte';
 
   export let data;
   let pageData = data.pageData;
+  console.log(pageData);
 </script>
 
 <svelte:head>
@@ -23,21 +25,32 @@
 </div>
 
 <!--! Table BG color is temporary just for testing -->
-<Tabs class="flex flex-row min-h-fi justify-center items-center">
+<Tabs class="flex flex-row min-h-fit justify-center items-center">
   <TabItem open title="SOPs"> 
-    <table class="bg-red-300 w-full">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Updated</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-
-      </tbody>
-    </table>
+    <div class="flex flex-row min-h-fit justify-center items-center">
+      <div class="table">
+        <div class="table-row-group">
+          <div class="table-cell font-bold text-lg w-20 text-center">Name</div>
+          <div class="table-cell font-bold text-lg w-96 text-center">Description</div>
+          <div class="table-cell font-bold text-lg w-72 text-center">Updated</div>
+          <div class="table-cell font-bold text-lg w-28 text-center">Actions</div>
+        </div>
+        {#each pageData.sops as sop}
+          <div class="table-row"> 
+            <p class="text-center table-cell">{sop.name}</p>
+            <p class="text-center table-cell">{sop.description}</p>
+            <p class="text-center table-cell">{sop.updated.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</p>
+            <div class="table-cell text-center">
+              <a href="/documents/{sop.id}" class="bg-green-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
+              {#if pageData.canEdit}
+              <a href="/documents/{sop.id}" class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></a>
+              <button class="bg-red-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+              {/if}
+            </div>
+          </div>
+        {/each}
+      </div>
+    </div>
   </TabItem>
   <TabItem title="LOAs">
     <table class="bg-blue-300 w-full">
@@ -56,6 +69,21 @@
   </TabItem>
   <TabItem title="vATIS">
     <table class="bg-green-300 w-full">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      </tbody>
+    </table>
+  </TabItem>
+  <TabItem title="Misc">
+    <table class="bg-orange-300-300 w-full">
       <thead>
         <tr>
           <th>Name</th>
