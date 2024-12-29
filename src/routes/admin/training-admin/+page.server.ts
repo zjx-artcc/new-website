@@ -23,6 +23,9 @@ export const load = async({locals}) => {
         }
       }
     },
+    where: {
+      active: true
+    },
     orderBy: {
       date_requested: 'asc'
     },
