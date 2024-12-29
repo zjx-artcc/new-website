@@ -1,8 +1,9 @@
 <script lang="ts">
 	import Popup from "$lib/components/Popup.svelte";
+	import TrainingTicketSubmission from "$lib/components/TrainingTicketSubmission.svelte";
 	import { TabItem, Tabs } from "flowbite-svelte";
 	let openRowAssignments = null
-	let hidden: boolean = true
+	let hidden: boolean = false
 	export let data;
 	
 	const formatDate = (input: Date): string => {
@@ -145,6 +146,6 @@
 	
 	
 	<Popup hidden={hidden}>
-		Hi
+		<TrainingTicketSubmission/>
 	</Popup>
 </div>
