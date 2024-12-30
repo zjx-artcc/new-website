@@ -16,6 +16,7 @@ services:
       SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN}
       SENTRY_ORG: ${SENTRY_ORG}
       SENTRY_PROJECT: ${SENTRY_PROJECT}
+      BODY_SIZE_LIMIT: "50mb"
     volumes:
       - /usr/src/app/static/documents:/var/www/new-website/
     ports:
