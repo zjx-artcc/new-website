@@ -31,7 +31,6 @@ export const actions = {
       const response = await submitTrainingNote(parseInt(data.get("student_cid") as string), vatusaData)
       if (response.status == 200) {
         // Push to DB
-        console.log("ran")
         const insertion = await prisma.trainingSession.create({
           data: {
             student_cid: studentCid,
