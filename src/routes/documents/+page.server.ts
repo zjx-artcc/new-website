@@ -39,6 +39,7 @@ class PageData {
     this.canEdit = false;
     this.sops = [];
     this.loas = [];
+    this.vATIS = [];
     this.misc = [];
   }
 }

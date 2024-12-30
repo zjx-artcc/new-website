@@ -1,10 +1,13 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-import { Tabs, TabItem } from 'flowbite-svelte';
+  import { Tabs, TabItem } from 'flowbite-svelte';
 
   export let data;
   let pageData = data.pageData;
-  console.log(pageData);
+
+  function deleteResource(id: string): void {
+
+  }
 </script>
 
 <svelte:head>
@@ -53,48 +56,81 @@ import { Tabs, TabItem } from 'flowbite-svelte';
     </div>
   </TabItem>
   <TabItem title="LOAs">
-    <table class="bg-blue-300 w-full">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Updated</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-      </tbody>
-    </table>
+    <div class="flex flex-row min-h-fit justify-center items-center">
+      <div class="table">
+        <div class="table-row-group">
+          <div class="table-cell font-bold text-lg w-20 text-center">Name</div>
+          <div class="table-cell font-bold text-lg w-96 text-center">Description</div>
+          <div class="table-cell font-bold text-lg w-72 text-center">Updated</div>
+          <div class="table-cell font-bold text-lg w-28 text-center">Actions</div>
+        </div>
+        {#each pageData.loas as loa}
+          <div class="table-row"> 
+            <p class="text-center table-cell">{loa.name}</p>
+            <p class="text-center table-cell">{loa.description}</p>
+            <p class="text-center table-cell">{loa.updated.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</p>
+            <div class="table-cell text-center">
+              <a href="/{loa.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
+              {#if pageData.canEdit}
+                <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                <button class="bg-red-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+              {/if} 
+            </div>
+          </div>
+        {/each}
+      </div>
+    </div>
   </TabItem>
   <TabItem title="vATIS">
-    <table class="bg-green-300 w-full">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Updated</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-      </tbody>
-    </table>
+    <div class="flex flex-row min-h-fit justify-center items-center">
+      <div class="table">
+        <div class="table-row-group">
+          <div class="table-cell font-bold text-lg w-20 text-center">Name</div>
+          <div class="table-cell font-bold text-lg w-96 text-center">Description</div>
+          <div class="table-cell font-bold text-lg w-72 text-center">Updated</div>
+          <div class="table-cell font-bold text-lg w-28 text-center">Actions</div>
+        </div>
+        {#each pageData.vATIS as vatis}
+          <div class="table-row"> 
+            <p class="text-center table-cell">{vatis.name}</p>
+            <p class="text-center table-cell">{vatis.description}</p>
+            <p class="text-center table-cell">{vatis.updated.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</p>
+            <div class="table-cell text-center">
+              <a href="/{vatis.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
+              {#if pageData.canEdit}
+                <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                <button class="bg-red-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+              {/if} 
+            </div>
+          </div>
+        {/each}
+      </div>
+    </div>
   </TabItem>
   <TabItem title="Misc">
-    <table class="bg-orange-300-300 w-full">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Updated</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-      </tbody>
-    </table>
+    <div class="flex flex-row min-h-fit justify-center items-center">
+      <div class="table">
+        <div class="table-row-group">
+          <div class="table-cell font-bold text-lg w-20 text-center">Name</div>
+          <div class="table-cell font-bold text-lg w-96 text-center">Description</div>
+          <div class="table-cell font-bold text-lg w-72 text-center">Updated</div>
+          <div class="table-cell font-bold text-lg w-28 text-center">Actions</div>
+        </div>
+        {#each pageData.misc as misc}
+          <div class="table-row"> 
+            <p class="text-center table-cell">{misc.name}</p>
+            <p class="text-center table-cell">{misc.description}</p>
+            <p class="text-center table-cell">{misc.updated.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</p>
+            <div class="table-cell text-center">
+              <a href="/{misc.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
+              {#if pageData.canEdit}
+                <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                <button class="bg-red-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+              {/if} 
+            </div>
+          </div>
+        {/each}
+      </div>
+    </div>
   </TabItem>
 </Tabs>
