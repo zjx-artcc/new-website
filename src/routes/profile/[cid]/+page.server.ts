@@ -9,6 +9,7 @@ const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), 
 const months = ['month_one', 'month_two', 'month_three'];
 
 export const prerender = false;
+export const ssr = false;
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 
