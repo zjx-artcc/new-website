@@ -1,11 +1,7 @@
 <script lang="ts">
-  //@ts-nocheck
   import '$lib/app.css';
-  import Navbar from '$lib/components/Navbar.svelte';
-  import Footer from "$lib/components/Footer.svelte"
   import Icon from '@iconify/svelte';
   import { required, useForm, validators } from 'svelte-use-form'
-  let rows = 0;
   const form = useForm();
   let event = {
     name: '',
@@ -14,16 +10,7 @@
     host: '',
     banner: '',
     hidden: false,
-    description: '',
-    positions: []
-  }
-
-  let columns = ['Position', 'Controller']
-  let newRow = [...columns];
-  let tableData = [];
-  function addRow() {
-    tableData = [...tableData, [...newRow]];
-    newRow = columns;
+    description: ''
   }
 </script>
 
@@ -117,4 +104,3 @@
     <i class="text-blue-500">You must save the event to create positions</i>
   </div>
 </form>
-<Footer />

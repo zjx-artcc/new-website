@@ -99,6 +99,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
           lastName: true,
           rating: true,
           homeFacility: true,
+          cid: true
         }
       }
     },
@@ -113,6 +114,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   // Sanitize and push data
   for (let i = 0; i < onlineData.length; i++) {
     let controller: OnlineController = {
+      cid: onlineData[i].roster.cid,
       firstName: onlineData[i].roster.firstName,
       lastName: onlineData[i].roster.lastName,
       callsign: onlineData[i].callsign,
@@ -168,6 +170,7 @@ type Event = {
 }
 
 type OnlineController = {
+  cid: number;
   firstName: string;
   lastName: string;
   callsign: string;
