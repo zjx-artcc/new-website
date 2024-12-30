@@ -3,9 +3,11 @@
 	import TrainingTicketSubmission from "$lib/components/TrainingTicketSubmission.svelte";
 	import { TabItem, Tabs } from "flowbite-svelte";
 	let openRowAssignments = null
-	let hidden: boolean = false
+	let hidden: boolean = true
 	export let data;
-	
+	let controllerData
+	let selection: string
+
 	const formatDate = (input: Date): string => {
 		let dateTime = new Date(input);
 		let year = dateTime.getFullYear();
@@ -25,8 +27,14 @@
   };
 
   const showPopup = (screen: string) => {
-    hidden = true
+		selection = screen
+    hidden = false
   }
+
+	const showTrainingTicketSubmission = (requestData) => {
+		controllerData = requestData
+		showPopup("trainingTicketSubmission")
+	}
 </script>
 
 <div class="m-5 flex justify-center items-center flex-col">
@@ -72,7 +80,7 @@
 
 								<div>
 									<div class="flex flex-col h-full flex-wrap gap-y-2 gap-x-2">
-										<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105">File Training Ticket</button>
+										<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showTrainingTicketSubmission(trainingRequest)}>File Training Ticket</button>
 										<button class="p-2 bg-sky-500 rounded-md text-sm transition hover:scale-105">View Training History</button>
 										<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105">Update Training Assignment</button>
 									</div>
@@ -146,6 +154,8 @@
 	
 	
 	<Popup hidden={hidden}>
-		<TrainingTicketSubmission/>
+		{#if selection == "trainingTicketSubmission"}
+			<TrainingTicketSubmission data={controllerData}/>
+		{/if}
 	</Popup>
 </div>
