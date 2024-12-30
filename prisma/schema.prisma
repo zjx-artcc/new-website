@@ -60,6 +60,17 @@ model EventPosition {
   @@map("event_positions")
 }
 
+model File {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  path        String
+  type        String
+  updated   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("files")
+}
+
 model PositionRequest {
   cid           Int
   eventId       Int           @map("event_id")

@@ -8,6 +8,8 @@ WORKDIR /usr/src/app
 
 COPY . .
 
+RUN ls
+
 RUN npm i -g pnpm
 
 RUN pnpm i

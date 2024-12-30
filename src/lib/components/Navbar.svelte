@@ -1,8 +1,7 @@
 <script lang="ts">
-	//@ts-nocheck
 	import Icon from '@iconify/svelte';
-	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
-	import { ChevronDownOutline, ChevronDownSolid, ChevronRightSolid } from 'flowbite-svelte-icons';
+	import { Button, Dropdown } from 'flowbite-svelte';
+	import { ChevronDownSolid } from 'flowbite-svelte-icons';
 	import { page } from '$app/stores';
 	import NavbarListItem from './NavbarListItem.svelte';
   export let canViewAdmin: boolean
@@ -24,7 +23,7 @@
 
     <Dropdown class="w-48">
       <NavbarListItem label="Pilot Briefing" href="/airspace" subText="Learn our airspace" icon="mdi:book"/>
-      <NavbarListItem label="Submit Feedback" href="/feedback"/>
+      <NavbarListItem label="Submit Feedback" href="/feedback" subText="Rate our controllers" icon="mdi:chat"/>
     </Dropdown>
 
     <!-- CONTROLLERS PAGE -->
@@ -35,9 +34,9 @@
     </Button>
 
     <Dropdown class="w-48">
-      <NavbarListItem label="Staff" href="/staff" icon="mdi:account-tie"/>
-      <NavbarListItem label="Roster" href="/roster" icon="mdi:list-box"/>
-      <NavbarListItem label="SOPs & Downloads" href="/downloads" icon="mdi:download"/>
+      <NavbarListItem label="Staff" href="/staff" subText="View our staff team" icon="mdi:account-tie"/>
+      <NavbarListItem label="Roster" href="/roster" subText="View our memebers" icon="mdi:list-box"/>
+      <NavbarListItem label="SOPs & Downloads" href="/documents" subText="Download tools" icon="mdi:download"/>
     </Dropdown>
 
     <!-- FEEDBACK PAGE -->

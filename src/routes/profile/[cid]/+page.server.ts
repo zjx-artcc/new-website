@@ -8,6 +8,9 @@ const DisplayMonths = ["January", "February", "March", "April", "May", "June", "
 const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
 const months = ['month_one', 'month_two', 'month_three'];
 
+export const prerender = false;
+export const ssr = false;
+
 export const load: PageServerLoad = async ({ params, locals }) => {
 
   // Make sure valid parameter is passed

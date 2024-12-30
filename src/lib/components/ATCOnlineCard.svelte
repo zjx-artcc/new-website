@@ -1,13 +1,12 @@
 <script lang="ts">
-	import HomepageCard from "./HomepageCard.svelte";
-
-  export let cid: number;
   export let position: string;
   export let rating: string;
   export let name: string;
   export let start: Date;
   export let homeController: boolean;
   export let frequency: string;
+  export let cid: number;
+  
   let visibility: string = 'hidden'
   const showDialog = () => {
     visibility = ""
@@ -25,7 +24,7 @@
 </script>
 
 
-<a href="/profile/1697197" on:mouseenter={showDialog} on:mouseleave={hideDialog}>
+<a href="/profile/{cid}" on:mouseenter={showDialog} on:mouseleave={hideDialog}>
   <div class="transition hover:bg-sky-300 rounded-lg">
     <div class="px-3 py-2 flex flex-row justify-between">
       <h4 class="font-bold text-sm text-gray-700">{position}</h4>
@@ -55,7 +54,7 @@
 
         <div class="mt-2 flex justify-evenly gap-x-2">
           <a href="/feedback" class="bg-green-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-green-400">Submit Feedback</a>
-          <a href={`/profile/${cid}`} class="bg-amber-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-amber-400">View Profile</a>
+          <a href="/" class="bg-amber-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-amber-400">View Profile</a>
         </div>
 
       </div>

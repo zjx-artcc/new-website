@@ -100,6 +100,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
           lastName: true,
           rating: true,
           homeFacility: true,
+          cid: true
         }
       }
     },
