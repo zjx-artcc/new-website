@@ -1,10 +1,18 @@
 <script lang="ts">
 	import Popup from "$lib/components/Popup.svelte";
+	import ResponseBox from "$lib/components/ResponseBox.svelte";
 	import TrainingTicketSubmission from "$lib/components/TrainingTicketSubmission.svelte";
 	import { TabItem, Tabs } from "flowbite-svelte";
-	let openRowAssignments = null
-	let hidden: boolean = true
 	export let data;
+	export let form;
+	let responseBox = {
+		success: false,
+		hidden: true,
+		text: ""
+	}
+	let openRowAssignments = null
+	let popupHidden: boolean = true
+	
 	let controllerData
 	let selection: string
 
@@ -21,23 +29,38 @@
 		openRowAssignments = openRowAssignments === i ? null : i
 	}
 
-	const hidePopup = () => {
-    hidden = true
+	const hidePopup = (showResponseBox: boolean, success: boolean, message: string) => {
+    popupHidden = true
     document.body.style.overflow = 'scroll'
+		responseBox.success = success
+		responseBox.hidden = !showResponseBox
+		responseBox.text = message
   };
 
   const showPopup = (screen: string) => {
 		selection = screen
-    hidden = false
+    popupHidden = false
   }
 
 	const showTrainingTicketSubmission = (requestData) => {
 		controllerData = requestData
 		showPopup("trainingTicketSubmission")
 	}
+
+
 </script>
 
+<ResponseBox 
+	hidden={responseBox.hidden} 
+	bgColor={responseBox.success ? "bg-green-500" : "bg-red-500"} 
+	header={responseBox.success ? "Success" : "Fail"}
+	text={responseBox.text}
+/>
 <div class="m-5 flex justify-center items-center flex-col">
+
+
+
+
 	<div>
 			<h1 class="text-xl text-sky-500 font-bold align-left">Training Admin</h1>
 	</div>
@@ -95,9 +118,9 @@
 		</TabItem>
 
 		<TabItem>
-			<!--
+			
 			<span slot="title">Training Slots</span>
-
+<!--
 			<table class="border-spacing-2 px-2">
 					<thead class="border-4">
 						<tr>
@@ -153,9 +176,9 @@
 	</Tabs>
 	
 	
-	<Popup hidden={hidden}>
+	<Popup hidden={popupHidden}>
 		{#if selection == "trainingTicketSubmission"}
-			<TrainingTicketSubmission data={controllerData}/>
+			<TrainingTicketSubmission data={controllerData} hidePopup={hidePopup} {form}/>
 		{/if}
 	</Popup>
 </div>

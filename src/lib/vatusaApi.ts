@@ -4,8 +4,8 @@ import { getStaffRoles, prisma } from "./db";
  * @param {Date} time - The time to format
  * @returns {String} The formatted time string
  */
-function formatTrainingSessionTimeString(time: Date): string {
-  return `${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`;
+export function formatTrainingSessionTimeString(time: Date): string {
+  return `${time.getUTCFullYear()}-${time.getUTCMonth().toString().padStart(2, "0")}-${time.getUTCDay().toString().padStart(2, "0")} ${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`;
 }
 
 /**
@@ -31,23 +31,21 @@ function getDurationString(duration: number): string {
  * @param {VATUSATrainingSession} sessionData - The training session data
  * @returns {Response} The response from the VATUSA API
  */
-export async function submitTrainingNote(sessionData: VATUSATrainingSession): Promise<Response> {
+export async function submitTrainingNote(studentCid: number, sessionData): Promise<Response> {
   try {
     // VATUSA API call to add solo cert
     const vatusaReq = await fetch(
-      `https://api.vatusa.net/v2/user/${sessionData.traineeCid}/training/record?apikey=${process.env.VATUSA_KEY}`,
+      `https://api.vatusa.net/v2/user/${studentCid}/training/record?apikey=${process.env.VATUSA_KEY}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify(sessionData)
+        body: new URLSearchParams(sessionData)
       }
     );
-
     return new Response(null, {status: vatusaReq.status});
   } catch(error) {
-    console.error(error);
     return new Response(error, {status: 500});
   }
 }
@@ -203,11 +201,10 @@ export async function addVisitorToVatusa(requestId: number, actionCid: number): 
 }
 
 export type VATUSATrainingSession = {
-  traineeCid: number;
-  instructorCid: number;
-  sessionDate: Date;
+  instructor_id: number;
+  session_date: string;
   position: string;
-  duration: number; // in seconds
+  duration: string; // HH:mm
   movements: number;
   score: number; // Session Score, 1-5
   notes: string;
