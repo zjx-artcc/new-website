@@ -5,11 +5,8 @@
   export let hidePopup
   export let data
   export let form
-  $: console.log(form)
-  let hours = 0;
-  let minutes = 0;
-  
   let score = 5
+  let allowSubmit = true
 
   type TrainingData = {
     studentCid: number
@@ -23,16 +20,7 @@
   }
 
   const handleSubmit = async(event) => {
-    
-    event.preventDefault();
-		const data = new FormData(event.currentTarget);
 
-		const response = await fetch(event.currentTarget.action, {
-			method: 'POST',
-			body: data
-		});
-
-    hidePopup(true, response.ok, await response.text())
   }
 </script>
 
@@ -47,7 +35,26 @@
     <form class="flex flex-col p-2 space-y-4 w-72" 
     method="POST" 
     action="/admin/training-admin/handler?/submitTicket" 
-    on:submit={handleSubmit}>
+    on:submit={handleSubmit}
+    use:enhance={async({ formElement, formData, action, cancel }) => {
+      if (allowSubmit) {
+        allowSubmit = false
+        const data = formData;
+
+        /*const response = await fetch(action, {
+          method: 'POST',
+          body: data
+        });*/
+      }
+      return async ({ result }) => {
+        if(result.type == "failure") {
+          hidePopup(true, false, await result.data.message)
+        } else {
+          hidePopup(true, true, "Ticket uploaded to ZJX site and VATUSA!")
+        }
+        allowSubmit = true
+      };
+    }}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>
         <input class="px-2" readonly value={`${data.instructorName} (${data.instructorCid})`}>

@@ -96,7 +96,7 @@ model Roster {
   stats                                                      Stats?
   training_requests_training_requests_instructor_cidToroster TrainingRequest[]   @relation("training_requests_instructor_cidToroster")
   training_requests_training_requests_student_cidToroster    TrainingRequest[]   @relation("training_requests_student_cidToroster")
-  training_sessions_training_sessions_controller_cidToroster TrainingSession[]   @relation("training_sessions_controller_cidToroster")
+  training_sessions_training_sessions_student_cidToroster    TrainingSession[]   @relation("training_sessions_student_cidToroster")
   training_sessions_training_sessions_instructor_cidToroster TrainingSession[]   @relation("training_sessions_instructor_cidToroster")
 
   @@map("roster")
@@ -145,17 +145,18 @@ model TrainingRequest {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model TrainingSession {
-  id                                              String  @id @default(uuid())
-  controllerCid                                   Int     @map("controller_cid")
-  instructorCid                                   Int     @map("instructor_cid")
+  session_id                                      Int      @id @default(autoincrement())
+  student_cid                                     Int
+  instructorCid                                   Int      @map("instructor_cid")
   duration                                        Int
-  numberOfMovements                               Int?    @default(0) @map("number_of_movements")
-  comments                                        String? @db.VarChar(750)
-  progressRating                                  Int?    @map("progress_rating")
-  position                                        String? @db.VarChar(20)
-  sessionType                                     String  @map("session_type") @db.VarChar(20)
-  roster_training_sessions_controller_cidToroster Roster  @relation("training_sessions_controller_cidToroster", fields: [controllerCid], references: [cid], onDelete: Cascade, map: "training_sessions___fk_controller")
-  roster_training_sessions_instructor_cidToroster Roster  @relation("training_sessions_instructor_cidToroster", fields: [instructorCid], references: [cid], onDelete: NoAction, map: "training_sessions___fk_instructor")
+  movements                                       Int?     @default(0)
+  notes                                           String   @db.VarChar(750)
+  score                                           Int
+  position                                        String   @db.VarChar(20)
+  location                                        Int
+  session_date                                    DateTime @db.Date
+  roster_training_sessions_student_cidToroster    Roster   @relation("training_sessions_student_cidToroster", fields: [student_cid], references: [cid], onDelete: Cascade, map: "training_sessions___fk_controller")
+  roster_training_sessions_instructor_cidToroster Roster   @relation("training_sessions_instructor_cidToroster", fields: [instructorCid], references: [cid], onDelete: NoAction, map: "training_sessions___fk_instructor")
 
   @@map("training_sessions")
 }

@@ -1,5 +1,6 @@
 import { getStaffRoles, isRostered } from '$lib/db.js'
 import { fail } from '@sveltejs/kit'
+import { prisma, convertDurationStringToSeconds } from '$lib/db.js'
 import { formatTrainingSessionTimeString, submitTrainingNote, type VATUSATrainingSession } from '$lib/vatusaApi.js'
 // @ts-nocheck
 export const actions = {
@@ -10,10 +11,11 @@ export const actions = {
     const formEntries = Object.fromEntries(data.entries()) // turns into table
     const instructorCid = locals.user.id
     const durationString: string = `${formEntries.hours.toString().padStart(2, "0")}:${formEntries.minutes.toString().padStart(2, "0")}`
+    const studentCid = parseInt(formEntries.student_cid as string)
 
-    if(getStaffRoles(instructorCid, "training") && isRostered(parseInt(formEntries.student_cid as string))) {
+    if(getStaffRoles(instructorCid, "training") && isRostered(studentCid)) {
       const vatusaData = {
-        instructor_id: 1697197,
+        instructor_id: locals.user.id,
         session_date: formatTrainingSessionTimeString(new Date(data.get("session_date") as string)),
         position: formEntries.position as string,
         duration: durationString, // in seconds
@@ -28,17 +30,32 @@ export const actions = {
 
       const response = await submitTrainingNote(parseInt(data.get("student_cid") as string), vatusaData)
       if (response.status == 200) {
-        console.log("success")
-        return({success: true})
-      } else {
-        console.log("fail")
-        fail(response.status, {invalid: true, message: await response.text()})
+        // Push to DB
+        console.log("ran")
+        const insertion = await prisma.trainingSession.create({
+          data: {
+            student_cid: studentCid,
+            instructorCid: instructorCid,
+            session_date: new Date(vatusaData.session_date),
+            duration: convertDurationStringToSeconds(vatusaData.duration),
+            position: vatusaData.position,
+            movements: vatusaData.movements,
+            score: vatusaData.score,
+            notes: vatusaData.notes,
+            location: vatusaData.location,
+          }
+        })
+
+        return {success: true}
+      } else {   
+        return fail(response.status, {invalid: true, message: "VATUSA upload failed"})
       }
     } else {
-      fail(403, {invalid: true, message: "Instructor not authenticator or student not rostered"})
+      return fail(403, {invalid: true, message: "Instructor not authenticator or student not rostered"})
     }
    } catch(error) {
-    fail(500, {invalid: true, message: "Invalid form data"})
+    console.log(error)
+    return fail(500, {invalid: true, message: "Invalid form data"})
    }
   }
 }

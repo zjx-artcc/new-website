@@ -145,6 +145,13 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
   }
 }
 
+export function convertDurationStringToSeconds(timeString: string): number {
+  const a = timeString.split(':');
+  const seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60; 
+
+  return seconds
+}
+
 /**
  * 
  * @param input - Date String
