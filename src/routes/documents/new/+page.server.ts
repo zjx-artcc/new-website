@@ -38,7 +38,7 @@ export const actions: Actions = {
     const formData = await request.formData();
     const file: File = formData.get('file') as File;
     const name = formData.get('name').toString();
-    const type = formData.get('type').toString().toLowerCase();
+    const type = formData.get('type').toString();
     const description = formData.get('desc').toString();
 
     if (!file.name || file.name === "undefined") {
@@ -58,7 +58,7 @@ export const actions: Actions = {
         updated: new Date(),
         description: description,
         path: `static/documents/${type}/${file.name}`,
-        type: type.toLowerCase()
+        type: type
       }
     })
 

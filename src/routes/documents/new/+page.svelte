@@ -64,9 +64,9 @@
         <label class="pb-1" for="type">Document Type:</label>
         <br>
         <select id="type" name="type" class="pb-1 pl-1" bind:value={document.type}>
-          <option value="SOP">SOP</option>
-          <option value="LOA">LOA</option>
-          <option value="vATIS">vATIS</option>
+          <option value="sop">SOP</option>
+          <option value="loa">LOA</option>
+          <option value="vatis">vATIS</option>
           <option value="misc">Miscellaneous</option>
       </div>
       <div class="px-2">
@@ -77,7 +77,7 @@
     </div>
   </div>
   <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">
-    <a href='/events/' class="bg-red-500 text-white px-2 py-1 rounded-md text-xl">Cancel</a>
+    <a href='/documents/' class="bg-red-500 text-white px-2 py-1 rounded-md text-xl">Cancel</a>
     <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-0.5 rounded-md text-xl">Save</button>
   </div>
   <div class="text-center flex-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">

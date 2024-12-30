@@ -2,11 +2,15 @@
   import Icon from '@iconify/svelte';
   import { Tabs, TabItem, Modal } from 'flowbite-svelte';
 
+  import type { File } from '@prisma/client';
+
   export let data;
   let pageData = data.pageData;
 
+  let targetData: File = undefined;
+
   let deleteModal = false;
-  let editModal = true;
+  let editModal = false;
 
   let target = "";
 
@@ -18,6 +22,20 @@
       },
       body: JSON.stringify({ id })
     });
+    const res = await req.json();
+    if (res.success) {
+      location.reload();
+    }
+  }
+
+  async function editResource(data: File) {
+    const req = await fetch('/documents/',{
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ data })
+    })
     const res = await req.json();
     if (res.success) {
       location.reload();
@@ -66,14 +84,45 @@
   </div>
 </Modal>
 
+<Modal bind:open={editModal} class="w-fit" autoclose>
+  <div class="text-center">
+    <h3 class="mb-5 text-lg font-normal text-gray-500">Modify {targetData.name}</h3>
+    <div class="text-center flex-1 px-5 py-2.5 outline outline-slate-200 rounded-sm">
+      <h1 class="font-bold text-xl pb-2">Document Details:</h1>
+       
+      <div class="px-2">
+        <label class="pb-1" for="name">Document Name:</label>
+        <br>
+        <input name="name" id="name" class="outline outline-1" bind:value={targetData.name} autocomplete="off" data-1p-ignore>
+      </div>
+      <div class="px-2">
+        <label class="pb-1" for="desc">Document Description:</label>
+        <br>
+        <input name="desc" id="desc" class="outline outline-1"  bind:value={targetData.description}>
+      </div>
+      <div class="px-2">
+        <!--TODO: Convert to a dropdown with enums for types-->
+        <label class="pb-1" for="type">Document Type:</label>
+        <br>
+        <select id="type" name="type" class="pb-1 pl-1" bind:value={targetData.type}>
+          <option value="sop">SOP</option>
+          <option value="loa">LOA</option>
+          <option value="vatis">vATIS</option>
+          <option value="misc">Miscellaneous</option>
+      </div>
+      <button class="bg-green-500 text-white px-2 py-1 mt-2 rounded-md" on:click={() => editResource(targetData)}>Save</button>
+      <button class="bg-blue-500 text-white px-2 py-1 mt-2 rounded-md">Cancel</button>
+    </div>
+  </div>
+</Modal>
+
 <div>
-  <!--! Table BG color is temporary just for testing -->
   <Tabs class="flex flex-row min-h-fit justify-center items-center">
     <TabItem open title="SOPs"> 
       <div class="flex flex-row min-h-fit justify-center items-center">
         <div class="table">
           <div class="table-row-group">
-            <div class="table-cell font-bold text-lg w-20 text-center">Name</div>
+            <div class="table-cell font-bold text-lg w-56 text-center">Name</div>
             <div class="table-cell font-bold text-lg w-96 text-center">Description</div>
             <div class="table-cell font-bold text-lg w-72 text-center">Updated</div>
             <div class="table-cell font-bold text-lg w-28 text-center">Actions</div>
@@ -86,8 +135,8 @@
               <div class="table-cell text-center">
                 <a href="/{sop.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
                 {#if pageData.canEdit}
-                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
-                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => deleteResource(sop.id)}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" on:click={() => {editModal = true; targetData = sop}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => { deleteModal = true; target = sop.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
                 {/if} 
               </div>
             </div>
@@ -112,8 +161,8 @@
               <div class="table-cell text-center">
                 <a href="/{loa.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
                 {#if pageData.canEdit}
-                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
-                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => deleteResource(loa.id)}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" on:click={() => {editModal = true; targetData = loa}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => { deleteModal = true; target = loa.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
                 {/if} 
               </div>
             </div>
@@ -138,9 +187,9 @@
               <div class="table-cell text-center">
                 <a href="/{vatis.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
                 {#if pageData.canEdit}
-                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
-                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => deleteResource(vatis.id)}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
-                {/if} 
+                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" on:click={() => {editModal = true; targetData = vatis}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => { deleteModal = true; target = vatis.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+                {/if}  
               </div>
             </div>
           {/each}
@@ -164,7 +213,7 @@
               <div class="table-cell text-center">
                 <a href="/{misc.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
                 {#if pageData.canEdit}
-                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" on:click={() => {editModal = true; targetData = misc}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
                   <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => { deleteModal = true; target = misc.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
                 {/if} 
               </div>
