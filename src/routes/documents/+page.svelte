@@ -45,7 +45,7 @@ import { Tabs, TabItem } from 'flowbite-svelte';
               {#if pageData.canEdit}
                 <button class="bg-yellow-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:pencil" color="white" width="20px"/></button>
                 <button class="bg-red-500 rounded-full inline-flex items-center p-1"><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
-              {/if}
+              {/if} 
             </div>
           </div>
         {/each}
