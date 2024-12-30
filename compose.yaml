@@ -16,6 +16,8 @@ services:
       SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN}
       SENTRY_ORG: ${SENTRY_ORG}
       SENTRY_PROJECT: ${SENTRY_PROJECT}
+    volumes:
+      - /usr/src/app/static/documents:/var/www/new-website/
     ports:
       - "3700:3700"
     network_mode: bridge
