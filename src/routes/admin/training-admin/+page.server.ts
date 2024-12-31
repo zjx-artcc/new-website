@@ -54,7 +54,7 @@ export const load = async( {locals} ) => {
   // parse database pull
   for(let i = 0; i < trainingRequestDb.length; i++) {
     const currentRequest = trainingRequestDb[i]
-    const student = currentRequest.roster_training_requests_instructor_cidToroster
+    const student = currentRequest.roster_training_requests_student_cidToroster
     const instructor = currentRequest.roster_training_requests_instructor_cidToroster
     trainingRequests.push({
       studentCid: currentRequest.studentCid,
