@@ -22,12 +22,12 @@ export const load = async( {locals} ) => {
   // Get Training Requests
   const trainingRequestDb = await prisma.trainingRequest.findMany({
     select: {
-      student_cid: true,
-      instructor_cid: true,
-      date_assigned: true,
-      date_requested: true,
+      studentCid: true,
+      instructorCid: true,
+      dateAssigned: true,
+      dateRequested: true,
       status: true,
-      training_type: true,
+      trainingType: true,
       roster_training_requests_instructor_cidToroster: {
         select: {
           firstName: true,
@@ -45,7 +45,7 @@ export const load = async( {locals} ) => {
       active: true
     },
     orderBy: {
-      date_requested: 'asc'
+      dateRequested: 'asc'
     },
   })
 
@@ -57,14 +57,14 @@ export const load = async( {locals} ) => {
     const student = currentRequest.roster_training_requests_student_cidToroster
     const instructor = currentRequest.roster_training_requests_instructor_cidToroster
     trainingRequests.push({
-      studentCid: currentRequest.student_cid,
-      instructorCid: currentRequest.instructor_cid,
-      dateAssigned: currentRequest.date_assigned,
-      dateRequested: currentRequest.date_requested,
+      studentCid: currentRequest.studentCid,
+      instructorCid: currentRequest.instructorCid,
+      dateAssigned: currentRequest.dateAssigned,
+      dateRequested: currentRequest.dateRequested,
       status: currentRequest.status != null ? currentRequest.status : "Awaiting Assignment",
       studentName: student.firstName + " " + student.lastName,
       instructorName: instructor != null ? instructor.firstName + " " + instructor.lastName : "None",
-      trainingType: currentRequest.training_type
+      trainingType: currentRequest.trainingType
     })
   }
 
