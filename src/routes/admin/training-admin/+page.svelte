@@ -12,6 +12,7 @@
 	}
 	let localTrainingAssignments = 0
 	let openRowAssignments = null
+	let openRowSlots = null
 	let popupHidden: boolean = true
 	
 	let controllerData
@@ -30,6 +31,10 @@
 		openRowAssignments = openRowAssignments === i ? null : i
 	}
 
+	const toggleRowSlots = (i) => {
+		openRowSlots = openRowSlots === i ? null : i
+	}
+
 	const hidePopup = (showResponseBox: boolean, success: boolean, message: string) => {
     popupHidden = true
     document.body.style.overflow = 'scroll'
@@ -46,6 +51,24 @@
 	const showTrainingTicketSubmission = (requestData) => {
 		controllerData = requestData
 		showPopup("trainingTicketSubmission")
+	}
+	
+	const getStatusColor = (status: string): string => {
+		// use 300 for all colors
+		switch (status) {
+			case "In Progress":
+				return "bg-sky-300"
+			case "Awaiting Trainer Assignment":
+				return "bg-purple-300"
+			case "In Progress":
+				return "bg-cyan-300"
+			case "Solo Cert":
+				return "bg-amber-300"
+			case "Checkout":
+				return "bg-green-300"
+			default:
+				return "bg-gray-300"
+		}
 	}
 
 	// init localtrainingrequests
@@ -93,7 +116,7 @@
 							<td class="px-2 text-center font-bold border-x-2 border-gray-300">{trainingRequest.trainingType}</td>
 							<td class="px-2 border-x-2 border-gray-300">{formatDate(trainingRequest.dateRequested)}</td>
 							<td class="px-2 border-x-2 border-gray-300">{trainingRequest.dateAssigned != null ? formatDate(trainingRequest.dateAssigned) : "None"}</td>
-							<td class="px-2 border-x-2 border-gray-300">{trainingRequest.status}</td>
+							<td class={`px-2 border-x-2 border-gray-300 ${getStatusColor(trainingRequest.status)}`}>{trainingRequest.status}</td>
 						</tr>
 					{/if}
 
@@ -131,7 +154,7 @@
 		<TabItem>
 			
 			<span slot="title">Training Slots</span>
-<!--
+			{#if data.trainingRequests.length > 0}
 			<table class="border-spacing-2 px-2">
 					<thead class="border-4">
 						<tr>
@@ -143,38 +166,41 @@
 							<th class="px-2">Status</th>
 						</tr>
 					</thead>
-			<tbody class="">
-				{#each data.trainingRequests as trainingRequest, i}
-					<tr on:click={() => toggleRow(i)} class={`transition hover:bg-sky-200 border-y-2 border-gray-400 ${trainingRequest.instructorCid == null ? "bg-red-200" : "bg-gray-200"}`}>
-						<td class="p-1 border-x-2 border-gray-300">{trainingRequest.studentName}</td>
-						<td class="px-2 border-x-2 border-gray-300">{trainingRequest.instructorName}</td>
-						<td class="px-2 text-center font-bold border-x-2 border-gray-300">{trainingRequest.trainingType}</td>
-						<td class="px-2 border-x-2 border-gray-300">{formatDate(trainingRequest.dateRequested)}</td>
-						<td class="px-2 border-x-2 border-gray-300">{trainingRequest.dateAssigned != null ? formatDate(trainingRequest.dateAssigned) : "None"}</td>
-						<td class="px-2 border-x-2 border-gray-300">{trainingRequest.status}</td>
-					</tr>
-
-					{#if openRow == i}
-						<tr>
-							<td colspan=6>
-								<div class="w-full h-36 bg-sky-200 p-2 border-x-4 flex flex-row gap-x-5">
-									<div>
-										<h3>{trainingRequest.trainingType} Training Request</h3>
-										<h2 class="font-bold text-lg">{trainingRequest.studentName}</h2>
-										<h3 class="text-md">{trainingRequest.studentCid}</h3>
-									</div>
-
-									<div>
-										<h2>Actions</h2>
-									</div>
-								</div>
-							</td>
+				<tbody class="">
+					{#each data.trainingRequests as trainingRequest, i}
+						<tr on:click={() => toggleRowSlots(i)} class={`transition hover:bg-sky-200 border-y-2 border-gray-400 ${trainingRequest.instructorCid == null ? "bg-red-200" : "bg-gray-200"}`}>
+							<td class="p-1 border-x-2 border-gray-300">{trainingRequest.studentName}</td>
+							<td class="px-2 border-x-2 border-gray-300">{trainingRequest.instructorName}</td>
+							<td class="px-2 text-center font-bold border-x-2 border-gray-300">{trainingRequest.trainingType}</td>
+							<td class="px-2 border-x-2 border-gray-300">{formatDate(trainingRequest.dateRequested)}</td>
+							<td class="px-2 border-x-2 border-gray-300">{trainingRequest.dateAssigned != null ? formatDate(trainingRequest.dateAssigned) : "None"}</td>
+							<td class={`px-2 border-x-2 border-gray-300 ${getStatusColor(trainingRequest.status)}`}>{trainingRequest.status}</td>
 						</tr>
 
-					{/if}
-				{/each}
-			</tbody>-->
-		
+						{#if openRowSlots == i}
+							<tr>
+								<td colspan=6>
+									<div class="w-full h-36 bg-sky-200 p-2 border-x-4 flex flex-row gap-x-5">
+										<div>
+											<h3>{trainingRequest.trainingType} Training Request</h3>
+											<h2 class="font-bold text-lg">{trainingRequest.studentName}</h2>
+											<h3 class="text-md">{trainingRequest.studentCid}</h3>
+										</div>
+
+										<div>
+											<h2>Actions</h2>
+										</div>
+									</div>
+								</td>
+							</tr>
+
+						{/if}
+					{/each}
+				</tbody>
+			</table>
+			{:else}
+			<h2 class="font-bold text-xl my-4">No active training requests</h2>
+			{/if}
 		</TabItem>
 
 		<TabItem>
