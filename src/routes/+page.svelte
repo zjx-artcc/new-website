@@ -72,7 +72,13 @@
 
 			<div>
 				{#each data.pageData.online as controller}
-					<AtcOnlineCard position={controller.callsign} name={`${controller.firstName} ${controller.lastName}`} rating={controller.rating} homeController={controller.homeController} start={controller.start} frequency={controller.frequency} cid={controller.cid}/>
+					<AtcOnlineCard 
+					position={controller.callsign} 
+					name={`${controller.firstName} ${controller.lastName}`} 
+					rating={controller.rating} homeController={controller.homeController} 
+					start={controller.start} 
+					frequency={controller.frequency} 
+					cid={controller.cid}/>
 				{/each}
 			</div>
 				

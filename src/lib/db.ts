@@ -47,6 +47,22 @@ export function getRating(ratingInt: number): string {
 
 /**
  * 
+ * @param cid - CID of user
+ * @returns {boolean} True/false if user is rostered or not
+ */
+export function isRostered(cid: number): boolean {
+  const query = prisma.roster.findFirst({
+    where: {
+      cid: cid
+    }
+  })
+
+  
+  return query != null
+}
+
+/**
+ * 
  * @param input - Hours in Decimal Form
  * @returns {string} Hours in HH:MM Format
  */
@@ -93,6 +109,20 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
   let roleString = roles.join(",");
   //TODO: Switch from individual roles to teams; EX: ATM + DATM + TA are "SS", FE + AFEs are "FE", etc.
   switch(type) {
+    case "ots": {
+      if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("INS") || roleString.includes("TA")) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    case "training": {
+      if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("INS") || roleString.includes("MTR") || roleString.includes("TA")) {
+        return true;
+      } else {
+        return false;
+      }
+    }
     case "events": {
       if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("EC") || roleString.includes("AEC")) {
         return true;
@@ -120,6 +150,13 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
       return false;
     }
   }
+}
+
+export function convertDurationStringToSeconds(timeString: string): number {
+  const a = timeString.split(':');
+  const seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60; 
+
+  return seconds
 }
 
 /**

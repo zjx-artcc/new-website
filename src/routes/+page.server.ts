@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 
 const months = ['month_three', 'month_two', 'month_two'];
 
-export const load: PageServerLoad = async ({ cookies, locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
   //Setup page data
   let pageData = new PageData();
 
@@ -90,6 +90,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   //Fetch all online controllers
   const onlineData = await prisma.controllerSession.findMany({
     select: {
+      cid: true,
       callsign: true,
       start: true,
       frequency: true,
@@ -114,7 +115,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   // Sanitize and push data
   for (let i = 0; i < onlineData.length; i++) {
     let controller: OnlineController = {
-      cid: onlineData[i].roster.cid,
+      cid: onlineData[i].cid,
       firstName: onlineData[i].roster.firstName,
       lastName: onlineData[i].roster.lastName,
       callsign: onlineData[i].callsign,

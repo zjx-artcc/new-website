@@ -140,25 +140,24 @@
 
   <div id="confirmation-screen" class={`${popupClass} z-20 left-0 top-0 absolute w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50`}>
 		{#if activeScreen == "removeUser"}
-      <div class="z-50 flex flex-col items-center place-items-center bg-gray-200 w-96">
-        <h2 class="text-sky-500 font-bold text-2xl mt-2 mb-5">Confirm Sudo Action</h2>
+      <div class="z-50 flex flex-col items-center place-items-center bg-gray-200 px-4 py-2">
+        <h2 class="text-sky-500 font-bold text-2xl mt-2 mb-5">Remove User</h2>
 
         <div>
-          <div class="flex-col flex gap-y-1 bg-sky-800 p-2">
-            <h4 class="text-white font-bold">Action: {confirmationScreenAction}</h4>
-            <h4 class="text-white">Name: {removeUserInfo.name}</h4>
-            <h4 class="text-white">CID: {removeUserInfo.cid}</h4>
-            <h4 class="text-white">Home Facility: {removeUserInfo.home_facility}</h4>
+          <div class="flex-col flex gap-y-1 bg-sky-200 p-2">
+            <h4 class="text-black">Name: {removeUserInfo.name}</h4>
+            <h4 class="text-black">CID: {removeUserInfo.cid}</h4>
+            <h4 class="text-black">Home Facility: {removeUserInfo.home_facility}</h4>
 
             <div>
-              <h4 class="text-amber-500 font-semibold">Enter removal reason:</h4>
+              <h4 class="text-amber-800 font-semibold">Enter removal reason:</h4>
               <input type="text" bind:value={removeUserInfo.reason}/>
             </div>
           </div>
-          <h4 class="text-red-500 font-bold text-lg">This action cannot be undone.</h4>
+          <h4 class="text-red-500 font-light text-lg">This action cannot be undone.</h4>
         </div>
 
-        <div class="flex my-5">
+        <div class="flex my-2">
           <button
             class="bg-red-500 p-2 mx-2 w-24 font-semibold rounded-md"
             on:click={() => hidePopup()}>

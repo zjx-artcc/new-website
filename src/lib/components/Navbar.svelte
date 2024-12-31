@@ -7,7 +7,7 @@
   export let canViewAdmin: boolean
 </script>
 
-<div class="w-screen h-20 bg-sky-600 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
+<div class="w-screen py-2 bg-sky-600 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
 
     <a href="/" class="flex flex-row justify-center items-center gap-x-4">
       <h2 class="font-semibold text-xl text-white w-24 text-center">Jacksonville</h2>
@@ -37,6 +37,7 @@
       <NavbarListItem label="Staff" href="/staff" subText="View our staff team" icon="mdi:account-tie"/>
       <NavbarListItem label="Roster" href="/roster" subText="View our memebers" icon="mdi:list-box"/>
       <NavbarListItem label="SOPs & Downloads" href="/documents" subText="Download tools" icon="mdi:download"/>
+      <NavbarListItem label="Visit" href="/visit" subText="" icon="mdi:person"/>
     </Dropdown>
 
     <!-- FEEDBACK PAGE -->
