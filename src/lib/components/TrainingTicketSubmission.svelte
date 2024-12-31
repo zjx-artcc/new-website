@@ -40,11 +40,6 @@
       if (allowSubmit) {
         allowSubmit = false
         const data = formData;
-
-        /*const response = await fetch(action, {
-          method: 'POST',
-          body: data
-        });*/
       }
       return async ({ result }) => {
         if(result.type == "failure") {
