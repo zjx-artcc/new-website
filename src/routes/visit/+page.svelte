@@ -2,8 +2,6 @@
 	import '$lib/app.css';
 	import VisitRow from '$lib/components/VisitRow.svelte';
 
-
-	import { getRating } from '$lib/db';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
 	//import { getRating } from '$lib/db.js';
 	export let data;

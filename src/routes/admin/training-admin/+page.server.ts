@@ -1,6 +1,24 @@
-import { prisma, getCertsColor, getCtrCertColor, getRating, getStaffRoles } from '$lib/db';
+import { prisma, getStaffRoles } from '$lib/db';
 
-export const load = async({locals}) => {
+export const load = async( {locals} ) => {
+  if (!locals.session) {
+    return {
+      status: 302,
+      headers: {
+        location: '/login'
+      }
+    }
+  }
+
+  if (!await getStaffRoles(locals.session.userId, 'training')) {
+    return {
+      status: 403,
+      headers: {
+        location: '/forbidden'
+      }
+    }
+  }
+
   // Get Training Requests
   const trainingRequestDb = await prisma.trainingRequest.findMany({
     select: {

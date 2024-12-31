@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 
 const months = ['month_three', 'month_two', 'month_two'];
 
-export const load: PageServerLoad = async ({ cookies, locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
   //Setup page data
   let pageData = new PageData();
 

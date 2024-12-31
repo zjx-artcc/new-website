@@ -140,16 +140,16 @@ model Stats {
 }
 
 model TrainingRequest {
-  training_request_id                             Int       @id(map: "training_requests_pk") @default(autoincrement())
-  student_cid                                     Int
-  instructor_cid                                  Int?
-  date_requested                                  DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
-  date_assigned                                   DateTime? @db.Date
+  trainingRequestId                               Int       @id(map: "training_requests_pk") @default(autoincrement()) @map("training_request_id")
+  studentCid                                      Int       @map("student_cid")
+  instructorCid                                   Int?      @map("instructor_cid")
+  dateRequested                                   DateTime  @default(dbgenerated("CURRENT_DATE")) @map("date_requested") @db.Date
+  dateAssigned                                    DateTime? @map("date_assigned") @db.Date
   status                                          String?   @db.VarChar(50)
   active                                          Boolean   @default(true)
-  training_type                                   String?   @db.VarChar(30)
-  roster_training_requests_instructor_cidToroster Roster?   @relation("training_requests_instructor_cidToroster", fields: [instructor_cid], references: [cid], onUpdate: NoAction, map: "training_requests_roster_cid_fk_ins")
-  roster_training_requests_student_cidToroster    Roster    @relation("training_requests_student_cidToroster", fields: [student_cid], references: [cid], onDelete: Cascade, onUpdate: NoAction, map: "training_requests_roster_cid_fk_student")
+  trainingType                                    String?   @map("training_type") @db.VarChar(30)
+  roster_training_requests_instructor_cidToroster Roster?   @relation("training_requests_instructor_cidToroster", fields: [instructorCid], references: [cid], onUpdate: NoAction, map: "training_requests_roster_cid_fk_ins")
+  roster_training_requests_student_cidToroster    Roster    @relation("training_requests_student_cidToroster", fields: [studentCid], references: [cid], onDelete: Cascade, onUpdate: NoAction, map: "training_requests_roster_cid_fk_student")
 
   @@map("training_requests")
 }

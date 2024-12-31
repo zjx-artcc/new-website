@@ -1,8 +1,7 @@
 import { getStaffRoles, isRostered } from '$lib/db.js'
 import { fail } from '@sveltejs/kit'
 import { prisma, convertDurationStringToSeconds } from '$lib/db.js'
-import { formatTrainingSessionTimeString, submitTrainingNote, type VATUSATrainingSession } from '$lib/vatusaApi.js'
-// @ts-nocheck
+import { formatTrainingSessionTimeString, submitTrainingNote } from '$lib/vatusaApi.js'
 export const actions = {
   submitTicket: async({request, locals}) => {
 
@@ -57,16 +56,4 @@ export const actions = {
     return fail(500, {invalid: true, message: "Invalid form data"})
    }
   }
-}
-
-type TrainingTicketFormEntry = {
-  studentCid: number;
-  score: number;
-  session_date: Date;
-  hours: number;
-  minutes: number;
-  location: number;
-  position: string;
-  notes: string;
-  movements: string;
 }
