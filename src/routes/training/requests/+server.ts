@@ -11,8 +11,8 @@ export const POST: RequestHandler = async ( {request, locals} ): Promise<Respons
 
   await prisma.trainingRequest.create({
     data: {
-      cid: locals.session.userId,
-      type: parseFloat(type),
+      student_cid: locals.session.userId,
+      trainingType: parseFloat(type),
       requestDate: new Date()
     }
   })

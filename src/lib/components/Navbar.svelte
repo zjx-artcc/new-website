@@ -37,6 +37,7 @@
       <NavbarListItem label="Staff" href="/staff" subText="View our staff team" icon="mdi:account-tie"/>
       <NavbarListItem label="Roster" href="/roster" subText="View our memebers" icon="mdi:list-box"/>
       <NavbarListItem label="SOPs & Downloads" href="/documents" subText="Download tools" icon="mdi:download"/>
+      <NavbarListItem label="Visit" href="/visit" subText="" icon="mdi:person"/>
     </Dropdown>
 
     <!-- FEEDBACK PAGE -->

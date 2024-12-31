@@ -51,7 +51,7 @@ export const load: PageServerLoad = async ({locals}) => {
   user.activeVisitRequests = activeVisitRequests
   user.previousVisitRequests = previousVisitRequests
 
-  return user;
+  return {...user};
 }
 
 class User {

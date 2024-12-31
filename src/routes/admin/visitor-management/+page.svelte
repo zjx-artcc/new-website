@@ -153,15 +153,15 @@
 									<td class="px-2 text-center border-r-2">
 										<div class="flex-wrap justify-center px-1">
 											<span class="flex text-lg justify-center font-bold"
-												>{user.first_name} {user.last_name}</span
+												>{user.firstName} {user.lastName}</span
 											>
 											<span class="flex justify-center italic"
 												>{user.cid} - {getRating(parseInt(user.rating))}</span
 											>
 										</div>
 									</td>
-									<td class="text-center px-2 text-2xl border-r-2">{user.home_facility == "" ? "None" : user.home_facility}</td>
-									<td class="text-center px-2 text-2xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth() + 1}-${user.date_requested.getUTCDate()}`}</td>
+									<td class="text-center px-2 text-2xl border-r-2">{user.homeFacility == "" ? "None" : user.homeFacility}</td>
+									<td class="text-center px-2 text-2xl border-r-2">{`${user.dateRequested.getUTCFullYear()}-${user.dateRequested.getUTCMonth() + 1}-${user.dateRequested.getUTCDate()}`}</td>
 									<td class="text-left text-lg p-2 w-96">{user.reason}</td>
 									<td class="px-5 py-4"
 										><input
@@ -201,7 +201,7 @@
 										<td class="px-2 text-center border-r-2 border-gray-300">
 											<div class="flex-wrap justify-center px-1">
 												<span class="flex justify-center font-bold"
-													>{user.first_name} {user.last_name}</span
+													>{user.firstName} {user.lastName}</span
 												>
 												<span class="flex justify-center italic"
 													>{user.cid} - {getRating(parseInt(user.rating))}</span
@@ -283,7 +283,7 @@
 									<td class="px-2 text-center border-r-2">
 										<div class="flex-wrap justify-center px-1">
 											<span class="flex text-lg justify-center font-bold"
-												>{user.first_name} {user.last_name}</span
+												>{user.firstName} {user.lastName}</span
 											>
 											<span class="flex justify-center italic"
 												>{user.cid} - {getRating(parseInt(user.rating))}</span
@@ -291,11 +291,11 @@
 										</div>
 									</td>
 									<td class="text-left px-2 text-xl border-r-2">{user.home_facility == "" ? "None" : user.home_facility}</td>
-									<td class="text-left px-2 text-xl border-r-2">{`${user.date_requested.getUTCFullYear()}-${user.date_requested.getUTCMonth() +1}-${user.date_requested.getUTCDate()}`}</td>
-									<td class="text-left px-2 text-xl border-r-2">{`${user.action_date.getUTCFullYear()}-${user.action_date.getUTCMonth() +1}-${user.action_date.getUTCDate()}`}</td>
-									<td class="text-left px-2 text-xl border-r-2">{`${user.action_cid}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.dateRequested.getUTCFullYear()}-${user.dateRequested.getUTCMonth() +1}-${user.dateRequested.getUTCDate()}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.actionDate.getUTCFullYear()}-${user.actionDate.getUTCMonth() +1}-${user.actionDate.getUTCDate()}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.actionCid}`}</td>
 									<td class="text-left px-2 text-xl border-r-2">{user.reason}</td>
-									<td class="text-left px-2 text-xl border-r-2">{`${user.action_message}`}</td>
+									<td class="text-left px-2 text-xl border-r-2">{`${user.actionMessage}`}</td>
 								</tr>
 							{/if}
 						{/each}
