@@ -180,15 +180,19 @@
 						{#if openRowSlots == i}
 							<tr>
 								<td colspan=6>
-									<div class="w-full h-36 bg-sky-200 p-2 border-x-4 flex flex-row gap-x-5">
+									<div class="w-full h-24 bg-sky-200 p-2 border-x-4 flex flex-row gap-x-5">
 										<div>
-											<h3>{trainingRequest.trainingType} Training Request</h3>
+											<h3>{trainingRequest.trainingType}Training Request</h3>
 											<h2 class="font-bold text-lg">{trainingRequest.studentName}</h2>
 											<h3 class="text-md">{trainingRequest.studentCid}</h3>
 										</div>
 
 										<div>
-											<h2>Actions</h2>
+											<div class="flex flex-col h-full flex-wrap gap-y-2 gap-x-2">
+												<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105">View Student Profile</button>
+												<button class="p-2 bg-sky-500 rounded-md text-sm transition hover:scale-105">View Training History</button>
+												<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105">Update Training Assignment</button>
+											</div>
 										</div>
 									</div>
 								</td>
