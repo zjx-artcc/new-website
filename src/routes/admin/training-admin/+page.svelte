@@ -10,6 +10,7 @@
 		hidden: true,
 		text: ""
 	}
+	let localTrainingAssignments = 0
 	let openRowAssignments = null
 	let popupHidden: boolean = true
 	
@@ -47,7 +48,12 @@
 		showPopup("trainingTicketSubmission")
 	}
 
-
+	// init localtrainingrequests
+	for(let i = 0; i < data.trainingRequests.length; i++) {
+		if (data.trainingRequests[i].instructorCid == data.session.user.id) {
+			localTrainingAssignments++
+		}
+	}
 </script>
 
 <ResponseBox 
@@ -68,7 +74,7 @@
 	<Tabs contentClass="p-2" style="underline">
 		<TabItem open>
 			<span slot="title">Your Assignments</span>
-
+		{#if localTrainingAssignments > 0}
 			<table class="border-spacing-2 px-2">
 				<thead class="border-4">
 					<tr>
@@ -79,42 +85,47 @@
 						<th class="px-2">Status</th>
 					</tr>
 				</thead>
-		<tbody class="">
-			{#each data.trainingRequests as trainingRequest, i}
-				{#if data.session.user.id == trainingRequest.instructorCid}
-					<tr on:click={() => toggleRowAssignments(i)} class={`transition hover:bg-sky-200 border-y-2 border-gray-400 ${trainingRequest.instructorCid == null ? "bg-red-200" : "bg-gray-200"}`}>
-						<td class="p-1 border-x-2 border-gray-300">{trainingRequest.studentName}</td>
-						<td class="px-2 text-center font-bold border-x-2 border-gray-300">{trainingRequest.trainingType}</td>
-						<td class="px-2 border-x-2 border-gray-300">{formatDate(trainingRequest.dateRequested)}</td>
-						<td class="px-2 border-x-2 border-gray-300">{trainingRequest.dateAssigned != null ? formatDate(trainingRequest.dateAssigned) : "None"}</td>
-						<td class="px-2 border-x-2 border-gray-300">{trainingRequest.status}</td>
-					</tr>
-				{/if}
+				<tbody class="">
+				{#each data.trainingRequests as trainingRequest, i}
+					{#if data.session.user.id == trainingRequest.instructorCid}
+						<tr on:click={() => toggleRowAssignments(i)} class={`transition hover:bg-sky-200 border-y-2 border-gray-400 ${trainingRequest.instructorCid == null ? "bg-red-200" : "bg-gray-200"}`}>
+							<td class="p-1 border-x-2 border-gray-300">{trainingRequest.studentName}</td>
+							<td class="px-2 text-center font-bold border-x-2 border-gray-300">{trainingRequest.trainingType}</td>
+							<td class="px-2 border-x-2 border-gray-300">{formatDate(trainingRequest.dateRequested)}</td>
+							<td class="px-2 border-x-2 border-gray-300">{trainingRequest.dateAssigned != null ? formatDate(trainingRequest.dateAssigned) : "None"}</td>
+							<td class="px-2 border-x-2 border-gray-300">{trainingRequest.status}</td>
+						</tr>
+					{/if}
 
-				{#if openRowAssignments == i}
-					<tr>
-						<td colspan=6>
-							<div class="w-full h-24 bg-sky-200 p-2 border-x-4 flex flex-row gap-x-5">
-								<div>
-									<h3>{trainingRequest.trainingType} Training</h3>
-									<h2 class="font-bold text-lg">{trainingRequest.studentName}</h2>
-									<h3 class="text-md">{trainingRequest.studentCid}</h3>
-								</div>
+					{#if openRowAssignments == i}
+						<tr>
+							<td colspan=6>
+								<div class="w-full h-24 bg-sky-200 p-2 border-x-4 flex flex-row gap-x-5">
+									<div>
+										<h3>{trainingRequest.trainingType} Training</h3>
+										<h2 class="font-bold text-lg">{trainingRequest.studentName}</h2>
+										<h3 class="text-md">{trainingRequest.studentCid}</h3>
+									</div>
 
-								<div>
-									<div class="flex flex-col h-full flex-wrap gap-y-2 gap-x-2">
-										<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showTrainingTicketSubmission(trainingRequest)}>File Training Ticket</button>
-										<button class="p-2 bg-sky-500 rounded-md text-sm transition hover:scale-105">View Training History</button>
-										<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105">Update Training Assignment</button>
+									<div>
+										<div class="flex flex-col h-full flex-wrap gap-y-2 gap-x-2">
+											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showTrainingTicketSubmission(trainingRequest)}>File Training Ticket</button>
+											<button class="p-2 bg-sky-500 rounded-md text-sm transition hover:scale-105">View Training History</button>
+											<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105">Update Training Assignment</button>
+										</div>
 									</div>
 								</div>
-							</div>
-						</td>
-					</tr>
+							</td>
+						</tr>
 
-				{/if}
-			{/each}
-		</tbody>
+					{/if}
+				{/each}
+				</tbody>
+			</table>
+			{:else}
+				<h2 class="font-bold text-xl my-4">No students assigned to you</h2>
+			{/if}
+
 		</TabItem>
 
 		<TabItem>
