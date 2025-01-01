@@ -19,6 +19,47 @@ export const load = async( {locals} ) => {
     }
   }
 
+  // Get Instructors
+  const instructorQuery = await prisma.staffRole.findMany({
+    select: {
+      cid: true,
+      roster: {
+        select: {
+          firstName: true,
+          lastName: true
+        }
+      }
+    },
+    where: {
+      OR: [
+        { 
+          role: {
+            contains: "INS"
+          }
+        },
+        { 
+          role: {
+            contains: "MTR"
+          }
+        },
+        { 
+          role: {
+            contains: "TA"
+          }
+        },
+      ]
+    }
+  })
+  let instructors = []
+
+  for(let i =0; i < instructorQuery.length; i++) {
+    instructors.push({
+      cid: instructorQuery[i].cid,
+      firstName: instructorQuery[i].roster.firstName,
+      lastName: instructorQuery[i].roster.lastName
+    })
+  }
+
   // Get Training Requests
   const trainingRequestDb = await prisma.trainingRequest.findMany({
     select: {
@@ -69,7 +110,9 @@ export const load = async( {locals} ) => {
   }
 
   const data = {
-    trainingRequests: trainingRequests
+    trainingAdmin: await getStaffRoles(locals.user.id, "admin") || await getStaffRoles(locals.user.id, "TA"),
+    trainingRequests: trainingRequests,
+    instructors: instructors
   }
   return data
 }

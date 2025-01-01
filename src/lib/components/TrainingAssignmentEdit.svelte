@@ -3,10 +3,9 @@
   import Icon from "@iconify/svelte";
 	import { Result } from "postcss";
   export let hidePopup
+  export let instructors
   export let data
   export let form
-  export let instructor // note: this is a read only value and is checked on the server.
-
   let score = 5
   let allowSubmit = true
 
@@ -31,7 +30,7 @@
     <Icon icon="mdi:close" class="w-5 h-5 absolute top-2 right-2"/>
   </button>
 
-  <h2 class="font-bold text-xl text-sky-500">File Training Ticket</h2>
+  <h2 class="font-bold text-xl text-sky-500">Edit Training Assignment</h2>
 
   <div>
     <form class="flex flex-col p-2 space-y-4 w-72" 
@@ -54,7 +53,14 @@
     }}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>
-        <input class="px-2" readonly value={`${instructor.firstName + " " + instructor.lastName} (${instructor.id})`}>
+        <select name="instructor" required={true} class="px-2 invalid:border-2 invalid:border-red-500">
+          <option selected>{data.instructorName} {data.instructorCid != null ? `(${data.instructorCid})` : ""}</option>
+          {#each instructors as instructor}
+            {#if !(data.instructorCid == instructor.cid)}
+              <option>{instructor.firstName + " " + instructor.lastName} ({instructor.cid})</option>
+            {/if}
+          {/each}
+        </select>
       </div>
 
       <div class="flex flex-col">
