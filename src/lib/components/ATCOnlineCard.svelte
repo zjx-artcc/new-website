@@ -18,9 +18,12 @@
 
   const getTimeString = (date: Date) => {
     const duration = new Date(Date.now() - date.getTime())
-
-    return `${duration.toTimeString().substring(0,5)}`
+    console.log(duration.toUTCString())
+    console.log(Date.now())
+    return `${duration.toUTCString().substring(17,22)}`
   }
+
+  
 </script>
 
 

@@ -5,6 +5,8 @@
   export let hidePopup
   export let data
   export let form
+  export let instructor // note: this is a read only value and is checked on the server.
+
   let score = 5
   let allowSubmit = true
 
@@ -19,13 +21,10 @@
     location: number
   }
 
-  const handleSubmit = async(event) => {
-
-  }
 </script>
 
 <div class="relative z-50 flex flex-col items-center place-items-center bg-gray-200 px-4 py-2 border-2 border-gray-400">
-  <button on:click={hidePopup}>
+  <button on:click={() => hidePopup(false, false, "")}>
     <Icon icon="mdi:close" class="w-5 h-5 absolute top-2 right-2"/>
   </button>
 
@@ -35,11 +34,13 @@
     <form class="flex flex-col p-2 space-y-4 w-72" 
     method="POST" 
     action="/admin/training-admin/handler?/submitTicket" 
-    on:submit={handleSubmit}
     use:enhance={async({ formElement, formData, action, cancel }) => {
+      console.log("ran")
       if (allowSubmit) {
         allowSubmit = false
         const data = formData;
+      } else {
+        cancel()
       }
       return async ({ result }) => {
         if(result.type == "failure") {
@@ -52,7 +53,7 @@
     }}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>
-        <input class="px-2" readonly value={`${data.instructorName} (${data.instructorCid})`}>
+        <input class="px-2" readonly value={`${instructor.firstName + " " + instructor.lastName} (${instructor.id})`}>
       </div>
 
       <div class="flex flex-col">
