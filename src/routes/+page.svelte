@@ -4,6 +4,7 @@
 	import Icon from '@iconify/svelte';
 	import Card from '$lib/components/Card.svelte';
 	import EventCard from '$lib/components/EventCard.svelte';
+	import SmallEventCard from '$lib/components/SmallEventCard.svelte';
 	import NewsCard from '$lib/components/NewsCard.svelte';
 	import ATCCard from '$lib/components/ATCCard.svelte';
 	import Footer from '$lib/components/Footer.svelte';
@@ -32,7 +33,7 @@
 		"MCO_F11_Tour_SMALL-25.jpg",
 		"MCO_F11_Tour_SMALL-30.jpg",
 	]
-	const imageUrl = availableImages[3]//availableImages[Math.random() * availableImages.length]
+	const imageUrl = availableImages[4]//availableImages[Math.random() * availableImages.length]
 	//
 </script>
 
@@ -98,11 +99,11 @@
 
 		<HomepageCard bgColor="bg-sky-100">
 			<div class="px-4 py-2 border-b-2 border-black">
-				<h1 class="font-semibold text-xl">Events</h1>
+				<h1 class="font-semibold text-xl">Next Event</h1>
 			</div>
 
 			<div class="px-4 py-3 flex flex-col">
-				<h2>Did someone say events? vZJX always has events which are fun for controllers and pilots alike! Scroll down to check out our upcoming events.</h2>
+				<SmallEventCard title={pageData.events[0].name} hostedBy={pageData.events[0].host} imageUrl={pageData.events[0].banner} start={pageData.events[0].start} end={pageData.events[0].end} id={pageData.events[0].id}/>
 			</div>
 		</HomepageCard>
 	</div>

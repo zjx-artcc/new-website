@@ -21,9 +21,6 @@
     location: number
   }
 
-  const handleSubmit = async(event) => {
-
-  }
 </script>
 
 <div class="relative z-50 flex flex-col items-center place-items-center bg-gray-200 px-4 py-2 border-2 border-gray-400">
@@ -37,11 +34,13 @@
     <form class="flex flex-col p-2 space-y-4 w-72" 
     method="POST" 
     action="/admin/training-admin/handler?/submitTicket" 
-    on:submit={handleSubmit}
     use:enhance={async({ formElement, formData, action, cancel }) => {
+      console.log("ran")
       if (allowSubmit) {
         allowSubmit = false
         const data = formData;
+      } else {
+        cancel()
       }
       return async ({ result }) => {
         if(result.type == "failure") {

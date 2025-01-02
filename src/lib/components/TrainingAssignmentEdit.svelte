@@ -2,11 +2,11 @@
 	import { enhance } from "$app/forms";
   import Icon from "@iconify/svelte";
 	import { Result } from "postcss";
+	import { minLength } from "svelte-use-form";
   export let hidePopup
   export let instructors
   export let data
   export let form
-  let score = 5
   let allowSubmit = true
 
   type TrainingData = {
@@ -20,8 +20,12 @@
     location: number
   }
 
-  const handleSubmit = async(event) => {
-
+  const formatDateString = (date: Date) => {
+    if (date != null) {
+      return `${date.getUTCFullYear().toString().padStart(4, "0")}-${date.getUTCMonth().toString().padStart(2, "0")}-${date.getUTCDay().toString().padStart(2, "0")}`
+    } else {
+      return "None"
+    }
   }
 </script>
 
@@ -35,12 +39,13 @@
   <div>
     <form class="flex flex-col p-2 space-y-4 w-72" 
     method="POST" 
-    action="/admin/training-admin/handler?/submitTicket" 
-    on:submit={handleSubmit}
+    action="/admin/training-admin/handler?/editAssignment" 
     use:enhance={async({ formElement, formData, action, cancel }) => {
       if (allowSubmit) {
         allowSubmit = false
         const data = formData;
+      } else {
+        cancel()
       }
       return async ({ result }) => {
         if(result.type == "failure") {
@@ -53,13 +58,13 @@
     }}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>
-        <select name="instructor" required={true} class="px-2 invalid:border-2 invalid:border-red-500">
-          <option selected>{data.instructorName} {data.instructorCid != null ? `(${data.instructorCid})` : ""}</option>
+        <select name="selectedInstructor" class="px-2 invalid:border-2 invalid:border-red-500" value={data.instructorCid}>
           {#each instructors as instructor}
             {#if !(data.instructorCid == instructor.cid)}
-              <option>{instructor.firstName + " " + instructor.lastName} ({instructor.cid})</option>
+              <option value={instructor.cid}>{instructor.firstName + " " + instructor.lastName} ({instructor.cid})</option>
             {/if}
           {/each}
+          <option selected value={data.instructorCid}>{data.instructorName} {data.instructorCid != null ? `(${data.instructorCid})` : ""}</option>
         </select>
       </div>
 
@@ -68,52 +73,17 @@
         <input class="px-2" readonly value={`${data.studentName} (${data.studentCid})`}>
       </div>
 
-      <!-- DO NOT DELETE THIS!!! -->
-      <input name="student_cid" class="px-2 hidden" readonly value={data.studentCid}>
-
       <div class="flex flex-col">
-        <label class="font-bold" for="progress">Progress Rating</label>
-        <input name="score" type="range" min=1 max=5 bind:value={score}/>
-        <p>Rating: {score}</p>
+        <label class="font-bold" for="progress">Date Requested</label>
+        <input class="px-2" name="score" type="text" readonly value={formatDateString(data.dateRequested)}/>
       </div>
 
       <div class="flex flex-col">
-        <label class="font-bold" for="date">Session Date (UTC) <span class="text-red-500 font-bold">*</span></label>
-        <input name="session_date" id="date" type="datetime-local" required={true} class="px-2 invalid:border-2 invalid:border-red-500"/>
+        <label class="font-bold" for="date">Date Updated</label>
+        
+        <input class="px-2" name="score" type="text" readonly value={formatDateString(data.dateAssigned)}/>
       </div>
 
-      <div class="flex flex-col">
-        <label class="font-bold" for="duration">Session Duration <span class="text-red-500 font-bold">*</span></label>
-        <div class="flex flex-row justify-left">
-          <input name="hours" type="number" min=0 max=12 class="px-2 w-15 h-6 text-center text-sm invalid:border-2 invalid:border-red-500" placeholder="Hours" required={true}/>
-          <span class="mx-2">:</span>
-          <input name="minutes" type="number" min=0 max=59 class="px-2 w-15 h-6 text-center text-sm invalid:border-2 invalid:border-red-500" placeholder="Mins" required={true}/>
-        </div>
-      </div>
-
-      <div class="flex flex-col">
-        <label class="font-bold" for="student_cid">Training Location <span class="text-red-500 font-bold">*</span></label>
-        <select name="location" required={true} class="px-2 invalid:border-2 invalid:border-red-500">
-          <option value=0>Classroom</option>
-          <option value=1>Live</option>
-          <option value=2>Sweatbox</option>
-        </select>
-      </div>
-
-      <div class="flex flex-col">
-        <label class="font-bold" for="student_cid">Position <span class="text-red-500 font-bold">*</span></label>
-        <input name="position" required={true} placeholder="Ex: JAX_APP" class="px-2 invalid:border-2 invalid:border-red-500">
-      </div>
-
-      <div class="flex flex-col">
-        <label class="font-bold" for="notes">Training Notes <span class="text-red-500 font-bold">*</span></label>
-        <textarea name="notes" required={true} class="invalid:border-2 invalid:border-red-500 h-24 resize-none p-2"/>
-      </div>
-
-      <div class="flex flex-col">
-        <label class="font-bold" for="movements">Number of Movements</label>
-        <input name="movements" class="w-16 px-2" type="number" min=0/>
-      </div>
      
 
       <button type="submit" class="p-2 bg-sky-500 text-white font-bold">Submit Ticket</button>
