@@ -22,9 +22,9 @@
 
 	const formatDate = (input: Date): string => {
 		let dateTime = new Date(input);
-		let year = dateTime.getFullYear();
-		let month = (dateTime.getMonth() + 1).toString().padStart(2, "0");
-		let day = dateTime.getDate().toString().padStart(2, "0");
+		let year = dateTime.getUTCFullYear();
+		let month = (dateTime.getUTCMonth() + 1).toString().padStart(2, "0");
+		let day = dateTime.getUTCDate().toString().padStart(2, "0");
 
 		return `${year}-${month}-${day}`;
 	}
@@ -77,7 +77,7 @@
 				return "bg-gray-300"
 		}
 	}
-	
+
 	// init localtrainingrequests
 	for(let i = 0; i < data.trainingRequests.length; i++) {
 		if (data.trainingRequests[i].instructorCid == data.session.user.id) {
