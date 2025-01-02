@@ -8,7 +8,7 @@
     const staffData = [
         {
             title: "Air Traffic Manager",
-            name: "Matt Bromback",
+            name: "Owen Bliss",
             category: "ARTCC Administrative Staff",
             email: "atm@zjxartcc.org"
         },
@@ -20,15 +20,21 @@
         },
         {
             title: "Facility Engineer",
-            name: "Howard Snider",
+            name: "Michael Knight",
             category: "ARTCC Facility Team",
-            email: "fe@zjxartcc.org"
+            email: "michael.knight@vatusa.net"
         },
         {
             title: "Assistant Facility Engineer",
             name: "Donald Kolaweski",
             category: "ARTCC Facility Team",
             email: "afe@zjxartcc.org"
+        },
+        {
+            title: "Assistant Facility Engineer",
+            name: "Alejandro Jaramillo",
+            category: "ARTCC Facility Team",
+            email: "alejandro.jaramillo@vatusa.net"
         },
         {
             title: "Training Administrator",
@@ -56,9 +62,15 @@
         },
         {
             title: "Instructor",
-            name: "Howard Snider",
+            name: "Martin Mejia",
             category: "ARTCC Training Team",
-            email: "fe@zjxartcc.org"
+            email: "martin.mejia@vatusa.net"
+        },
+        {
+            title: "Instructor",
+            name: "Nicholas Ader",
+            category: "ARTCC Training Team",
+            email: "nicholas.ader@vatusa.net"
         },
         {
             title: "Instructor",
@@ -74,19 +86,19 @@
         },
         {
             title: "Mentor",
-            name: "Martin Mejia",
+            name: "Christopher Mangan",
             category: "ARTCC Training Team",
-            email: "martin.mejia@vatusa.net"
+            email: "christopher.mangan@vatusa.net"
         },
         {
             title: "Mentor",
-            name: "Nicholas Ader",
+            name: "Caleb Scott",
             category: "ARTCC Training Team",
-            email: "nicholas.ader@vatusa.net"
+            email: "caleb.scott@vatusa.net"
         },
         {
             title: "Events Coordinator",
-            name: "Owen Bliss",
+            name: "Nicholas Ader",
             category: "ARTCC Event Team",
             email: "ec@zjxartcc.org"
         },
@@ -101,12 +113,6 @@
             name: "Michael Knight",
             category: "ARTCC Event Team",
             email: "michael.knight@vatusa.net"
-        },
-        {
-            title: "Assistant Events Coordinator",
-            name: "Preston Kurzeja",
-            category: "ARTCC Event Team",
-            email: "aec@zjxartcc.org"
         },
         {
             title: "Webmaster",
