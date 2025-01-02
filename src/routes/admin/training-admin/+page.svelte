@@ -77,7 +77,7 @@
 				return "bg-gray-300"
 		}
 	}
-
+	
 	// init localtrainingrequests
 	for(let i = 0; i < data.trainingRequests.length; i++) {
 		if (data.trainingRequests[i].instructorCid == data.session.user.id) {

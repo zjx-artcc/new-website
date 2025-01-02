@@ -1,4 +1,5 @@
 import { prisma, getStaffRoles } from '$lib/db';
+import { redirect } from '@sveltejs/kit';
 
 export const load = async( {locals} ) => {
   if (!locals.session) {
@@ -11,6 +12,7 @@ export const load = async( {locals} ) => {
   }
 
   if (!await getStaffRoles(locals.session.userId, 'training')) {
+    redirect(403, '/')
     return {
       status: 403,
       headers: {
@@ -63,6 +65,7 @@ export const load = async( {locals} ) => {
   // Get Training Requests
   const trainingRequestDb = await prisma.trainingRequest.findMany({
     select: {
+      trainingRequestId: true,
       studentCid: true,
       instructorCid: true,
       dateAssigned: true,
@@ -98,6 +101,7 @@ export const load = async( {locals} ) => {
     const student = currentRequest.roster_training_requests_student_cidToroster
     const instructor = currentRequest.roster_training_requests_instructor_cidToroster
     trainingRequests.push({
+      trainingRequestId: currentRequest.trainingRequestId,
       studentCid: currentRequest.studentCid,
       instructorCid: currentRequest.instructorCid,
       dateAssigned: currentRequest.dateAssigned,
@@ -114,10 +118,12 @@ export const load = async( {locals} ) => {
     trainingRequests: trainingRequests,
     instructors: instructors
   }
+
   return data
 }
 
 type TrainingRequest = {
+  trainingRequestId: number;
   studentCid: number;
   instructorCid: number;
   dateAssigned: Date;
