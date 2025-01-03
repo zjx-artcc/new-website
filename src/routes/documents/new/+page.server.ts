@@ -57,7 +57,7 @@ export const actions: Actions = {
         name: name,
         updated: new Date(),
         description: description,
-        path: `static/documents/${type}/${file.name}`,
+        path: `/documents/${type}/${file.name}`,
         type: type
       }
     })
