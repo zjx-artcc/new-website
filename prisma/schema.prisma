@@ -25,7 +25,7 @@ model ControllerSession {
   start     DateTime? @db.Timestamptz(6)
   active    Boolean
   end       DateTime? @db.Timestamptz(6)
-  roster    Roster    @relation(fields: [cid], references: [cid], onDelete: Cascade, onUpdate: Cascade)
+  roster    Roster    @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("controller_sessions")
 }
@@ -41,7 +41,6 @@ model Event {
   host             String
   hidden           Boolean           @default(true)
   banner           String
-  positions        Json?
   EventPosition    EventPosition[]
   roster           Roster            @relation(fields: [createdBy], references: [cid], onDelete: NoAction, onUpdate: NoAction)
   positionRequests PositionRequest[]
@@ -55,10 +54,35 @@ model EventPosition {
   position        String
   type            Float
   id              String            @id @default(uuid())
-  event           Event             @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  event           Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
   PositionRequest PositionRequest[]
 
   @@map("event_positions")
+}
+
+model Feedback {
+  id         String @id @default(uuid())
+  author     Int
+  controller Int
+  position   Int
+  rating     Int
+  comment    String
+
+  authorCid     User   @relation(fields: [author], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  controllerCid Roster @relation(fields: [controller], references: [cid], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("feedback")
+}
+
+model File {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  path        String
+  type        String
+  updated     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("files")
 }
 
 model PositionRequest {
@@ -94,9 +118,11 @@ model Roster {
   events                                                     Event[]
   positionRequests                                           PositionRequest[]
   StaffRoles                                                 StaffRole[]
-  trainingRequests                                           TrainingRequest[]
   stats                                                      Stats?
-  training_sessions_training_sessions_controller_cidToroster TrainingSession[]   @relation("training_sessions_controller_cidToroster")
+  feedback                                                   Feedback[]
+  training_requests_training_requests_instructor_cidToroster TrainingRequest[]   @relation("training_requests_instructor_cidToroster")
+  training_requests_training_requests_student_cidToroster    TrainingRequest[]   @relation("training_requests_student_cidToroster")
+  training_sessions_training_sessions_student_cidToroster    TrainingSession[]   @relation("training_sessions_student_cidToroster")
   training_sessions_training_sessions_instructor_cidToroster TrainingSession[]   @relation("training_sessions_instructor_cidToroster")
 
   @@map("roster")
@@ -129,28 +155,34 @@ model Stats {
 }
 
 model TrainingRequest {
-  id          String   @id @default(uuid())
-  cid         Int
-  type        Float
-  requestDate DateTime @map("request_date") @db.Timestamptz(6)
-  roster      Roster   @relation(fields: [cid], references: [cid], onDelete: Cascade)
+  trainingRequestId                               Int       @id(map: "training_requests_pk") @default(autoincrement()) @map("training_request_id")
+  studentCid                                      Int       @map("student_cid")
+  instructorCid                                   Int?      @map("instructor_cid")
+  dateRequested                                   DateTime  @default(dbgenerated("CURRENT_DATE")) @map("date_requested") @db.Date
+  dateAssigned                                    DateTime? @map("date_assigned") @db.Date
+  status                                          String?   @db.VarChar(50)
+  active                                          Boolean   @default(true)
+  trainingType                                    String?   @map("training_type") @db.VarChar(30)
+  roster_training_requests_instructor_cidToroster Roster?   @relation("training_requests_instructor_cidToroster", fields: [instructorCid], references: [cid], onUpdate: NoAction, map: "training_requests_roster_cid_fk_ins")
+  roster_training_requests_student_cidToroster    Roster    @relation("training_requests_student_cidToroster", fields: [studentCid], references: [cid], onDelete: Cascade, onUpdate: NoAction, map: "training_requests_roster_cid_fk_student")
 
   @@map("training_requests")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model TrainingSession {
-  id                                              String  @id @default(uuid())
-  controllerCid                                   Int     @map("controller_cid")
-  instructorCid                                   Int     @map("instructor_cid")
+  session_id                                      Int      @id @default(autoincrement())
+  student_cid                                     Int
+  instructorCid                                   Int      @map("instructor_cid")
   duration                                        Int
-  numberOfMovements                               Int?    @default(0) @map("number_of_movements")
-  comments                                        String? @db.VarChar(750)
-  progressRating                                  Int?    @map("progress_rating")
-  position                                        String? @db.VarChar(20)
-  sessionType                                     String  @map("session_type") @db.VarChar(20)
-  roster_training_sessions_controller_cidToroster Roster  @relation("training_sessions_controller_cidToroster", fields: [controllerCid], references: [cid], onDelete: Cascade, onUpdate: Cascade, map: "training_sessions___fk_controller")
-  roster_training_sessions_instructor_cidToroster Roster  @relation("training_sessions_instructor_cidToroster", fields: [instructorCid], references: [cid], onDelete: NoAction, onUpdate: Cascade, map: "training_sessions___fk_instructor")
+  movements                                       Int?     @default(0)
+  notes                                           String   @db.VarChar(750)
+  score                                           Int
+  position                                        String   @db.VarChar(20)
+  location                                        Int
+  session_date                                    DateTime @db.Date
+  roster_training_sessions_student_cidToroster    Roster   @relation("training_sessions_student_cidToroster", fields: [student_cid], references: [cid], onDelete: Cascade, map: "training_sessions___fk_controller")
+  roster_training_sessions_instructor_cidToroster Roster   @relation("training_sessions_instructor_cidToroster", fields: [instructorCid], references: [cid], onDelete: NoAction, map: "training_sessions___fk_instructor")
 
   @@map("training_sessions")
 }
@@ -168,23 +200,23 @@ model User {
   visitRequests                                   VisitRequest[]
   visit_requests_visit_requests_action_cidTousers VisitRequest[] @relation("visit_requests_action_cidTousers")
   sessions                                        WebSession[]
+  feedback                                        Feedback[]
 
   @@map("users")
 }
 
 model VisitRequest {
-  id            Int       @id @default(autoincrement())
-  cid           Int
-  reason        String
-  dateRequested DateTime? @map("date_requested") @db.Date
-  reviewed      Boolean?  @default(false)
-  actionMessage String?   @map("action_message") @db.VarChar(150)
-  actionCid     Int?      @map("action_cid")
-  actionDate    DateTime? @map("action_date") @db.Date
-  accepted      Boolean
-  users         User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
-
-  users_visit_requests_action_cidTousers User? @relation("visit_requests_action_cidTousers", fields: [actionCid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
+  id                                     Int       @id @default(autoincrement())
+  cid                                    Int
+  reason                                 String
+  dateRequested                          DateTime? @map("date_requested") @db.Date
+  reviewed                               Boolean?  @default(false)
+  actionMessage                          String?   @map("action_message") @db.VarChar(150)
+  actionCid                              Int?      @map("action_cid")
+  actionDate                             DateTime? @map("action_date") @db.Date
+  accepted                               Boolean   @default(false)
+  users                                  User      @relation(fields: [cid], references: [id], onDelete: Cascade, map: "visit_requests_users_cid_fk")
+  users_visit_requests_action_cidTousers User?     @relation("visit_requests_action_cidTousers", fields: [actionCid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visit_requests_users_id_fk")
 
   @@map("visit_requests")
 }
