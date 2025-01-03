@@ -3,7 +3,7 @@
 	import Icon from '@iconify/svelte';
 
 	export let data;
-	let pageData = data.pageData;
+	let pageData = data.pageData
 </script>
 
 <svelte:head>

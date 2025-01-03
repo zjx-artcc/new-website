@@ -69,6 +69,11 @@ export const load: PageServerLoad = async ({ locals }) => {
     take: 6,
     orderBy: {
       start: 'asc',
+    },
+    where: {
+      start: {
+        gte: new Date()
+      }
     }
   });
 

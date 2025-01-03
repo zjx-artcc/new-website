@@ -8,6 +8,9 @@ WORKDIR /usr/src/app
 
 COPY . .
 
+#DEBUG
+RUN apk add --no-cache sudo
+
 RUN ls
 
 RUN npm i -g pnpm

@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
+	import { deserialize, enhance } from "$app/forms";
   import Icon from "@iconify/svelte";
 	import { Result } from "postcss";
   export let hidePopup
   export let data
   export let form
+  export let instructor // note: this is a read only value and is checked on the server.
+
   let score = 5
   let allowSubmit = true
 
@@ -19,40 +21,39 @@
     location: number
   }
 
-  const handleSubmit = async(event) => {
-
-  }
 </script>
 
 <div class="relative z-50 flex flex-col items-center place-items-center bg-gray-200 px-4 py-2 border-2 border-gray-400">
-  <button on:click={hidePopup}>
+  <button on:click={() => hidePopup(false, false, "")}>
     <Icon icon="mdi:close" class="w-5 h-5 absolute top-2 right-2"/>
   </button>
 
   <h2 class="font-bold text-xl text-sky-500">File Training Ticket</h2>
 
   <div>
-    <form class="flex flex-col p-2 space-y-4 w-72" 
+    <form class="flex flex-col p-2 space-y-4 w-96" 
     method="POST" 
     action="/admin/training-admin/handler?/submitTicket" 
-    on:submit={handleSubmit}
     use:enhance={async({ formElement, formData, action, cancel }) => {
+      console.log(formData)
       if (allowSubmit) {
         allowSubmit = false
         const data = formData;
+      } else {
+        cancel()
       }
       return async ({ result }) => {
-        if(result.type == "failure") {
-          hidePopup(true, false, await result.data.message)
+        if(result.type == "success") {
+          hidePopup(true, true, "Ticket uploaded to ZJX site and VATUSA!")      
         } else {
-          hidePopup(true, true, "Ticket uploaded to ZJX site and VATUSA!")
+          hidePopup(true, false, result.data.message)
         }
         allowSubmit = true
       };
     }}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>
-        <input class="px-2" readonly value={`${data.instructorName} (${data.instructorCid})`}>
+        <input class="px-2" readonly value={`${instructor.firstName + " " + instructor.lastName} (${instructor.id})`}>
       </div>
 
       <div class="flex flex-col">
@@ -99,7 +100,7 @@
 
       <div class="flex flex-col">
         <label class="font-bold" for="notes">Training Notes <span class="text-red-500 font-bold">*</span></label>
-        <textarea name="notes" required={true} class="invalid:border-2 invalid:border-red-500 h-24 resize-none p-2"/>
+        <textarea name="notes" required={true} class="invalid:border-2 invalid:border-red-500 h-36 text-sm resize-none p-2"/>
       </div>
 
       <div class="flex flex-col">
