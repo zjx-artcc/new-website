@@ -53,7 +53,7 @@ export const actions = {
       }
     } catch(error) {
       console.log(error)
-      return fail(500, {invalid: true, message: "Invalid form data"})
+      return fail(500, {invalid: true, message: error})
     }
   },
 
