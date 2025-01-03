@@ -11,7 +11,7 @@
 
   const formatDateString = (date: Date) => {
     if (date != null) {
-      return `${date.getUTCFullYear().toString().padStart(4, "0")}-${date.getUTCMonth().toString().padStart(2, "0")}-${date.getUTCDay().toString().padStart(2, "0")}`
+      return `${date.getUTCFullYear().toString().padStart(4, "0")}-${(date.getUTCMonth() + 1).toString().padStart(2, "0")}-${date.getUTCDay().toString().padStart(2, "0")}`
     } else {
       return "None"
     }

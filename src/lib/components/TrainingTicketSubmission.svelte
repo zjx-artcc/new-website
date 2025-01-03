@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
+	import { deserialize, enhance } from "$app/forms";
   import Icon from "@iconify/svelte";
 	import { Result } from "postcss";
   export let hidePopup
@@ -46,7 +46,7 @@
         if(result.type == "success") {
           hidePopup(true, true, "Ticket uploaded to ZJX site and VATUSA!")      
         } else {
-          hidePopup(true, false, await result.data.message)
+          hidePopup(true, false, result.data.message)
         }
         allowSubmit = true
       };
