@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN apk add --no-cache su-exec 
+RUN apk add --no-cache sudo
 
 RUN ls
 
