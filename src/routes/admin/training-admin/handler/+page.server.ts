@@ -46,14 +46,14 @@ export const actions = {
 
           return {success: true}
         } else {   
-          return fail(response.status, {invalid: true, message: "VATUSA upload failed"})
+          return fail(response.status, {message: "VATUSA upload failed"})
         }
       } else {
-        return fail(403, {invalid: true, message: "Instructor not authenticator or student not rostered"})
+        return fail(403, {message: "Instructor not authenticator or student not rostered"})
       }
     } catch(error) {
       console.log(error)
-      return fail(500, {invalid: true, message: error})
+      return fail(500, {message: error})
     }
   },
 
