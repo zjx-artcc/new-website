@@ -50,7 +50,7 @@ export const actions: Actions = {
 
 
 
-    writeFileSync(`/usr/src/static/documents/${type}/${file.name}`, Buffer.from(await file.arrayBuffer()));
+    writeFileSync(`/usr/src/app/static/documents/${type}/${file.name}`, Buffer.from(await file.arrayBuffer()));
 
     await prisma.file.create({
       data: {
