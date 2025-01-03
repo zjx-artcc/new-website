@@ -46,14 +46,13 @@ export const actions = {
 
           return {success: true}
         } else {   
-          return fail(response.status, {message: "VATUSA upload failed"})
+          fail(response.status, {message: "VATUSA upload failed"})
         }
       } else {
-        return fail(403, {message: "Instructor not authenticator or student not rostered"})
+        fail(403, {message: "Instructor not authenticator or student not rostered"})
       }
     } catch(error) {
-      console.log(error)
-      return fail(500, {message: error})
+      fail(500, {message: error})
     }
   },
 
@@ -64,7 +63,7 @@ export const actions = {
     const trainingRequestId = parseInt(formData.get("trainingRequestId") as string)
 
     if(!getStaffRoles(locals.user.id, "training")) {
-      return fail(403)
+      fail(403)
     }
 
     // basic update
@@ -96,7 +95,7 @@ export const actions = {
             }
           })
         } else {
-          return fail(403)
+          fail(403)
         }
       }
       return {success: true}
