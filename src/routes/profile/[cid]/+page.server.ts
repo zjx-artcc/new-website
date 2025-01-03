@@ -21,8 +21,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   //Setup page data 
   let pageData: PageData = new PageData();
 
-  //Check for user permissions from database3
-  console.log(locals.session);
+  //Check for user permissions from database
   pageData.canEdit = locals.session != null ? await getStaffRoles(locals.session.userId, "roster") : false;
   
   //Fetch roster data for user

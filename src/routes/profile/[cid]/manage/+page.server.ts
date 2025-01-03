@@ -4,7 +4,7 @@ import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor } from
 import type { Roster } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types.js';
 
-export const load: PageServerLoad = async ({ params, cookies, locals }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
   // Make sure valid parameter is passed
   if (params.cid == undefined) {
     svelteError(404, 'User not found');
