@@ -31,11 +31,11 @@
   <h2 class="font-bold text-xl text-sky-500">File Training Ticket</h2>
 
   <div>
-    <form class="flex flex-col p-2 space-y-4 w-72" 
+    <form class="flex flex-col p-2 space-y-4 w-96" 
     method="POST" 
     action="/admin/training-admin/handler?/submitTicket" 
     use:enhance={async({ formElement, formData, action, cancel }) => {
-      console.log("ran")
+      console.log(formData)
       if (allowSubmit) {
         allowSubmit = false
         const data = formData;
@@ -100,7 +100,7 @@
 
       <div class="flex flex-col">
         <label class="font-bold" for="notes">Training Notes <span class="text-red-500 font-bold">*</span></label>
-        <textarea name="notes" required={true} class="invalid:border-2 invalid:border-red-500 h-24 resize-none p-2"/>
+        <textarea name="notes" required={true} class="invalid:border-2 invalid:border-red-500 h-36 text-sm resize-none p-2"/>
       </div>
 
       <div class="flex flex-col">
