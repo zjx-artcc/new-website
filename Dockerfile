@@ -14,7 +14,7 @@ RUN npm i -g pnpm
 
 RUN pnpm i
 
-RUN npx prisma generate
+RUN npx prisma generate --no-hints
 
 RUN pnpm build
 

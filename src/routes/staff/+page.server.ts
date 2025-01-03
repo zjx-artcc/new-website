@@ -27,9 +27,9 @@ export const load: PageServerLoad = async () => {
       cid: staff[i].cid,
       name: `${controller.firstName} ${controller.lastName}`,
       role: staff[i].role,
-      email: `${controller.firstName}.${controller.lastName}@zjxartcc.org`
+      email: `${controller.firstName}.${controller.lastName}@zjxartcc.org`.toLowerCase()
     }
-    console.log(staff[i].role);
+    
     switch (staff[i].role) {
       case "ATM": pageData.atm = staffMember; break;
       case "DATM": pageData.datm = staffMember; break;
@@ -60,6 +60,22 @@ export const load: PageServerLoad = async () => {
       cid: 0,
       name: "Vacant",
       role: "DATM",
+      email: "atm@zjxartcc.org"
+    }
+  }
+  if (pageData.ta == undefined) {
+    pageData.ta = {
+      cid: 0,
+      name: "Vacant",
+      role: "TA",
+      email: "atm@zjxartcc.org"
+    }
+  }
+  if (pageData.fe == undefined) {
+    pageData.fe = {
+      cid: 0,
+      name: "Vacant",
+      role: "FE",
       email: "atm@zjxartcc.org"
     }
   }
