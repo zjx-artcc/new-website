@@ -8,6 +8,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 
+#DEBUG
 RUN apk add --no-cache sudo
 
 RUN ls
@@ -16,7 +17,7 @@ RUN npm i -g pnpm
 
 RUN pnpm i
 
-RUN npx prisma generate
+RUN npx prisma generate --no-hints
 
 RUN pnpm build
 
