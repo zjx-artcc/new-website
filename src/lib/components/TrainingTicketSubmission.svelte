@@ -43,10 +43,10 @@
         cancel()
       }
       return async ({ result }) => {
-        if(result.type == "failure") {
-          hidePopup(true, false, await result.data.message)
+        if(result.type == "success") {
+          hidePopup(true, true, "Ticket uploaded to ZJX site and VATUSA!")      
         } else {
-          hidePopup(true, true, "Ticket uploaded to ZJX site and VATUSA!")
+          hidePopup(true, false, await result.data.message)
         }
         allowSubmit = true
       };
