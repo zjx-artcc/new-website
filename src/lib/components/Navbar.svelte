@@ -22,7 +22,7 @@
     </Button>
 
     <Dropdown class="w-48">
-      <NavbarListItem label="Pilot Briefing" href="/airspace" subText="Learn our airspace" icon="mdi:book"/>
+      <NavbarListItem label="Pilot Briefing" href="/pilotbriefing" subText="Learn our airspace" icon="mdi:book"/>
       <NavbarListItem label="Submit Feedback" href="/feedback" subText="Rate our controllers" icon="mdi:chat"/>
     </Dropdown>
 
