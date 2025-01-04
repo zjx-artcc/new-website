@@ -40,20 +40,20 @@
   <div class="flex flex-wrap justify-center align-middle mx-5 mr-5">
     <div class="text-center flex-1 w-1/2 px-5 py-2.5 outline outline-slate-200 rounded-sm">
       <div class="px-2">
-        <label class="pb-1" for="type">Controller Name:</label>
+        <label class="pb-1" for="controller">Controller Name:</label>
         <br>
-        <select id="type" name="type" class="pb-1 pl-1">
+        <select id="controller" name="controller" class="pb-1 pl-1">
           {#each data.pageData.roster as controller}
             <option value={controller.cid}>{controller.firstName} {controller.lastName}</option>
           {/each}
       </div>
       <div class="px-2">
-        <label class="pb-1" for="desc">Controller Position:</label>
+        <label class="pb-1" for="position">Controller Position:</label>
         <br>
-        <input name="desc" id="desc" class="outline outline-1"  use:validators={[required]}>
+        <input name="position" id="position" class="outline outline-1"  use:validators={[required]}>
       </div>
       <div class="px-2">
-        <label class="pb-1" for="type">Rating:</label>
+        <label class="pb-1" for="rating">Rating:</label>
         <br>
         <select id="rating" name="rating" class="pb-1 pl-1">
           <option value="5">⭐⭐⭐⭐⭐</option>
@@ -63,17 +63,14 @@
           <option value="1">⭐</option>
       </div>
       <div class="px-2">
-        <label class="pb-1" for="file">Comments:</label>
+        <label class="pb-1" for="comments">Comments:</label>
         <br>
-        
-      </div>
+        <textarea use:validators={[required]} name="comments" id="comments" class="outline outline-1"></textarea>
+      </div>  
     </div>
   </div>
   <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">
     <a href='/documents/' class="bg-red-500 text-white px-2 py-1 rounded-md text-xl">Cancel</a>
-    <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-0.5 rounded-md text-xl">Save</button>
-  </div>
-  <div class="text-center flex-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">
-    <i class="text-blue-500">You must save the event to create positions</i>
+    <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-[0.25rem] rounded-md text-xl">Submit</button>
   </div>
 </form>
