@@ -18,20 +18,16 @@
 	
 	const availableImages = [
 		"MCO_TOUR_SMALL-5.jpg",
-		//"MCO_TOUR_SMALL-7.jpg",
 		"MCO_TOUR_SMALL-8.jpg",
 		"MCO_TOUR_SMALL-28.jpg",
 		"MCO_TOUR_SMALL-46.jpg",
 		"MCO_F11_Tour_SMALL-1.jpg",
 		"MCO_F11_Tour_SMALL-6.jpg",
 		"MCO_F11_Tour_SMALL-13.jpg",
-		"MCO_F11_Tour_SMALL-14.jpg",
-		"MCO_F11_Tour_SMALL-21.jpg",
-		"MCO_F11_Tour_SMALL-22.jpg",
 		"MCO_F11_Tour_SMALL-25.jpg",
 		"MCO_F11_Tour_SMALL-30.jpg",
 	]
-	const imageUrl = availableImages[3]//availableImages[Math.random() * availableImages.length]
+	const imageUrl = availableImages[7]//availableImages[Math.random() * availableImages.length]
 	//
 </script>
 
@@ -39,19 +35,19 @@
 	<title>Jacksonville ARTCC</title>
 </svelte:head>
 
-<img src={imageUrl} class="-z-10 absolute top-0 w-full h-full blur-sm"/>
+<img src={imageUrl} alt="background" class="-z-10 absolute top-0 w-full h-full blur-sm"/>
 <div class="w-screen h-screen z-0 bg-transparent p-5 flex flex-col justify-left items-center">
 	<div class="flex flex-col">
 		{#if data.pageData.user}
-			<h3 class="text-center text-gray-800 text-2xl">Welcome back, {data.pageData.user.firstName}</h3>
+			<h3 class="text-center text-white text-2xl">Welcome back, {data.pageData.user.firstName}</h3>
 		{:else}
-			<h3 class="text-center text-gray-800 text-2xl">Welcome to</h3>
+			<h3 class="text-center text-white text-2xl">Welcome to</h3>
 		{/if}
 		<div class="flex justify-center items-center">
-			<img src="/ZJX-Dark-Logo.png" alt="lt" class="w-36 h-36"/>
+			<img src="/ZJX-Light-Logo.png" alt="lt" class="w-36 h-36"/>
 			<div class="flex justify-start flex-col ml-5">
-				<h1 class="font-bold text-gray-800 text-4xl">Jacksonville ARTCC</h1>
-				<h2 class="text-gray-800 text-3xl">Pride of VATUSA South</h2>
+				<h1 class="font-bold text-white text-4xl">Jacksonville ARTCC</h1>
+				<h2 class="text-white text-3xl">Elevating Virtual Excellence</h2>
 			</div>
 		</div>
 		
