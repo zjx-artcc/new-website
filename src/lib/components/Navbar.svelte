@@ -8,7 +8,7 @@
   export let canViewAdmin: boolean
 </script>
 
-<div class="w-screen h-20 bg-opacity-80 z-0 flex justify-center items-center gap-x-4 align-middle" style="background-color: #012241;">
+<div class="w-screen h-20 bg-opacity-80 z-0 flex justify-center items-center gap-x-4 align-middle font-montserrat" style="background-color: #012241;">
 
     <a href="/" class="flex flex-row justify-center items-center gap-x-4">
       <img src="/ZJX-Light-Logo.png" alt="lt" class="w-10 h-10"/>

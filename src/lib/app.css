@@ -2,7 +2,10 @@ html {
   margin: 0;
   width: 100%;
   padding: 0;
+
+  font-family: 'montserrat';
 }
+
 
 body {
   margin: 0;
@@ -478,6 +481,27 @@ a {
 
 .bg-red-low-opacity {
   background-color: rgba(255, 0, 0, .3);
+}
+
+@layer base {
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('/fonts/Montserrat-Regular.ttf');
+    font-weight: regular;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('/fonts/Montserrat-Bold.ttf');
+    font-weight: bold;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins-Bold.ttf');
+    font-weight: bold;
+    font-display: swap;
+  }
 }
 
 @tailwind base;

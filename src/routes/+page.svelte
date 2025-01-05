@@ -39,21 +39,21 @@
 <div class="w-screen h-screen z-0 bg-transparent p-5 flex flex-col justify-left items-center">
 	<div class="flex flex-col">
 		{#if data.pageData.user}
-			<h3 class="text-center text-white text-2xl">Welcome back, {data.pageData.user.firstName}</h3>
+			<h3 class="text-center text-white text-2xl font-montserrat">Welcome back, {data.pageData.user.firstName}</h3>
 		{:else}
-			<h3 class="text-center text-white text-2xl">Welcome to</h3>
+			<h3 class="text-center text-white text-2xl font-montserrat">Welcome to</h3>
 		{/if}
 		<div class="flex justify-center items-center">
 			<img src="/ZJX-Light-Logo.png" alt="lt" class="w-36 h-36"/>
 			<div class="flex justify-start flex-col ml-5">
-				<h1 class="font-bold text-white text-4xl">Jacksonville ARTCC</h1>
-				<h2 class="text-white text-3xl">Elevating Virtual Excellence</h2>
+				<h1 class="font-bold text-white text-4xl font-montserrat">Jacksonville ARTCC</h1>
+				<h2 class="text-white text-3xl font-montserrat">Elevating Virtual Excellence.</h2>
 			</div>
 		</div>
 		
 	</div>
 
-	<div class="gap-x-5 justify-center items-start my-10 lg:my-20 gap-y-2 flex flex-row flex-wrap">
+	<div class="gap-x-5 justify-center items-start my-10 lg:my-20 gap-y-2 flex flex-row flex-wrap font-montserrat">
 		<HomepageCard bgColor="bg-sky-100">
 			{#if data.pageData.online.length == 0}
 			<div class="p-4">
