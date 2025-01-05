@@ -106,7 +106,7 @@
 		<div class="flex flex-wrap justify-center w-full">
 			{#each pageData.afe as afe}
 				<div class="subset-card">
-					<h3 class="text-2xl font-bold">Assisant Facility Engineer</h3>
+					<h3 class="text-2xl font-bold">Assistant Facility Engineer</h3>
 					<p class="text-xl">{afe.name}</p>
 					<a href={"mailto:" + afe.email} class="text-gray-800">
 						<Icon icon="mdi:email" class="text-3xl" />
@@ -131,7 +131,7 @@
 		<div class="flex flex-wrap justify-center w-full">
 			{#each pageData.aec as aec}
 				<div class="subset-card">
-					<h3 class="text-2xl font-bold">Assisant Events Coordinator</h3>
+					<h3 class="text-2xl font-bold">Assistant Events Coordinator</h3>
 					<p class="text-xl">{aec.name}</p>
 					<a href={"mailto:" + aec.email} class="text-gray-800">
 						<Icon icon="mdi:email" class="text-3xl" />
@@ -156,7 +156,7 @@
 		<div class="flex flex-wrap justify-center w-full">
 			{#each pageData.awm as awm}
 				<div class="subset-card">
-					<h3 class="text-2xl font-bold">Assisant Webmaster</h3>
+					<h3 class="text-2xl font-bold">Assistant Webmaster</h3>
 					<p class="text-xl">{awm.name}</p>
 					<a href={"mailto:" + awm.email} class="text-gray-800">
 						<Icon icon="mdi:email" class="text-3xl" />
