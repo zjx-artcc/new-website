@@ -1,7 +1,7 @@
 import { error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours } from '$lib/db';
 
-import type { Roster, ControllerSession } from '@prisma/client';
+import type { Roster } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -21,8 +21,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   //Setup page data 
   let pageData: PageData = new PageData();
 
-  //Check for user permissions from database3
-  console.log(locals.session);
+  //Check for user permissions from database
   pageData.canEdit = locals.session != null ? await getStaffRoles(locals.session.userId, "roster") : false;
   
   //Fetch roster data for user
@@ -51,7 +50,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   }
 
   //Fetch sessions data for user
-  let sessionsData: ControllerSession[] = await prisma.controllerSession.findMany({
+  let sessionsData = await prisma.controllerSession.findMany({
     where: {
       cid: parseInt(params.cid),
       active: false
@@ -64,12 +63,28 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
   //Process existing data
   if (sessionsData != null) {
-    pageData.sessions = sessionsData;
+    for (let i = 0; i < sessionsData.length; i++) {
+      let session: ControllerSession = {
+        date: sessionsData[i].start.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'}),
+        start: sessionsData[i].start.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'}),
+        end: sessionsData[i].end.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'}),
+        callsign: sessionsData[i].callsign,
+        duration: calculateTime(sessionsData[i].start, sessionsData[i].end)
+      } 
+      console.log(session);
+      pageData.sessions.push(session);
+    }
   }
 
   //Make sure there are at least 5 rows so the table is complete
-  for (let i = pageData.sessions.length; i < 5; i++) {
+  for (let i = pageData.sessions.length; i < 10; i++) {
     pageData.sessions.push(null);
+  }
+
+  //TODO: Fetch training sessions
+
+  for (let i = pageData.training.length; i < 10; i++) {
+    pageData.training.push(null);
   }
 
   let roles = await prisma.staffRole.findMany({
@@ -126,6 +141,13 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   return {pageData: {...pageData}};
 }
 
+function calculateTime(start: Date, end: Date): string {
+  let diff = Math.abs(end.getTime() - start.getTime());
+  let hours = Math.floor(diff / 3600000);
+  let minutes = Math.floor((diff % 3600000) / 60000);
+  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+}
+
 class PageData {
   onRoster: boolean;
   canEdit: boolean;
@@ -140,6 +162,7 @@ class PageData {
   };
   hours: Hours[];
   sessions: ControllerSession[];
+  training: string[];
   staffRoles: StaffRoles[];
 
   constructor() {
@@ -157,6 +180,7 @@ class PageData {
     this.sessions = [];
     this.staffRoles = [];
     this.hours = [];
+    this.training = [];
   }
 }
 
@@ -171,14 +195,11 @@ type StaffRoles = {
 }
 
 // use this for mapping the recent sessions
-type ControllerSessions = {
-  id: number,
-  cid: number,
+type ControllerSession = {
+  date: string,
+  start: String,
+  end: String,
   callsign: string
-  frequency: string
-  start: Date,
-  end: Date,
-  active: boolean,
   duration: string
 }
 

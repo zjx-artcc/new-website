@@ -1,6 +1,8 @@
 import { prisma, getStaffRoles } from '$lib/db.js';
-import type { File } from '@prisma/client';
 import { json } from '@sveltejs/kit';
+import { rmSync } from 'fs';
+
+import type { File } from '@prisma/client';
 
 export async function DELETE({ request, locals }): Promise<Response> {
   if (!locals.session) {
@@ -18,6 +20,8 @@ export async function DELETE({ request, locals }): Promise<Response> {
       id: id
     }
   })
+
+  rmSync(`static/${file.path}`)
 
   if (!file) {
     return json({ success: false, error: 'File not found' });

@@ -1,11 +1,26 @@
-# ZJX Website
-## Useful Links
-https://vatusa-api.ztlartcc.org/
+# Virtual Jacksonville ARTCC Website
 
+## 
+## Useful Links
+https://vatusa-api.ztlartcc.org/ - Meaningful VATUSA API documentation
+
+## Setup
+This project runs on Postgres 16 and uses prisma. Once you have cloned the repo, setup your environment by changing the following in .env.example:
+
+```env
+databaseUrl="" # See prisma docs for format
+vatusaApikey="" # Your development key
+```
+
+Then, initialize your database:
+
+```bash
+prisma db push
+```
 
 ## Developing
 
-Once you've created a project and installed dependencies with `pnpm install`, start a development server:
+Now install dependencies with `pnpm install`, start a development server:
 
 ```bash
 pnpm run dev
@@ -14,14 +29,12 @@ pnpm run dev
 pnpm run dev -- --open
 ```
 
-## Building
+## Deploying
 
-To create a production version of your app:
-
+This project relies on docker compose to create the containers. You can manually run:
 ```bash
-pnpm run build
+docker compose up --build -d
 ```
 
-You can preview the production build with `pnpm run preview`.
+Or setup a self hosted runner and let GitHub actions deploy it.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
