@@ -156,7 +156,7 @@
 		<div class="flex flex-wrap justify-center w-full">
 			{#each pageData.awm as awm}
 				<div class="subset-card">
-					<h3 class="text-2xl font-bold">Assisant Events Coordinator</h3>
+					<h3 class="text-2xl font-bold">Assisant Webmaster</h3>
 					<p class="text-xl">{awm.name}</p>
 					<a href={"mailto:" + awm.email} class="text-gray-800">
 						<Icon icon="mdi:email" class="text-3xl" />
