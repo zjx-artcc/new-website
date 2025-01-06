@@ -18,6 +18,7 @@ services:
       SENTRY_ORG: ${SENTRY_ORG}
       SENTRY_PROJECT: ${SENTRY_PROJECT}
       BODY_SIZE_LIMIT: "5e+7"
+      SENTRY_DSN: ${SENTRY_DSN}
     volumes:
       - /var/www/new-website/:/usr/src/app/static/documents
     ports:
