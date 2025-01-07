@@ -31,7 +31,7 @@ jobs:
         client-id: ${{ secrets.CLIENT_ID }}
         client-secret: ${{ secrets.CLIENT_SECRET }}
         env-slug: "production"
-        project-slug: "new-website"
+        project-slug: "example-project-c-tm-k"
         export-type: "file"
         file-output-path: ".env"
     - name: Build and push image
