@@ -14,7 +14,7 @@ export const actions = {
 
       if(getStaffRoles(instructorCid, "training") && isRostered(studentCid)) {
         const vatusaData = {
-          instructor_id: locals.user.id,
+          instructor_id: 1697197,
           session_date: formatTrainingSessionTimeString(new Date(data.get("session_date") as string)),
           position: formEntries.position as string,
           duration: durationString, // in seconds
@@ -28,13 +28,15 @@ export const actions = {
         }
 
         const response = await submitTrainingNote(parseInt(data.get("student_cid") as string), vatusaData)
+        console.log("VATUSA File Training Ticket - " + response.status)
         if (response.status == 200) {
+
           // Push to DB
-          const insertion = await prisma.trainingSession.create({
+          await prisma.trainingSession.create({
             data: {
               student_cid: studentCid,
               instructorCid: instructorCid,
-              session_date: new Date(vatusaData.session_date),
+              session_date: new Date(data.get("session_date") as string),
               duration: convertDurationStringToSeconds(vatusaData.duration),
               position: vatusaData.position,
               movements: vatusaData.movements,
@@ -42,19 +44,17 @@ export const actions = {
               notes: vatusaData.notes,
               location: vatusaData.location,
             }
-          })
-
-          return {success: true}
+          }) 
         } else {   
-          return fail(response.status, {invalid: true, message: "VATUSA upload failed"})
+          fail(500, {message: "VATUSA upload failed"})
         }
       } else {
-        return fail(403, {invalid: true, message: "Instructor not authenticator or student not rostered"})
+        fail(403, {message: "Instructor not authenticator or student not rostered"})
       }
     } catch(error) {
-      console.log(error)
-      return fail(500, {invalid: true, message: "Invalid form data"})
+      fail(500, {message: error})
     }
+    fail(500, {message: "Error"})
   },
 
   editAssignment: async({request, locals}) => {
@@ -64,7 +64,7 @@ export const actions = {
     const trainingRequestId = parseInt(formData.get("trainingRequestId") as string)
 
     if(!getStaffRoles(locals.user.id, "training")) {
-      return fail(403)
+      fail(403)
     }
 
     // basic update
@@ -96,7 +96,7 @@ export const actions = {
             }
           })
         } else {
-          return fail(403)
+          fail(403)
         }
       }
       return {success: true}
