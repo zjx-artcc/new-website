@@ -53,4 +53,4 @@ jobs:
       - name: Pull image
         run: docker pull ghcr.io/zjx-artcc/new-website:master
       - name: Run container
-        run: docker run -d -p 3700:3700 --name new-websiteghcr.io/zjx-artcc/new-website:master 
+        run: docker run -d -p 3700:3700 --name new-website ghcr.io/zjx-artcc/new-website:master 
