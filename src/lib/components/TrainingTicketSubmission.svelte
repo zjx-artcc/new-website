@@ -21,7 +21,33 @@
     location: number
   }
 
+const handleSubmit = async(e) => {
+  if (allowSubmit) {
+    allowSubmit = false
+    const data = new FormData(e.target);
+
+    const response = await fetch(
+      "/admin/training-admin/handler?/submitTicket" ,
+        {
+          method: 'POST',
+          body: data
+      }
+    )
+
+    const result = deserialize(await response.text())
+    console.log(result)
+    if(result.type == "success") {
+      hidePopup(true, true, "Submitted!")
+    } else {
+      hidePopup(true, false, result.status + " " + result.data.message)
+    }
+  }
+
+  allowSubmit = true
+}
+
 </script>
+
 
 <div class="relative z-50 flex flex-col items-center place-items-center bg-gray-200 px-4 py-2 border-2 border-gray-400">
   <button on:click={() => hidePopup(false, false, "")}>
@@ -32,25 +58,7 @@
 
   <div>
     <form class="flex flex-col p-2 space-y-4 w-96" 
-    method="POST" 
-    action="/admin/training-admin/handler?/submitTicket" 
-    use:enhance={async({ formElement, formData, action, cancel }) => {
-      console.log(formData)
-      if (allowSubmit) {
-        allowSubmit = false
-        const data = formData;
-      } else {
-        cancel()
-      }
-      return async ({ result }) => {
-        if(result.type == "success") {
-          hidePopup(true, true, "Ticket uploaded to ZJX site and VATUSA!")      
-        } else {
-          hidePopup(true, false, result.data.message)
-        }
-        allowSubmit = true
-      };
-    }}>
+    on:submit={handleSubmit}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>
         <input class="px-2" readonly value={`${instructor.firstName + " " + instructor.lastName} (${instructor.id})`}>

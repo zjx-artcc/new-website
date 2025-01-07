@@ -33,12 +33,13 @@
 
     const result = deserialize(await response.text())
     console.log(result)
-    if(result.type == "failure") {
-      hidePopup(true, false, result.status + " " + result.data.message)
-    } else {
+    if(result.type == "success") {
       hidePopup(true, true, "Assignment Updated")
+    } else {
+      hidePopup(true, false, result.status + " " + result.data.message)
+      
     }
-    }
+  }
 
     allowSubmit = true
   }
