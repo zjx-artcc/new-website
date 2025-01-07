@@ -8,6 +8,8 @@ WORKDIR /usr/src/app
 
 COPY . .
 
+COPY .env /usr/src/app/.env
+
 #DEBUG
 RUN apk add --no-cache sudo
 

@@ -30,7 +30,7 @@ jobs:
       with:
         client-id: ${{ secrets.CLIENT_ID }}
         client-secret: ${{ secrets.CLIENT_SECRET }}
-        env-slug: "production"
+        env-slug: "prod"
         project-slug: "example-project-c-tm-k"
         export-type: "file"
         file-output-path: ".env"
