@@ -28,8 +28,8 @@ jobs:
     - name: Create .env
       uses: Infisical/secrets-action@v1.0.7
       with:
-        client-id: ${{ secrets.MACHINE_IDENTITY_CLIENT_ID }}
-        client-secret: ${{ secrets.MACHINE_IDENTITY_CLIENT_SECRET }}
+        client-id: ${{ secrets.CLIENT_ID }}
+        client-secret: ${{ secrets.CLIENT_SECRET }}
         env-slug: "production"
         project-slug: "new-website"
         export-type: "file"
