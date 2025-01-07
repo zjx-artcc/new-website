@@ -33,7 +33,7 @@ jobs:
         env-slug: "prod"
         project-slug: "example-project-c-tm-k"
         export-type: "file"
-        file-output-path: "./.env"
+        file-output-path: "/.env"
     - name: Build and push image
       uses: docker/build-push-action@v6.10.0
       id: push
