@@ -25,6 +25,15 @@ jobs:
       uses: docker/metadata-action@v5.6.1
       with:
         images: ghcr.io/${{ github.repository }}
+    - name: Create .env
+      uses: Infisical/secrets-action@v1.0.7
+      with:
+        client-id: ${{ secrets.MACHINE_IDENTITY_CLIENT_ID }}
+        client-secret: ${{ secrets.MACHINE_IDENTITY_CLIENT_SECRET }}
+        env-slug: "production"
+        project-slug: "new-website"
+        export-type: "file"
+        file-output-path: ".env"
     - name: Build and push image
       uses: docker/build-push-action@v6.10.0
       id: push
