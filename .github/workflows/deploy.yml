@@ -51,6 +51,6 @@ jobs:
       - name: Login to registry
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Pull image
-        run: docker pull ghcr.io/zjx-artcc/new-website:${{ needs.build.outputs.tags }}
+        run: docker pull ghcr.io/zjx-artcc/new-website:master
       - name: Run container
-        run: docker run -d -p 3000:3000 ghcr.io/zjx-artcc/new-website:${{ needs.build.outputs.tags }}
+        run: docker run -d -p 3000:3000 ghcr.io/zjx-artcc/new-website:master
