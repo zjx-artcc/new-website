@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { deserialize, enhance } from "$app/forms";
   import Icon from "@iconify/svelte";
-	import { Result } from "postcss";
+	import { onDestroy, onMount } from "svelte";
   export let hidePopup
   export let data
   export let form
@@ -42,10 +42,8 @@ const handleSubmit = async(e) => {
       hidePopup(true, false, result.status + " " + result.data.message)
     }
   }
-
   allowSubmit = true
 }
-
 </script>
 
 
@@ -58,6 +56,7 @@ const handleSubmit = async(e) => {
 
   <div>
     <form class="flex flex-col p-2 space-y-4 w-96" 
+    id="form"
     on:submit={handleSubmit}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>

@@ -32,7 +32,7 @@
     )
 
     const result = deserialize(await response.text())
-    console.log(result)
+
     if(result.type == "success") {
       hidePopup(true, true, "Assignment Updated")
     } else {
@@ -40,7 +40,6 @@
       
     }
   }
-
     allowSubmit = true
   }
 
