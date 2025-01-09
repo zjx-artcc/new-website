@@ -3,6 +3,7 @@
 	import ResponseBox from "$lib/components/ResponseBox.svelte";
 	import TrainingTicketSubmission from "$lib/components/TrainingTicketSubmission.svelte";
 	import TrainingAssignmentEdit from "$lib/components/TrainingAssignmentEdit.svelte";
+	import ConfirmPopup from "$lib/components/ConfirmPopup.svelte";
 	import Icon from "@iconify/svelte";
 	import { TabItem, Tabs } from "flowbite-svelte";
 	export let data;
@@ -58,6 +59,11 @@
 	const showAssignmentEdit = (requestData) => {
 		controllerData = requestData
 		showPopup("assignmentEdit")
+	}
+
+	const showConfirmPickup = (requestData) => {
+		controllerData = requestData
+		showPopup("confirmPickup")
 	}
 
 	const getStatusColor = (status: string): string => {
@@ -142,7 +148,7 @@
 										<div class="flex flex-col h-full flex-wrap gap-y-2 gap-x-2">
 											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showTrainingTicketSubmission(trainingRequest)}>File Training Ticket</button>
 											<button class="p-2 bg-sky-500 rounded-md text-sm transition hover:scale-105">View Training History</button>
-											<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105">Update Training Assignment</button>
+											<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105" on:click={() => showAssignmentEdit(trainingRequest)}>Update Training Assignment</button>
 										</div>
 									</div>
 								</div>
@@ -185,7 +191,7 @@
 							<td class={`px-2 border-x-2 border-gray-300 ${getStatusColor(trainingRequest.status)}`}>{trainingRequest.status}</td>
 							<td class="px-2 border-x-2 border-gray-300">
 								{#if trainingRequest.instructorCid == null}
-									<button class="transition group w-5 h-5 relative">
+									<button class="transition group w-5 h-5 relative" on:click={() => showConfirmPickup(trainingRequest)}>
 										<Icon icon="mdi:arrow-down-bold"/>
 										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Claim Student</p>
 									</button>
@@ -223,6 +229,8 @@
 
 		<TabItem>
 			<span slot="title">Stats</span>
+
+			<h2 class="font-bold text-2xl">To be added</h2>
 		</TabItem>
 	</Tabs>
 	
@@ -234,6 +242,10 @@
 
 		{#if selection == "assignmentEdit"}
 			<TrainingAssignmentEdit instructors={data.instructors} data={controllerData} hidePopup={hidePopup} {form}/>
+		{/if}
+
+		{#if selection == "confirmPickup"}
+			<ConfirmPopup data={controllerData} hidePopup={hidePopup} form/>
 		{/if}
 	</Popup>
 </div>

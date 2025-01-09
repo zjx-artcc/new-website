@@ -46,15 +46,15 @@ export const actions = {
             }
           }) 
         } else {   
-          fail(500, {message: "VATUSA upload failed"})
+          return fail(500, {message: "VATUSA upload failed"})
         }
       } else {
-        fail(403, {message: "Instructor not authenticator or student not rostered"})
+        return fail(403, {message: "Instructor not authenticator or student not rostered"})
       }
     } catch(error) {
-      fail(500, {message: error})
+      return fail(500, {message: error})
     }
-    fail(500, {message: "Error"})
+    return fail(500, {message: "Error"})
   },
 
   editAssignment: async({request, locals}) => {
@@ -64,7 +64,7 @@ export const actions = {
     const trainingRequestId = parseInt(formData.get("trainingRequestId") as string)
 
     if(!getStaffRoles(locals.user.id, "training")) {
-      fail(403)
+      return fail(403)
     }
 
     // basic update
@@ -96,7 +96,7 @@ export const actions = {
             }
           })
         } else {
-          fail(403)
+          return fail(403)
         }
       }
       return {success: true}
@@ -144,6 +144,32 @@ export const actions = {
       return {success: true}
     }
 
-    fail(403, {message: "Not implemented"})
+    return fail(403, {message: "Not implemented"})
+  },
+
+  claimStudent: async({request, locals}) => {
+    try {
+      const formData = await request.formData()
+      const trainingRequestId = parseInt(formData.get("trainingRequestId") as string)
+      console.log(trainingRequestId)
+      if(!getStaffRoles(locals.user.id, "training")) {
+        return fail(403, {message: "Unauthorized"})
+      }
+
+      await prisma.trainingRequest.update({
+        where: {
+          trainingRequestId: trainingRequestId,
+          instructorCid: null // so people cant claim active requests
+        },
+        data: {
+          instructorCid: locals.user.id,
+          status: "In Progress"
+        }
+      })
+
+      return({success: true})
+    } catch (error) {
+      return fail(500, {message: "Unknown Error"})
+    }
   }
 }
