@@ -48,9 +48,11 @@ jobs:
     needs: build
     environment: Development
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
       - name: Login to registry
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Pull image
         run: docker pull ghcr.io/zjx-artcc/new-website:master
       - name: Run container
-        run: docker run -d -p 3700:3700 --name new-website ghcr.io/zjx-artcc/new-website:master 
+        run: docker compose up -d
