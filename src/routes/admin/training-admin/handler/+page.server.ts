@@ -14,7 +14,7 @@ export const actions = {
 
       if(getStaffRoles(instructorCid, "training") && isRostered(studentCid)) {
         const vatusaData = {
-          instructor_id: locals.user.id,
+          instructor_id: 1697197,
           session_date: formatTrainingSessionTimeString(new Date(data.get("session_date") as string)),
           position: formEntries.position as string,
           duration: durationString, // in seconds
@@ -28,13 +28,15 @@ export const actions = {
         }
 
         const response = await submitTrainingNote(parseInt(data.get("student_cid") as string), vatusaData)
+        console.log("VATUSA File Training Ticket - " + response.status)
         if (response.status == 200) {
+
           // Push to DB
-          const insertion = await prisma.trainingSession.create({
+          await prisma.trainingSession.create({
             data: {
               student_cid: studentCid,
               instructorCid: instructorCid,
-              session_date: new Date(vatusaData.session_date),
+              session_date: new Date(data.get("session_date") as string),
               duration: convertDurationStringToSeconds(vatusaData.duration),
               position: vatusaData.position,
               movements: vatusaData.movements,
@@ -42,11 +44,9 @@ export const actions = {
               notes: vatusaData.notes,
               location: vatusaData.location,
             }
-          })
-
-          return {success: true}
+          }) 
         } else {   
-          fail(response.status, {message: "VATUSA upload failed"})
+          fail(500, {message: "VATUSA upload failed"})
         }
       } else {
         fail(403, {message: "Instructor not authenticator or student not rostered"})
@@ -54,6 +54,7 @@ export const actions = {
     } catch(error) {
       fail(500, {message: error})
     }
+    fail(500, {message: "Error"})
   },
 
   editAssignment: async({request, locals}) => {
