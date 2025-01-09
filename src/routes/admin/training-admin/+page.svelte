@@ -44,6 +44,12 @@
 		responseBox.success = success
 		responseBox.hidden = !showResponseBox
 		responseBox.text = message
+
+		if (showResponseBox) { // response box actions usually mean some kind of database action was performed, hence the reload
+			setTimeout(() => {
+				window.location.reload()
+			}, 2000)
+		}
   };
 
   const showPopup = (screen: string) => {
