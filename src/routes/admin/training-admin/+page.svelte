@@ -17,7 +17,7 @@
 	let openRowAssignments = null
 	let openRowSlots = null
 	let popupHidden: boolean = true
-	
+	let popupType = ""
 	let controllerData
 	let selection: string
 
@@ -63,6 +63,13 @@
 
 	const showConfirmPickup = (requestData) => {
 		controllerData = requestData
+		popupType = "claim"
+		showPopup("confirmPickup")
+	}
+
+	const showConfirmDropStudent = (requestData) => {
+		controllerData = requestData
+		popupType = "drop"
 		showPopup("confirmPickup")
 	}
 
@@ -149,6 +156,7 @@
 											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showTrainingTicketSubmission(trainingRequest)}>File Training Ticket</button>
 											<button class="p-2 bg-sky-500 rounded-md text-sm transition hover:scale-105">View Training History</button>
 											<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105" on:click={() => showAssignmentEdit(trainingRequest)}>Update Training Assignment</button>
+											<button class="p-2 bg-red-500 rounded-md text-sm transition hover:scale-105" on:click={() => showConfirmDropStudent(trainingRequest)}>Drop Student</button>
 										</div>
 									</div>
 								</div>
@@ -194,6 +202,13 @@
 									<button class="transition group w-5 h-5 relative" on:click={() => showConfirmPickup(trainingRequest)}>
 										<Icon icon="mdi:arrow-down-bold"/>
 										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Claim Student</p>
+									</button>
+								{/if}
+
+								{#if trainingRequest.instructorCid == data.session.userId}
+									<button class="transition group w-5 h-5 relative" on:click={() => showConfirmDropStudent(trainingRequest)}>
+										<Icon icon="mdi:alpha-x"/>
+										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Drop Student</p>
 									</button>
 								{/if}
 
@@ -245,7 +260,7 @@
 		{/if}
 
 		{#if selection == "confirmPickup"}
-			<ConfirmPopup data={controllerData} hidePopup={hidePopup} form/>
+			<ConfirmPopup type={popupType} data={controllerData} hidePopup={hidePopup} {form}/>
 		{/if}
 	</Popup>
 </div>

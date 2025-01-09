@@ -171,5 +171,31 @@ export const actions = {
     } catch (error) {
       return fail(500, {message: "Unknown Error"})
     }
+  },
+
+  dropStudent: async({request, locals}) => {
+    try {
+      const formData = await request.formData()
+      const trainingRequestId = parseInt(formData.get("trainingRequestId") as string)
+      console.log(trainingRequestId)
+      if(!getStaffRoles(locals.user.id, "training")) {
+        return fail(403, {message: "Unauthorized"})
+      }
+
+      await prisma.trainingRequest.update({
+        where: {
+          trainingRequestId: trainingRequestId,
+          instructorCid: locals.user.id // so people cant claim active requests
+        },
+        data: {
+          instructorCid: null,
+          status: "Awaiting Trainer Assignment"
+        }
+      })
+
+      return({success: true})
+    } catch (error) {
+      return fail(500, {message: "Unknown Error"})
+    }
   }
 }

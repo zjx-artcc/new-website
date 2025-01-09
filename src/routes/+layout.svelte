@@ -6,7 +6,7 @@
 	export let data
 </script>
 
-<body class="bg-transparent">
+<body class="bg-transparent min-w-fit">
 	<div class="z-10">
 		<Navbar canViewAdmin={data.canViewAdmin} />
 	</div>

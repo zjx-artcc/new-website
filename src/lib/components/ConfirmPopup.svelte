@@ -2,6 +2,7 @@
   import Icon from "@iconify/svelte";
   import { deserialize } from "$app/forms";
   export let data;
+  export let type;
   export let hidePopup;
   export let form;
   let allowSubmit = true
@@ -10,26 +11,48 @@
     if (allowSubmit) {
       allowSubmit = false
       const formData: FormData = new FormData(e.target)
-      formData.append("submitType", e.submitter.getAttribute("name"))
       formData.append("trainingRequestId", data.trainingRequestId)
-    const response = await fetch(
-      "/admin/training-admin/handler?/claimStudent" ,
+      let link: string
+
+      switch(type) {
+        case "drop":
+          link = "/admin/training-admin/handler?/dropStudent"
+          break
+        case "claim":
+          link = "/admin/training-admin/handler?/claimStudent"
+          break
+        default:
+          link = ""
+      }
+      
+      console.log(link)
+      const response = await fetch(
+      link,
         {
           method: 'POST',
           body: formData
+        }
+      )
+
+      const result = deserialize(await response.text())
+
+      if(result.type == "success") {
+        hidePopup(true, true, "Action Success")
+      } else {
+        hidePopup(true, false, result.status + " " + result.data.message)
+        
       }
-    )
-
-    const result = deserialize(await response.text())
-
-    if(result.type == "success") {
-      hidePopup(true, true, "Student Claimed!")
-    } else {
-      hidePopup(true, false, result.status + " " + result.data.message)
-      
     }
-  }
     allowSubmit = true
+  }
+
+  const getTypeString = (type: string): string => {
+    switch(type) {
+      case "claim":
+        return "Claim Student"
+      case "drop":
+        return "Drop Student"
+    }
   }
 </script>
 
@@ -38,7 +61,7 @@
     <Icon icon="mdi:close" class="w-5 h-5 absolute top-2 right-2"/>
   </button>
 
-  <h2 class="font-bold text-xl text-sky-500">Claim Student</h2>
+  <h2 class="font-bold text-xl text-sky-500">{getTypeString(type)}</h2>
 
   <form class="flex flex-col p-2 space-y-4 w-72" on:submit={handleSubmit}>
       <div class="flex flex-col">
