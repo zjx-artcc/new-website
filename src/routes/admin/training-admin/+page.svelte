@@ -229,6 +229,8 @@
 
 		<TabItem>
 			<span slot="title">Stats</span>
+
+			<h2 class="font-bold text-2xl">To be added</h2>
 		</TabItem>
 	</Tabs>
 	
