@@ -1,0 +1,12 @@
+services:
+  web:
+    image: ghcr.io/zjx-artcc/new-website:master
+    ports:
+      - 3700:3700
+    container_name: new-website
+    restart: always
+    volumes:
+      - new-website:/usr/src/app/static/documents
+  
+volumes:
+  new-website:
