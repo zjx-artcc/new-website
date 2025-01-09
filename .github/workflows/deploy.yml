@@ -48,6 +48,8 @@ jobs:
     needs: build
     environment: Development
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
       - name: Login to registry
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Pull image
