@@ -89,9 +89,6 @@
 
       <button type="submit" name="submit" class="p-2 bg-sky-500 text-white font-bold">Submit Changes</button>
       <button type="submit" name="deactivate" class="p-2 bg-red-500 text-white font-bold">Deactivate Training Request</button>
-      {#if data.status == "Solo Cert"}
-        <button type="submit" name="revokeSolo" class="p-2 bg-amber-500 text-white font-bold">Revoke Solo Cert</button>
-      {/if}
     </form>
   </div>
 </div>

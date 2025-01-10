@@ -6,6 +6,7 @@
 	import ConfirmPopup from "$lib/components/ConfirmPopup.svelte";
 	import Icon from "@iconify/svelte";
 	import { TabItem, Tabs } from "flowbite-svelte";
+	import { getStaffRoles } from "$lib/db.js";
 	export let data;
 	export let form;
 	let responseBox = {
@@ -56,6 +57,18 @@
 		selection = screen
     popupHidden = false
   }
+
+	const showConfirmSoloCert = (requestData) => {
+		controllerData = requestData
+		popupType = "solo"
+		showPopup("confirmPickup")
+	}
+
+	const showConfirmDropSoloCert = (requestData) => {
+		controllerData = requestData
+		popupType = "revokeSolo"
+		showPopup("confirmPickup")
+	}
 
 	const showTrainingTicketSubmission = (requestData) => {
 		controllerData = requestData
@@ -112,10 +125,6 @@
 	text={responseBox.text}
 />
 <div class="m-5 flex justify-center items-center flex-col">
-
-
-
-
 	<div>
 			<h1 class="text-xl text-sky-500 font-bold align-left">Training Admin</h1>
 	</div>
@@ -160,8 +169,13 @@
 									<div>
 										<div class="flex flex-col h-full flex-wrap gap-y-2 gap-x-2">
 											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showTrainingTicketSubmission(trainingRequest)}>File Training Ticket</button>
+											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showAssignmentEdit(trainingRequest)}>Edit Training Assignment</button>
 											<button class="p-2 bg-sky-500 rounded-md text-sm transition hover:scale-105">View Training History</button>
-											<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105" on:click={() => showAssignmentEdit(trainingRequest)}>Update Training Assignment</button>
+											<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105" on:click={() => showConfirmSoloCert(trainingRequest)}>Issue Solo Cert</button>
+
+											{#if trainingRequest.status == "Solo Cert"}
+												<button class="p-2 bg-red-500 rounded-md text-sm transition hover:scale-105" on:click={() => showConfirmDropSoloCert(trainingRequest)}>Revoke Solo Cert</button>
+											{/if}
 											<button class="p-2 bg-red-500 rounded-md text-sm transition hover:scale-105" on:click={() => showConfirmDropStudent(trainingRequest)}>Drop Student</button>
 										</div>
 									</div>
@@ -224,15 +238,23 @@
 										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Edit Training Assignment</p>
 									</button>
 								{/if}
-									<a class="transition group w-5 h-5 relative" href={`/training/${trainingRequest.studentCid}`}>
-										<Icon icon="mdi:person"/>
-										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">View Student Profile</p>
-									</a>
 
-									<button class="transition group w-5 h-5 relative" on:click={() => showTrainingTicketSubmission(trainingRequest)}>
-										<Icon icon="mdi:upload"/>
-										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">File Training Ticket</p>
+								{#if trainingRequest.status == "Solo Cert" && (data.session.user.id == trainingRequest.instructorCid || data.trainingAdmin)}
+									<button class="transition group w-5 h-5 relative" on:click={() => showConfirmDropSoloCert(trainingRequest)}>
+										<Icon icon="mdi:file-certificate"/>
+										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Revoke Solo Cert</p>
 									</button>
+								{/if}
+
+								<a class="transition group w-5 h-5 relative" href={`/training/${trainingRequest.studentCid}`}>
+									<Icon icon="mdi:person"/>
+									<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">View Student Profile</p>
+								</a>
+
+								<button class="transition group w-5 h-5 relative" on:click={() => showTrainingTicketSubmission(trainingRequest)}>
+									<Icon icon="mdi:upload"/>
+									<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">File Training Ticket</p>
+								</button>
 								
 							</td>
 						</tr>

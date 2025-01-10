@@ -7,6 +7,10 @@
   export let form;
   let allowSubmit = true
 
+  function formatSoloCertTimeString(time: Date): string {
+    return `${time.getUTCFullYear().toString().padStart(4, "0")}-${(time.getUTCMonth() + 1).toString().padStart(2, "0")}-${time.getUTCDate().toString().padStart(2, "0")}`;
+  }
+
   const handleSubmit = async(e) => {
     if (allowSubmit) {
       allowSubmit = false
@@ -20,6 +24,12 @@
           break
         case "claim":
           link = "/admin/training-admin/handler?/claimStudent"
+          break
+        case "solo":
+          link = "/admin/training-admin/handler?/issueSolo"
+          break
+        case "revokeSolo":
+          link = "/admin/training-admin/handler?/revokeSolo"
           break
         default:
           link = ""
@@ -52,6 +62,10 @@
         return "Claim Student"
       case "drop":
         return "Drop Student"
+      case "solo":
+        return "Issue Solo Cert"
+      case "revokeSolo":
+        return "Revoke Solo Cert"
     }
   }
 </script>
@@ -74,6 +88,27 @@
         <input class="px-2" readonly value={data.trainingType}>
       </div>
       <input class="px-2 hidden" name="trainingRequestId" readonly value={data.trainingRequestId}>
+
+      {#if type == "solo"}
+        <div class="flex flex-col">
+          <label class="font-bold" for="soloPosition">Position</label>
+          <input class="px-2" name="soloPosition" required placeholder="Enter Position">
+        </div>
+
+        <div class="flex flex-col">
+          <label class="font-bold" for="soloPosition">Expiration</label>
+          <input class="px-2" readonly value={formatSoloCertTimeString(new Date(Date.now() + 2592000000))}>
+          <label class="italic text-red-500" for="soloPosition">* 30 days from today</label>
+
+        </div>
+      {/if}
+
+      {#if type == "revokeSolo"}
+        <div class="flex flex-col">
+          <label class="font-bold" for="soloPosition">Position</label>
+          <input class="px-2" name="soloPosition" required placeholder="Enter Position">
+        </div>
+      {/if}
       <button type="submit" name="submit" class="p-2 bg-sky-500 text-white font-bold">Confirm</button>
     </form>
 </div>

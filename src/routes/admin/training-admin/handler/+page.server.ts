@@ -1,7 +1,7 @@
 import { getStaffRoles, isRostered } from '$lib/db.js'
 import { fail, redirect } from '@sveltejs/kit'
 import { prisma, convertDurationStringToSeconds } from '$lib/db.js'
-import { deleteSoloCert, formatTrainingSessionTimeString, submitTrainingNote } from '$lib/vatusaApi.js'
+import { deleteSoloCert, formatTrainingSessionTimeString, submitSoloCert, submitTrainingNote } from '$lib/vatusaApi.js'
 
 export const actions = {
   submitTicket: async({request, locals}) => {
@@ -14,7 +14,7 @@ export const actions = {
 
       if(getStaffRoles(instructorCid, "training") && isRostered(studentCid)) {
         const vatusaData = {
-          instructor_id: 1697197,
+          instructor_id: locals.user.id,
           session_date: formatTrainingSessionTimeString(new Date(data.get("session_date") as string)),
           position: formEntries.position as string,
           duration: durationString, // in seconds
@@ -118,32 +118,6 @@ export const actions = {
       return {success: true}
     }
 
-    if (submitType == "revokeSolo") {
-      const dbQuery = await prisma.trainingRequest.update({
-        where: {
-          trainingRequestId: trainingRequestId
-        },
-        data: {
-          status: "In Progress",
-          dateAssigned: new Date()
-        }
-      })
-
-      // get student CID
-      const query = await prisma.trainingRequest.findFirst({
-        select: {
-          studentCid: true
-        },
-        where: {
-          trainingRequestId: trainingRequestId
-        }
-      })
-      
-      // think of some mystical way to delete solo certs from vatusa
-
-      return {success: true}
-    }
-
     return fail(403, {message: "Not implemented"})
   },
 
@@ -194,6 +168,58 @@ export const actions = {
       })
 
       return({success: true})
+    } catch (error) {
+      return fail(500, {message: "Unknown Error"})
+    }
+  },
+
+  issueSolo: async({request, locals}) => {
+    try {
+      const formData = await request.formData()
+      const trainingRequestId: number = parseInt(formData.get("trainingRequestId") as string)
+      const soloPosition: string = formData.get("soloPosition") as string
+      
+      if(!getStaffRoles(locals.user.id, "training")) {
+        return fail(403, {message: "Unauthorized"})
+      }
+
+      if(soloPosition.length < 1) {
+        return fail(500, {message: "Invalid Position Input"})
+      }
+
+      // Get training request (CID cannot be trusted by client)\
+      const trainingRequest = await prisma.trainingRequest.findFirst({
+        where: {
+          trainingRequestId: trainingRequestId
+        },
+        select: {
+          studentCid: true
+        }
+      })
+
+      if (trainingRequest != null) {
+        const vatusaResponse = await submitSoloCert(trainingRequest.studentCid, soloPosition)
+
+        if (vatusaResponse.status == 200) {
+          await prisma.trainingRequest.update({
+            where: {
+              trainingRequestId: trainingRequestId,
+              active: true
+            },
+            data: {
+              status: "Solo Cert"
+            }
+          })
+
+          return({success: true})
+        } else {
+          console.log (vatusaResponse)
+          return fail(500, {message: "VATUSA communication failed"})
+        }
+        
+      } else {
+        return fail(500, {message: "Training request does not exist"})
+      }
     } catch (error) {
       return fail(500, {message: "Unknown Error"})
     }
