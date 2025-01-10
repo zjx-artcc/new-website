@@ -223,5 +223,57 @@ export const actions = {
     } catch (error) {
       return fail(500, {message: "Unknown Error"})
     }
+  },
+
+  revokeSolo: async({request, locals}) => {
+    try {
+      const formData = await request.formData()
+      const trainingRequestId: number = parseInt(formData.get("trainingRequestId") as string)
+      const soloPosition: string = formData.get("soloPosition") as string
+      
+      if(!getStaffRoles(locals.user.id, "training")) {
+        return fail(403, {message: "Unauthorized"})
+      }
+
+      if(soloPosition.length < 1) {
+        return fail(500, {message: "Invalid Position Input"})
+      }
+
+      // Get training request (CID cannot be trusted by client)\
+      const trainingRequest = await prisma.trainingRequest.findFirst({
+        where: {
+          trainingRequestId: trainingRequestId
+        },
+        select: {
+          studentCid: true
+        }
+      })
+
+      if (trainingRequest != null) {
+        const vatusaResponse = await deleteSoloCert(trainingRequest.studentCid, soloPosition)
+
+        if (vatusaResponse.status == 200) {
+          await prisma.trainingRequest.update({
+            where: {
+              trainingRequestId: trainingRequestId,
+              active: true
+            },
+            data: {
+              status: "In Progress"
+            }
+          })
+
+          return({success: true})
+        } else {
+          console.log (vatusaResponse)
+          return fail(500, {message: "VATUSA communication failed"})
+        }
+        
+      } else {
+        return fail(500, {message: "Training request does not exist"})
+      }
+    } catch (error) {
+      return fail(500, {message: "Unknown Error"})
+    }
   }
 }

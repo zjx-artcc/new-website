@@ -126,7 +126,7 @@
 />
 <div class="m-5 flex justify-center items-center flex-col">
 	<div>
-			<h1 class="text-xl text-sky-500 font-bold align-left">Training Admin</h1>
+			<h1 class="text-xl text-sky-500 font-bold align-left mb-2">Training Admin</h1>
 	</div>
 
 	<!-- Assignments Page -->
@@ -265,7 +265,7 @@
 			<h2 class="font-bold text-xl my-4">No active training requests</h2>
 			{/if}
 		</TabItem>
-
+<!--
 		<TabItem>
 			<span slot="title">Student Profile</span>
 		</TabItem>
@@ -275,6 +275,7 @@
 
 			<h2 class="font-bold text-2xl">To be added</h2>
 		</TabItem>
+	-->
 	</Tabs>
 	
 	

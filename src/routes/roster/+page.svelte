@@ -38,14 +38,14 @@
 			<tbody>
 				{#each data.pageData.home as controller}
 					<tr>
-						<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.name} ({controller.initials})</td>
-						<td class="text-center align-top border-2 border-solid px-2 py-5"><a href="/profile/{controller.cid}">{controller.cid}</a></td>
-						<td class="text-center align-top border-2 border-solid px-2 py-5">{controller.rating}</td>
-						<td class="text-center align-top border-2 border-solid px-2 py-5 bg-{controller.delCerts.color}"><p class="py-1 text-white">{controller.delCerts.cert}</p></td>
-						<td class="text-center align-top border-2 border-solid px-2 py-5 bg-{controller.gndCerts.color}"><p class="py-1 text-white">{controller.gndCerts.cert}</p></td>
-						<td class="text-center align-top border-2 border-solid px-2 py-5 bg-{controller.twrCerts.color}"><p class="py-1 text-white">{controller.twrCerts.cert}</p></td>
-						<td class="text-center align-top border-2 border-solid px-2 py-5 bg-{controller.appCerts.color}"><p class="py-1 text-white">{controller.appCerts.cert}</p></td>
-						<td class="text-center align-top border-2 border-solid px-2 py-5 bg-{controller.ctrCert.color}"><p class="px-1 py-1 rounded-md text-white">{controller.ctrCert.cert}</p></td>
+						<td class="text-left align-middle border-2 border-solid px-2 py-2">{controller.name} ({controller.initials})</td>
+						<td class="text-center text-sky-700 align-middle border-2 border-solid px-2 transition hover:text-sky-300"><a href="/profile/{controller.cid}">{controller.cid}</a></td>
+						<td class="text-center align-middle border-2 border-solid px-2">{controller.rating}</td>
+						<td class="text-center align-middle border-2 border-solid px-2 bg-{controller.delCerts.color}"><p class="py-1 text-white">{controller.delCerts.cert}</p></td>
+						<td class="text-center align-middle border-2 border-solid px-2 bg-{controller.gndCerts.color}"><p class="py-1 text-white">{controller.gndCerts.cert}</p></td>
+						<td class="text-center align-middle border-2 border-solid px-2 bg-{controller.twrCerts.color}"><p class="py-1 text-white">{controller.twrCerts.cert}</p></td>
+						<td class="text-center align-middle border-2 border-solid px-2 bg-{controller.appCerts.color}"><p class="py-1 text-white">{controller.appCerts.cert}</p></td>
+						<td class="text-center align-middle border-2 border-solid px-2 bg-{controller.ctrCert.color}"><p class="px-1 py-1 rounded-md text-white">{controller.ctrCert.cert}</p></td>
 					</tr>
 				{/each}
 			</tbody>

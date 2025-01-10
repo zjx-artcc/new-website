@@ -86,6 +86,7 @@ export async function submitSoloCert(cid: number, position: string): Promise<Res
  */
 export async function deleteSoloCert(cid: number, position: string): Promise<Response> {
   try {
+    const fetchBody: URLSearchParams = new URLSearchParams({'cid': cid.toString(), 'position': position})
     // VATUSA API call to remove solo cert
     const vatusaReq = await fetch(
       `https://api.vatusa.net/v2/solo?apikey=${process.env.VATUSA_KEY}`,
@@ -94,7 +95,7 @@ export async function deleteSoloCert(cid: number, position: string): Promise<Res
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify({'cid': cid, 'position': position})
+        body: fetchBody
       }
     );
 
