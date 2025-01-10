@@ -7,6 +7,9 @@ export const load: PageServerLoad = async ({ locals }) => {
   let feedback = await prisma.feedback.findMany({
     where: {
       public: true
+    },
+    orderBy: {
+      created: "desc"
     }
   })
 
@@ -31,6 +34,7 @@ export const load: PageServerLoad = async ({ locals }) => {
       }
     })
     pageData.feedback.push({
+      id: feedbackItem.id,
       author: `${author.firstName} ${author.lastName}`,
       rating: feedbackItem.rating,
       controller: `${controller.firstName} ${controller.lastName}`,
@@ -47,6 +51,9 @@ export const load: PageServerLoad = async ({ locals }) => {
       let hidden = await prisma.feedback.findMany({
         where: {
           public: false
+        },
+        orderBy: {
+          created: "asc"
         }
       })
 
@@ -70,8 +77,8 @@ export const load: PageServerLoad = async ({ locals }) => {
             lastName: true
           }
         })
-        console.log(feedbackItem);
         pageData.hidden.push({
+          id: feedbackItem.id,
           author: `${author.firstName} ${author.lastName}`,
           rating: feedbackItem.rating,
           controller: `${controller.firstName} ${controller.lastName}`,
@@ -94,10 +101,12 @@ class PageData {
   constructor() {
     this.feedback = [];
     this.hidden = [];
+    this.staff = false;
   }
 }
 
 export type WebFeedback = {
+  id: string;
   author: string;
   rating: number;
   controller: string;

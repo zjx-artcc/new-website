@@ -317,14 +317,16 @@ h3 {
   font-size: 1.857143rem;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
+h1,h2,h3,h4,h5,h6,p {
   margin-top: 0;
+}
+
+h1,h2,h3 {
+  font-family: 'Poppins'
+}
+
+p, a, button, div {
+  font-family: 'Montserrat'
 }
 
 .font-w600 {

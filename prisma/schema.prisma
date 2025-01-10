@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Action {
+  id String @id @default(uuid())
+  user Int 
+  action String
+
+  roster    Roster    @relation(fields: [user], references: [cid], onDelete: Cascade)
+
+  @@map("action_log")
+}
+
 model ArtccStats {
   id        Int      @id
   timestamp DateTime
@@ -122,6 +132,7 @@ model Roster {
   StaffRoles                                                 StaffRole[]
   stats                                                      Stats?
   feedback                                                   Feedback[]
+  actions                                                   Action[]                  
   training_requests_training_requests_instructor_cidToroster TrainingRequest[]   @relation("training_requests_instructor_cidToroster")
   training_requests_training_requests_student_cidToroster    TrainingRequest[]   @relation("training_requests_student_cidToroster")
   training_sessions_training_sessions_student_cidToroster    TrainingSession[]   @relation("training_sessions_student_cidToroster")
