@@ -6,7 +6,6 @@
   const form = useForm();
 
   export let data;
-  console.log(data);
 </script>
 
 <svelte:head>
@@ -29,9 +28,9 @@
     <nav class="py-2 mb-0">
       <a href="/" class="text-sky-500">Home</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/documents" class="text-sky-500">Documents</a>
+      <a href="/feedback" class="text-sky-500">Feedback</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/documents/new" class="text-sky-500">New</a>
+      <a href="/feedback/new" class="text-sky-500">New</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
     </nav>
   </div>

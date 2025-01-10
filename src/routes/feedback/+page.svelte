@@ -1,6 +1,20 @@
 <script lang="ts">
   import '$lib/app.css';
 	import Icon from '@iconify/svelte';
+	import type { WebFeedback } from './+page.server';
+	import { Modal } from 'flowbite-svelte';
+
+	export let data;
+
+
+	let target: WebFeedback = data.pageData.feedback[0];
+	let modal = true;
+	let hidden = true;
+
+	async function approveFeedback() {
+		
+	}
+
 </script>
 
 <svelte:head>
@@ -26,14 +40,52 @@
   </div>
 </div>
 
+{#if data.pageData.staff}
+	<h1 class="text-2xl text-red-500 text-center mt-2 mb-4">Feedback in red is not approved and like this message, is visible to staff only</h1>
+{/if}
+
+<Modal bind:open={modal} class="w-fit">
+	<div class="text-center px-10">
+		<h1 class="text-2xl font-bold">Feedback for {target.controller}</h1>
+		<h2 class="text-xl">Submitted by {target.author}</h2>
+		<h3 class="text-lg">Rating</h3>
+		<p>{target.rating}</p>
+		<h3 class="text-lg">Comments</h3>
+		<p>{target.comment}</p>
+		<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle" on:click={() => modal = false}>Close</button>
+		{#if hidden}
+			<button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle">Approve</button>
+			<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle">Deny</button>
+		{/if}
+	</div>
+</Modal>
+
 <div class="flex flex-row min-h-fit justify-center items-center mt-2">
 	<div class="table">
 		<div class="table-row-group">
 			<div class="table-cell font-bold text-lg text-center">Date</div>
-			<div class="table-cell font-bold text-lg text-center">Controller</div>
-			<div class="table-cell font-bold text-lg text-center">Position</div>
-			<div class="table-cell font-bold text-lg text-center">Rating</div>
+			<div class="table-cell font-bold text-lg text-center w-60">Controller</div>
+			<div class="table-cell font-bold text-lg text-center w-40">Position</div>
+			<div class="table-cell font-bold text-lg text-center w-24">Rating</div>
 			<div class="table-cell font-bold text-lg text-center">Info</div>
 		</div>
+		{#each data.pageData.feedback as feedback}
+			<div class="table-row-group">
+				<div class="table-cell text-center">{feedback.created.toDateString()}</div>
+				<div class="table-cell text-center">{feedback.controller}</div>
+				<div class="table-cell text-center">{feedback.position}</div>
+				<div class="table-cell text-center">{feedback.rating}</div>
+				<div class="table-cell text-center"><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle" on:click={() => { modal = true; target = feedback}}><Icon icon="mdi:eye-outline" /></div>
+			</div>
+		{/each}
+		{#each data.pageData.hidden as feedback}
+			<div class="table-row-group">
+				<div class="table-cell text-center text-red-500">{feedback.created.toDateString()}</div>
+				<div class="table-cell text-center text-red-500">{feedback.controller}</div>
+				<div class="table-cell text-center text-red-500">{feedback.position}</div>
+				<div class="table-cell text-center text-red-500">{feedback.rating}</div>
+				<div class="table-cell text-center text-red-500"><p class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle"><Icon icon="mdi:eye-outline" /></p></div>
+			</div>
+		{/each}
 	</div>
 </div>

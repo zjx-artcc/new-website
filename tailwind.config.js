@@ -21,6 +21,7 @@ export default {
     'text-sky-700',
     'bg-indigo-700',
     'text-indigo-700',
+    'sr-only'
   ]
 }
 
