@@ -1,6 +1,8 @@
 <script lang="ts">
   import '$lib/app.css';
 	import Icon from '@iconify/svelte';
+
+	export let data;
 </script>
 
 <svelte:head>
@@ -26,14 +28,36 @@
   </div>
 </div>
 
+{#if data.pageData.staff}
+	<h1 class="text-2xl text-red-500 text-center mt-2 mb-4">Feedback in red is not approved and like this message, is visible to staff only</h1>
+{/if}
+
 <div class="flex flex-row min-h-fit justify-center items-center mt-2">
 	<div class="table">
 		<div class="table-row-group">
 			<div class="table-cell font-bold text-lg text-center">Date</div>
-			<div class="table-cell font-bold text-lg text-center">Controller</div>
-			<div class="table-cell font-bold text-lg text-center">Position</div>
-			<div class="table-cell font-bold text-lg text-center">Rating</div>
+			<div class="table-cell font-bold text-lg text-center w-60">Controller</div>
+			<div class="table-cell font-bold text-lg text-center w-40">Position</div>
+			<div class="table-cell font-bold text-lg text-center w-24">Rating</div>
 			<div class="table-cell font-bold text-lg text-center">Info</div>
 		</div>
+		{#each data.pageData.feedback as feedback}
+			<div class="table-row-group">
+				<div class="table-cell text-center">{feedback.created.toDateString()}</div>
+				<div class="table-cell text-center">{feedback.controller}</div>
+				<div class="table-cell text-center">{feedback.position}</div>
+				<div class="table-cell text-center">{feedback.rating}</div>
+				<div class="table-cell text-center"><p class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle"><Icon icon="mdi:eye-outline" /></p></div>
+			</div>
+		{/each}
+		{#each data.pageData.hidden as feedback}
+			<div class="table-row-group">
+				<div class="table-cell text-center text-red-500">{feedback.created.toDateString()}</div>
+				<div class="table-cell text-center text-red-500">{feedback.controller}</div>
+				<div class="table-cell text-center text-red-500">{feedback.position}</div>
+				<div class="table-cell text-center text-red-500">{feedback.rating}</div>
+				<div class="table-cell text-center text-red-500"><p class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle"><Icon icon="mdi:eye-outline" /></p></div>
+			</div>
+		{/each}
 	</div>
 </div>
