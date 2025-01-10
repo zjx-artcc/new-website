@@ -21,7 +21,17 @@ export const load: PageServerLoad = async ({ locals }) => {
         lastName: true 
       }
     })
+    let author = await prisma.user.findUnique({
+      where: {
+        id: feedbackItem.author
+      },
+      select: {
+        firstName: true,
+        lastName: true
+      }
+    })
     pageData.feedback.push({
+      author: `${author.firstName} ${author.lastName}`,
       rating: feedbackItem.rating,
       controller: `${controller.firstName} ${controller.lastName}`,
       position: feedbackItem.position,
@@ -51,8 +61,18 @@ export const load: PageServerLoad = async ({ locals }) => {
             lastName: true 
           }
         })
+        let author = await prisma.user.findFirst({
+          where: {
+            id: feedbackItem.author
+          },
+          select: {
+            firstName: true,
+            lastName: true
+          }
+        })
         console.log(feedbackItem);
         pageData.hidden.push({
+          author: `${author.firstName} ${author.lastName}`,
           rating: feedbackItem.rating,
           controller: `${controller.firstName} ${controller.lastName}`,
           position: feedbackItem.position,
@@ -77,7 +97,8 @@ class PageData {
   }
 }
 
-type WebFeedback = {
+export type WebFeedback = {
+  author: string;
   rating: number;
   controller: string;
   position: string;
