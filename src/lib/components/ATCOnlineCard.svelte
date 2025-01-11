@@ -4,8 +4,8 @@
   export let name: string;
   export let start: Date;
   export let homeController: boolean;
-  export let frequency: string;
   export let cid: number;
+  export let frequency: string;
   
   let visibility: string = 'hidden'
   const showDialog = () => {
@@ -56,8 +56,8 @@
         <h4>Online for {getTimeString(start)}</h4>
 
         <div class="mt-2 flex justify-evenly gap-x-2">
-          <a href="/feedback" class="bg-green-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-green-400">Submit Feedback</a>
-          <a href="/profile/{cid}" class="bg-amber-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-amber-400">View Profile</a>
+          <a href={`/feedback/new?cid=${cid}&position=${position}`} class="bg-green-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-green-400">Submit Feedback</a>
+          <a href={`/profile/${cid}`} class="bg-amber-500 rounded-md text-sm font-semibold w-32 p-2 transition hover:scale-105 hover:bg-amber-400">View Profile</a>
         </div>
 
       </div>

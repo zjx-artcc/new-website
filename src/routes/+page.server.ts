@@ -101,6 +101,7 @@ export const load: PageServerLoad = async ({ locals }) => {
       frequency: true,
       roster: {
         select: {
+          cid: true,
           firstName: true,
           lastName: true,
           rating: true,

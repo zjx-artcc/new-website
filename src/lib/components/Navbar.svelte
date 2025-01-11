@@ -7,11 +7,10 @@
   export let canViewAdmin: boolean
 </script>
 
-<div class="w-screen py-2 bg-sky-600 bg-opacity-80 z-0 flex justify-center items-center gap-x-4">
+<div class="w-screen h-20 bg-opacity-80 z-0 flex justify-center items-center gap-x-4 align-middle font-montserrat" style="background-color: #012241;">
 
     <a href="/" class="flex flex-row justify-center items-center gap-x-4">
-      <h2 class="font-semibold text-xl text-white w-24 text-center">Jacksonville</h2>
-      <h2 class="text-sky-800 font-bold text-xl">ARTCC</h2>
+      <img src="/ZJX-Light-Logo.png" alt="lt" class="w-10 h-10"/>
     </a>
 
     <!-- PILOTS PAGE -->
