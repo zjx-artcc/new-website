@@ -156,7 +156,7 @@ export async function deleteVisitingUser(cid: number, actionCid: number, reason:
           body: JSON.stringify({'reason': reason} )
         }
       );
-
+      console.log(await vatusaReq.text())
       return new Response(null, {status: vatusaReq.status});
     } else {
       return new Response("User not authorized", {status: 405});
