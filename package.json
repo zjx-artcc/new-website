@@ -36,6 +36,7 @@
 		"@oslojs/encoding": "^1.1.0",
 		"@prisma/client": "^6.1.0",
 		"@sentry/sveltekit": "^8.47.0",
+		"@sentry/vite-plugin": "^2.23.0",
 		"@sveltejs/adapter-node": "^5.2.11",
 		"autoprefixer": "^10.4.20",
 		"colorthief": "^2.6.0",
