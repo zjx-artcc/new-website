@@ -6,7 +6,6 @@
 	import ConfirmPopup from "$lib/components/ConfirmPopup.svelte";
 	import Icon from "@iconify/svelte";
 	import { TabItem, Tabs } from "flowbite-svelte";
-	import { getStaffRoles } from "$lib/db.js";
 	export let data;
 	export let form;
 	let responseBox = {
