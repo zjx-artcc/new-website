@@ -4,9 +4,8 @@
   export let name: string;
   export let start: Date;
   export let homeController: boolean;
-  export let cid: number
-  export let frequency: string;
   export let cid: number;
+  export let frequency: string;
   
   let visibility: string = 'hidden'
   const showDialog = () => {
