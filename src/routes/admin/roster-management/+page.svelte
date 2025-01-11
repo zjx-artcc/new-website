@@ -111,8 +111,8 @@
     <tbody class="">
       {#each data.roster as controller}
         <tr>
-          <td class="text-center align-center border-2 border-solid px-2 py-2">{controller.name} ({controller.initials})</td>
-          <td class="text-center align-center border-2 border-solid px-2"><a href="/profile/{controller.cid}">{controller.cid}</a></td>
+          <td class="text-left align-center border-2 border-solid pl-2 py-2">{controller.name} ({controller.initials})</td>
+          <td class="text-center text-sky-600 align-center border-2 border-solid px-2 transition hover:text-sky-300"><a href="/profile/{controller.cid}">{controller.cid}</a></td>
           <td class="text-center align-center border-2 border-solid px-2">{controller.rating}</td>
           <td class={`text-center align-center border-2 border-solid px-2 ${controller.home_facility == "ZJX" ? "bg-sky-500" : "bg-red-500"}`}>{controller.home_facility}</td>
           <td class="text-center align-center border-2 border-solid px-2 bg-{controller.delCerts.color}"><p class="py-1 text-white">{controller.delCerts.cert}</p></td>
@@ -124,12 +124,11 @@
             <Button><ChevronDownSolid class="text-black w-3 h-3 flex justify-center"/></Button>
             <Dropdown class="p-2 flex flex-col z-0" bind:open={controller.dropdownOpen}>
               <DropdownItem class="rounded-md font-bold text-md hover:transition-colors hover:bg-gray-200 border-b-4"><p class="">{`${controller.name} (${controller.rating})`}</p></DropdownItem>
-              <DropdownItem class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}`}>View Profile</DropdownItem>
-              <DropdownItem class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}`}>View Activity Summary</DropdownItem>
-              <DropdownItem class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}`}>View Training Summary</DropdownItem>
-              <DropdownItem class={`rounded-md text-left hover:transition-colors hover:bg-gray-200 ${`border-b-2`}`}>View VATUSA Action Summary</DropdownItem>
+              <DropdownItem target="_blank" class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}`}>View Profile</DropdownItem>
+              <DropdownItem target="_blank" class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}/manage`}>Edit User</DropdownItem>
+              <DropdownItem class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/training/${controller.cid}`}>View Training Summary</DropdownItem>
               {#if data.isAdmin}
-                <DropdownItem class="rounded-md text-left text-red-500 font-bold hover:transition-colors hover:bg-gray-200" on:click={() => {controller.dropdownOpen = false; showConfirmationScreen(controller, "Remove User")}}>Remove User</DropdownItem>
+                <DropdownItem class="rounded-md text-left text-red-500 font-bold hover:transition-colors hover:bg-gray-200 border-t-2" on:click={() => {controller.dropdownOpen = false; showConfirmationScreen(controller, "Remove User")}}>Remove User</DropdownItem>
               {/if}
             </Dropdown>
           </td>

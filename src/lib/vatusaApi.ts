@@ -5,7 +5,7 @@ import { getStaffRoles, prisma } from "./db";
  * @returns {String} The formatted time string
  */
 export function formatTrainingSessionTimeString(time: Date): string {
-  return `${time.getUTCFullYear()}-${time.getUTCMonth().toString().padStart(2, "0")}-${time.getUTCDay().toString().padStart(2, "0")} ${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`;
+  return `${time.getUTCFullYear()}-${(time.getUTCMonth() + 1).toString().padStart(2, "0")}-${time.getUTCDay().toString().padStart(2, "0")} ${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`;
 }
 
 /**
@@ -13,7 +13,7 @@ export function formatTrainingSessionTimeString(time: Date): string {
  * @returns {String} The formatted time string
  */
 function formatSoloCertTimeString(time: Date): string {
-  return `${time.getUTCFullYear().toString().padStart(4, "0")}-${time.getUTCMonth().toString().padStart(2, "0")}-${time.getUTCDate().toString().padStart(2, "0")} ${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`;
+  return `${time.getUTCFullYear().toString().padStart(4, "0")}-${(time.getUTCMonth() + 1).toString().padStart(2, "0")}-${time.getUTCDate().toString().padStart(2, "0")}`;
 }
 
 /**
@@ -56,8 +56,11 @@ export async function submitTrainingNote(studentCid: number, sessionData): Promi
  * @returns {Response} The response from the VATUSA API
  */
 export async function submitSoloCert(cid: number, position: string): Promise<Response> {
+  console.log(cid, position)
   try {
     // VATUSA API call to add solo cert
+    const fetchBody: URLSearchParams = new URLSearchParams({'cid': cid.toString(), 'position': position, 'expDate': formatSoloCertTimeString(new Date(Date.now() + 2592000000))})
+
     const vatusaReq = await fetch(
       `https://api.vatusa.net/v2/solo?apikey=${process.env.VATUSA_KEY}`,
       {
@@ -65,9 +68,10 @@ export async function submitSoloCert(cid: number, position: string): Promise<Res
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify({'cid': cid, 'position': position})
+        body: fetchBody
       }
     );
+
     return new Response(null, {status: vatusaReq.status});
   } catch(error) {
     console.error(error);
@@ -82,6 +86,7 @@ export async function submitSoloCert(cid: number, position: string): Promise<Res
  */
 export async function deleteSoloCert(cid: number, position: string): Promise<Response> {
   try {
+    const fetchBody: URLSearchParams = new URLSearchParams({'cid': cid.toString(), 'position': position})
     // VATUSA API call to remove solo cert
     const vatusaReq = await fetch(
       `https://api.vatusa.net/v2/solo?apikey=${process.env.VATUSA_KEY}`,
@@ -90,7 +95,7 @@ export async function deleteSoloCert(cid: number, position: string): Promise<Res
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify({'cid': cid, 'position': position})
+        body: fetchBody
       }
     );
 
@@ -151,7 +156,7 @@ export async function deleteVisitingUser(cid: number, actionCid: number, reason:
           body: JSON.stringify({'reason': reason} )
         }
       );
-
+      console.log(await vatusaReq.text())
       return new Response(null, {status: vatusaReq.status});
     } else {
       return new Response("User not authorized", {status: 405});
