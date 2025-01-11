@@ -1,11 +1,21 @@
 <script lang="ts">
+  export let data;
   import { validators, required, useForm } from 'svelte-use-form';
-
+  import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
   const form = useForm();
+  let position
+  let cid
 
-  export let data;
+  if ($page.url.searchParams.has('cid')) {
+    cid = $page.url.searchParams.get('cid')
+  }
+  
+  if ($page.url.searchParams.has('position')) {
+    position = $page.url.searchParams.get('position')
+  }
+  
 </script>
 
 <svelte:head>
@@ -41,25 +51,25 @@
       <div class="px-2">
         <label class="pb-1" for="controller">Controller Name:</label>
         <br>
-        <select id="controller" name="controller" class="pb-1 pl-1">
+        <select id="controller" name="controller" class="pb-1 pl-1" bind:value={cid}>
           {#each data.pageData.roster as controller}
             <option value={controller.cid}>{controller.firstName} {controller.lastName}</option>
           {/each}
       </div>
       <div class="px-2">
-        <label class="pb-1" for="position">Controller Position:</label>
+        <label class="pb-1" for="position" >Controller Position:</label>
         <br>
-        <input name="position" id="position" class="outline outline-1"  use:validators={[required]}>
+        <input name="position" id="position" class="outline outline-1" bind:value={position}  use:validators={[required]}>
       </div>
       <div class="px-2">
         <label class="pb-1" for="rating">Rating:</label>
         <br>
         <select id="rating" name="rating" class="pb-1 pl-1">
-          <option value="5">⭐⭐⭐⭐⭐</option>
-          <option value="4">⭐⭐⭐⭐</option>
-          <option value="3">⭐⭐⭐</option>
-          <option value="2">⭐⭐</option>
-          <option value="1">⭐</option>
+          <option class="text-center" value="5">⭐⭐⭐⭐⭐</option>
+          <option class="text-center" value="4">⭐⭐⭐⭐</option>
+          <option class="text-center" value="3">⭐⭐⭐</option>
+          <option class="text-center" value="2">⭐⭐</option>
+          <option class="text-center" value="1">⭐</option>
       </div>
       <div class="px-2">
         <label class="pb-1" for="comments">Comments:</label>

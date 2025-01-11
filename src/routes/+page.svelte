@@ -67,7 +67,7 @@
 
 			<div>
 				{#each data.pageData.online as controller}
-					<AtcOnlineCard position={controller.callsign} name={`${controller.firstName} ${controller.lastName}`} rating={controller.rating} homeController={controller.homeController} start={controller.start} frequency={controller.frequency}/>
+					<AtcOnlineCard cid={controller.cid} position={controller.callsign} name={`${controller.firstName} ${controller.lastName}`} rating={controller.rating} homeController={controller.homeController} start={controller.start} frequency={controller.frequency}/>
 				{/each}
 			</div>
 				
@@ -80,7 +80,7 @@
 			</div>
 
 			<div class="px-4 py-2 flex flex-col">
-				<h2>We are always happy to hear from pilots about our controllers!</h2>
+				<h4>We are always happy to hear from pilots about our controllers!</h4>
 				<LinkButton to="/feedback" bgColor="bg-amber-500" textColor="text-black font-semibold" text="Submit Feedback Here"></LinkButton>
 			</div>
 		</HomepageCard>
@@ -91,7 +91,7 @@
 			</div>
 
 			<div class="px-4 py-3 flex flex-col">
-				<h2>Did someone say events? vZJX always has events which are fun for controllers and pilots alike! Scroll down to check out our upcoming events.</h2>
+				<h4>Did someone say events? vZJX always has events which are fun for controllers and pilots alike! Scroll down to check out our upcoming events.</h4>
 			</div>
 		</HomepageCard>
 	</div>
