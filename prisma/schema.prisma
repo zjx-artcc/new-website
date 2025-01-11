@@ -128,6 +128,7 @@ model Roster {
   sopCourse                                                  Boolean             @default(false) @map("sop_course")
   controllerSessions                                         ControllerSession[]
   events                                                     Event[]
+  feedback                                                   feedback[]
   positionRequests                                           PositionRequest[]
   StaffRoles                                                 StaffRole[]
   stats                                                      Stats?
@@ -210,6 +211,7 @@ model User {
   rating                                          Int
   roles                                           String
   rostered                                        Boolean?
+  feedback                                        feedback[]
   visitRequests                                   VisitRequest[]
   visit_requests_visit_requests_action_cidTousers VisitRequest[] @relation("visit_requests_action_cidTousers")
   sessions                                        WebSession[]
@@ -241,4 +243,15 @@ model WebSession {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("web_sessions")
+}
+
+model feedback {
+  id         String @id
+  author     Int
+  controller Int
+  position   Int
+  rating     Int
+  comment    String
+  users      User   @relation(fields: [author], references: [id], onDelete: Cascade)
+  roster     Roster @relation(fields: [controller], references: [cid], onDelete: Cascade)
 }

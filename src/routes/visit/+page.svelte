@@ -2,8 +2,6 @@
 	import '$lib/app.css';
 	import VisitRow from '$lib/components/VisitRow.svelte';
 
-
-	import { getRating } from '$lib/db';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
 	//import { getRating } from '$lib/db.js';
 	export let data;
@@ -54,7 +52,7 @@
 
 <header class="bg-gray-700" id="myTopnav">
 	<div class="h-52 flex justify-center items-center">
-			<h1 class="ml-5 text-6xl text-white font-bold pt-3">Visit the Virtual Jacksonville ARTCC</h1>
+			<h1 class="ml-5 text-2xl text-white font-bold pt-3 text-center lg:text-6xl">Visit the Virtual Jacksonville ARTCC</h1>
 	</div>
 </header>
 
@@ -73,7 +71,7 @@
 			</tbody>
 		</table>
 	</div>
-	{#if data.activeVisitRequests = 0}
+	{#if data.activeVisitRequests == 0}
 		<div class="bg-gray-200 m-5 p-2 w-96 h-72">
 			<h2 class="text-xl text-center font-semibold mb-4 border-b-2 border-gray-400">Submit Request</h2>
 			<div class="flex flex-col place-items-center">

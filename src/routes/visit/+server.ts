@@ -45,7 +45,7 @@ export const POST = async ({ request, cookies }): Promise<Response> => {
 				data: {
 					cid: user.id,
 					reason: userReason,
-					date_requested: new Date()
+					dateRequested: new Date()
 				}
 			});
 

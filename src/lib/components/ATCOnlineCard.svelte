@@ -1,6 +1,4 @@
 <script lang="ts">
-	import HomepageCard from "./HomepageCard.svelte";
-
   export let position: string;
   export let rating: string;
   export let name: string;
@@ -8,6 +6,8 @@
   export let homeController: boolean;
   export let cid: number
   export let frequency: string;
+  export let cid: number;
+  
   let visibility: string = 'hidden'
   const showDialog = () => {
     visibility = ""
@@ -19,13 +19,16 @@
 
   const getTimeString = (date: Date) => {
     const duration = new Date(Date.now() - date.getTime())
-
-    return `${duration.toTimeString().substring(0,5)}`
+    console.log(duration.toUTCString())
+    console.log(Date.now())
+    return `${duration.toUTCString().substring(17,22)}`
   }
+
+  
 </script>
 
 
-<a href="/profile/1697197" on:mouseenter={showDialog} on:mouseleave={hideDialog}>
+<a href="/profile/{cid}" on:mouseenter={showDialog} on:mouseleave={hideDialog}>
   <div class="transition hover:bg-sky-300 rounded-lg">
     <div class="px-3 py-2 flex flex-row justify-between">
       <h4 class="font-bold text-sm text-gray-700">{position}</h4>

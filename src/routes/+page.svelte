@@ -4,12 +4,14 @@
 	import Icon from '@iconify/svelte';
 	import Card from '$lib/components/Card.svelte';
 	import EventCard from '$lib/components/EventCard.svelte';
+	import SmallEventCard from '$lib/components/SmallEventCard.svelte';
 	import NewsCard from '$lib/components/NewsCard.svelte';
 	import ATCCard from '$lib/components/ATCCard.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import AtcOnlineCard from '$lib/components/ATCOnlineCard.svelte';
 	import HomepageCard from '$lib/components/HomepageCard.svelte';
 	import LinkButton from '$lib/components/LinkButton.svelte';
+	import FeedbackCard from '$lib/components/FeedbackCard.svelte';
 
 	const today = new Date();
 	export let data;
@@ -87,7 +89,7 @@
 
 		<HomepageCard bgColor="bg-sky-100">
 			<div class="px-4 py-2 border-b-2 border-black">
-				<h1 class="font-semibold text-xl">Events</h1>
+				<h1 class="font-semibold text-xl">Next Event</h1>
 			</div>
 
 			<div class="px-4 py-3 flex flex-col">
@@ -97,7 +99,7 @@
 	</div>
 </div>
 
-<div class="flex flex-col justify-center items-center w-screen">
+<div class="flex flex-col justify-center items-center w-screen mb-40">
 	<div class="flex justify-center flex-col border-b-2 pb-2">
 		<h1 class="font-bold text-gray-800 text-4xl text-center">Upcoming Events</h1>
 		<h2 class="text-gray-800 text-2xl text-center">Our events team would love to see you fly or control!</h2>
@@ -105,8 +107,22 @@
 
 	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
 		{#each data.pageData.events as event}
-		<EventCard title={event.name} hostedBy={event.host} imageUrl={event.banner} start={event.start} end={event.end}/>
+		 <EventCard title={event.name} hostedBy={event.host} imageUrl={event.banner} start={event.start} end={event.end} id={event.id}/>
 		{/each}
+	</div>
+</div>
+
+<div class="flex flex-col justify-center items-center w-screen mb-40">
+	<div class="flex justify-center flex-col border-b-2 pb-2">
+		<h1 class="font-bold text-gray-800 text-4xl text-center">Controller Feedback</h1>
+		<h2 class="text-gray-800 text-2xl text-center">See what pilots have to say about our controllers!
+		</h2>
+	</div>
+
+	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
+		<FeedbackCard controllerName="Chris Mangan" feedbackText="Chris did an excellent job not killing me and also made my flying experience fun" position="MCO_TWR" rating=5/>
+		<FeedbackCard controllerName="Samuel Valencia" feedbackText="Besides almost killing me, he was a pretty easygoing controller." position="JAX_APP" rating=1/>
+		<FeedbackCard controllerName="Michael Knight" feedbackText="Mike provided great assitance to my group flight and was overall a good controller, would fly again" position="JAX_CTR" rating=5/>
 	</div>
 </div>
 

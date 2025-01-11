@@ -148,9 +148,9 @@
 						{#each pageData.sessions as session}
 							{#if session != null}
 								<tr>
-									<td class="text-sm text-slate-600">{session.start.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
-									<td class="text-sm text-slate-600">{session.start.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.end.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+									<td class="text-sm text-slate-600">{session.date}</td>
+									<td class="text-sm text-slate-600">{session.start}</td>
+									<td class="text-sm text-slate-600">{session.end}</td>
 									<td class="text-sm text-slate-600">{session.callsign}</td>
 									<td class="text-sm text-slate-600">{session.duration}</td>
 								</tr>
@@ -185,7 +185,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each pageData.sessions as session}
+						{#each pageData.training as session}
 							{#if session != null}
 								<tr>
 									<td class="text-sm text-slate-600">{session.start.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
@@ -214,7 +214,7 @@
 				</h3>
 				<hr class="px-1 border-slate-300">
 				<div>
-					{#if pageData.user.cid == $page.data.session.userId && pageData.onRoster}
+					{#if $page.data.session != null && pageData.user.cid == $page.data.session.userId && pageData.onRoster}
 						<a href="/training/requests/new" class="text-blue-500">Request Training</a>
 						<p class="text-blue-500">Request LOA</p>
 					{/if}

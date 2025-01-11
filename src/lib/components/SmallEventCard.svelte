@@ -58,20 +58,20 @@
 }
 </script>
 
-<div class="bg-sky-50 flex flex-col rounded-lg overflow-hidden shadow-xl p-4 w-96 h-[24rem] transition hover:scale-105">
+<div class="bg-sky-50 flex flex-col rounded-lg overflow-hidden shadow-xl p-2 transition hover:scale-105">
   <!-- svelte-ignore a11y-img-redundant-alt -->
-  <img class="w-[18rem] h-[12rem] rounded-lg object-cover self-center" src="{imageUrl}" alt="Image Description" />
+  <img class="w-[18rem] h-[8rem] rounded-lg object-cover self-center" src="{imageUrl}" alt="Image Description" />
   <div class="flex-1 pt-6 px-4 flex flex-col">
     <div class="flex justify-between">
-      <div class="mb-2">
-        <div class="font-bold text-xl">{title}</div>
+      <div class=" mb-1">
+        <div class="font-bold text-lg">{title}</div>
         <p class="text-gray-700 text-base inline">Hosted by</p>
         <h5 class="font-bold inline">{hostedBy}</h5>
       </div>
 
       <div class="">
-        <h4 class="text-md font-normal text-gray-700 text-center">{formatTimeString(start)}Z - {formatTimeString(end)}z</h4>
-        <span>
+        <h4 class="text-md font-normal text-gray-700 text-right">{formatTimeString(start)}Z - {formatTimeString(end)}z</h4>
+        <span class="flex flex-row justify-end">
           <h4 class="inline text-lg font-bold text-gray-700">{getMonthString(start.getUTCMonth()).substring(0,3).toUpperCase()}</h4>
           <h4 class="inline text-lg font-semibold text-gray-700">{start.getUTCDate().toString().padStart(2, "0")}</h4>  
         </span>

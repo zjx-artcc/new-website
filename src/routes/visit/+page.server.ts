@@ -1,8 +1,6 @@
 
 import { prisma, getRating } from '$lib/db';
-import { redirect } from '@sveltejs/kit';
 import type {PageServerLoad} from './$types';
-import type { VisitRequest } from '@prisma/client';
 
 export const load: PageServerLoad = async ({locals}) => {
   let user: User = new User();
@@ -51,7 +49,7 @@ export const load: PageServerLoad = async ({locals}) => {
   user.activeVisitRequests = activeVisitRequests
   user.previousVisitRequests = previousVisitRequests
 
-  return user;
+  return {...user};
 }
 
 class User {
