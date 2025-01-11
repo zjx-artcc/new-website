@@ -18,3 +18,5 @@ vite.config.ts.timestamp-*
 !.vscode/settings.json
 
 static/documents/
+# Sentry Config File
+.env.sentry-build-plugin
