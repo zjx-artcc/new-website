@@ -79,7 +79,7 @@
               <p class="text-left pr-5">{position.position}: </p>
               <p class="text-right text-green-700">Position Request Recieved</p>
             </div>
-            {:else if pageData.positionRequested != position.id}
+            {:else if pageData.positionRequested != position.id && !pageData.canRequest}
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
                 <p class="text-right text-yellow-600">You are not allowed to request another position</p> 

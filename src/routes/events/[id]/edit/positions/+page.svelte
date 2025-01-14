@@ -98,7 +98,7 @@
             <td>
               {#if row.requests != undefined}
                 <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center">
-                  <option value=''>None</option>
+                  <option value='none'>None</option>
                   {#each row.requests as request}
                     <option value={request.name}>{request.name}</option>
                   {/each}
