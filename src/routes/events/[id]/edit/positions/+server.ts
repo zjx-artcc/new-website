@@ -33,8 +33,7 @@ export const POST: RequestHandler = async ({request, params}) => {
         }
       })
     }
-
-    if (positions[i].controller != null) {
+    if (positions[i].controller != "none") {
       let fname = positions[i].controller.split(" ")[0];
       let lname = positions[i].controller.split(" ")[1];
       let cid = await prisma.roster.findFirst({

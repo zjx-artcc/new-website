@@ -62,6 +62,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	}
 
 	for (let i = 0; i < pageData.positions.length; i++) {
+		console.log(pageData.positions[i].controller);
 		if (pageData.positions[i].controller != null) {
 			let name = await prisma.roster.findFirst({
 				where: {
@@ -73,6 +74,8 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 				}
 			})
 			pageData.positions[i].controller = `${name.firstName} ${name.lastName}`;
+		} else {
+			pageData.positions[i].controller = "none";
 		}
 	}
 	
