@@ -37,7 +37,7 @@
 
 			for (let j = 0; j < data.userData[i].controllerSessions.length; j++) {
 				const session = data.userData[i].controllerSessions[j];
-				if (session.start.getTime() >= beginDate && session.start.getTime() <= endDate) {
+				if (session.end != null && session.start.getTime() >= beginDate && session.start.getTime() <= endDate) {
 					controllingMseconds += session.end.getTime() - session.start.getTime();
 				}
 			}

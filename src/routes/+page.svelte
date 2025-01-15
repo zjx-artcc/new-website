@@ -12,6 +12,7 @@
 	import HomepageCard from '$lib/components/HomepageCard.svelte';
 	import LinkButton from '$lib/components/LinkButton.svelte';
 	import FeedbackCard from '$lib/components/FeedbackCard.svelte';
+	import TopControllerCard from '$lib/components/TopControllerCard.svelte';
 
 	const today = new Date();
 	export let data;
@@ -105,6 +106,17 @@
 			<div class="px-4 py-3 flex flex-col">
 				<SmallEventCard title={pageData.events[0].name} hostedBy={pageData.events[0].host} imageUrl={pageData.events[0].banner} start={pageData.events[0].start} end={pageData.events[0].end} id={pageData.events[0].id}/>
 			</div>
+		</HomepageCard>
+
+		<HomepageCard bgColor="bg-sky-100">
+			<div class="px-4 py-2 border-b-2 border-black">
+				<h1 class="font-semibold text-xl">Top Controllers</h1>
+				<h2 class="text-md italic">This Month</h2>
+			</div>
+
+			<TopControllerCard name="Chris Mangan" rank=1 cid=1697197 duration="10:00" medalColor="text-amber-500" ending="st"/>
+			<TopControllerCard name="Chris Mangan" rank=2 cid=1697197 duration="10:00" medalColor="text-gray-500" ending="st"/>
+			<TopControllerCard name="Chris Mangan" rank=3 cid=1697197 duration="10:00" medalColor="text-yellow-900" ending="st"/>
 		</HomepageCard>
 	</div>
 </div>
