@@ -142,9 +142,9 @@
 	</div>
 
 	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
-		<FeedbackCard controllerName="Chris Mangan" feedbackText="Chris did an excellent job not killing me and also made my flying experience fun" position="MCO_TWR" rating=5/>
-		<FeedbackCard controllerName="Samuel Valencia" feedbackText="Besides almost killing me, he was a pretty easygoing controller." position="JAX_APP" rating=1/>
-		<FeedbackCard controllerName="Michael Knight" feedbackText="Mike provided great assitance to my group flight and was overall a good controller, would fly again" position="JAX_CTR" rating=5/>
+		{#each data.pageData.feedback as feedback}
+			<FeedbackCard controllerName={`${feedback.firstName} ${feedback.lastName}`} feedbackText={feedback.comment} position={feedback.position} rating={feedback.rating}/>
+		{/each}
 	</div>
 </div>
 
