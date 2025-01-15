@@ -48,8 +48,8 @@
 
       if(result.type == "success") {
         hidePopup(true, true, "Action Success")
-      } else {
-        hidePopup(true, false, result.status + " " + result.data.message)
+      } else if (result.type == "error") {
+        hidePopup(true, false, result.status + " " + result.error)
         
       }
     }

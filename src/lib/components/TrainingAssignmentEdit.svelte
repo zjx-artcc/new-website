@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { deserialize, enhance } from "$app/forms";
+	import { deserialize } from "$app/forms";
   import Icon from "@iconify/svelte";
-	import { Result } from "postcss";
-	import { minLength } from "svelte-use-form";
   export let hidePopup
   export let instructors
   export let data
@@ -35,8 +33,8 @@
 
     if(result.type == "success") {
       hidePopup(true, true, "Assignment Updated")
-    } else {
-      hidePopup(true, false, result.status + " " + result.data.message)
+    } else if (result.type == "error") {
+      hidePopup(true, false, result.status + " " + result.error)
       
     }
   }

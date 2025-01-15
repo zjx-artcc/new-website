@@ -1,5 +1,5 @@
 import { getStaffRoles, isRostered } from '$lib/db.js'
-import { fail, redirect } from '@sveltejs/kit'
+import { fail } from '@sveltejs/kit'
 import { prisma, convertDurationStringToSeconds } from '$lib/db.js'
 import { deleteSoloCert, formatTrainingSessionTimeString, submitSoloCert, submitTrainingNote } from '$lib/vatusaApi.js'
 
