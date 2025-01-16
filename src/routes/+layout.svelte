@@ -1,13 +1,13 @@
 <script>
 	// @ts-nocheck
 	import '$lib/app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import Navbar from '$lib/components/Navbar.svelte';
 	export let data
 </script>
 
 <body class="w-screen h-screen bg-transparent min-w-fit">
-	<div class="z-10 w-screen">
+	<div>
 		<Navbar canViewAdmin={data.canViewAdmin} />
 	</div>
 
