@@ -27,7 +27,7 @@
     </Dropdown>
     <NavLi href="/events" class="cursor-pointer">Events</NavLi>
     {#if $page.data.session != null}
-      <NavLi class="cursor-pointer">{$page.data.session.user.firstName} {$page.data.session.user.lastName}<Icon icon="mdi:chevron-down"/></NavLi>
+      <NavLi class="cursor-pointer"><p>{$page.data.session.user.firstName} {$page.data.session.user.lastName}<Icon icon="mdi:chevron-down"/></p></NavLi>
       <Dropdown class="w-48">
         <NavbarListItem label="Profile" href="/profile/{$page.data.session.userId}" subText="View your profile" icon="mdi:account"/>
         {#if canViewAdmin}
