@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import { Button, Dropdown, Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
+	import { Dropdown, Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import NavbarListItem from './NavbarListItem.svelte';
   export let canViewAdmin: boolean
@@ -13,12 +13,12 @@
   </NavBrand>
   <NavHamburger class="text-white" on:click={toggle}/>
   <NavUl class="pt-2">
-    <NavLi class="cursor-pointer text-white">Pilots<Icon icon="mdi:chevron-down"/></NavLi>
+    <NavLi class="cursor-pointer text-white flex items-center justify-center">Pilots<Icon icon="mdi:chevron-down"/></NavLi>
     <Dropdown class="w-48">
       <NavbarListItem label="Pilot Briefing" href="/pilotbriefing" subText="Learn our airspace" icon="mdi:book"/>
       <NavbarListItem label="Submit Feedback" href="/feedback" subText="Rate our controllers" icon="mdi:chat"/>
     </Dropdown>
-    <NavLi class="cursor-pointer text-white">Controllers<Icon icon="mdi:chevron-down"/></NavLi>
+    <NavLi class="cursor-pointer text-white flex items-center justify-center">Controllers<Icon icon="mdi:chevron-down" class=""/></NavLi>
     <Dropdown class="w-48">
       <NavbarListItem label="Staff" href="/staff" subText="View our staff team" icon="mdi:account-tie"/>
       <NavbarListItem label="Roster" href="/roster" subText="View our memebers" icon="mdi:list-box"/>
@@ -27,7 +27,7 @@
     </Dropdown>
     <NavLi href="/events" class="cursor-pointer text-white">Events</NavLi>
     {#if $page.data.session != null}
-      <NavLi class="cursor-pointer text-white">{$page.data.session.user.firstName} {$page.data.session.user.lastName}<Icon icon="mdi:chevron-down"/></NavLi>
+      <NavLi class="cursor-pointer text-white flex items-center justify-center">{$page.data.session.user.firstName} {$page.data.session.user.lastName}<Icon icon="mdi:chevron-down"/></NavLi>
       <Dropdown class="w-48">
         <NavbarListItem label="Profile" href="/profile/{$page.data.session.userId}" subText="View your profile" icon="mdi:account"/>
         {#if canViewAdmin}
