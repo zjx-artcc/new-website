@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
   import Icon from '@iconify/svelte';
+  import { page } from '$app/stores';
   export let data;
 
   let pageData = data.pageData;
@@ -78,6 +79,11 @@
             <div id="positions" class="px-2.5 inline-flex">
               <p class="text-left pr-5">{position.position}: </p>
               <p class="text-right text-green-700">Position Request Recieved</p>
+            </div>
+            {:else if $page.data.session == null}
+            <div id="positions" class="px-2.5 inline-flex">
+              <p class="text-left pr-5">{position.position}: </p>
+              <p class="text-right text-yellow-700">You are not logged in</p>
             </div>
             {:else if pageData.positionRequested != position.id && !pageData.canRequest}
               <div id="positions" class="px-2.5 inline-flex">
