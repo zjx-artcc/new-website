@@ -1,19 +1,22 @@
 
 import { prisma, getRating } from '$lib/db';
+import { redirect } from '@sveltejs/kit';
 import type {PageServerLoad} from './$types';
 
 export const load: PageServerLoad = async ({locals}) => {
   let user: User = new User();
 
-  if (locals.session != null) {
-    user.cid = locals.session.userId;
+  if (locals.session == null) {
+    redirect(302, '/login');
   }
-
+  
+  user.cid = locals.session.userId;
   let data = await prisma.user.findFirst({
     where: {
       id: user.cid
     }
   })
+  console.log(data);
 
   const previousVisitRequests: PreviousVisitRequest[] = await prisma.visitRequest.findMany({
     select: {

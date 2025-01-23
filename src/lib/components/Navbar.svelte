@@ -23,7 +23,9 @@
       <NavbarListItem label="Staff" href="/staff" subText="View our staff team" icon="mdi:account-tie"/>
       <NavbarListItem label="Roster" href="/roster" subText="View our memebers" icon="mdi:list-box"/>
       <NavbarListItem label="SOPs & Downloads" href="/documents" subText="Download tools" icon="mdi:download"/>
-      <NavbarListItem label="Visit" href="/visit" subText="" icon="mdi:person"/>
+      {#if $page.data.session == null || ($page.data.session != null && $page.data.session.user.rostered != true)}
+        <NavbarListItem label="Visit" href="/visit" subText="Submit a visiting request" icon="mdi:person"/>
+      {/if}
     </Dropdown>
     <NavLi href="/events" class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:calendar-month-outline" class="w-7 h-7 pr-1.5"/>Events</NavLi>
     {#if $page.data.session != null}
