@@ -37,7 +37,7 @@
         <NavbarListItem label="Logout" href="/logout" subText="Logout of your account" icon="mdi:logout"/>
       </Dropdown>
     {:else}
-      <NavLi href="/login" class="cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:login" class="w-7 h-7 pr-1.5"/>Login</NavLi>
+      <NavLi href="/login" class="cursor-pointer text-xl text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:login" class="w-7 h-7 pr-1.5"/>Login</NavLi>
     {/if}
   </NavUl>
 </Navbar>
