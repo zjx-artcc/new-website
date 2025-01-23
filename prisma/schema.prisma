@@ -8,11 +8,10 @@ datasource db {
 }
 
 model Action {
-  id String @id @default(uuid())
-  user Int 
+  id     String @id @default(uuid())
+  user   Int
   action String
-
-  roster    Roster    @relation(fields: [user], references: [cid], onDelete: Cascade)
+  roster Roster @relation(fields: [user], references: [cid], onDelete: Cascade)
 
   @@map("action_log")
 }
@@ -35,6 +34,7 @@ model ControllerSession {
   start     DateTime? @db.Timestamptz(6)
   active    Boolean
   end       DateTime? @db.Timestamptz(6)
+  duration  Int?      @default(dbgenerated("EXTRACT(epoch FROM (\"end\" - start))"))
   roster    Roster    @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("controller_sessions")
@@ -71,17 +71,16 @@ model EventPosition {
 }
 
 model Feedback {
-  id         String @id @default(uuid())
-  author     Int
-  controller Int
-  position   String
-  rating     Int
-  comment    String
-  public     Boolean @default(false)
-  created    DateTime @default(now()) @map("created_at") @db.Timestamptz(6) 
-
-  authorCid     User   @relation(fields: [author], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  controllerCid Roster @relation(fields: [controller], references: [cid], onDelete: Cascade, onUpdate: Cascade)
+  id            String   @id @default(uuid())
+  author        Int
+  controller    Int
+  position      String
+  rating        Int
+  comment       String
+  public        Boolean  @default(false)
+  created       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  authorCid     User     @relation(fields: [author], references: [id], onDelete: Cascade)
+  controllerCid Roster   @relation(fields: [controller], references: [cid], onDelete: Cascade)
 
   @@map("feedback")
 }
@@ -126,13 +125,13 @@ model Roster {
   mentorLevel                                                BigInt?             @default(0) @map("mentor_level")
   ratingChanged                                              DateTime?           @default(now()) @map("rating_changed") @db.Timestamptz(6)
   sopCourse                                                  Boolean             @default(false) @map("sop_course")
+  actions                                                    Action[]
   controllerSessions                                         ControllerSession[]
   events                                                     Event[]
   feedback                                                   Feedback[]
   positionRequests                                           PositionRequest[]
   StaffRoles                                                 StaffRole[]
   stats                                                      Stats?
-  actions                                                   Action[]                  
   training_requests_training_requests_instructor_cidToroster TrainingRequest[]   @relation("training_requests_instructor_cidToroster")
   training_requests_training_requests_student_cidToroster    TrainingRequest[]   @relation("training_requests_student_cidToroster")
   training_sessions_training_sessions_student_cidToroster    TrainingSession[]   @relation("training_sessions_student_cidToroster")
@@ -151,18 +150,16 @@ model StaffRole {
 }
 
 model Stats {
-  cid         Int    @id
-  month_one   Float  @default(0.0)
-  month_two   Float  @default(0.0)
-  month_three Float  @default(0.0)
-  ytd         Float?
-  all_time    Float?
-  delivery    Float?
-  ground      Float?
-  tower       Float?
-  tracon      Float?
-  enroute     Float?
-  roster      Roster @relation(fields: [cid], references: [cid], onDelete: Cascade)
+  cid           Int    @id
+  current_month Float  @default(0.0)
+  ytd           Int?
+  all_time      Int?
+  delivery      Int?
+  ground        Int?
+  tower         Int?
+  tracon        Int?
+  enroute       Int?
+  roster        Roster @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("stats")
 }
