@@ -13,30 +13,31 @@
   </NavBrand>
   <NavHamburger class="text-white" on:click={toggle}/>
   <NavUl class="pt-2">
-    <NavLi class="cursor-pointer text-white flex items-center justify-center">Pilots<Icon icon="mdi:chevron-down"/></NavLi>
+    <NavLi class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:airplane" class="w-7 h-7 pr-1.5"/>Pilots<Icon icon="mdi:chevron-down"/></NavLi>
     <Dropdown class="w-48">
       <NavbarListItem label="Pilot Briefing" href="/pilotbriefing" subText="Learn our airspace" icon="mdi:book"/>
       <NavbarListItem label="Submit Feedback" href="/feedback" subText="Rate our controllers" icon="mdi:chat"/>
     </Dropdown>
-    <NavLi class="cursor-pointer text-white flex items-center justify-center">Controllers<Icon icon="mdi:chevron-down" class=""/></NavLi>
+    <NavLi class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:radar" class="w-7 h-7 pr-1.5"/>Controllers<Icon icon="mdi:chevron-down" class=""/></NavLi>
     <Dropdown class="w-48">
       <NavbarListItem label="Staff" href="/staff" subText="View our staff team" icon="mdi:account-tie"/>
       <NavbarListItem label="Roster" href="/roster" subText="View our memebers" icon="mdi:list-box"/>
       <NavbarListItem label="SOPs & Downloads" href="/documents" subText="Download tools" icon="mdi:download"/>
       <NavbarListItem label="Visit" href="/visit" subText="" icon="mdi:person"/>
     </Dropdown>
-    <NavLi href="/events" class="cursor-pointer text-white">Events</NavLi>
+    <NavLi href="/events" class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:calendar-month-outline" class="w-7 h-7 pr-1.5"/>Events</NavLi>
     {#if $page.data.session != null}
-      <NavLi class="cursor-pointer text-white flex items-center justify-center">{$page.data.session.user.firstName} {$page.data.session.user.lastName}<Icon icon="mdi:chevron-down"/></NavLi>
+      <NavLi class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:person" class="w-7 h-7 pr-1.5"/>{$page.data.session.user.firstName} {$page.data.session.user.lastName}<Icon icon="mdi:chevron-down"/></NavLi>
       <Dropdown class="w-48">
         <NavbarListItem label="Profile" href="/profile/{$page.data.session.userId}" subText="View your profile" icon="mdi:account"/>
+        <NavbarListItem label="Discord" href="https://discord.gg/MuMR4wZeqT" subText="Join the conversation" icon="mdi:discord" />
         {#if canViewAdmin}
           <NavbarListItem label="Admin" href="/admin" subText="Admin Dashboard" icon="mdi:security"/>
         {/if}
         <NavbarListItem label="Logout" href="/logout" subText="Logout of your account" icon="mdi:logout"/>
       </Dropdown>
     {:else}
-      <NavLi href="/login" class="cursor-pointer text-white">Login</NavLi>
+      <NavLi href="/login" class="cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:login" class="w-7 h-7 pr-1.5"/>Login</NavLi>
     {/if}
   </NavUl>
 </Navbar>

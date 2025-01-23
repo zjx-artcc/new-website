@@ -15,7 +15,6 @@
         <li>This site is not affiliated with the FAA, the actual Jacksonville ARTCC, or any governing aviation body.</li>
         <li>All content contained herein is approved only for use on the VATSIM network.</li>
       </ul>
-           
     </div>
   </div>
   <div class="w-50 text-center flex align-middle justify-center text-slate-500 py-10">

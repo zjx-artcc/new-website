@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
+import flowbitePlugin from "flowbite/plugin"
 
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'],
@@ -12,7 +13,7 @@ export default {
     },
   },
   plugins: [
-    require('flowbite/plugin')
+    flowbitePlugin
   ],
   safelist: [
     'bg-slate-500',

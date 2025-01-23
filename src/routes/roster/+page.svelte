@@ -38,7 +38,7 @@
 			<tbody>
 				{#each data.pageData.home as controller}
 					<tr>
-						<td class="text-left align-middle border-2 border-solid px-2 py-2">{controller.name} ({controller.initials})</td>
+						<td class="text-center align-middle border-2 border-solid px-2 py-2">{controller.name} ({controller.initials})</td>
 						<td class="text-center text-sky-700 align-middle border-2 border-solid px-2 transition hover:text-sky-300"><a href="/profile/{controller.cid}">{controller.cid}</a></td>
 						<td class="text-center align-middle border-2 border-solid px-2">{controller.rating}</td>
 						<td class="text-center align-middle border-2 border-solid px-2 bg-{controller.delCerts.color}"><p class="py-1 text-white">{controller.delCerts.cert}</p></td>
