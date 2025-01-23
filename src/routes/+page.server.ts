@@ -16,7 +16,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   //Fetch top 3 controllers for the month
   let targetMonth = months[(new Date().getUTCMonth() + 1) % 3]; //Current month + 1 is a numerical representation of the month, Modulo 3 returns where it is within the quarter
-  const statsData = await prisma.$queryRaw<Stats[]>`SELECT * FROM stats ORDER BY ${targetMonth} DESC LIMIT 3;`;
+  const statsData = await prisma.stats.findMany({
+    take: 3
+  });
   
   //Get the top 3 controllers' names
   for (let i = 0; i < statsData.length; i++) {
