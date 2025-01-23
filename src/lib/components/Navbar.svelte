@@ -31,7 +31,7 @@
     {#if $page.data.session != null}
       <NavLi class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:person" class="w-7 h-7 pr-1.5"/>{$page.data.session.user.firstName} {$page.data.session.user.lastName}<Icon icon="mdi:chevron-down"/></NavLi>
       <Dropdown class="w-48">
-        <NavbarListItem label="Profile" href="/profile/{$page.data.session.userId}" subText="View your profile" icon="mdi:account"/>
+        <NavbarListItem label="Profile" href="/profile/" subText="View your profile" icon="mdi:account"/>
         <NavbarListItem label="Discord" href="https://discord.gg/MuMR4wZeqT" subText="Join the conversation" icon="mdi:discord" />
         {#if canViewAdmin}
           <NavbarListItem label="Admin" href="/admin" subText="Admin Dashboard" icon="mdi:security"/>
