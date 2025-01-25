@@ -8,11 +8,20 @@ export const POST: RequestHandler = async ({request, params}) => {
   const event: number = parseInt(params.id);
   const positions: Position[] = req.positions;
 
+  console.log(positions.length);
+
   for (let i = 0; i < positions.length; i++) {
     if (positions[i].type == undefined) {
       positions[i].type = getPositionType(positions[i].position);
     }
   }
+  
+  //Wipe existing positions
+  await prisma.eventPosition.deleteMany({
+    where: {
+      eventId: event
+    }
+  })
 
   //Strip requests property from each position and remove requests for position
   for (let i = 0; i < positions.length; i++) {
@@ -21,7 +30,7 @@ export const POST: RequestHandler = async ({request, params}) => {
 
     if (positions[i].eventId == undefined) {
       //New position
-      positions[i].controller = null;
+      positions[i].controller = "none";
       positions[i].eventId = event;
 
       await prisma.eventPosition.create({
@@ -33,6 +42,7 @@ export const POST: RequestHandler = async ({request, params}) => {
         }
       })
     }
+    console.log(positions[i].controller);
     if (positions[i].controller != "none") {
       let fname = positions[i].controller.split(" ")[0];
       let lname = positions[i].controller.split(" ")[1];
@@ -44,13 +54,13 @@ export const POST: RequestHandler = async ({request, params}) => {
       })
       positions[i].controller = cid.cid.toString();
       
-      
-      await prisma.eventPosition.update({
-        where: {
-          id: positions[i].id
-        },
+      await prisma.eventPosition.create({
         data: {
+          id: positions[i].id ?? null,
+          type: positions[i].type,
           controller: parseInt(positions[i].controller),
+          position: positions[i].position,
+          eventId: event
         }
       })
     }

@@ -85,7 +85,7 @@
   <div class="text-center flex-1 m-2 mt-1 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
     <h1 class="font-bold">Position Assignments:</h1>
     <hr>
-    <table class="mx-auto">
+    <table class="mx-auto mb-2">
       <tr>
         {#each columns as column}
           <th class="w-52">{column}</th>
@@ -109,19 +109,29 @@
                 </select>
               {:else}
                 <select name="controllers" id="controllers" disabled class="p-1 rounded-md text-center">
-                  <option value="No controllers available">No controllers available</option>
+                  <option value="none">No controllers available</option>
                 </select>
               {/if}
             </td>
-            <td><button type="button" class="bg-red-600 text-white p-1 rounded-lg text-sm" on:click={() => removePosition(i)}>Remove</button></td>
+            <td>
+              <button type="button" class="bg-red-600 text-white p-1 rounded-full text-sm" on:click={() => removePosition(i)}>
+                <Icon icon="mdi:remove" />
+              </button>
+            </td>
           </tr>
         {/each}
       {/key}
     </table>
     <hr>
-    <div class="pb-5">
+    <div class="pb-5 flex align-middle justify-center items-center mt-3">
       <input bind:value={newPosition} autocomplete="off" on:keypress={(e) => {if (e.key === 'Enter') addRow();}} data-1p-ignore class="outline outline-1" />
-      <button type="button" disabled={!newPosition.length > 0} on:click={addRow} class="bg-green-400 px-2 pt-1 pb-2 text-white"><Icon icon="f7:plus-app-fill" style="width: 30px; height: 25px;"/>Add Position</button>
+      <button type="button" disabled={!newPosition.length > 0} on:click={addRow} class="bg-green-400 px-2 ml-4 text-white">
+        <div class="flex justify-center items-center">
+          <Icon icon="mdi:add-box" class="h-7 align-middle" />
+          <p class="pl-1">Add Position</p>
+        <!--/div-->
+      </button>
+        
     </div>
   </div>
 </div>
