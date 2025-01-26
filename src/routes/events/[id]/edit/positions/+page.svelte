@@ -37,12 +37,23 @@
     }
   }
 
-  function removePosition(index: number) {
-    //Remove position based on index
-    console.log(typeof positions);
-    positions.splice(index, 1);
-    positions = positions;
-    console.log(positions);
+  async function removePosition(id: string) {
+    let event = pageData.event.id;
+    let req = await fetch(`/events/${event}/edit/positions`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id, event})
+    })
+
+    let res = await req.json();
+    if (res.success) {
+      console.log("OK");
+      positions = positions.filter((pos) => {
+        pos.id != id
+      })
+    }
   }
 
   function assignController(position: String, controller: String) {
@@ -114,7 +125,7 @@
               {/if}
             </td>
             <td>
-              <button type="button" class="bg-red-600 text-white p-1 rounded-full text-sm" on:click={() => removePosition(i)}>
+              <button type="button" class="bg-red-600 text-white p-1 rounded-full text-sm" on:click={() => removePosition(row.id)}>
                 <Icon icon="mdi:remove" />
               </button>
             </td>

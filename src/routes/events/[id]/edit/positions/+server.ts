@@ -1,14 +1,24 @@
-import { prisma } from "$lib/db.js";
+import { getStaffRoles, prisma } from "$lib/db.js";
 import { json } from '@sveltejs/kit'
 
 import type { RequestHandler } from "./$types";
 
-export const POST: RequestHandler = async ({request, params}) => {
+export const POST: RequestHandler = async ({request, params, locals}): Promise<Response> => {
+  if (locals.session == null) {
+    return new Response("Please log in and try again", {
+      status: 400,
+    })
+  }
+
+  if (!await getStaffRoles(locals.user.id, "events")) {
+    return new Response("You do not have permission to edit events", {
+      status: 403
+    })
+  }
+
   const req = await request.json();
   const event: number = parseInt(params.id);
   const positions: Position[] = req.positions;
-
-  console.log(positions.length);
 
   for (let i = 0; i < positions.length; i++) {
     if (positions[i].type == undefined) {
@@ -67,6 +77,23 @@ export const POST: RequestHandler = async ({request, params}) => {
   }
 
   return json({success: true})
+}
+
+export const DELETE: RequestHandler = async ({ request, params, locals}): Promise<Response> => {
+  let id = parseInt(params.id);
+  
+  if (locals.session == null) {
+    return new Response("Please log in and try again", {
+      status: 400,
+    })
+  }
+  if (!await getStaffRoles(locals.user.id, "events")) {
+    return new Response("You do not have permission to edit events", {
+      status: 403
+    })
+  }
+
+  
 }
 
 class Position {
