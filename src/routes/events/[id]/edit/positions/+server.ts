@@ -55,9 +55,12 @@ export const POST: RequestHandler = async ({request, params, locals}): Promise<R
       })
       positions[i].controller = cid.cid.toString();
       
-      await prisma.eventPosition.create({
+      await prisma.eventPosition.update({
+        where: {
+          id: positions[i].id
+        },
         data: {
-          id: positions[i].id ?? null,
+          id: positions[i].id,
           type: positions[i].type,
           controller: parseInt(positions[i].controller),
           position: positions[i].position,
