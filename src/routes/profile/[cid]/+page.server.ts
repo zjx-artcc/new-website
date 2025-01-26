@@ -71,7 +71,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         callsign: sessionsData[i].callsign,
         duration: calculateTime(sessionsData[i].start, sessionsData[i].end)
       } 
-      console.log(session);
       pageData.sessions.push(session);
     }
   }
