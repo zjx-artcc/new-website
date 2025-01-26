@@ -58,7 +58,6 @@
 
   function assignController(position: String, controller: String) {
     //Assign controller to position
-    console.log(position, controller);
   }
 
 </script>

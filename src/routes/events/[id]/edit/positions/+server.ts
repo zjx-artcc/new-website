@@ -26,17 +26,9 @@ export const POST: RequestHandler = async ({request, params, locals}): Promise<R
     }
   }
   
-  //Wipe existing positions
-  await prisma.eventPosition.deleteMany({
-    where: {
-      eventId: event
-    }
-  })
-
   //Strip requests property from each position and remove requests for position
   for (let i = 0; i < positions.length; i++) {
     delete positions[i].requests;
-    console.log(positions[i]);
 
     if (positions[i].eventId == undefined) {
       //New position
@@ -52,7 +44,6 @@ export const POST: RequestHandler = async ({request, params, locals}): Promise<R
         }
       })
     }
-    console.log(positions[i].controller);
     if (positions[i].controller != "none") {
       let fname = positions[i].controller.split(" ")[0];
       let lname = positions[i].controller.split(" ")[1];
@@ -79,8 +70,9 @@ export const POST: RequestHandler = async ({request, params, locals}): Promise<R
   return json({success: true})
 }
 
-export const DELETE: RequestHandler = async ({ request, params, locals}): Promise<Response> => {
-  let id = parseInt(params.id);
+export const DELETE: RequestHandler = async ({ request, locals }): Promise<Response> => {
+  const req = await request.json();
+  const id = req.id;
   
   if (locals.session == null) {
     return new Response("Please log in and try again", {
@@ -93,6 +85,19 @@ export const DELETE: RequestHandler = async ({ request, params, locals}): Promis
     })
   }
 
+  const data = await prisma.eventPosition.delete({
+    where: {
+      id: id
+    }
+  })
+
+  if (data == null) {
+    return new Response("Position not found", {
+      status: 404
+    })
+  }
+
+  return json({success: true})
   
 }
 
