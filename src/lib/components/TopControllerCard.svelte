@@ -3,11 +3,34 @@
 
   export let rank: number
   export let name: string
-  export let duration: string
+  export let duration: number
   export let cid: number
 
-  export let medalColor: string
-  export let ending: string
+  let medalColor: string
+  let ending: string
+
+  function getDurationString(duration: number): string {
+    const hours = Math.floor(duration / 3600).toString().padStart(2, "0");
+    const minutes = Math.floor(duration % 3600 / 60).toString().padStart(2, "0");
+
+    return `${hours}:${minutes}`
+  }
+
+  // get ending string
+  switch(rank) {
+    case 1:
+      ending = "st"
+      medalColor = "text-amber-500"
+      break
+    case 2:
+      ending = "nd"
+      medalColor = "text-gray-500"
+      break
+    case 3:
+      ending = "rd"
+      medalColor = "text-amber-800"
+      break
+  }
 </script>
 
 <div class="px-4 py-3 flex flex-col relative">
@@ -17,7 +40,7 @@
 
     <div class="ml-5 flex flex-col">
       <h1 class="text-xl">{name}</h1>
-      <h2 class="text-md">{duration} hours</h2>
+      <h2 class="text-md">{getDurationString(duration)} hours</h2>
     </div>
 
     <Icon icon="mdi-medal" class={"w-8 h-8 absolute right-5 " + medalColor}/>

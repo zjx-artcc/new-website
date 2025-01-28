@@ -104,9 +104,10 @@
 				<h2 class="text-md italic">This Month</h2>
 			</div>
 
-			<TopControllerCard name="Chris Mangan" rank=1 cid=1697197 duration="10:00" medalColor="text-amber-500" ending="st"/>
-			<TopControllerCard name="Chris Mangan" rank=2 cid=1697197 duration="10:00" medalColor="text-gray-500" ending="st"/>
-			<TopControllerCard name="Chris Mangan" rank=3 cid=1697197 duration="10:00" medalColor="text-yellow-900" ending="st"/>
+			{#each data.pageData.stats as controller, i}
+				<TopControllerCard name={`${controller.firstName} ${controller.lastName}`} rank={i+1} cid={controller.cid} duration={controller.duration}/>
+			{/each}
+			
 		</HomepageCard>
 	</div>
 </div>
