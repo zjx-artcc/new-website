@@ -63,7 +63,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
       }
     })
     //Certification check
-    if (user != null && pageData.event.positions != null) {
+    if (user != null && positions != null) {
       //@ts-ignore
       positions.forEach((position: Position) => {
         if (position.controller == `${user.firstName} ${user.lastName}`) {

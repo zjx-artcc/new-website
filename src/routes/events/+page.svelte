@@ -32,16 +32,18 @@
   </div>
 </div>
 
-<div id="content" class="flex justify-center mt-3 mb-6">
+<div id="content" class="flex flex-col self-center md:flex-row justify-center mt-3 mb-6 w-screen flex-wrap">
   {#each pageData.events as event}
-    <div class="mx-1 bg-slate-100 rounded-sm">
+    <div class="mx-1 mt-2 bg-slate-100 rounded-sm text-center">
       <a href="/events/{event.id}">
-        <img src={event.banner} alt="{event.name} Banner" class="max-w-96" loading="lazy" /> <br>
-        <h3 class="text-xl">{event.name}</h3>
-        <p>Starts {event.start.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
-        {#if pageData.canEdit && event.hidden}
-          <p class="text-red-500">Hidden</p>
-        {/if}
+        <img src={event.banner} alt="{event.name} Banner" class="max-w-96" loading="lazy" />
+        <div class="py-2">
+          <h3 class="text-xl">{event.name}</h3>
+          <p>Starts {event.start.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+          {#if pageData.canEdit && event.hidden}
+            <p class="text-red-500">Hidden</p>
+          {/if}
+        </div>
       </a>
     </div>
   {/each}

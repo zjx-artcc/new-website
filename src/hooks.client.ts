@@ -1,15 +1,20 @@
 import * as Sentry from "@sentry/sveltekit";
-import { PUBLIC_SENTRY_DSN } from "$env/static/public";
-console.log(process.env.NODE_ENV.toLowerCase());
+
+const { MODE } = import.meta.env;
 
 Sentry.init({
-    dsn: PUBLIC_SENTRY_DSN,
-    tracesSampleRate: 1.0,
-    environment: process.env.NODE_ENV.toLowerCase()
+  dsn: "https://22ffdff6755c2e1f38dc9054b9de714e@o4508141635239936.ingest.us.sentry.io/4508141636222976",
+  tracesSampleRate: 1.0,
+  environment: MODE,
+  integrations: [
+    Sentry.feedbackIntegration({
+        colorScheme: "light"
+    })
+  ]
 });
 
 const myErrorHandler = ({error, event}) => {
-    console.error("A client side error occured:", error, event);
+  console.error("A client side error occured:", error, event);
 }
 
 export const handleError = Sentry.handleErrorWithSentry(myErrorHandler);
