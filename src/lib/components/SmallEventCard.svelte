@@ -72,7 +72,7 @@
       <div class="">
         <h4 class="text-md font-normal text-gray-700 text-right">{formatTimeString(start)}Z - {formatTimeString(end)}z</h4>
         <span class="flex flex-row justify-end">
-          <h4 class="inline text-lg font-bold text-gray-700">{getMonthString(start.getUTCMonth()).substring(0,3).toUpperCase()}</h4>
+          <h4 class="inline text-lg font-bold text-gray-700 mr-1">{getMonthString(start.getUTCMonth()).substring(0,3).toUpperCase()}</h4>
           <h4 class="inline text-lg font-semibold text-gray-700">{start.getUTCDate().toString().padStart(2, "0")}</h4>  
         </span>
         

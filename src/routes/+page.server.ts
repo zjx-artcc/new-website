@@ -1,7 +1,9 @@
 import { getHours, getRating, prisma } from '$lib/db';
 
-import type { Stats, User } from '@prisma/client';
+import type { Feedback, Stats, User } from '@prisma/client';
 import type { PageServerLoad } from './$types';
+import { page } from '$app/state';
+import { P } from 'flowbite-svelte';
 
 const months = ['month_three', 'month_two', 'month_two'];
 
@@ -17,29 +19,69 @@ export const load: PageServerLoad = async ({ locals }) => {
   //Fetch top 3 controllers for the month
   let targetMonth = months[(new Date().getUTCMonth() + 1) % 3]; //Current month + 1 is a numerical representation of the month, Modulo 3 returns where it is within the quarter
   const statsData = await prisma.stats.findMany({
-    take: 3
-  });
-  
-  //Get the top 3 controllers' names
-  for (let i = 0; i < statsData.length; i++) {
-    const user = await prisma.roster.findFirst({
-      where: {
-        cid: statsData[i].cid,
-      },
-      select: {
-        firstName: true,
-        lastName: true
+    take: 3,
+    select: {
+      cid: true,
+      month_one: true,
+      roster: {
+        select: {
+          firstName: true,
+          lastName: true
+        }
       }
-    });
-
-    //Setup member object and push it
-    let memberStats: MtdStats = {
-      hours: getHours(statsData[i][targetMonth]),
-      firstName: user.firstName,
-      lastName: user.lastName
     }
-    pageData.stats.push(memberStats);
+  });
+
+
+    for (let i = 0; i < statsData.length; i++) {
+      const data = statsData[i]
+      let memberStats: MtdStats = {
+        cid: data.cid,
+        duration: data.month_one,
+        firstName: data.roster.firstName,
+        lastName: data.roster.lastName
+      }
+      pageData.stats.push(memberStats);
+    }
+
+  const feedbackData = await prisma.feedback.findMany({
+    take: 3,
+    orderBy: {
+      created: 'desc'
+    },
+    where: {
+      public: true
+    },
+    select: {
+      controllerCid: {
+        select: {
+          cid: true,
+          firstName: true,
+          lastName: true
+        }
+      },
+      created: true,
+      comment: true,
+      rating: true,
+      position: true
+    }
+  })
+
+  let filteredFeedback: FilteredFeedback[] = []
+  for(let feedback of feedbackData) {
+    console.log(feedback)
+    filteredFeedback.push(
+      {
+        rating: feedback.rating,
+        position: feedback.position,
+        comment: feedback.comment,
+        created: feedback.created,
+        firstName: feedback.controllerCid.firstName,
+        lastName: feedback.controllerCid.lastName,
+        controllerCid: feedback.controllerCid.cid
+      })
   }
+  pageData.feedback = filteredFeedback
 
   //Fetch last 3 controllers to join the roster
   const rosterData = await prisma.roster.findMany({
@@ -145,6 +187,7 @@ class PageData {
   events: Event[];
   online: OnlineController[];
   user: User;
+  feedback: FilteredFeedback[]
   constructor() {
     this.stats = [];
     this.newControllers = [];
@@ -155,7 +198,8 @@ class PageData {
 };
 
 type MtdStats = {
-  hours: string;
+  cid: number;
+  duration: number;
   firstName: string;
   lastName: string;
 }
@@ -186,4 +230,14 @@ type OnlineController = {
   rating: string;
   homeController: boolean;
   frequency: string;
+}
+
+type FilteredFeedback = {
+  rating: number;
+  position: string;
+  comment: string;
+  created: Date;
+  firstName: string;
+  lastName: string;
+  controllerCid: number;
 }

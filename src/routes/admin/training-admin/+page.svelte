@@ -6,7 +6,6 @@
 	import ConfirmPopup from "$lib/components/ConfirmPopup.svelte";
 	import Icon from "@iconify/svelte";
 	import { TabItem, Tabs } from "flowbite-svelte";
-	import { getStaffRoles } from "$lib/db.js";
 	export let data;
 	export let form;
 	let responseBox = {
@@ -217,7 +216,7 @@
 							<td class="px-2 border-x-2 border-gray-300">{formatDate(trainingRequest.dateRequested)}</td>
 							<td class="px-2 border-x-2 border-gray-300">{trainingRequest.dateAssigned != null ? formatDate(trainingRequest.dateAssigned) : "None"}</td>
 							<td class={`px-2 border-x-2 border-gray-300 ${getStatusColor(trainingRequest.status)}`}>{trainingRequest.status}</td>
-							<td class="px-2 border-x-2 border-gray-300">
+							<td class="px-2 border-x-2 border-gray-300 flex flex-row mt-1">
 								{#if trainingRequest.instructorCid == null}
 									<button class="transition group w-5 h-5 relative" on:click={() => showConfirmPickup(trainingRequest)}>
 										<Icon icon="mdi:arrow-down-bold"/>

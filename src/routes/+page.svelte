@@ -12,6 +12,7 @@
 	import HomepageCard from '$lib/components/HomepageCard.svelte';
 	import LinkButton from '$lib/components/LinkButton.svelte';
 	import FeedbackCard from '$lib/components/FeedbackCard.svelte';
+	import TopControllerCard from '$lib/components/TopControllerCard.svelte';
 
 	const today = new Date();
 	export let data;
@@ -96,6 +97,18 @@
 				<h4>Did someone say events? vZJX always has events which are fun for controllers and pilots alike! Scroll down to check out our upcoming events.</h4>
 			</div>
 		</HomepageCard>
+
+		<HomepageCard bgColor="bg-sky-100">
+			<div class="px-4 py-2 border-b-2 border-black">
+				<h1 class="font-semibold text-xl">Top Controllers</h1>
+				<h2 class="text-md italic">This Month</h2>
+			</div>
+
+			{#each data.pageData.stats as controller, i}
+				<TopControllerCard name={`${controller.firstName} ${controller.lastName}`} rank={i+1} cid={controller.cid} duration={controller.duration}/>
+			{/each}
+			
+		</HomepageCard>
 	</div>
 </div>
 
@@ -120,9 +133,9 @@
 	</div>
 
 	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
-		<FeedbackCard controllerName="Chris Mangan" feedbackText="Chris did an excellent job not killing me and also made my flying experience fun" position="MCO_TWR" rating=5/>
-		<FeedbackCard controllerName="Samuel Valencia" feedbackText="Besides almost killing me, he was a pretty easygoing controller." position="JAX_APP" rating=1/>
-		<FeedbackCard controllerName="Michael Knight" feedbackText="Mike provided great assitance to my group flight and was overall a good controller, would fly again" position="JAX_CTR" rating=5/>
+		{#each data.pageData.feedback as feedback}
+			<FeedbackCard controllerName={`${feedback.firstName} ${feedback.lastName}`} feedbackText={feedback.comment} position={feedback.position} rating={feedback.rating}/>
+		{/each}
 	</div>
 </div>
 

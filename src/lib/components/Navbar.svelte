@@ -15,7 +15,7 @@
   <NavUl class="pt-2">
     <NavLi class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:airplane" class="w-7 h-7 pr-1.5"/>Pilots<Icon icon="mdi:chevron-down"/></NavLi>
     <Dropdown class="w-48">
-      <NavbarListItem label="Pilot Briefing" href="/pilotbriefing" subText="Learn our airspace" icon="mdi:book"/>
+      <!--<NavbarListItem label="Pilot Briefing" href="/pilotbriefing" subText="Learn our airspace" icon="mdi:book"/>}-->
       <NavbarListItem label="Submit Feedback" href="/feedback" subText="Rate our controllers" icon="mdi:chat"/>
     </Dropdown>
     <NavLi class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:radar" class="w-7 h-7 pr-1.5"/>Controllers<Icon icon="mdi:chevron-down" class=""/></NavLi>
