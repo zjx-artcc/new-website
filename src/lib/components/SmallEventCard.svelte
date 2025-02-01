@@ -1,12 +1,23 @@
 <script lang="ts">
 	import LinkButton from "./LinkButton.svelte";
 
-  export let imageUrl: string;
-  export let title: string;
-  export let hostedBy: string;
-  export let start: Date;
-  export let end: Date
-  export let id: number;
+  interface Props {
+    imageUrl: string;
+    title: string;
+    hostedBy: string;
+    start: Date;
+    end: Date;
+    id: number;
+  }
+
+  let {
+    imageUrl,
+    title,
+    hostedBy,
+    start,
+    end,
+    id
+  }: Props = $props();
   
   const formatTimeString = (time: Date) => {
     return `${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`
@@ -59,7 +70,7 @@
 </script>
 
 <div class="bg-sky-50 flex flex-col rounded-lg overflow-hidden shadow-xl p-2 transition hover:scale-105">
-  <!-- svelte-ignore a11y-img-redundant-alt -->
+  <!-- svelte-ignore a11y_img_redundant_alt -->
   <img class="w-[18rem] h-[8rem] rounded-lg object-cover self-center" src="{imageUrl}" alt="Image Description" />
   <div class="flex-1 pt-6 px-4 flex flex-col">
     <div class="flex justify-between">

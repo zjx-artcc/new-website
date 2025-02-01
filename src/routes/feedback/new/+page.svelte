@@ -1,12 +1,16 @@
 <script lang="ts">
-  export let data;
   import { validators, required, useForm } from 'svelte-use-form';
   import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
+  interface Props {
+    data: any;
+  }
+
+  let { data }: Props = $props();
   const form = useForm();
-  let position
-  let cid
+  let position = $state()
+  let cid = $state()
 
   if ($page.url.searchParams.has('cid')) {
     cid = $page.url.searchParams.get('cid')

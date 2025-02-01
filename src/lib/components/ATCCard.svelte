@@ -1,8 +1,17 @@
 <script lang="ts">
-	export let name: string;
-	export let startDate: string;
-	export let endDate: string;
-	export let position: string;
+	interface Props {
+		name: string;
+		startDate: string;
+		endDate: string;
+		position: string;
+	}
+
+	let {
+		name,
+		startDate,
+		endDate,
+		position
+	}: Props = $props();
 </script>
 
 <tr>

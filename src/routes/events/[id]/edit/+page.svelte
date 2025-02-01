@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: `<tr>` is invalid inside `<table>` -->
 <script lang="ts">
   //@ts-nocheck
   import '$lib/app.css';
@@ -56,57 +57,63 @@
   <div class="flex flex-wrap justify-center align-middle mx-5 mr-5">
     <div class="text-center flex-1 w-1/2 px-5 py-2.5 outline outline-slate-200 rounded-sm">
       <table class="columns-2 text-center w-full">
-        <tr>
-          <th><h1>Event Details:</h1></th>
-          <th><h1>Event Description:</h1></th>
-        </tr>
-        <tr>
-          <td>
-            <table class="mx-auto">
-              <tr class="py-2">
-                <td class="px-2">
-                  <label class="pb-1" for="name">Event Name:</label>
-                  <br>
-                  <input name="name" id="name" class="outline outline-1" use:validators={[required]} bind:value={event.name}>
-                </td>
-                <td class="px-2">
-                  <label class="pb-1" for="start">Event Start:</label>
-                  <br>
-                  <input name="start" id="start" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]} bind:value={event.start}>
-                </td>
-              </tr>
-              <tr class="py-2">
-                <td class="px-2">
-                  <label for="host" class="pb-1">Host:</label>
-                  <br>
-                  <input name="host" id="host" class="outline outline-1" use:validators={[required]} bind:value={event.host}>
-                </td>
-                <td class="px-2">
-                  <label for="end" class="pb-1">Event End:</label>
-                  <br>
-                  <input name="end" id="end" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]} bind:value={event.end}>
-                </td>
-              </tr>
-              <tr class="py-2">
-                <td class="px-2">
-                  <label for="banner" class="pb-1">Banner URL:</label>
-                  <br>
-                  <input name="banner" id="banner" class="outline outline-1" use:validators={[required]} bind:value={event.banner}>
-                </td>
-                <td>
-                  <label for="hidden" class="pb-1">Hide Event:</label>
-                  <br>
-                  <input name="hidden" id="hidden" type="checkbox" bind:checked={event.hidden}/>
-                </td>
-              </tr>
-            </table>
-          </td>
-          <td>
-            <div class="pt-5">
-              <textarea name="description" id="description" class="p-5 w-full" placeholder="Event Description" rows="5" cols="30" use:validators={[required]} bind:value={event.description}></textarea>
-            </div>
-          </td>
-        </tr>
+        <thead>
+          <tr>
+            <th><h1>Event Details:</h1></th>
+            <th><h1>Event Description:</h1></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <table class="mx-auto">
+                <tbody>
+                  <tr class="py-2">
+                    <td class="px-2">
+                      <label class="pb-1" for="name">Event Name:</label>
+                      <br>
+                      <input name="name" id="name" class="outline outline-1" use:validators={[required]} bind:value={event.name}>
+                    </td>
+                    <td class="px-2">
+                      <label class="pb-1" for="start">Event Start:</label>
+                      <br>
+                      <input name="start" id="start" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]} bind:value={event.start}>
+                    </td>
+                  </tr>
+                  <tr class="py-2">
+                    <td class="px-2">
+                      <label for="host" class="pb-1">Host:</label>
+                      <br>
+                      <input name="host" id="host" class="outline outline-1" use:validators={[required]} bind:value={event.host}>
+                    </td>
+                    <td class="px-2">
+                      <label for="end" class="pb-1">Event End:</label>
+                      <br>
+                      <input name="end" id="end" class="bg-inherit outline rounded-md outline-1 p-1" type="datetime-local" use:validators={[required]} bind:value={event.end}>
+                    </td>
+                  </tr>
+                  <tr class="py-2">
+                    <td class="px-2">
+                      <label for="banner" class="pb-1">Banner URL:</label>
+                      <br>
+                      <input name="banner" id="banner" class="outline outline-1" use:validators={[required]} bind:value={event.banner}>
+                    </td>
+                    <td>
+                      <label for="hidden" class="pb-1">Hide Event:</label>
+                      <br>
+                      <input name="hidden" id="hidden" type="checkbox" bind:checked={event.hidden}/>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td>
+              <div class="pt-5">
+                <textarea name="description" id="description" class="p-5 w-full" placeholder="Event Description" rows="5" cols="30" use:validators={[required]} bind:value={event.description}></textarea>
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

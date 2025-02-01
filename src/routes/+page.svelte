@@ -15,7 +15,8 @@
 	import TopControllerCard from '$lib/components/TopControllerCard.svelte';
 
 	const today = new Date();
-	export let data;
+	/** @type {{data: any}} */
+	let { data } = $props();
 	const pageData = data.pageData;
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 	

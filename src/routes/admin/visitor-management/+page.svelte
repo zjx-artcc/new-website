@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: Identifier 'ResponseBox' has already been declared -->
 <script lang="ts">
 	//@ts-nocheck
 	export let data;
@@ -118,7 +119,7 @@
 	// Initialize selected tag
 	uncheckUsers();
 
-	type ResponseBox = {
+	type ResponseBoxType = {
 		bgColor: string;
 		header: string;
 		text: string;

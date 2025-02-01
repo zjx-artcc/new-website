@@ -1,7 +1,11 @@
 <script lang="ts">
   import '$lib/app.css';
   import Icon from '@iconify/svelte';
-  export let data;
+  interface Props {
+    data: any;
+  }
+
+  let { data }: Props = $props();
 
   const getRankString = (rank: number) => {
     switch(rank) {

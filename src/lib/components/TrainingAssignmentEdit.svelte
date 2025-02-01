@@ -1,10 +1,19 @@
 <script lang="ts">
 	import { deserialize } from "$app/forms";
   import Icon from "@iconify/svelte";
-  export let hidePopup
-  export let instructors
-  export let data
-  export let form
+  interface Props {
+    hidePopup: any;
+    instructors: any;
+    data: any;
+    form: any;
+  }
+
+  let {
+    hidePopup,
+    instructors,
+    data,
+    form
+  }: Props = $props();
   let allowSubmit = true
 
   const formatDateString = (date: Date) => {
@@ -45,14 +54,14 @@
 </script>
 
 <div class="relative z-50 flex flex-col items-center place-items-center bg-gray-200 px-4 py-2 border-2 border-gray-400">
-  <button on:click={() => hidePopup(false, false, "")}>
+  <button onclick={() => hidePopup(false, false, "")}>
     <Icon icon="mdi:close" class="w-5 h-5 absolute top-2 right-2"/>
   </button>
 
   <h2 class="font-bold text-xl text-sky-500">Edit Training Assignment</h2>
 
   <div>
-    <form class="flex flex-col p-2 space-y-4 w-72" on:submit={handleSubmit}>
+    <form class="flex flex-col p-2 space-y-4 w-72" onsubmit={handleSubmit}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>
         <select name="instructorCid" class="px-2 invalid:border-2 invalid:border-red-500" value={data.instructorCid}>

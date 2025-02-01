@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: `<tr>` is invalid inside `<table>` -->
 <script lang="ts">
   //@ts-nocheck
   import '$lib/app.css';
@@ -86,37 +87,41 @@
     <h1 class="font-bold">Position Assignments:</h1>
     <hr>
     <table class="mx-auto">
-      <tr>
-        {#each columns as column}
-          <th class="w-52">{column}</th>
-        {/each}
-      </tr>
-      {#key positions.length}
-        {#each positions as row, i}
-          <tr>
-            <td><input name="position-{i}" class="p-0.5 rounded-md text-center" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
-            <td>
-              {#if row.requests != undefined}
-                <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center">
-                  <option value='none'>None</option>
-                  {#each row.requests as request}
-                    <option value={request.name}>{request.name}</option>
-                  {/each}
-                </select>
-              {:else if row.controller != null}
-                <select value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center" disabled >
-                  <option>{row.controller}</option>
-                </select>
-              {:else}
-                <select name="controllers" id="controllers" disabled class="p-1 rounded-md text-center">
-                  <option value="No controllers available">No controllers available</option>
-                </select>
-              {/if}
-            </td>
-            <td><button type="button" class="bg-red-600 text-white p-1 rounded-lg text-sm" on:click={() => removePosition(i)}>Remove</button></td>
-          </tr>
-        {/each}
-      {/key}
+      <thead>
+        <tr>
+          {#each columns as column}
+            <th class="w-52">{column}</th>
+          {/each}
+        </tr>
+      </thead>
+      <tbody>
+        {#key positions.length}
+          {#each positions as row, i}
+            <tr>
+              <td><input name="position-{i}" class="p-0.5 rounded-md text-center" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
+              <td>
+                {#if row.requests != undefined}
+                  <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center">
+                    <option value='none'>None</option>
+                    {#each row.requests as request}
+                      <option value={request.name}>{request.name}</option>
+                    {/each}
+                  </select>
+                {:else if row.controller != null}
+                  <select value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center" disabled >
+                    <option>{row.controller}</option>
+                  </select>
+                {:else}
+                  <select name="controllers" id="controllers" disabled class="p-1 rounded-md text-center">
+                    <option value="No controllers available">No controllers available</option>
+                  </select>
+                {/if}
+              </td>
+              <td><button type="button" class="bg-red-600 text-white p-1 rounded-lg text-sm" on:click={() => removePosition(i)}>Remove</button></td>
+            </tr>
+          {/each}
+        {/key}
+      </tbody>
     </table>
     <hr>
     <div class="pb-5">

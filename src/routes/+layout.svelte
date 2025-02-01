@@ -3,15 +3,16 @@
 	import '$lib/app.css';
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
-	export let data
+	/** @type {{data: any, children?: import('svelte').Snippet}} */
+	let { data, children } = $props();
 </script>
 
-<body class="w-screen h-screen bg-transparent min-w-fit">
+<div class="w-screen h-screen bg-transparent min-w-fit">
 	<div>
 		<Navbar canViewAdmin={data.canViewAdmin} />
 	</div>
 
-	<slot />
+	{@render children?.()}
 
 	<!--Leave Praise End-->
 	<footer id="page-footer" class="bg-white opacity-0" style="opacity: 1;">
@@ -20,4 +21,4 @@
 			<Footer />
 		</div>
 	</footer>
-</body>
+</div>

@@ -20,27 +20,35 @@
 
 <Tabs contentClass="p-3" style="underline">
   <TabItem open>
-    <span slot="title">General</span>
+    {#snippet title()}
+            <span >General</span>
+          {/snippet}
     <p class="text-md text-black">
       <strong>Welcome to ZJX Airspace!</strong>
     </p>
   </TabItem>
   <TabItem>
-    <span slot="title">MCO</span>
+    {#snippet title()}
+            <span >MCO</span>
+          {/snippet}
     <p class="text-sm text-gray-500 dark:text-gray-400">
       <b>MCO</b>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
     </p>
   </TabItem>
   <TabItem>
-    <span slot="title">JAX</span>
+    {#snippet title()}
+            <span >JAX</span>
+          {/snippet}
     <p class="text-sm text-gray-500 dark:text-gray-400">
       <b>JAX</b>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
     </p>
   </TabItem>
   <TabItem>
-    <span slot="title">DAB</span>
+    {#snippet title()}
+            <span >DAB</span>
+          {/snippet}
     <p class="text-sm text-gray-500 dark:text-gray-400">
       <b>DAB</b>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

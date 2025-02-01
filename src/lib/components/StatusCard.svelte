@@ -1,7 +1,11 @@
 <script lang="ts">
-    export let bgColor: String
-    export let headerText: String
-    export let bodyText: String
+    interface Props {
+        bgColor: String;
+        headerText: String;
+        bodyText: String;
+    }
+
+    let { bgColor, headerText, bodyText }: Props = $props();
 </script>
 
 <div class={bgColor + " opacity-90 py-2 px-4 rounded-md w-96"}>

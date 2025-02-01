@@ -1,6 +1,7 @@
+<!-- @migration-task Error while migrating Svelte code: Identifier 'ResponseBox' has already been declared -->
 <script lang="ts">
   import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
-  import { ChevronDownSolid } from 'flowbite-svelte-icons';
+  import { ChevronDownOutline } from 'flowbite-svelte-icons';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
 	import type { Roster } from '@prisma/client';
 
@@ -8,7 +9,7 @@
   let popupClass: string = "hidden"
   let activeScreen: string = ""
   let confirmationScreenAction: string = ""
-	let responseBox: ResponseBox = {
+	let responseBox: ResponseBoxType = {
 		bgColor: "",
 		header: "",
 		text: "",
@@ -81,7 +82,7 @@
     dropdownOpen: boolean
   }
 
-  type ResponseBox = {
+  type ResponseBoxType = {
 		bgColor: string;
 		header: string;
 		text: string;
@@ -121,7 +122,7 @@
           <td class="text-center align-center border-2 border-solid px-2 bg-{controller.appCerts.color}"><p class="py-1 text-white">{controller.appCerts.cert}</p></td>
           <td class="text-center align-center border-2 border-solid px-2 bg-{controller.ctrCert.color}"><p class="px-1 py-1 rounded-md text-white">{controller.ctrCert.cert}</p></td>
           <td class="text-center align-center border-2 border-solid px-2 ">
-            <Button><ChevronDownSolid class="text-black w-3 h-3 flex justify-center"/></Button>
+            <Button><ChevronDownOutline class="text-black w-3 h-3 flex justify-center"/></Button>
             <Dropdown class="p-2 flex flex-col z-0" bind:open={controller.dropdownOpen}>
               <DropdownItem class="rounded-md font-bold text-md hover:transition-colors hover:bg-gray-200 border-b-4"><p class="">{`${controller.name} (${controller.rating})`}</p></DropdownItem>
               <DropdownItem target="_blank" class="rounded-md text-left hover:transition-colors hover:bg-gray-200" href={`/profile/${controller.cid}`}>View Profile</DropdownItem>

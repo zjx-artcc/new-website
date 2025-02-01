@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: `<a>` is invalid inside `<a>` -->
 <script lang="ts">
   export let position: string;
   export let rating: string;
@@ -27,7 +28,7 @@
 </script>
 
 
-<a href="/profile/{cid}" on:mouseenter={showDialog} on:mouseleave={hideDialog}>
+<div role="link" on:mouseenter={showDialog} on:mouseleave={hideDialog}>
   <div class="transition hover:bg-sky-300 rounded-lg">
     <div class="px-3 py-2 flex flex-row justify-between">
       <h4 class="font-bold text-sm text-gray-700">{position}</h4>
@@ -64,4 +65,4 @@
     </div>
   </div>
   
-</a>
+</div>

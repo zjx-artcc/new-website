@@ -2,7 +2,8 @@
 	import '$lib/app.css';
 	import Icon from '@iconify/svelte';
 
-	export let data;
+	/** @type {{data: any}} */
+	let { data } = $props();
 	let pageData = data.pageData
 </script>
 

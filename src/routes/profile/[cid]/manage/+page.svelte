@@ -2,8 +2,9 @@
 	import '$lib/app.css';
 	import Icon from '@iconify/svelte';
 
-	export let data;
-	let pageData = data.pageData;
+	/** @type {{data: any}} */
+	let { data } = $props();
+	let pageData = $state(data.pageData);
 </script>
 
 <svelte:head>

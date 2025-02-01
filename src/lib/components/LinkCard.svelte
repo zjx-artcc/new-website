@@ -1,9 +1,13 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	export let title: string;
 	//export let subtext: string;
-	export let to: string;
-	export let icon: string;
+	interface Props {
+		title: string;
+		to: string;
+		icon: string;
+	}
+
+	let { title, to, icon }: Props = $props();
 </script>
 
 <div class="m-4 p-8 bg-white border-4 w-64 h-64 flex justify-center items-center">

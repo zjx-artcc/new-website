@@ -6,20 +6,24 @@
 	import ConfirmPopup from "$lib/components/ConfirmPopup.svelte";
 	import Icon from "@iconify/svelte";
 	import { TabItem, Tabs } from "flowbite-svelte";
-	export let data;
-	export let form;
-	let responseBox = {
+	interface Props {
+		data: any;
+		form: any;
+	}
+
+	let { data, form }: Props = $props();
+	let responseBox = $state({
 		success: false,
 		hidden: true,
 		text: ""
-	}
-	let localTrainingAssignments = 0
-	let openRowAssignments = null
+	})
+	let localTrainingAssignments = $state(0)
+	let openRowAssignments = $state(null)
 	let openRowSlots = null
-	let popupHidden: boolean = true
-	let popupType = ""
-	let controllerData
-	let selection: string
+	let popupHidden: boolean = $state(true)
+	let popupType = $state("")
+	let controllerData = $state()
+	let selection: string = $state()
 
 	const formatDate = (input: Date): string => {
 		let dateTime = new Date(input);
@@ -131,7 +135,9 @@
 	<!-- Assignments Page -->
 	<Tabs contentClass="p-2" style="underline">
 		<TabItem open>
-			<span slot="title">Your Assignments</span>
+			{#snippet title()}
+						<span >Your Assignments</span>
+					{/snippet}
 		{#if localTrainingAssignments > 0}
 			<table class="border-spacing-2 px-2">
 				<thead class="border-4">
@@ -146,7 +152,7 @@
 				<tbody class="">
 				{#each data.trainingRequests as trainingRequest, i}
 					{#if data.session.user.id == trainingRequest.instructorCid}
-						<tr on:click={() => toggleRowAssignments(i)} class="transition hover:bg-sky-200 border-y-2 border-gray-400 odd:bg-gray-200 even:bg-gray-100">
+						<tr onclick={() => toggleRowAssignments(i)} class="transition hover:bg-sky-200 border-y-2 border-gray-400 odd:bg-gray-200 even:bg-gray-100">
 							<td class="p-1 border-x-2 border-gray-300">{trainingRequest.studentName}</td>
 							<td class="px-2 text-center font-bold border-x-2 border-gray-300">{trainingRequest.trainingType}</td>
 							<td class="px-2 border-x-2 border-gray-300">{formatDate(trainingRequest.dateRequested)}</td>
@@ -167,15 +173,15 @@
 
 									<div>
 										<div class="flex flex-col h-full flex-wrap gap-y-2 gap-x-2">
-											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showTrainingTicketSubmission(trainingRequest)}>File Training Ticket</button>
-											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" on:click={() => showAssignmentEdit(trainingRequest)}>Edit Training Assignment</button>
+											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" onclick={() => showTrainingTicketSubmission(trainingRequest)}>File Training Ticket</button>
+											<button class="p-2 bg-amber-500 rounded-md text-sm transition hover:scale-105" onclick={() => showAssignmentEdit(trainingRequest)}>Edit Training Assignment</button>
 											<button class="p-2 bg-sky-500 rounded-md text-sm transition hover:scale-105">View Training History</button>
-											<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105" on:click={() => showConfirmSoloCert(trainingRequest)}>Issue Solo Cert</button>
+											<button class="p-2 bg-green-500 rounded-md text-sm transition hover:scale-105" onclick={() => showConfirmSoloCert(trainingRequest)}>Issue Solo Cert</button>
 
 											{#if trainingRequest.status == "Solo Cert"}
-												<button class="p-2 bg-red-500 rounded-md text-sm transition hover:scale-105" on:click={() => showConfirmDropSoloCert(trainingRequest)}>Revoke Solo Cert</button>
+												<button class="p-2 bg-red-500 rounded-md text-sm transition hover:scale-105" onclick={() => showConfirmDropSoloCert(trainingRequest)}>Revoke Solo Cert</button>
 											{/if}
-											<button class="p-2 bg-red-500 rounded-md text-sm transition hover:scale-105" on:click={() => showConfirmDropStudent(trainingRequest)}>Drop Student</button>
+											<button class="p-2 bg-red-500 rounded-md text-sm transition hover:scale-105" onclick={() => showConfirmDropStudent(trainingRequest)}>Drop Student</button>
 										</div>
 									</div>
 								</div>
@@ -194,7 +200,9 @@
 
 		<!-- Slots Page -->
 		<TabItem>
-			<span slot="title">Training Slots</span>
+			{#snippet title()}
+						<span >Training Slots</span>
+					{/snippet}
 			{#if data.trainingRequests.length > 0}
 			<table class="border-spacing-2 px-2">
 					<thead class="border-4">
@@ -209,7 +217,7 @@
 					</thead>
 				<tbody class="">
 					{#each data.trainingRequests as trainingRequest, i}
-						<tr on:click={() => toggleRowSlots(i)} class={`transition hover:bg-sky-200 border-y-2 border-gray-400 bg-gray-200`}>
+						<tr onclick={() => toggleRowSlots(i)} class={`transition hover:bg-sky-200 border-y-2 border-gray-400 bg-gray-200`}>
 							<td class="p-1 border-x-2 border-gray-300">{trainingRequest.studentName}</td>
 							<td class="px-2 border-x-2 border-gray-300">{trainingRequest.instructorName}</td>
 							<td class="px-2 text-center font-bold border-x-2 border-gray-300">{trainingRequest.trainingType}</td>
@@ -218,28 +226,28 @@
 							<td class={`px-2 border-x-2 border-gray-300 ${getStatusColor(trainingRequest.status)}`}>{trainingRequest.status}</td>
 							<td class="px-2 border-x-2 border-gray-300 flex flex-row mt-1">
 								{#if trainingRequest.instructorCid == null}
-									<button class="transition group w-5 h-5 relative" on:click={() => showConfirmPickup(trainingRequest)}>
+									<button class="transition group w-5 h-5 relative" onclick={() => showConfirmPickup(trainingRequest)}>
 										<Icon icon="mdi:arrow-down-bold"/>
 										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Claim Student</p>
 									</button>
 								{/if}
 
 								{#if trainingRequest.instructorCid == data.session.userId}
-									<button class="transition group w-5 h-5 relative" on:click={() => showConfirmDropStudent(trainingRequest)}>
+									<button class="transition group w-5 h-5 relative" onclick={() => showConfirmDropStudent(trainingRequest)}>
 										<Icon icon="mdi:alpha-x"/>
 										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Drop Student</p>
 									</button>
 								{/if}
 
 								{#if data.trainingAdmin}
-									<button class="transition group w-5 h-5 relative" on:click={() => showAssignmentEdit(trainingRequest)}>
+									<button class="transition group w-5 h-5 relative" onclick={() => showAssignmentEdit(trainingRequest)}>
 										<Icon icon="mdi:file-edit"/>
 										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Edit Training Assignment</p>
 									</button>
 								{/if}
 
 								{#if trainingRequest.status == "Solo Cert" && (data.session.user.id == trainingRequest.instructorCid || data.trainingAdmin)}
-									<button class="transition group w-5 h-5 relative" on:click={() => showConfirmDropSoloCert(trainingRequest)}>
+									<button class="transition group w-5 h-5 relative" onclick={() => showConfirmDropSoloCert(trainingRequest)}>
 										<Icon icon="mdi:file-certificate"/>
 										<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">Revoke Solo Cert</p>
 									</button>
@@ -250,7 +258,7 @@
 									<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">View Student Profile</p>
 								</a>
 
-								<button class="transition group w-5 h-5 relative" on:click={() => showTrainingTicketSubmission(trainingRequest)}>
+								<button class="transition group w-5 h-5 relative" onclick={() => showTrainingTicketSubmission(trainingRequest)}>
 									<Icon icon="mdi:upload"/>
 									<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">File Training Ticket</p>
 								</button>

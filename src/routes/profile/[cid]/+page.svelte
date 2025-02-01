@@ -3,7 +3,8 @@
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
 
-	export let data;
+	/** @type {{data: any}} */
+	let { data } = $props();
 	let pageData = data.pageData;
 </script>
 

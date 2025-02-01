@@ -1,8 +1,17 @@
 <script lang="ts">
-  export let controllerName: string;
-  export let feedbackText: string;
-  export let rating: number;
-  export let position: string;
+  interface Props {
+    controllerName: string;
+    feedbackText: string;
+    rating: number;
+    position: string;
+  }
+
+  let {
+    controllerName,
+    feedbackText,
+    rating,
+    position
+  }: Props = $props();
 </script>
 
 <div class="bg-sky-50 flex flex-col rounded-lg overflow-hidden shadow-xl p-4 w-60 transition hover:scale-105">

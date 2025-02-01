@@ -1,13 +1,22 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
 
-  export let rank: number
-  export let name: string
-  export let duration: number
-  export let cid: number
+  interface Props {
+    rank: number;
+    name: string;
+    duration: number;
+    cid: number;
+  }
 
-  let medalColor: string
-  let ending: string
+  let {
+    rank,
+    name,
+    duration,
+    cid
+  }: Props = $props();
+
+  let medalColor: string = $state()
+  let ending: string = $state()
 
   function getDurationString(duration: number): string {
     const hours = Math.floor(duration / 3600).toString().padStart(2, "0");

@@ -5,14 +5,18 @@
 	import type { WebFeedback } from './+page.server';
 	import { Modal } from 'flowbite-svelte';
 
-	export let data;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 
 
-	let target: WebFeedback = data.pageData.hidden[0];
-	let modal = false;
-	let hidden = false;
-	let toDelete = false;
-	let reason = "";
+	let target: WebFeedback = $state(data.pageData.hidden[0]);
+	let modal = $state(false);
+	let hidden = $state(false);
+	let toDelete = $state(false);
+	let reason = $state("");
 
 	async function approveFeedback(id: string) {
 		const req = await fetch('/feedback', {
@@ -84,10 +88,10 @@
 		<h3 class="text-lg">Comments</h3>
 		<p>{target.comment}</p>
 		<div>
-			<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle" on:click={() => modal = false}>Close</button>
+			<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle" onclick={() => modal = false}>Close</button>
 			{#if hidden && data.pageData.staff && !toDelete}
-				<button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle" on:click={() => approveFeedback(target.id)}>Approve</button>
-				<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle" on:click={() => { toDelete = true; }}>Deny</button>
+				<button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle" onclick={() => approveFeedback(target.id)}>Approve</button>
+				<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-5 align-middle" onclick={() => { toDelete = true; }}>Deny</button>
 			{/if}
 		</div>
 		{#if toDelete}
@@ -97,8 +101,8 @@
 					<br>
 					<input id="reason" name="reason" class="outline mt-2 mr-1" bind:value={reason}/>
 				</div>
-				<button class="mt-3 bg-red-500 p-2 rounded-md text-white font-bold" on:click={() => { toDelete = false; }}>Cancel</button>
-				<button class="mt-3 bg-yellow-500 p-2 rounded-md text-white font-bold" on:click={() => { deleteFeedback(target.id, reason)}}>Submit</button>
+				<button class="mt-3 bg-red-500 p-2 rounded-md text-white font-bold" onclick={() => { toDelete = false; }}>Cancel</button>
+				<button class="mt-3 bg-yellow-500 p-2 rounded-md text-white font-bold" onclick={() => { deleteFeedback(target.id, reason)}}>Submit</button>
 			</div>
 		{/if}
 	</div>
@@ -119,7 +123,7 @@
 				<div class="table-cell text-center text-red-500">{feedback.controller}</div>
 				<div class="table-cell text-center text-red-500">{feedback.position}</div>
 				<div class="table-cell text-center text-red-500">{feedback.rating}/5</div>
-				<div class="table-cell text-center text-white"><button class="bg-green-500 rounded-full inline-flex items-center p-1" on:click={() => { modal = true; hidden = true; target = feedback}}><Icon icon="mdi:eye-outline" /></button></div>
+				<div class="table-cell text-center text-white"><button class="bg-green-500 rounded-full inline-flex items-center p-1" onclick={() => { modal = true; hidden = true; target = feedback}}><Icon icon="mdi:eye-outline" /></button></div>
 			</div>
 		{/each}
 		{#each data.pageData.feedback as feedback}
@@ -128,7 +132,7 @@
 				<div class="table-cell text-center">{feedback.controller}</div>
 				<div class="table-cell text-center">{feedback.position}</div>
 				<div class="table-cell text-center">{feedback.rating}/5</div>
-				<div class="table-cell text-center text-white"><button class="bg-green-500 rounded-full inline-flex items-center p-1" on:click={() => { modal = true; hidden = false; target = feedback}}><Icon icon="mdi:eye-outline" /></button></div>
+				<div class="table-cell text-center text-white"><button class="bg-green-500 rounded-full inline-flex items-center p-1" onclick={() => { modal = true; hidden = false; target = feedback}}><Icon icon="mdi:eye-outline" /></button></div>
 			</div>
 		{/each}
 		

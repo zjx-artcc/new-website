@@ -6,14 +6,14 @@
 	import { enhance } from '$app/forms';
   const form = useForm();
 
-  let document: File = {
+  let document: File = $state({
     id: "0",
     name: '',
     description: '',
     path: '',
     type: '',
     updated: new Date(),
-  };
+  });
 
 </script>
 
