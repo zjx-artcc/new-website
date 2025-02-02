@@ -177,7 +177,6 @@ export const load: PageServerLoad = async ({ locals }) => {
     pageData.online.push(controller);
   }
 
-  console.log(process.env.DATABASE_URL)
   return {pageData: { ...pageData }};
 }
 
