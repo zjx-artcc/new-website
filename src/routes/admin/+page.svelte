@@ -2,7 +2,6 @@
     import "$lib/app.css"
     import LinkCard from "$lib/components/LinkCard.svelte"
     export let data
-    console.log(data)
 </script>
 
 
