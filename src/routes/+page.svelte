@@ -86,7 +86,7 @@
 
 			<div class="px-4 py-2 flex flex-col">
 				<h4>We are always happy to hear from pilots about our controllers!</h4>
-				<LinkButton to="/feedback" bgColor="bg-amber-500" textColor="text-black font-semibold" text="Submit Feedback Here"></LinkButton>
+				<LinkButton to="https://old.zjxartcc.org/feedback/new" bgColor="bg-amber-500" textColor="text-black font-semibold" text="Submit Feedback Here"></LinkButton>
 			</div>
 		</HomepageCard>
 
@@ -118,25 +118,15 @@
 	<div class="flex justify-center flex-col border-b-2 pb-2">
 		<h1 class="font-bold text-gray-800 text-4xl text-center">Upcoming Events</h1>
 		<h2 class="text-gray-800 text-2xl text-center">Our events team would love to see you fly or control!</h2>
-                <h2 class="font-bold text-red-900">Please Note: Due to unforeseen issues with the events tab, this section is unavailable. Please reference the <a href="https://old.zjxartcc.org/events/">Old Website</a> until we resolve this problem.</h2>
+                <h2 class="font-bold text-red-900">Please Note: Due to unforeseen issues with the events system, this section is unavailable. Please reference the <a href="https://old.zjxartcc.org/events/">Old Website</a> until we resolve this problem.</h2>
 	</div>
 </div>
 
 <div class="flex flex-col justify-center items-center w-screen mb-40">
 	<div class="flex justify-center flex-col border-b-2 pb-2">
 		<h1 class="font-bold text-gray-800 text-4xl text-center">Controller Feedback</h1>
-		<h2 class="text-gray-800 text-2xl text-center">See what pilots have to say about our controllers!
-		</h2>
-	</div>
-
-	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
-		{#if data.pageData.feedback.length == 0}
-			<h1 class="font-bold text-gray-800 text-2xl text-center">No feedback currently submitted</h1>
-		{:else}
-			{#each data.pageData.feedback as feedback}
-				<FeedbackCard controllerName={`${feedback.firstName} ${feedback.lastName}`} feedbackText={feedback.comment} position={feedback.position} rating={feedback.rating}/>
-			{/each}
-		{/if}
+		<h2 class="text-gray-800 text-2xl text-center">See what pilots have to say about our controllers!</h2>
+		<h2 class="font-bold text-red-900">Please Note: Due to unforeseen issues with the feedback system, this section is unavailable. Please reference the <a href="https://old.zjxartcc.org/feedback/">Old Website</a> until we resolve this problem.</h2>
 	</div>
 </div>
 
