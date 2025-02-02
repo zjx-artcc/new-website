@@ -3,6 +3,7 @@ import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHo
 
 import type { Roster, TrainingSession } from '@prisma/client';
 import type { PageServerLoad } from './$types';
+import { P } from 'flowbite-svelte';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const quartersByMonth = [ DisplayMonths.slice(0, 3), DisplayMonths.slice(3, 6), DisplayMonths.slice(6, 9), DisplayMonths.slice(9, 12) ];
