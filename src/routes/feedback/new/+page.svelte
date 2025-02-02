@@ -83,7 +83,7 @@
     </div>
   </div>
   <div class="text-center flex-1 m-2 mt-1 px-5 py-5 outline outline-slate-200 rounded-sm align-middle mx-5 mr-5">
-    <a href='/documents/' class="bg-red-500 text-white px-2 py-1 rounded-md text-xl">Cancel</a>
+    <a href='/feedback/' class="bg-red-500 text-white px-2 py-1 rounded-md text-xl">Cancel</a>
     <button type="submit" disabled={!$form.valid} class="bg-green-500 text-white px-2 py-[0.25rem] rounded-md text-xl">Submit</button>
   </div>
 </form>
