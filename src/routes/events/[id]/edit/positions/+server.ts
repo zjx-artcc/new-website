@@ -28,46 +28,33 @@ export const POST: RequestHandler = async ({request, params, locals}): Promise<R
   
   //Strip requests property from each position and remove requests for position
   for (let i = 0; i < positions.length; i++) {
-    delete positions[i].requests;
-
-    if (positions[i].eventId == undefined) {
-      //New position
-      positions[i].controller = "none";
-      positions[i].eventId = event;
-
-      await prisma.eventPosition.create({
-        data: {
-          eventId: positions[i].eventId,
-          position: positions[i].position,
-          controller: null,
-          type: positions[i].type
-        }
-      })
-    }
-    if (positions[i].controller != "none") {
-      let fname = positions[i].controller.split(" ")[0];
-      let lname = positions[i].controller.split(" ")[1];
-      let cid = await prisma.roster.findFirst({
-        where: {
-          firstName: fname,
-          lastName: lname
-        }
-      })
-      positions[i].controller = cid.cid.toString();
-      
+    console.log(positions[i]);
+    if (positions[i].controller != 'none') {
       await prisma.eventPosition.update({
         where: {
           id: positions[i].id
         },
         data: {
-          id: positions[i].id,
-          type: positions[i].type,
           controller: parseInt(positions[i].controller),
+          eventId: event,
           position: positions[i].position,
-          eventId: event
+          id: positions[i].id,
+        }
+      })
+    } else {
+      await prisma.eventPosition.update({
+        where: {
+          id: positions[i].id
+        },
+        data: {
+          controller: null,
+          eventId: event,
+          position: positions[i].position,
+          id: positions[i].id,
         }
       })
     }
+
   }
 
   return json({success: true})

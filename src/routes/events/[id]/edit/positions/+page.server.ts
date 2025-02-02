@@ -3,8 +3,7 @@ import { prisma } from '$lib/db';
 import { getPositionType } from '$lib/events.js';
 
 import type { PageServerLoad } from './$types';
-import type { Event } from '@prisma/client';
-import { P } from 'flowbite-svelte';
+import type { Event, Roster } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	//Setup page data
@@ -92,8 +91,9 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 			pageData.positions[i].controller = "none";
 		}
 	}
-	
-	console.log(pageData.positionRequests)
+
+	const roster: Roster[] = await prisma.roster.findMany()
+	pageData.roster.push(...roster)
 	return {pageData: { ...pageData }};
 };
 
@@ -104,6 +104,7 @@ class PageData {
 	event: Event;
 	eventId: Number;
 	positions: Position[] & { requests: PositionRequest[] & { name: string }[] }[];
+	roster: Roster[]
 
 	constructor() {
 		this.canEdit = false;
@@ -111,7 +112,8 @@ class PageData {
 		this.eventId = 0;
 		this.event = null;
 		this.positions = [];
-		this.positionRequests = []
+		this.positionRequests = [];
+		this.roster = []
 	}
 }
 

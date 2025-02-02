@@ -23,6 +23,16 @@ RUN npx prisma generate --no-hints
 
 RUN pnpm build
 
+RUN mkdir /usr/src/app/static/documents
+
+RUN mkdir /usr/src/app/static/documents/sop
+
+RUN mkdir /usr/src/app/static/documents/loa
+
+RUN mkdir /usr/src/app/static/documents/misc
+
 USER node
+
+RUN ls /usr/src/app
 
 CMD node ./build/index.js

@@ -133,7 +133,7 @@ export async function getStaffRoles(cid: number, type: string): Promise<boolean>
       }
     }
     case "roster": {
-      if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("TA")) {
+      if (roleString.includes("ATM") || roleString.includes("DATM") || roleString.includes("WT") || roleString.includes("TA") || roleString.includes("MTR") || roleString.includes("INS")) {
         return true;
       }
       break;
