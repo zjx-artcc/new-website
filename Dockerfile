@@ -25,4 +25,12 @@ RUN pnpm build
 
 USER node
 
+RUN mkdir /usr/src/app/static/documents
+
+RUN mkdir /usr/src/app/static/documents/sop
+
+RUN mkdir /usr/src/app/static/documents/loa
+
+RUN mkdir /usr/src/app/static/documents/misc
+
 CMD node ./build/index.js
