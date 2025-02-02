@@ -42,12 +42,12 @@
   }
 </script>
 
-<div class="px-4 py-3 flex flex-col relative">
-  <a href={`/profile/${cid}`} class="flex flex-row items-center transition hover:scale-105">
+<div class="px-4 py-3 flex flex-col relative transition hover:bg-sky-300">
+  <a href={`/profile/${cid}`} class="flex flex-row items-center transition">
     <h1 class="font-semibold text-3xl">{rank}</h1>
     <h3 class="ml-1 self-start">{ending}</h3>
 
-    <div class="ml-5 flex flex-col">
+    <div class="ml-5 my-5 flex flex-col absolute left-16">
       <h1 class="text-xl">{name}</h1>
       <h2 class="text-md">{getDurationString(duration)} hours</h2>
     </div>

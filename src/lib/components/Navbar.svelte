@@ -28,6 +28,7 @@
         <NavbarListItem label="Staff" href="/staff" subText="View our staff team" icon="mdi:account-tie"/>
         <NavbarListItem label="Roster" href="/roster" subText="View our memebers" icon="mdi:list-box"/>
         <NavbarListItem label="SOPs & Downloads" href="/documents" subText="Download tools" icon="mdi:download"/>
+        <NavbarListItem label="Legacy SOPs" href="https://www.idszjxartcc.org/index.php?title=Main_Page" subText="For reference" icon="mdi:book"/>
         {#if $page.data.session == null || ($page.data.session != null && $page.data.session.user.rostered != true)}
           <NavbarListItem label="Visit" href="/visit" subText="Submit a visiting request" icon="mdi:person"/>
         {/if}
