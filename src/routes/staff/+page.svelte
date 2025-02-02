@@ -4,7 +4,7 @@
 
 	/** @type {{data: any}} */
 	let { data } = $props();
-	let pageData = data.pageData
+	const pageData = data.pageData
 </script>
 
 <svelte:head>
@@ -21,152 +21,150 @@
 	</div>
 </header>
 
-<body>
-	<section class="my-8">
-		<h2 class="text-4xl text-center my-4">Senior Staff</h2>
-		<div class="flex flex-wrap justify-center">
-			<div class="leader-card">
-				<h3 class="text-2xl font-bold">Air Traffic Manager</h3>
-				<p class="text-xl">{pageData.atm.name}</p>
-				<div class="flex justify-center mt-2">
-					<a href={"mailto:" + pageData.atm.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
-				</div>
-			</div>
-			<div class="leader-card">
-				<h3 class="text-2xl font-bold">Deputy Air Traffic Manager</h3>
-				<p class="text-xl">{pageData.datm.name}</p>
-				<div class="flex justify-center mt-2">
-					<a href={"mailto:" + pageData.datm.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
-				</div>
+<section class="my-8">
+	<h2 class="text-4xl text-center my-4">Senior Staff</h2>
+	<div class="flex flex-wrap justify-center">
+		<div class="leader-card">
+			<h3 class="text-2xl font-bold">Air Traffic Manager</h3>
+			<p class="text-xl">{pageData.atm.name}</p>
+			<div class="flex justify-center mt-2">
+				<a href={"mailto:" + pageData.atm.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
 			</div>
 		</div>
-	</section>
-	<section class="my-8">
-		<h2 class="text-4xl text-center my-4">Training Staff</h2>
-		<div class="flex flex-wrap justify-center">
-			<div class="leader-card">
-				<h3 class="text-2xl font-bold">Training Administrator</h3>
-				<p class="text-xl">{pageData.ta.name}</p>
-				<div class="flex justify-center mt-2">
-					<a href={"mailto:" + pageData.ta.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
-				</div>
+		<div class="leader-card">
+			<h3 class="text-2xl font-bold">Deputy Air Traffic Manager</h3>
+			<p class="text-xl">{pageData.datm.name}</p>
+			<div class="flex justify-center mt-2">
+				<a href={"mailto:" + pageData.datm.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
 			</div>
-			<div class="flex flex-wrap justify-center w-full">
-				{#each pageData.ata as ata}
-					<div class="subset-card">
-						<h3 class="text-2xl font-bold">Assistant Training Administrator</h3>
-						<p class="text-xl">{ata.name}</p>
-						<a href={"mailto:" + ata.email} class="text-gray-800">
-							<Icon icon="mdi:email" class="text-3xl" />
-						</a>
-					</div>
-				{/each}
-			</div>
-			<div class="flex flex-wrap justify-center w-full">
-				{#each pageData.ins as ins}
-					<div class="subset-card">
-						<h3 class="text-2xl font-bold">Instructor</h3>
-						<p class="text-xl">{ins.name}</p>
-						<a href={"mailto:" + ins.email} class="text-gray-800">
-							<Icon icon="mdi:email" class="text-3xl" />
-						</a>
-					</div>
-				{/each}
-			</div>
-			<div class="flex flex-wrap justify-center w-full">
-				{#each pageData.mtr as mtr}
-					<div class="subset-card">
-						<h3 class="text-2xl font-bold">Mentor</h3>
-						<p class="text-xl">{mtr.name}</p>
-						<a href={"mailto:" + mtr.email} class="text-gray-800">
-							<Icon icon="mdi:email" class="text-3xl" />
-						</a>
-					</div>
-				{/each}
 		</div>
-	</section>
-	<section class="my-8">
-		<h2 class="text-4xl text-center my-4">Facility Staff</h2>
-		<div class="flex flex-wrap justify-center">
-			<div class="leader-card">
-				<h3 class="text-2xl font-bold">Facility Engineer</h3>
-				<p class="text-xl">{pageData.fe.name}</p>
-				<div class="flex justify-center mt-2">
-					<a href={"mailto:" + pageData.fe.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
-				</div>
+	</div>
+</section>
+<section class="my-8">
+	<h2 class="text-4xl text-center my-4">Training Staff</h2>
+	<div class="flex flex-wrap justify-center">
+		<div class="leader-card">
+			<h3 class="text-2xl font-bold">Training Administrator</h3>
+			<p class="text-xl">{pageData.ta.name}</p>
+			<div class="flex justify-center mt-2">
+				<a href={"mailto:" + pageData.ta.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
 			</div>
 		</div>
 		<div class="flex flex-wrap justify-center w-full">
-			{#each pageData.afe as afe}
+			{#each pageData.ata as ata}
 				<div class="subset-card">
-					<h3 class="text-2xl font-bold">Assistant Facility Engineer</h3>
-					<p class="text-xl">{afe.name}</p>
-					<a href={"mailto:" + afe.email} class="text-gray-800">
+					<h3 class="text-2xl font-bold">Assistant Training Administrator</h3>
+					<p class="text-xl">{ata.name}</p>
+					<a href={"mailto:" + ata.email} class="text-gray-800">
 						<Icon icon="mdi:email" class="text-3xl" />
 					</a>
 				</div>
 			{/each}
 		</div>
-	</section>
-	<section class="my-8">
-		<h2 class="text-4xl text-center my-4">Events Team</h2>
-		<div class="flex flex-wrap justify-center">
-			<div class="leader-card">
-				<h3 class="text-2xl font-bold">Events Coordinator</h3>
-				<p class="text-xl">{pageData.ec.name}</p>
-				<div class="flex justify-center mt-2">
-					<a href={"mailto:" + pageData.ec.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
-				</div>
-			</div>
-		</div>
 		<div class="flex flex-wrap justify-center w-full">
-			{#each pageData.aec as aec}
+			{#each pageData.ins as ins}
 				<div class="subset-card">
-					<h3 class="text-2xl font-bold">Assistant Events Coordinator</h3>
-					<p class="text-xl">{aec.name}</p>
-					<a href={"mailto:" + aec.email} class="text-gray-800">
+					<h3 class="text-2xl font-bold">Instructor</h3>
+					<p class="text-xl">{ins.name}</p>
+					<a href={"mailto:" + ins.email} class="text-gray-800">
 						<Icon icon="mdi:email" class="text-3xl" />
 					</a>
 				</div>
 			{/each}
 		</div>
-	</section>
-	<section class="my-8">
-		<h2 class="text-4xl text-center my-4">Web Team</h2>
-		<div class="flex flex-wrap justify-center">
-			<div class="leader-card">
-				<h3 class="text-2xl font-bold">Webmaster</h3>
-				<p class="text-xl">{pageData.wm.name}</p>
-				<div class="flex justify-center mt-2">
-					<a href={"mailto:" + pageData.wm.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
-				</div>
-			</div>
-		</div>
 		<div class="flex flex-wrap justify-center w-full">
-			{#each pageData.awm as awm}
+			{#each pageData.mtr as mtr}
 				<div class="subset-card">
-					<h3 class="text-2xl font-bold">Assistant Webmaster</h3>
-					<p class="text-xl">{awm.name}</p>
-					<a href={"mailto:" + awm.email} class="text-gray-800">
+					<h3 class="text-2xl font-bold">Mentor</h3>
+					<p class="text-xl">{mtr.name}</p>
+					<a href={"mailto:" + mtr.email} class="text-gray-800">
 						<Icon icon="mdi:email" class="text-3xl" />
 					</a>
 				</div>
 			{/each}
+	</div>
+</section>
+<section class="my-8">
+	<h2 class="text-4xl text-center my-4">Facility Staff</h2>
+	<div class="flex flex-wrap justify-center">
+		<div class="leader-card">
+			<h3 class="text-2xl font-bold">Facility Engineer</h3>
+			<p class="text-xl">{pageData.fe.name}</p>
+			<div class="flex justify-center mt-2">
+				<a href={"mailto:" + pageData.fe.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
+			</div>
 		</div>
-	</section>
-</body>
+	</div>
+	<div class="flex flex-wrap justify-center w-full">
+		{#each pageData.afe as afe}
+			<div class="subset-card">
+				<h3 class="text-2xl font-bold">Assistant Facility Engineer</h3>
+				<p class="text-xl">{afe.name}</p>
+				<a href={"mailto:" + afe.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
+			</div>
+		{/each}
+	</div>
+</section>
+<section class="my-8">
+	<h2 class="text-4xl text-center my-4">Events Team</h2>
+	<div class="flex flex-wrap justify-center">
+		<div class="leader-card">
+			<h3 class="text-2xl font-bold">Events Coordinator</h3>
+			<p class="text-xl">{pageData.ec.name}</p>
+			<div class="flex justify-center mt-2">
+				<a href={"mailto:" + pageData.ec.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="flex flex-wrap justify-center w-full">
+		{#each pageData.aec as aec}
+			<div class="subset-card">
+				<h3 class="text-2xl font-bold">Assistant Events Coordinator</h3>
+				<p class="text-xl">{aec.name}</p>
+				<a href={"mailto:" + aec.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
+			</div>
+		{/each}
+	</div>
+</section>
+<section class="my-8">
+	<h2 class="text-4xl text-center my-4">Web Team</h2>
+	<div class="flex flex-wrap justify-center">
+		<div class="leader-card">
+			<h3 class="text-2xl font-bold">Webmaster</h3>
+			<p class="text-xl">{pageData.wm.name}</p>
+			<div class="flex justify-center mt-2">
+				<a href={"mailto:" + pageData.wm.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="flex flex-wrap justify-center w-full">
+		{#each pageData.awm as awm}
+			<div class="subset-card">
+				<h3 class="text-2xl font-bold">Assistant Webmaster</h3>
+				<p class="text-xl">{awm.name}</p>
+				<a href={"mailto:" + awm.email} class="text-gray-800">
+					<Icon icon="mdi:email" class="text-3xl" />
+				</a>
+			</div>
+		{/each}
+	</div>
+</section>
 
 <style>
 

@@ -34,7 +34,7 @@ model ControllerSession {
   start     DateTime? @db.Timestamptz(6)
   active    Boolean
   end       DateTime? @db.Timestamptz(6)
-  duration  Int?      @default(0)
+  duration  Int?      @default(dbgenerated("EXTRACT(epoch FROM (\"end\" - start))"))
   roster    Roster    @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("controller_sessions")
