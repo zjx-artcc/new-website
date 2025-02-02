@@ -2,8 +2,6 @@
 
 ## Information
 This is the new website for the [Virtual Jacksonville ARTCC](https://zjxartcc.org), part of the [VATSIM](https://vatsim.net) Network.
-> [!WARNING]
-> THIS REPOSITORY IS NOT PRODUCTION READY
 
 ## Useful Links
 https://vatusa-api.ztlartcc.org/ - Meaningful VATUSA API documentation
