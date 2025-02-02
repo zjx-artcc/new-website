@@ -1,10 +1,19 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
   import { deserialize } from "$app/forms";
-  export let data;
-  export let type;
-  export let hidePopup;
-  export let form;
+  interface Props {
+    data: any;
+    type: any;
+    hidePopup: any;
+    form: any;
+  }
+
+  let {
+    data,
+    type,
+    hidePopup,
+    form
+  }: Props = $props();
   let allowSubmit = true
 
   function formatSoloCertTimeString(time: Date): string {
@@ -48,8 +57,8 @@
 
       if(result.type == "success") {
         hidePopup(true, true, "Action Success")
-      } else {
-        hidePopup(true, false, result.status + " " + result.data.message)
+      } else if (result.type == "error") {
+        hidePopup(true, false, result.status + " " + result.error)
         
       }
     }
@@ -71,13 +80,13 @@
 </script>
 
 <div class="relative z-50 flex flex-col items-center place-items-center bg-gray-200 px-4 py-2 border-2 border-gray-400">
-  <button on:click={() => hidePopup(false, false, "")}>
+  <button onclick={() => hidePopup(false, false, "")}>
     <Icon icon="mdi:close" class="w-5 h-5 absolute top-2 right-2"/>
   </button>
 
   <h2 class="font-bold text-xl text-sky-500">{getTypeString(type)}</h2>
 
-  <form class="flex flex-col p-2 space-y-4 w-72" on:submit={handleSubmit}>
+  <form class="flex flex-col p-2 space-y-4 w-72" onsubmit={handleSubmit}>
       <div class="flex flex-col">
         <label class="font-bold" for="student_cid">Student (CID)</label>
         <input class="px-2" readonly value={`${data.studentName} (${data.studentCid})`}>

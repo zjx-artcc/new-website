@@ -5,7 +5,8 @@
 	import ATCCard from '$lib/components/ATCCard.svelte';
 
 	const today = new Date();
-	export let data;
+	/** @type {{data: any}} */
+	let { data } = $props();
 	const pageData = data.pageData;
 	const currentMonthName = today.toLocaleString('en-US', { month: 'long' });
 </script>

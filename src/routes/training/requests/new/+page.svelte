@@ -3,17 +3,21 @@
 	import Icon from '@iconify/svelte';
   import ResponseBox from '$lib/components/ResponseBox.svelte';
 	import VisitRow from '$lib/components/VisitRow.svelte';
-  export let data;
+  interface Props {
+    data: any;
+  }
+
+  let { data }: Props = $props();
   const pageData = data.pageData;
 
-  let type = 0;
+  let type = $state(0);
   //@ts-ignore
-  let responseBox: ResponseBox = {
+  let responseBox: ResponseBox = $state({
     bgColor: "",
     header: "",
     text: "",
     hidden: true
-  }
+  })
 
   async function submitRequest() {
     if (type == 0) {
@@ -87,7 +91,7 @@
 		<h2 class="text-xl text-center font-semibold mb-4 border-b-2 border-gray-400">Submit Request</h2>
 		<div class="flex flex-col place-items-center">
 			
-      <select class="mb-4 pl-1 bg-white" bind:value={type} on:change={() => console.log(type)}>
+      <select class="mb-4 pl-1 bg-white" bind:value={type} onchange={() => console.log(type)}>
         <option value="1">S1 Rating</option>
         <option value="1.5">Orlando Ground/Delivery</option>
         <option value="2">S2 Rating</option>
@@ -97,7 +101,7 @@
         <option value="4">C1 Rating</option>
       </select>
 
-			<button class="bg-green-500 p-3 w-24 font-semibold rounded-md" on:click={submitRequest}>
+			<button class="bg-green-500 p-3 w-24 font-semibold rounded-md" onclick={submitRequest}>
 				Submit
 			</button>
 		</div>

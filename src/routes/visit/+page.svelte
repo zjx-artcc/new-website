@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: Identifier 'ResponseBox' has already been declared -->
 <script lang="ts">
 	import '$lib/app.css';
 	import VisitRow from '$lib/components/VisitRow.svelte';
@@ -6,7 +7,7 @@
 	//import { getRating } from '$lib/db.js';
 	export let data;
 	let visitReason: string = ""
-	let responseBox: ResponseBox = {
+	let responseBox: ResponseBoxType = {
 		bgColor: "",
 		header: "",
 		text: "",
@@ -37,7 +38,7 @@
 		responseBox.hidden = false
 	}
 
-	type ResponseBox = {
+	type ResponseBoxType = {
 		bgColor: string;
 		header: string;
 		text: string;

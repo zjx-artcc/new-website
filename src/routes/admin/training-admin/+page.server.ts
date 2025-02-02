@@ -13,12 +13,6 @@ export const load = async( {locals} ) => {
 
   if (!await getStaffRoles(locals.session.userId, 'training')) {
     redirect(403, '/')
-    return {
-      status: 403,
-      headers: {
-        location: '/forbidden'
-      }
-    }
   }
 
   // Get Instructors

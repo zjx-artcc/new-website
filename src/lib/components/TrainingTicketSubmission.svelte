@@ -2,12 +2,21 @@
 	import { deserialize, enhance } from "$app/forms";
   import Icon from "@iconify/svelte";
 	import { onDestroy, onMount } from "svelte";
-  export let hidePopup
-  export let data
-  export let form
-  export let instructor // note: this is a read only value and is checked on the server.
+  interface Props {
+    hidePopup: any;
+    data: any;
+    form: any;
+    instructor: any;
+  }
 
-  let score = 5
+  let {
+    hidePopup,
+    data,
+    form,
+    instructor
+  }: Props = $props();
+
+  let score = $state(5)
   let allowSubmit = true
 
   type TrainingData = {
@@ -48,7 +57,7 @@ const handleSubmit = async(e) => {
 
 
 <div class="relative z-50 flex flex-col items-center place-items-center bg-gray-200 px-4 py-2 border-2 border-gray-400">
-  <button on:click={() => hidePopup(false, false, "")}>
+  <button onclick={() => hidePopup(false, false, "")}>
     <Icon icon="mdi:close" class="w-5 h-5 absolute top-2 right-2"/>
   </button>
 
@@ -57,7 +66,7 @@ const handleSubmit = async(e) => {
   <div>
     <form class="flex flex-col p-2 space-y-4 w-96" 
     id="form"
-    on:submit={handleSubmit}>
+    onsubmit={handleSubmit}>
       <div class="flex flex-col">
         <label class="font-bold" for="instructor_cid">Instructor (CID)</label>
         <input class="px-2" readonly value={`${instructor.firstName + " " + instructor.lastName} (${instructor.id})`}>
@@ -107,7 +116,7 @@ const handleSubmit = async(e) => {
 
       <div class="flex flex-col">
         <label class="font-bold" for="notes">Training Notes <span class="text-red-500 font-bold">*</span></label>
-        <textarea name="notes" required={true} class="invalid:border-2 invalid:border-red-500 h-36 text-sm resize-none p-2"/>
+        <textarea name="notes" required={true} class="invalid:border-2 invalid:border-red-500 h-36 text-sm resize-none p-2"></textarea>
       </div>
 
       <div class="flex flex-col">

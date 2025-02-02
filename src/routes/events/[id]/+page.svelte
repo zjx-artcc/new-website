@@ -2,7 +2,11 @@
 	import { invalidateAll } from '$app/navigation';
   import Icon from '@iconify/svelte';
   import { page } from '$app/stores';
-  export let data;
+  interface Props {
+    data: any;
+  }
+
+  let { data }: Props = $props();
 
   let pageData = data.pageData;
 
@@ -98,7 +102,7 @@
             {:else if position.canRequest}
               <div id="positions" class="px-2.5 inline-flex">
                 <p class="text-left pr-5">{position.position}: </p>
-                <button on:click={() => requestPosition(position.id)} class="text-right text-blue-500">Request Position</button>
+                <button onclick={() => requestPosition(position.id)} class="text-right text-blue-500">Request Position</button>
               </div>
               <br>
             {:else if !position.canRequest}

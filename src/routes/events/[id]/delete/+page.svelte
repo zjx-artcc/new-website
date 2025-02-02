@@ -2,7 +2,8 @@
 	import Icon from '@iconify/svelte';
 	import { goto } from '$app/navigation';
 
-	export let data;
+	/** @type {{data: any}} */
+	let { data } = $props();
 	let pageData = data.pageData;
 
 	async function deleteEvent() {
@@ -26,7 +27,7 @@
 		<div
 			class="absolute inset-0 bg-cover bg-center"
 			style="background-image: url({pageData.event.banner}); filter: blur(5px)  brightness(60%); border: 0;"
-		/>
+		></div>
 		<div class="relative">
 			<div
 				class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]"
@@ -72,10 +73,10 @@
 	<h1 class="text-3xl">Are you sure you want to delete {pageData.event.name}?</h1>
 	<button
 		class="bg-green-500 text-white px-2 align-middle rounded-md text-xl"
-		on:click={() => goto(`/events/${pageData.event.id}`)}>No, Go Back!</button
+		onclick={() => goto(`/events/${pageData.event.id}`)}>No, Go Back!</button
 	>
 	<button
 		class="bg-red-500 text-white px-2 align-middle rounded-md text-xl"
-		on:click={() => deleteEvent()}>Yes, I'm Sure</button
+		onclick={() => deleteEvent()}>Yes, I'm Sure</button
 	>
 </div>

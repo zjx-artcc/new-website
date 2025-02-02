@@ -4,15 +4,19 @@
 
   import type { File } from '@prisma/client';
 
-  export let data;
+  interface Props {
+    data: any;
+  }
+
+  let { data }: Props = $props();
   let pageData = data.pageData;
 
-  let targetData: File = undefined;
+  let targetData: File = $state(undefined);
 
-  let deleteModal = false;
-  let editModal = false;
+  let deleteModal = $state(false);
+  let editModal = $state(false);
 
-  let target = "";
+  let target = $state("");
 
   async function deleteResource(id: string) {
     const req = await fetch('/documents/', {
@@ -79,8 +83,8 @@
   <div class="text-center">
     <Icon icon="mdi:error-outline" class="mx-auto mb-4 text-gray-400 w-12 h-12"/>
     <h3 class="mb-5 text-lg font-normal text-gray-500 ">Are you sure you want to delete this document?</h3>
-    <button class="bg-red-500 text-white px-2 py-1 rounded-md" on:click={() => deleteResource(target)}>Yes</button>
-    <button class="bg-blue-500 text-white px-2 py-1 rounded-md" on:click={() => deleteModal = false}>No</button>
+    <button class="bg-red-500 text-white px-2 py-1 rounded-md" onclick={() => deleteResource(target)}>Yes</button>
+    <button class="bg-blue-500 text-white px-2 py-1 rounded-md" onclick={() => deleteModal = false}>No</button>
   </div>
 </Modal>
 
@@ -110,7 +114,7 @@
           <option value="vatis">vATIS</option>
           <option value="misc">Miscellaneous</option>
       </div>
-      <button class="bg-green-500 text-white px-2 py-1 mt-2 rounded-md" on:click={() => editResource(targetData)}>Save</button>
+      <button class="bg-green-500 text-white px-2 py-1 mt-2 rounded-md" onclick={() => editResource(targetData)}>Save</button>
       <button class="bg-blue-500 text-white px-2 py-1 mt-2 rounded-md">Cancel</button>
     </div>
   </div>
@@ -135,8 +139,8 @@
               <div class="table-cell text-center">
                 <a href="/{sop.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
                 {#if pageData.canEdit}
-                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" on:click={() => {editModal = true; targetData = sop}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
-                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => { deleteModal = true; target = sop.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" onclick={() => {editModal = true; targetData = sop}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" onclick={() => { deleteModal = true; target = sop.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
                 {/if} 
               </div>
             </div>
@@ -161,8 +165,8 @@
               <div class="table-cell text-center">
                 <a href="/{loa.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
                 {#if pageData.canEdit}
-                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" on:click={() => {editModal = true; targetData = loa}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
-                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => { deleteModal = true; target = loa.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" onclick={() => {editModal = true; targetData = loa}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" onclick={() => { deleteModal = true; target = loa.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
                 {/if} 
               </div>
             </div>
@@ -187,8 +191,8 @@
               <div class="table-cell text-center">
                 <a href="/{vatis.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
                 {#if pageData.canEdit}
-                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" on:click={() => {editModal = true; targetData = vatis}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
-                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => { deleteModal = true; target = vatis.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" onclick={() => {editModal = true; targetData = vatis}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" onclick={() => { deleteModal = true; target = vatis.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
                 {/if}  
               </div>
             </div>
@@ -213,8 +217,8 @@
               <div class="table-cell text-center">
                 <a href="/{misc.path}" class="bg-green-500 rounded-full inline-flex items-center p-1" target="_blank"><Icon icon="mdi:eye-outline" color="white" width="20px"/></a>
                 {#if pageData.canEdit}
-                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" on:click={() => {editModal = true; targetData = misc}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
-                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" on:click={() => { deleteModal = true; target = misc.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
+                  <button class="bg-yellow-500 rounded-full inline-flex items-center p-1" onclick={() => {editModal = true; targetData = misc}}><Icon icon="mdi:pencil" color="white" width="20px"/></button>
+                  <button class="bg-red-500 rounded-full inline-flex items-center p-1" onclick={() => { deleteModal = true; target = misc.id }}><Icon icon="mdi:trash-can-outline" color="white" width="20px"/></button>
                 {/if} 
               </div>
             </div>

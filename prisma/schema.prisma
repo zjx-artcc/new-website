@@ -150,16 +150,18 @@ model StaffRole {
 }
 
 model Stats {
-  cid           Int    @id
-  current_month Float  @default(0.0)
-  ytd           Int?
-  all_time      Int?
-  delivery      Int?
-  ground        Int?
-  tower         Int?
-  tracon        Int?
-  enroute       Int?
-  roster        Roster @relation(fields: [cid], references: [cid], onDelete: Cascade)
+  cid         Int    @id
+  ytd         Int?   @default(0)
+  all_time    Int?   @default(0)
+  delivery    Int?   @default(0)
+  ground      Int?   @default(0)
+  tower       Int?   @default(0)
+  tracon      Int?   @default(0)
+  enroute     Int?   @default(0)
+  month_one   Int?   @default(0)
+  month_two   Int?   @default(0)
+  month_three Int?   @default(0)
+  roster      Roster @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("stats")
 }

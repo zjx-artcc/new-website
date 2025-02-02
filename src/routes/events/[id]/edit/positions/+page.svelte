@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: `<tr>` is invalid inside `<table>` -->
 <script lang="ts">
   //@ts-nocheck
   import '$lib/app.css';
@@ -131,6 +132,7 @@
           </tr>
         {/each}
       {/key}
+
     </table>
     <hr>
     <div class="pb-5 flex align-middle justify-center items-center mt-3">

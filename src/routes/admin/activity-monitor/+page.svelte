@@ -37,7 +37,7 @@
 
 			for (let j = 0; j < data.userData[i].controllerSessions.length; j++) {
 				const session = data.userData[i].controllerSessions[j];
-				if (session.start.getTime() >= beginDate && session.start.getTime() <= endDate) {
+				if (session.end != null && session.start.getTime() >= beginDate && session.start.getTime() <= endDate) {
 					controllingMseconds += session.end.getTime() - session.start.getTime();
 				}
 			}
@@ -68,12 +68,23 @@
 
 	// variables
 
-	export let currentDate = new Date();
-	export let data;
-	export let years = [];
-	export let selectedYear: number = currentDate.getFullYear();
-	export let quarterInt: number = getCurrentQuarter();
-	export let displayConflictsOnly: boolean = true;
+	interface Props {
+		currentDate?: any;
+		data: any;
+		years?: any;
+		selectedYear?: number;
+		quarterInt?: number;
+		displayConflictsOnly?: boolean;
+	}
+
+	let {
+		currentDate = new Date(),
+		data = $bindable(),
+		years = [],
+		selectedYear = $bindable(currentDate.getFullYear()),
+		quarterInt = $bindable(getCurrentQuarter()),
+		displayConflictsOnly = $bindable(true)
+	}: Props = $props();
 
 	// Init years table
 	for (let i = currentDate.getUTCFullYear(); i >= 2023; i--) {
@@ -93,7 +104,7 @@
 			<div class="flex-wrap justify-items-center mx-10">
 				<h1 class="text-lg text-grey-300 text-center font-bold mb-3">Select Year</h1>
 
-				<select class="w-20 text-center" bind:value={selectedYear} on:change={updateTable}>
+				<select class="w-20 text-center" bind:value={selectedYear} onchange={updateTable}>
 					{#each years as year}
 						<option>{year}</option>
 					{/each}
@@ -102,7 +113,7 @@
 
 			<div class="flex-wrap justify-items-center mx-10">
 				<h1 class="text-lg text-grey-300 text-center font-bold mb-3">Select Quarter</h1>
-				<select bind:value={quarterInt} on:change={updateTable}>
+				<select bind:value={quarterInt} onchange={updateTable}>
 					<option>Select Quarter</option>
 					<option value="1">Q1 (January - March)</option>
 					<option value="2">Q2 (April - June)</option>
@@ -117,7 +128,7 @@
 					class="accent-sky-500 h-5 w-5"
 					type="checkbox"
 					bind:checked={displayConflictsOnly}
-					on:change={updateTable}
+					onchange={updateTable}
 				/>
 			</div>
 		</div>
