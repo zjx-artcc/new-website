@@ -5,6 +5,8 @@ services:
       - 3700:3700
     container_name: new-website
     restart: always
+    environment:
+      BODY_SIZE_LIMIT: "5e+7"
     volumes:
       - new-website:/usr/src/app/static/documents
   
