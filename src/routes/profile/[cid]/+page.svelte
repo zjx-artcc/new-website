@@ -36,7 +36,7 @@
 			{/each}
 		</h3>
 	</div>
-</header>
+</div>
 
 <div id="breadcrumbs" class="border-b">
   <div class="py-1.5 text-center">
@@ -254,3 +254,4 @@
 			</div>
 		</div>
 	</div>
+</div>
