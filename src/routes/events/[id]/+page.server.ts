@@ -113,6 +113,10 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
   //See if the user can edit the event
   pageData.canEdit = await getStaffRoles(pageData.cid, "events");
 
+  if (pageData.positionRequested != '') {
+    pageData.canRequest = false;
+  }
+
   return {pageData: { ...pageData }};
 }
 
