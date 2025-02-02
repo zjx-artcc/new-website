@@ -92,13 +92,13 @@
 		<div class="flex flex-col place-items-center">
 			
       <select class="mb-4 pl-1 bg-white" bind:value={type} onchange={() => console.log(type)}>
-        <option value="1">S1 Rating</option>
-        <option value="1.5">Orlando Ground/Delivery</option>
-        <option value="2">S2 Rating</option>
-        <option value="2.5">Orlando Tower</option>
-        <option value="3">S3 Rating</option>
-        <option value="3.5">F11 Tracon</option>
-        <option value="4">C1 Rating</option>
+        <option value="S1">S1 Rating</option>
+        <option value="MCO GND">Orlando Ground/Delivery</option>
+        <option value="S2">S2 Rating</option>
+        <option value="MCO TWR">Orlando Tower</option>
+        <option value="S3">S3 Rating</option>
+        <option value="F11">F11 Tracon</option>
+        <option value="C1">C1 Rating</option>
       </select>
 
 			<button class="bg-green-500 p-3 w-24 font-semibold rounded-md" onclick={submitRequest}>
