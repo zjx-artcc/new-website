@@ -41,6 +41,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 		});
 	
 		for (let i = 0; i < requests.length; i++) {
+			console.log(requests[i]);
 			let user = await prisma.roster.findFirst({
 				where: {
 					cid: requests[i].cid
@@ -74,6 +75,8 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 			pageData.positions[i].controller = "none";
 		}
 	}
+
+	console.log(pageData.positions[0].requests);
 	
 
 	return {pageData: { ...pageData }};

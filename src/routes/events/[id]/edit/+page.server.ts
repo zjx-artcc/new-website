@@ -76,8 +76,7 @@ export const actions: Actions = {
       end: new Date(formData.get("end").toString()),
       host: formData.get("host").toString(),
       hidden: formData.get("hidden") == "on" ? true : false,
-      banner: formData.get("banner").toString(),
-      positions: JSON.stringify([])
+      banner: formData.get("banner").toString()
     }
     
 
