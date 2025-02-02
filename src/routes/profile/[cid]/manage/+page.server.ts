@@ -103,7 +103,21 @@ export const actions: Actions = {
       user.ctrCert = getCtrCertInt(formData.get('enroute').toString());
 
       let staffRoles = formData.getAll('roles');
-      console.log(staffRoles);
+
+      //Drop all roles
+      let roles = await prisma.staffRole.deleteMany({
+        where: {
+          cid: user.cid
+        }
+      })
+      if (roles == null) {
+        return {
+          status: 500,
+          body: {
+            error: "Failed to update user roles"
+          }
+        }
+      }
       
       for(let i = 0; i < staffRoles.length; i++) {
         let role = await prisma.staffRole.upsert({
@@ -119,6 +133,15 @@ export const actions: Actions = {
           },
           update: {}
         })
+        
+        if (role == null) {
+          return {
+            status: 500,
+            body: {
+              error: "Failed to update user roles"
+            }
+          }
+        }
       }
 
       let update = await prisma.roster.update({

@@ -36,7 +36,7 @@
 			{/each}
 		</h3>
 	</div>
-</div>
+</header>
 
 <div id="breadcrumbs" class="border-b">
   <div class="py-1.5 text-center">
@@ -115,7 +115,7 @@
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 			{#if pageData.onRoster}
 				<div class="flex flex-col space-y-1.5 p-6">
-					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+					<h3 class="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
 						Certifications
 					</h3>
 					<hr class="px-1 border-slate-300">
@@ -231,7 +231,7 @@
 		
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm " data-v0-t="card">
 			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+				<h3 class="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
 					Actions
 				</h3>
 				<hr class="px-1 border-slate-300">
@@ -254,4 +254,3 @@
 			</div>
 		</div>
 	</div>
-</div>

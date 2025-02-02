@@ -3,9 +3,7 @@ import { prisma } from '$lib/db';
 import { getPositionType } from '$lib/events.js';
 
 import type { PageServerLoad } from './$types';
-import type { Event, PositionRequest, EventPosition } from '@prisma/client';
-
-const positionOrder = ['DEL', 'GND', 'TWR', 'APP', 'CTR'];
+import type { Event, PositionRequest } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	//Setup page data
@@ -16,7 +14,7 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 
 	//Load event
 	if (params.id == 'undefined') {
-		error(404, 'Not Found');
+		error(404, 'Not Found'); 
 	} else {
 		const data: Event = await prisma.event.findUnique({
 			where: {
@@ -29,7 +27,6 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 		} else {
 			pageData.event = data;
 		}
-		
 		//@ts-ignore
 		pageData.positions = await prisma.eventPosition.findMany({
 			where: {
@@ -62,7 +59,6 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	}
 
 	for (let i = 0; i < pageData.positions.length; i++) {
-		console.log(pageData.positions[i].controller);
 		if (pageData.positions[i].controller != null) {
 			let name = await prisma.roster.findFirst({
 				where: {
@@ -82,27 +78,6 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 
 	return {pageData: { ...pageData }};
 };
-
-function sortPositions(a, b) {
-	//Get airport and type
-	const airportA = a.split('_')[0];
-	const airportB = b.split('_')[0];
-	const positionTypeA = a.split('_')[1];
-	const positionTypeB = b.split('_')[1];
-
-	//Sort by airport then type
-	if (airportA < airportB) {
-		return -1;
-	} else if (airportA > airportB) {
-		return 1;
-	} else if (positionTypeA < positionTypeB) {
-		return -1;
-	} else if (positionTypeA > positionTypeB) {
-		return 1;
-	} else {
-		return 0;
-	}
-}
 
 class PageData {
 	canEdit: Boolean;

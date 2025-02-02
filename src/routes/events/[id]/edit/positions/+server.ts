@@ -1,9 +1,21 @@
-import { prisma } from "$lib/db.js";
+import { getStaffRoles, prisma } from "$lib/db.js";
 import { json } from '@sveltejs/kit'
 
 import type { RequestHandler } from "./$types";
 
-export const POST: RequestHandler = async ({request, params}) => {
+export const POST: RequestHandler = async ({request, params, locals}): Promise<Response> => {
+  if (locals.session == null) {
+    return new Response("Please log in and try again", {
+      status: 400,
+    })
+  }
+
+  if (!await getStaffRoles(locals.user.id, "events")) {
+    return new Response("You do not have permission to edit events", {
+      status: 403
+    })
+  }
+
   const req = await request.json();
   const event: number = parseInt(params.id);
   const positions: Position[] = req.positions;
@@ -13,15 +25,14 @@ export const POST: RequestHandler = async ({request, params}) => {
       positions[i].type = getPositionType(positions[i].position);
     }
   }
-
+  
   //Strip requests property from each position and remove requests for position
   for (let i = 0; i < positions.length; i++) {
     delete positions[i].requests;
-    console.log(positions[i]);
 
     if (positions[i].eventId == undefined) {
       //New position
-      positions[i].controller = null;
+      positions[i].controller = "none";
       positions[i].eventId = event;
 
       await prisma.eventPosition.create({
@@ -44,19 +55,53 @@ export const POST: RequestHandler = async ({request, params}) => {
       })
       positions[i].controller = cid.cid.toString();
       
-      
       await prisma.eventPosition.update({
         where: {
           id: positions[i].id
         },
         data: {
+          id: positions[i].id,
+          type: positions[i].type,
           controller: parseInt(positions[i].controller),
+          position: positions[i].position,
+          eventId: event
         }
       })
     }
   }
 
   return json({success: true})
+}
+
+export const DELETE: RequestHandler = async ({ request, locals }): Promise<Response> => {
+  const req = await request.json();
+  const id = req.id;
+  
+  if (locals.session == null) {
+    return new Response("Please log in and try again", {
+      status: 400,
+    })
+  }
+  if (!await getStaffRoles(locals.user.id, "events")) {
+    return new Response("You do not have permission to edit events", {
+      status: 403
+    })
+  }
+
+  const data = await prisma.eventPosition.delete({
+    where: {
+      id: id
+    }
+  })
+
+  if (data == null) {
+    return new Response("Position not found", {
+      status: 404
+    })
+  }
+
+  return json({success: true})
+  
 }
 
 class Position {
