@@ -253,7 +253,7 @@
 									</button>
 								{/if}
 
-								<a class="transition group w-5 h-5 relative" href={`/training/${trainingRequest.studentCid}`}>
+								<a class="transition group w-5 h-5 relative" href={`/profile/${trainingRequest.studentCid}`}>
 									<Icon icon="mdi:person"/>
 									<p class="w-max border-2 border-gray-300 rounded-md absolute hidden bg-gray-100 top-6 left-0 z-50 p-1 group-hover:inline-block">View Student Profile</p>
 								</a>

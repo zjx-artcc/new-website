@@ -3,9 +3,9 @@
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
 
-	/** @type {{data: any}} */
-	let { data } = $props();
+	export let data
 	let pageData = data.pageData;
+	console.log(pageData.training)
 </script>
 
 <svelte:head>
@@ -168,46 +168,49 @@
 				</table>
 			</div>
 		</div>
-		
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Recent Training Sessions
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<table class="text-center">
-					<thead class="border-b">
-						<tr>
-							<th>Date</th>
-							<th>Type</th>
-							<th>Position</th>
-							<th>Training Staff</th>
-							<th>Notes</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each pageData.training as session}
-							{#if session != null}
-								<tr>
-									<td class="text-sm text-slate-600">{session.start.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
-									<td class="text-sm text-slate-600">{session.start.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.end.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.callsign}</td>
-									<td class="text-sm text-slate-600"></td>
-								</tr>
-							{:else}
-								<tr>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-								</tr>
-							{/if}
-						{/each}
-					</tbody>
-				</table> 
+
+		{#if data.pageData.training.length > 0}
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+				<div class="flex flex-col space-y-1.5 p-6">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						Recent Training Sessions
+					</h3>
+					<hr class="px-1 border-slate-300">
+					<table class="text-center">
+						<thead class="border-b">
+							<tr>
+								<th>Date</th>
+								<th>Type</th>
+								<th>Position</th>
+								<th>Training Staff</th>
+								<th>Notes</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each pageData.training as session}
+								
+								{#if session != null}
+									<tr>
+										<td class="text-sm text-slate-600">{session.session_date.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
+										<td class="text-sm text-slate-600">{session.session_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
+										<td class="text-sm text-slate-600">{session.callsign}</td>
+										<td class="text-sm text-slate-600"></td>
+									</tr>
+								{:else}
+									<tr>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+									</tr>
+								{/if}
+							{/each}
+						</tbody>
+					</table> 
+				</div>
 			</div>
-		</div>
+		{/if}
+		
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm " data-v0-t="card">
 			<div class="flex flex-col space-y-1.5 p-6">
 				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">

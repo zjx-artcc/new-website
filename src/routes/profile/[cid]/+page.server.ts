@@ -1,7 +1,7 @@
 import { error as svelteError } from '@sveltejs/kit'
 import { prisma, getRating, getStaffRoles, getCertsColor, getCtrCertColor, getHours } from '$lib/db';
 
-import type { Roster } from '@prisma/client';
+import type { Roster, TrainingSession } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 
 const DisplayMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -71,7 +71,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         callsign: sessionsData[i].callsign,
         duration: calculateTime(sessionsData[i].start, sessionsData[i].end)
       } 
-      console.log(session);
+
       pageData.sessions.push(session);
     }
   }
@@ -81,12 +81,20 @@ export const load: PageServerLoad = async ({ params, locals }) => {
     pageData.sessions.push(null);
   }
 
-  //TODO: Fetch training sessions
-
-  for (let i = pageData.training.length; i < 10; i++) {
-    pageData.training.push(null);
+  if (await getStaffRoles(locals.user?.id, "training") || await getStaffRoles(locals.user?.id, "admin")) {
+    const sessionsQuery = await prisma.trainingSession.findMany({
+      take: 10,
+      where: {
+        student_cid: parseInt(params.cid)
+      }
+    })
+    for (let i = 0; i < sessionsData.length; i++) {
+      if (sessionsQuery[i] != null) {
+        pageData.training.push(sessionsQuery[i])
+      }
+    }
   }
-
+  
   let roles = await prisma.staffRole.findMany({
     where: {
       cid: pageData.user.cid
@@ -126,7 +134,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
     if (i == 3) {
       let hours: Hours = {
         month: "All Time",
-        hours: hoursData == null ? getHours(0) : "1:00" //getHours(hoursData.all_time),
+        hours: hoursData == null ? getHours(0) : getHours(hoursData.all_time),
       }
       pageData.hours.push(hours);
     } else {
@@ -162,7 +170,7 @@ class PageData {
   };
   hours: Hours[];
   sessions: ControllerSession[];
-  training: string[];
+  training: TrainingSession[];
   staffRoles: StaffRoles[];
 
   constructor() {
