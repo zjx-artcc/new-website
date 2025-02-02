@@ -61,9 +61,11 @@
 				<div class="subset-card">
 					<h3 class="text-2xl font-bold">Assistant Training Administrator</h3>
 					<p class="text-xl">{ata.name}</p>
-					<a href={"mailto:" + ata.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
+					<div class="flex justify-center mt-2">
+						<a href={"mailto:" + ata.email} class="text-gray-800">
+							<Icon icon="mdi:email" class="text-3xl" />
+						</a>
+					</div>
 				</div>
 			{/each}
 		</div>
@@ -72,9 +74,11 @@
 				<div class="subset-card">
 					<h3 class="text-2xl font-bold">Instructor</h3>
 					<p class="text-xl">{ins.name}</p>
-					<a href={"mailto:" + ins.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
+					<div class="flex justify-center mt-2">
+						<a href={"mailto:" + ins.email} class="text-gray-800">
+							<Icon icon="mdi:email" class="text-3xl" />
+						</a>
+					</div>
 				</div>
 			{/each}
 		</div>
@@ -83,9 +87,11 @@
 				<div class="subset-card">
 					<h3 class="text-2xl font-bold">Mentor</h3>
 					<p class="text-xl">{mtr.name}</p>
-					<a href={"mailto:" + mtr.email} class="text-gray-800">
-						<Icon icon="mdi:email" class="text-3xl" />
-					</a>
+					<div class="flex justify-center mt-2">
+						<a href={"mailto:" + mtr.email} class="text-gray-800">
+							<Icon icon="mdi:email" class="text-3xl" />
+						</a>
+					</div>
 				</div>
 			{/each}
 	</div>
@@ -108,9 +114,11 @@
 			<div class="subset-card">
 				<h3 class="text-2xl font-bold">Assistant Facility Engineer</h3>
 				<p class="text-xl">{afe.name}</p>
-				<a href={"mailto:" + afe.email} class="text-gray-800">
-					<Icon icon="mdi:email" class="text-3xl" />
-				</a>
+				<div class="flex justify-center mt-2">
+					<a href={"mailto:" + afe.email} class="text-gray-800">
+						<Icon icon="mdi:email" class="text-3xl" />
+					</a>
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -133,9 +141,11 @@
 			<div class="subset-card">
 				<h3 class="text-2xl font-bold">Assistant Events Coordinator</h3>
 				<p class="text-xl">{aec.name}</p>
-				<a href={"mailto:" + aec.email} class="text-gray-800">
-					<Icon icon="mdi:email" class="text-3xl" />
-				</a>
+				<div class="flex justify-center mt-2">
+					<a href={"mailto:" + aec.email} class="text-gray-800">
+						<Icon icon="mdi:email" class="text-3xl" />
+					</a>
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -158,9 +168,11 @@
 			<div class="subset-card">
 				<h3 class="text-2xl font-bold">Assistant Webmaster</h3>
 				<p class="text-xl">{awm.name}</p>
-				<a href={"mailto:" + awm.email} class="text-gray-800">
-					<Icon icon="mdi:email" class="text-3xl" />
-				</a>
+				<div class="flex justify-center mt-2">
+					<a href={"mailto:" + awm.email} class="text-gray-800">
+						<Icon icon="mdi:email" class="text-3xl" />
+					</a>
+				</div>
 			</div>
 		{/each}
 	</div>
