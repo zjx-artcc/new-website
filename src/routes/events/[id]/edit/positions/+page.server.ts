@@ -3,7 +3,8 @@ import { prisma } from '$lib/db';
 import { getPositionType } from '$lib/events.js';
 
 import type { PageServerLoad } from './$types';
-import type { Event, PositionRequest } from '@prisma/client';
+import type { Event } from '@prisma/client';
+import { P } from 'flowbite-svelte';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	//Setup page data
@@ -34,27 +35,44 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 			}
 		});
 	
-		let requests: PositionRequest[] = await prisma.positionRequest.findMany({
+		let requests = await prisma.positionRequest.findMany({
+			select: {
+				cid: true,
+				roster: {
+					select: {
+						firstName: true,
+						lastName: true
+					}
+				},
+				eventId: true,
+				position: true,
+				eventPosition: {
+					select: {
+						position: true
+					}
+				},
+				requestId: true
+			},
 			where: {
 				eventId: pageData.event.id
 			}
 		});
 	
 		for (let i = 0; i < requests.length; i++) {
-			let user = await prisma.roster.findFirst({
-				where: {
-					cid: requests[i].cid
-				},
-				select: {
-					firstName: true,
-					lastName: true
-				}
-			});
 			let position: Position = pageData.positions.find((pos) => pos.id == requests[i].position);
-			if (user != null && position != null) {
-				position.requests = [];
-				position.requests.push({name: `${user.firstName} ${user.lastName}`, ...requests[i]});
-			}
+				let currentRequest = requests[i]
+				//position.requests.push({name: `${currentRequest.roster.firstName} ${currentRequest.roster.lastName}`, ...requests[i]});
+
+				const request = {
+					name: `${currentRequest.roster.firstName} ${currentRequest.roster.lastName}`,
+					eventId: requests[i].eventId,
+					position: requests[i].eventPosition.position,
+					cid: requests[i].cid,
+					requestId: requests[i].requestId,
+				} 
+
+				pageData.positionRequests.push(request)
+			
 		}
 	}
 
@@ -75,12 +93,13 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 		}
 	}
 	
-
+	console.log(pageData.positionRequests)
 	return {pageData: { ...pageData }};
 };
 
 class PageData {
 	canEdit: Boolean;
+	positionRequests: PositionRequest[]
 	cid: Number;
 	event: Event;
 	eventId: Number;
@@ -92,6 +111,7 @@ class PageData {
 		this.eventId = 0;
 		this.event = null;
 		this.positions = [];
+		this.positionRequests = []
 	}
 }
 
@@ -102,4 +122,12 @@ type Position = {
   type: number;
   canRequest: boolean;
   requests: PositionRequest[] & {name: string}[];
+}
+
+type PositionRequest = {
+	eventId: number; 
+	position: string; 
+	cid: number; 
+	requestId: number;
+	name: string;
 }

@@ -56,11 +56,43 @@
       })
     }
   }
-
+  console.log(data.pageData.positionRequests)
   function assignController(position: String, controller: String) {
     //Assign controller to position
   }
 
+/*
+{#key positions.length}
+        {#each positions as row, i}
+          <tr>
+            <td><input name="position-{i}" class="p-0.5 rounded-md text-center" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
+            <td>
+              {#if row.requests != undefined}
+                <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center">
+                  <option value='none'>None</option>
+                  {#each row.requests as request}
+                    <option value={request.name}>{request.name}</option>
+                  {/each}
+                </select>
+              {:else if row.controller != null}
+                <select value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center" disabled >
+                  <option>{row.controller}</option>
+                </select>
+              {:else}
+                <select name="controllers" id="controllers" disabled class="p-1 rounded-md text-center">
+                  <option value="none">No controllers available</option>
+                </select>
+              {/if}
+            </td>
+            <td>
+              <button type="button" class="bg-red-600 text-white p-1 rounded-full text-sm" on:click={() => removePosition(row.id)}>
+                <Icon icon="mdi:remove" />
+              </button>
+            </td>
+          </tr>
+        {/each}
+      {/key}
+*/
 </script>
 
 <svelte:head>
@@ -92,6 +124,28 @@
     </nav>
   </div>
 </div>
+
+<div class="flex justify-center items-center flex-col">
+  <h2 class="text-sky-500 font-bold text-xl">Position Request Summary</h2>
+  <table class="border-2">
+    <thead>
+      <tr>
+        <td class="mx-2 font-bold">Name</td>
+        <td class="mx-2 font-bold">Position Requested</td>
+      </tr>
+    </thead>
+    <tbody class="border-2">
+      {#each pageData.positionRequests as positionRequest}
+        <tr class="border-2">
+          <td class="px-2">{positionRequest.name} ({positionRequest.cid})</td>
+          <td class="px-2">{positionRequest.position}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+
+</div>
+
 <div id="content" class="flex flex-wrap justify-center align-middle">
   <div class="text-center flex-1 m-2 mt-1 mb-20 px-5 py-5 outline outline-slate-200 rounded-sm">
     <h1 class="font-bold">Position Assignments:</h1>
@@ -104,7 +158,7 @@
           {/each}
         </tr>
       </thead>
-      {#key positions.length}
+      <tbody>
         {#each positions as row, i}
           <tr>
             <td><input name="position-{i}" class="p-0.5 rounded-md text-center" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
@@ -133,7 +187,8 @@
             </td>
           </tr>
         {/each}
-      {/key}
+      </tbody>
+     
 
     </table>
     <hr>

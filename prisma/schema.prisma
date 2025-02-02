@@ -34,7 +34,7 @@ model ControllerSession {
   start     DateTime? @db.Timestamptz(6)
   active    Boolean
   end       DateTime? @db.Timestamptz(6)
-  duration  Int?      @default(dbgenerated("EXTRACT(epoch FROM (\"end\" - start))"))
+  duration  Int?      @default(0)
   roster    Roster    @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("controller_sessions")
@@ -46,11 +46,11 @@ model Event {
   createdBy        Int               @map("created_by")
   name             String
   description      String
-  start            DateTime          @db.Timestamptz(6)
-  end              DateTime          @db.Timestamptz(6)
   host             String
   hidden           Boolean           @default(true)
   banner           String
+  end              DateTime          @db.Timestamptz(6)
+  start            DateTime          @db.Timestamptz(6)
   EventPosition    EventPosition[]
   roster           Roster            @relation(fields: [createdBy], references: [cid], onDelete: NoAction, onUpdate: NoAction)
   positionRequests PositionRequest[]
@@ -143,7 +143,7 @@ model Roster {
 model StaffRole {
   cid    Int
   role   String @db.VarChar(10)
-  roster Roster @relation(fields: [cid], references: [cid], onDelete: NoAction, onUpdate: NoAction, map: "staff_roles_roster_cid_fk")
+  roster Roster @relation(fields: [cid], references: [cid], onDelete: Cascade, map: "staff_roles_roster_cid_fk")
 
   @@id([cid, role], map: "staff_roles_pk")
   @@map("staff_roles")
@@ -151,16 +151,16 @@ model StaffRole {
 
 model Stats {
   cid         Int    @id
-  ytd         Int?   @default(0)
-  all_time    Int?   @default(0)
-  delivery    Int?   @default(0)
-  ground      Int?   @default(0)
-  tower       Int?   @default(0)
-  tracon      Int?   @default(0)
-  enroute     Int?   @default(0)
   month_one   Int?   @default(0)
   month_two   Int?   @default(0)
   month_three Int?   @default(0)
+  all_time    Int?   @default(0)
+  delivery    Int?   @default(0)
+  enroute     Int?   @default(0)
+  ground      Int?   @default(0)
+  tower       Int?   @default(0)
+  tracon      Int?   @default(0)
+  ytd         Int?   @default(0)
   roster      Roster @relation(fields: [cid], references: [cid], onDelete: Cascade)
 
   @@map("stats")
