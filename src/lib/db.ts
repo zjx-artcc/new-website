@@ -63,16 +63,18 @@ export function isRostered(cid: number): boolean {
 
 /**
  * 
- * @param input - Hours in Decimal Form
+ * @param input - Seconds
  * @returns {string} Hours in HH:MM Format
  */
 export function getHours(input: number):string {
   if (input == 0) {
     return "00:00";
   }
-  let hours = Math.floor(input);
-  let minutes = Math.round((input - hours) * 60).toString().padStart(2, "0");
-  return `${hours.toString().padStart(2,"0")}:${minutes}`;
+
+  const hours = Math.floor(input / 3600).toString().padStart(2, "0");
+  const minutes = Math.floor(input % 3600 / 60).toString().padStart(2, "0");
+
+  return `${hours}:${minutes}`
 }
 
 /**

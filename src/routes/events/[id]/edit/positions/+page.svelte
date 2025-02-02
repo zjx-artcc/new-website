@@ -97,11 +97,13 @@
     <h1 class="font-bold">Position Assignments:</h1>
     <hr>
     <table class="mx-auto mb-2">
-      <tr>
-        {#each columns as column}
-          <th class="w-52">{column}</th>
-        {/each}
-      </tr>
+      <thead>
+        <tr>
+          {#each columns as column}
+            <th class="w-52">{column}</th>
+          {/each}
+        </tr>
+      </thead>
       {#key positions.length}
         {#each positions as row, i}
           <tr>

@@ -2,9 +2,6 @@ import { getHours, getRating, prisma } from '$lib/db';
 
 import type { Feedback, Stats, User } from '@prisma/client';
 import type { PageServerLoad } from './$types';
-import { page } from '$app/state';
-import { P } from 'flowbite-svelte';
-
 const months = ['month_three', 'month_two', 'month_two'];
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -29,6 +26,9 @@ export const load: PageServerLoad = async ({ locals }) => {
           lastName: true
         }
       }
+    },
+    orderBy: {
+      month_one: 'desc',
     }
   });
 

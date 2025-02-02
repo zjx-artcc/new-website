@@ -5,7 +5,7 @@
 	import '$lib/app.css';
 	import { formatDate, getRating } from '$lib/db.js';
 	import StatusCard from '$lib/components/StatusCard.svelte';
-	import { ChevronDownSolid, UserRemoveOutline } from 'flowbite-svelte-icons';
+	import { UserRemoveOutline } from 'flowbite-svelte-icons';
 	import ResponseBox from '$lib/components/ResponseBox.svelte';
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';

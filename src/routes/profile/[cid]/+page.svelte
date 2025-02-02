@@ -1,30 +1,42 @@
-<script>
+<script lang="ts">
 	import '$lib/app.css';
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
 
-	/** @type {{data: any}} */
-	let { data } = $props();
+	export let data
 	let pageData = data.pageData;
+	
+	const getLocationString = (location: number) => {
+		switch(location) {
+			case 0:
+				return "Classroom"
+			case 1:
+				return "Live"
+			case 2:
+				return "Sweatbox"
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>{pageData.user.firstName} {pageData.user.lastName} - Jacksonville ARTCC</title>
 </svelte:head>
 
-<header class="bg-gray-700 block" id="myTopnav">
-	<div class="relative">
-		<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/MCO_F11_Tour_SMALL-30.jpg'); filter: blur(5px) brightness(60%); border: 0;"></div>
-		<div class="relative">
-			<div class="w-full flex flex-col justify-center items-center container text-center m-auto p-[5rem]">
-				<h1 class="text-4xl text-white font-bold text-center pt-10">Welcome back, {pageData.user.firstName} {pageData.user.lastName}</h1>
-				{#each pageData.staffRoles as role}
-					<p class="inline rounded mx-2 px-2 py-0.5 text-white mt-5 {role.color}">{role.name}</p>
-				{/each}
-			</div>
-		</div>
+<div class="h-48">
+	<div class="block w-full place-content-center z-0 bg-[url('/KJAXNIGHT.png')] h-48">
+		<h1 class="text-4xl text-white font-bold text-center pt-10">{pageData.user.firstName} {pageData.user.lastName}</h1>
+		<h3 class="text-xl text-white text-center pt-4">
+			{#if pageData.user.homeFacility == "ZJX"}
+				<p class='inline rounded mx-2 px-2 py-0.5 bg-sky-800'>Home Controller</p>
+			{:else}
+				<p class='inline rounded mx-2 px-2 py-0.5 bg-red-800'>Visiting Controller</p>
+			{/if}
+			{#each pageData.staffRoles as role}
+				<p class='inline rounded mx-2 px-2 py-0.5 {role.color}'>{role.name}</p>
+			{/each}
+		</h3>
 	</div>
-</header>
+</div>
 
 <div id="breadcrumbs" class="border-b">
   <div class="py-1.5 text-center">
@@ -38,59 +50,68 @@
   </div>
 </div>
 
-<div class="flex flex-col self-center md:flex-row justify-center items-center w-screen">
-	<div class="rounded-lg border bg-card text-card-foreground shadow-sm self-start" data-v0-t="card">
-		<div class="flex flex-col space-y-1.5 p-6">
-			<h3 class="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
-				Overview
-			</h3>
-			<hr class="px-1 border-slate-300">
-			<div class="grid grid-cols-2">
-				<div>
-					<h4 class="text-base">VATSIM CID:</h4>
-					<p class="text-sm text-slate-600">{pageData.user.cid}</p>
-				</div>
-				<div>
-					<h4 class="text-base">ARTCC Status:</h4>
-					{#if pageData.user.homeFacility == "ZJX"}
-						<p class="text-sm text-green-600">Home Controller</p>
-					{:else if pageData.user.homeFacility != null && pageData.onRoster}
-						<p class="text-sm text-green-600">Visiting Controller</p>
-					{:else}
-						<p class="text-sm text-red-600">Not Affiliated</p>
-					{/if}
-				</div>
-				<div>
-					<h4 class="text-base">VATSIM Rating:</h4>
-					<p class="text-sm text-slate-600">{pageData.certs.rating}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Last Promotion:</h4>
-					{#if pageData.user.ratingChanged != null}
-						<p class="text-sm text-slate-600">{pageData.user.ratingChanged.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
-					{:else}
-						<p class="text-sm text-slate-600">Not Available</p>
-					{/if}
-				</div>
-				<div>
-					<h4 class="text-base">Operating Initials:</h4>
-					<p class="text-sm text-slate-600">{pageData.user.initials}</p>
-				</div>
-				<div>
-					<h4 class="text-base">{new Date().toLocaleString('default', {month: 'long'})} Hours:</h4>
-					<p class="text-sm text-slate-600">{pageData.hours[0].hours}</p>
-				</div>
-				<div>
-					<h4 class="text-base">Quarter {["One", "Two", "Three"][Math.ceil((new Date().getMonth() + 1) / 3) - 1]} Hours:</h4>
-					<p class="text-sm text-slate-600">{pageData.hours[1].hours}</p>
-				</div>
-				<div>
-					<h4 class="text-base">{new Date().getFullYear()} Hours:</h4>
-					<p class="text-sm text-slate-600">{pageData.hours[2].hours}</p>
+<div class="flex justify-center items-center w-screen">
+	<div class="flex flex-wrap justify-center min-h-fit gap-2 m-10" style="grid-template-columns: 16% 10% 32% 31% 9.5%;">
+		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+			<div class="flex flex-col space-y-1.5 p-6">
+				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+					Overview
+				</h3>
+				<hr class="px-1 border-slate-300">
+				<div class="grid grid-cols-2">
+					<div>
+						<h4 class="text-base">VATSIM CID:</h4>
+						<p class="text-sm text-slate-600">{pageData.user.cid}</p>
+					</div>
+					<div>
+						<h4 class="text-base">ARTCC Status:</h4>
+						{#if pageData.user.homeFacility == "ZJX"}
+							<p class="text-sm text-green-600">Home Controller</p>
+						{:else if pageData.user.homeFacility != null && pageData.onRoster}
+							<p class="text-sm text-green-600">Visiting Controller</p>
+						{:else}
+							<p class="text-sm text-red-600">Not Affiliated</p>
+						{/if}
+					</div>
+					<div>
+						<h4 class="text-base">VATSIM Rating:</h4>
+						<p class="text-sm text-slate-600">{pageData.certs.rating}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Last Promotion:</h4>
+						{#if pageData.user.ratingChanged != null}
+							<p class="text-sm text-slate-600">{pageData.user.ratingChanged.toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'})}</p>
+						{:else}
+							<p class="text-sm text-slate-600">Not Available</p>
+						{/if}
+					</div>
+					<div>
+						<h4 class="text-base">Operating Initials:</h4>
+						<p class="text-sm text-slate-600">{pageData.user.initials}</p>
+					</div>
+					<div>
+						<h4 class="text-base">Reward Tier:</h4>
+						<p class="text-sm text-slate-600">None</p>
+					</div>
+					<div>
+						<h4 class="text-base">{pageData.hours[0].month} Hours:</h4>
+						<p class="text-sm text-slate-600">{pageData.hours[0].hours}</p>
+					</div>
+					<div>
+						<h4 class="text-base">{pageData.hours[1].month} Hours:</h4>
+						<p class="text-sm text-slate-600">{pageData.hours[1].hours}</p>
+					</div>
+					<div>
+						<h4 class="text-base">{pageData.hours[2].month} Hours:</h4>
+						<p class="text-sm text-slate-600">{pageData.hours[2].hours}</p>
+					</div>
+					<div>
+						<h4 class="text-base">{pageData.hours[3].month}</h4>
+						<p class="text-sm text-slate-600">{pageData.hours[3].hours}</p>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 			{#if pageData.onRoster}
 				<div class="flex flex-col space-y-1.5 p-6">
@@ -123,85 +144,91 @@
 			<div class="p-6 flex items-center justify-center">
 			</div>
 		</div>
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Recent Controlling Sessions
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<table class="text-center">
-					<thead class="border-b">
-						<tr>
-							<th>Date</th>
-							<th>Start Time</th>
-							<th>End Time</th>
-							<th>Callsign</th>
-							<th>Duration</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each pageData.sessions as session}
-							{#if session != null}
-								<tr>
-									<td class="text-sm text-slate-600">{session.date}</td>
-									<td class="text-sm text-slate-600">{session.start}</td>
-									<td class="text-sm text-slate-600">{session.end}</td>
-									<td class="text-sm text-slate-600">{session.callsign}</td>
-									<td class="text-sm text-slate-600">{session.duration}</td>
-								</tr>
-							{:else}
-								<tr>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-								</tr>
-							{/if}
-						{/each}
-					</tbody>
-				</table>
+
+		{#if pageData.sessions[0] != null}
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+				<div class="flex flex-col space-y-1.5 p-6">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						Recent Controlling Sessions
+					</h3>
+					<hr class="px-1 border-slate-300">
+					<table class="text-center">
+						<thead class="border-b">
+							<tr>
+								<th>Date</th>
+								<th>Start Time</th>
+								<th>End Time</th>
+								<th>Callsign</th>
+								<th>Duration</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each pageData.sessions as session}
+								{#if session != null}
+									<tr>
+										<td class="text-sm text-slate-600">{session.date}</td>
+										<td class="text-sm text-slate-600">{session.start}</td>
+										<td class="text-sm text-slate-600">{session.end}</td>
+										<td class="text-sm text-slate-600">{session.callsign}</td>
+										<td class="text-sm text-slate-600">{session.duration}</td>
+									</tr>
+								{:else}
+									<tr>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+									</tr>
+								{/if}
+							{/each}
+						</tbody>
+					</table>
+				</div>
 			</div>
-		</div>
+		{/if}
 		
-		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-			<div class="flex flex-col space-y-1.5 p-6">
-				<h3 class="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
-					Recent Training Sessions
-				</h3>
-				<hr class="px-1 border-slate-300">
-				<table class="text-center">
-					<thead class="border-b">
-						<tr>
-							<th>Date</th>
-							<th>Type</th>
-							<th>Position</th>
-							<th>Training Staff</th>
-							<th>Notes</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each pageData.training as session}
-							{#if session != null}
-								<tr>
-									<td class="text-sm text-slate-600">{session.start.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
-									<td class="text-sm text-slate-600">{session.start.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.end.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'})}</td>
-									<td class="text-sm text-slate-600">{session.callsign}</td>
-									<td class="text-sm text-slate-600"></td>
-								</tr>
-							{:else}
-								<tr>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-									<td class="text-sm text-slate-600"></td>
-								</tr>
-							{/if}
-						{/each}
-					</tbody>
-				</table> 
+
+		{#if data.pageData.training.length > 0}
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+				<div class="flex flex-col space-y-1.5 w-[40rem] p-6">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
+						Recent Training Sessions
+					</h3>
+					<hr class="px-1 border-slate-300">
+					<table class="text-center">
+						<thead class="border-b">
+							<tr>
+								<th>Date</th>
+								<th>Type</th>
+								<th>Position</th>
+								<th>Training Staff</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each pageData.training as session}
+								
+								{#if session != null}
+									<tr>
+										<td class="text-sm text-slate-600">{session.session_date.toLocaleDateString(undefined,{month: 'short', day: 'numeric', year: 'numeric'})}</td>
+										<td class="text-sm text-slate-600">{getLocationString(session.location)}</td>
+										<td class="text-sm text-slate-600">{session.position}</td>
+										<td class="text-sm text-slate-600">{session.instructorCid}</td>
+									</tr>
+								{:else}
+									<tr>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+										<td class="text-sm text-slate-600"></td>
+									</tr>
+								{/if}
+							{/each}
+						</tbody>
+					</table> 
+				</div>
 			</div>
-		</div>
+		{/if}
+		
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm " data-v0-t="card">
 			<div class="flex flex-col space-y-1.5 p-6">
 				<h3 class="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
@@ -227,3 +254,4 @@
 			</div>
 		</div>
 	</div>
+</div>

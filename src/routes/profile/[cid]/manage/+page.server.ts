@@ -76,7 +76,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 }
 
 export const actions: Actions = {
-  default: async({request, params}) => {
+  default: async({request, params, locals}) => {
     const formData = await request.formData();
 
     let user: Roster = await prisma.roster.findUnique({
@@ -92,7 +92,7 @@ export const actions: Actions = {
           error: "User not found"
         }
       }
-    } else {
+    } else if (getStaffRoles(locals.user.id, "admin") || getStaffRoles(locals.user.id, "training")) {
       user.mentorLevel = BigInt(user.mentorLevel);
 
       // Update certifications based on the form data
