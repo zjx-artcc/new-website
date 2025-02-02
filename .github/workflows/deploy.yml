@@ -1,4 +1,4 @@
-name: Deploy to test
+name: Deploy to Production
 
 on:
   push:
