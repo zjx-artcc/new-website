@@ -91,7 +91,7 @@
 
 		<HomepageCard bgColor="bg-sky-100">
 			<div class="px-4 py-2 border-b-2 border-black">
-				<h1 class="font-semibold text-xl">Next Event</h1>
+				<h1 class="font-semibold text-xl">Events</h1>
 			</div>
 
 			<div class="px-4 py-3 flex flex-col">
@@ -120,9 +120,15 @@
 	</div>
 
 	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
-		{#each data.pageData.events as event}
-		 <EventCard title={event.name} hostedBy={event.host} imageUrl={event.banner} start={event.start} end={event.end} id={event.id}/>
-		{/each}
+		
+
+		{#if data.pageData.events.length == 0}
+			<h1 class="font-bold text-gray-800 text-2xl text-center">No events currently posted</h1>
+		{:else}
+			{#each data.pageData.events as event}
+				<EventCard title={event.name} hostedBy={event.host} imageUrl={event.banner} start={event.start} end={event.end} id={event.id}/>
+			{/each}
+		{/if}
 	</div>
 </div>
 
@@ -134,9 +140,14 @@
 	</div>
 
 	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
-		{#each data.pageData.feedback as feedback}
-			<FeedbackCard controllerName={`${feedback.firstName} ${feedback.lastName}`} feedbackText={feedback.comment} position={feedback.position} rating={feedback.rating}/>
-		{/each}
+		{#if data.pageData.feedback.length == 0}
+			<h1 class="font-bold text-gray-800 text-2xl text-center">No feedback currently submitted</h1>
+		{:else}
+			{#each data.pageData.feedback as feedback}
+				<FeedbackCard controllerName={`${feedback.firstName} ${feedback.lastName}`} feedbackText={feedback.comment} position={feedback.position} rating={feedback.rating}/>
+			{/each}
+		{/if}
+
 	</div>
 </div>
 
