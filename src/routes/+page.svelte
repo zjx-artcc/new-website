@@ -118,18 +118,7 @@
 	<div class="flex justify-center flex-col border-b-2 pb-2">
 		<h1 class="font-bold text-gray-800 text-4xl text-center">Upcoming Events</h1>
 		<h2 class="text-gray-800 text-2xl text-center">Our events team would love to see you fly or control!</h2>
-	</div>
-
-	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
-		
-
-		{#if data.pageData.events.length == 0}
-			<h1 class="font-bold text-gray-800 text-2xl text-center">No events currently posted</h1>
-		{:else}
-			{#each data.pageData.events as event}
-				<EventCard title={event.name} hostedBy={event.host} imageUrl={event.banner} start={event.start} end={event.end} id={event.id}/>
-			{/each}
-		{/if}
+                <h2 class="font-bold text-red-900">Please Note: Due to unforeseen issues with the events tab, this section is unavailable. Please reference the <a href="https://old.zjxartcc.org/documents/">Old Website</a> until we resolve this problem.</h2>
 	</div>
 </div>
 
