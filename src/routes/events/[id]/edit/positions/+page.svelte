@@ -159,6 +159,7 @@
         </tr>
       </thead>
       <tbody>
+
         {#key positions.length}
           {#each positions as row, i}
             <tr>
