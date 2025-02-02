@@ -64,7 +64,7 @@
     <nav class="py-2 mb-0">
       <a href="/" class="text-sky-500">Home</a>
       <Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
-      <a href="/training" class="text-sky-500">Training</a>
+      <p>Training</p>
 			<Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
       <a href="/training/requests" class="text-sky-500">Requests</a>
 			<Icon icon="mdi:chevron-right" class="inline-block align-middle mx-2" />
