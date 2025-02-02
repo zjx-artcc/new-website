@@ -36,7 +36,7 @@
 </div>
 
 <div class="flex justify-center items-center w-screen">
-	<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 16% 10% 32% 31% 9.5%;">
+	<div class="flex flex-wrap justify-center min-h-fit gap-2 m-10" style="grid-template-columns: 16% 10% 32% 31% 9.5%;">
 		<div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
 			<div class="flex flex-col space-y-1.5 p-6">
 				<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
