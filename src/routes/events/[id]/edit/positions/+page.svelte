@@ -104,37 +104,29 @@
           {/each}
         </tr>
       </thead>
-      {#key positions.length}
-        {#each positions as row, i}
-          <tr>
-            <td><input name="position-{i}" class="p-0.5 rounded-md text-center" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
-            <td>
-              {#if row.requests != undefined}
-                <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center">
-                  <option value='none'>None</option>
-                  {#each row.requests as request}
-                    <option value={request.name}>{request.name}</option>
-                  {/each}
-                </select>
-              {:else if row.controller != null}
-                <select value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center" disabled >
-                  <option>{row.controller}</option>
-                </select>
-              {:else}
-                <select name="controllers" id="controllers" disabled class="p-1 rounded-md text-center">
-                  <option value="none">No controllers available</option>
-                </select>
-              {/if}
-            </td>
-            <td>
-              <button type="button" class="bg-red-600 text-white p-1 rounded-full text-sm" on:click={() => removePosition(row.id)}>
-                <Icon icon="mdi:remove" />
-              </button>
-            </td>
-          </tr>
-        {/each}
-      {/key}
+      <tbody>
 
+        {#key positions.length}
+          {#each positions as row, i}
+            <tr>
+              <td><input name="position-{i}" class="p-0.5 rounded-md text-center" id="position-{i}" group="positions" bind:value={row.position} use:validators={[required]} autocomplete="off"></td>
+              <td>
+                <select bind:value={row.controller} name="controllers-{i}" id="controllers-{i}" class="p-1 rounded-md text-center">
+                    <option value='none'>None</option>
+                    {#each pageData.roster as roster}
+                      <option value={roster.cid}>{roster.firstName} {roster.lastName}</option>
+                    {/each}
+                  </select>
+              </td>
+              <td>
+                <button type="button" class="bg-red-600 text-white p-1 rounded-full text-sm" on:click={() => removePosition(row.id)}>
+                  <Icon icon="mdi:remove" />
+                </button>
+              </td>
+            </tr>
+          {/each}
+        {/key}
+      </tbody>
     </table>
     <hr>
     <div class="pb-5 flex align-middle justify-center items-center mt-3">

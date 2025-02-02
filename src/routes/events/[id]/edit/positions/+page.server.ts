@@ -3,7 +3,7 @@ import { prisma } from '$lib/db';
 import { getPositionType } from '$lib/events.js';
 
 import type { PageServerLoad } from './$types';
-import type { Event, PositionRequest } from '@prisma/client';
+import type { Event, PositionRequest, Roster } from '@prisma/client';
 
 export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 	//Setup page data
@@ -34,29 +34,12 @@ export const load: PageServerLoad = async ({ params, cookies, locals }) => {
 			}
 		});
 	
-		let requests: PositionRequest[] = await prisma.positionRequest.findMany({
-			where: {
-				eventId: pageData.event.id
+		const roster = await prisma.roster.findMany({
+			orderBy: {
+				lastName: 'asc'
 			}
 		});
-	
-		for (let i = 0; i < requests.length; i++) {
-			console.log(requests[i]);
-			let user = await prisma.roster.findFirst({
-				where: {
-					cid: requests[i].cid
-				},
-				select: {
-					firstName: true,
-					lastName: true
-				}
-			});
-			let position: Position = pageData.positions.find((pos) => pos.id == requests[i].position);
-			if (user != null && position != null) {
-				position.requests = [];
-				position.requests.push({name: `${user.firstName} ${user.lastName}`, ...requests[i]});
-			}
-		}
+		pageData.roster = roster;
 	}
 
 	for (let i = 0; i < pageData.positions.length; i++) {
@@ -88,6 +71,7 @@ class PageData {
 	event: Event;
 	eventId: Number;
 	positions: Position[] & { requests: PositionRequest[] & { name: string }[] }[];
+	roster: Roster[];
 
 	constructor() {
 		this.canEdit = false;
