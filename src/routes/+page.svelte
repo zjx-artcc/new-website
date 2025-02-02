@@ -99,7 +99,7 @@
 			</div>
 		</HomepageCard>
 
-		<HomepageCard bgColor="bg-sky-100">
+		<HomepageCard class="w-96" bgColor="bg-sky-100">
 			<div class="px-4 py-2 border-b-2 border-black">
 				<h1 class="font-semibold text-xl">Top Controllers</h1>
 				<h2 class="text-md italic">This Month</h2>

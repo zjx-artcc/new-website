@@ -34,8 +34,8 @@
   </div>
 </div>
 <form method="POST">
-	<div class="flex justify-center items-center self-center w-screen">
-		<div class="grid w-screen min-h-fit gap-2 m-10" style="grid-template-columns: 9.5% 11% 15.3% 9.5%;">
+	<div class="flex  justify-center items-center self-center w-screen">
+		<div class="min-h-fit flex flex-row flex-wrap gap-x-5 m-10" style="grid-template-columns: 9.5% 11% 15.3% 9.5%;">
 			<div class="rounded-lg border bg-card text-card-foreground shadow-sm">
 				<div class="flex flex-col space-y-1.5 p-6">
 					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">
@@ -178,9 +178,9 @@
 						Actions
 					</h3>
 					<hr class="px-1 border-slate-300">
-					<div>
-						<button type="submit" class="text-blue-500">Save Changes</button>
-						<a href="/profile/{pageData.user.cid}" class="text-red-500">Discard Changes</a>
+					<div class="flex flex-col gap-y-2">
+						<button type="submit" class="bg-sky-500 text-white font-bold p-2">Save Changes</button>
+						<a href="/profile/{pageData.user.cid}" class="bg-red-500 text-white font-bold p-2">Discard Changes</a>
 					</div>
 				</div>
 			</div>
