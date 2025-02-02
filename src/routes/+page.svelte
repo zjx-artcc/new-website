@@ -13,6 +13,7 @@
 	import LinkButton from '$lib/components/LinkButton.svelte';
 	import FeedbackCard from '$lib/components/FeedbackCard.svelte';
 	import TopControllerCard from '$lib/components/TopControllerCard.svelte';
+	import NewControllerCard from '$lib/components/NewControllerCard.svelte';
 
 	const today = new Date();
 	/** @type {{data: any}} */
@@ -147,7 +148,24 @@
 				<FeedbackCard controllerName={`${feedback.firstName} ${feedback.lastName}`} feedbackText={feedback.comment} position={feedback.position} rating={feedback.rating}/>
 			{/each}
 		{/if}
+	</div>
+</div>
 
+<div class="flex flex-col justify-center items-center w-screen mb-40">
+	<div class="flex justify-center flex-col border-b-2 pb-2">
+		<h1 class="font-bold text-gray-800 text-4xl text-center">Newest Home Controllers</h1>
+		<h2 class="text-gray-800 text-2xl text-center">Welcome to the ARTCC!
+		</h2>
+	</div>
+
+	<div class="m-5 flex flex-row flex-wrap gap-x-5 gap-y-5 justify-center">
+		{#if data.pageData.newControllers.length == 0}
+			<h1 class="font-bold text-gray-800 text-2xl text-center">No new controllers</h1>
+		{:else}
+			{#each data.pageData.newControllers as newController}
+				<NewControllerCard controllerName={`${newController.firstName} ${newController.lastName}`} rating={newController.rating} joined={newController.joined}/>
+			{/each}
+		{/if}
 	</div>
 </div>
 
