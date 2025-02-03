@@ -16,16 +16,6 @@ model Action {
   @@map("action_log")
 }
 
-model ArtccStats {
-  id        Int      @id
-  timestamp DateTime
-  mtd       Float?
-  ytd       Float?
-  all_time  Float?
-
-  @@map("artcc_stats")
-}
-
 model ControllerSession {
   id        String    @id @default(uuid())
   cid       Int
