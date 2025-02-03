@@ -44,7 +44,8 @@ export const actions = {
               notes: vatusaData.notes,
               location: vatusaData.location,
             }
-          }) 
+          })
+          return {message: "Success!"}
         } else {   
           return fail(500, {message: "VATUSA upload failed"})
         }
@@ -54,7 +55,6 @@ export const actions = {
     } catch(error) {
       return fail(500, {message: error})
     }
-    return fail(500, {message: "Error"})
   },
 
   editAssignment: async({request, locals}) => {

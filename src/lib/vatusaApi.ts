@@ -5,7 +5,7 @@ import { getStaffRoles, prisma } from "./db";
  * @returns {String} The formatted time string
  */
 export function formatTrainingSessionTimeString(time: Date): string {
-  return `${time.getUTCFullYear()}-${(time.getUTCMonth() + 1).toString().padStart(2, "0")}-${time.getUTCDay().toString().padStart(2, "0")} ${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`;
+  return `${time.getUTCFullYear()}-${(time.getUTCMonth() + 1).toString().padStart(2, "0")}-${time.getUTCDate().toString().padStart(2, "0")} ${time.getUTCHours().toString().padStart(2, "0")}:${time.getUTCMinutes().toString().padStart(2, "0")}`;
 }
 
 /**
@@ -32,7 +32,6 @@ function getDurationString(duration: number): string {
  * @returns {Response} The response from the VATUSA API
  */
 export async function submitTrainingNote(studentCid: number, sessionData): Promise<Response> {
-  console.log(sessionData)
   try {
     // VATUSA API call to add solo cert
     const vatusaReq = await fetch(
@@ -45,7 +44,6 @@ export async function submitTrainingNote(studentCid: number, sessionData): Promi
         body: new URLSearchParams(sessionData)
       }
     );
-    console.log(vatusaReq)
     return new Response(null, {status: vatusaReq.status});
   } catch(error) {
     return new Response(error, {status: 500});
