@@ -32,6 +32,7 @@ function getDurationString(duration: number): string {
  * @returns {Response} The response from the VATUSA API
  */
 export async function submitTrainingNote(studentCid: number, sessionData): Promise<Response> {
+  console.log(sessionData)
   try {
     // VATUSA API call to add solo cert
     const vatusaReq = await fetch(
@@ -44,6 +45,7 @@ export async function submitTrainingNote(studentCid: number, sessionData): Promi
         body: new URLSearchParams(sessionData)
       }
     );
+    console.log(vatusaReq)
     return new Response(null, {status: vatusaReq.status});
   } catch(error) {
     return new Response(error, {status: 500});

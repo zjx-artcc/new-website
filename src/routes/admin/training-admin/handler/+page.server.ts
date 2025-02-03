@@ -35,7 +35,7 @@ export const actions = {
           await prisma.trainingSession.create({
             data: {
               student_cid: studentCid,
-              instructorCid: instructorCid,
+              instructorCid: locals.user.id,
               session_date: new Date(data.get("session_date") as string),
               duration: convertDurationStringToSeconds(vatusaData.duration),
               position: vatusaData.position,
