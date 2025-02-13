@@ -33,7 +33,7 @@
           <NavbarListItem label="Visit" href="/visit" subText="Submit a visiting request" icon="mdi:person"/>
         {/if}
       </Dropdown>
-      <NavLi href="https://old.zjxartcc.org/events/" class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:calendar-month-outline" class="w-7 h-7 pr-1.5"/>Events</NavLi>
+      <NavLi href="/events" class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:calendar-month-outline" class="w-7 h-7 pr-1.5"/>Events</NavLi>
       {#if $page.data.session != null}
         <NavLi class="text-xl cursor-pointer text-slate-500 md:text-white flex items-center justify-center"><Icon icon="mdi:person" class="w-7 h-7 pr-1.5"/>{$page.data.session.user.firstName} {$page.data.session.user.lastName}<Icon icon="mdi:chevron-down"/></NavLi>
         <Dropdown class="w-48">
